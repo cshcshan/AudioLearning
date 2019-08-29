@@ -14,7 +14,8 @@ target 'AudioLearning' do
   end
 
   target 'AudioLearningUITests' do
-    inherit! :search_paths
+#    inherit! :search_paths
+    inherit! :complete
     # Pods for testing
   end
 

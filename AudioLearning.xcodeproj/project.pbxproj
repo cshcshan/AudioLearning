@@ -20,6 +20,9 @@
 		332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158E23178A5A003C78EA /* EpisodeModelTests.swift */; };
 		332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* EpisodeModel.swift */; };
 		332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* ExtensionString.swift */; };
+		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
+		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
+		EC48C94981C4ACB07B3A656B /* Pods_AudioLearningUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.release.xcconfig"; sourceTree = "<group>"; };
 		332C154D23174CF8003C78EA /* AudioLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C155023174CF8003C78EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		332C155223174CF8003C78EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +63,14 @@
 		332C158E23178A5A003C78EA /* EpisodeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModelTests.swift; sourceTree = "<group>"; };
 		332C15912317A5C4003C78EA /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		332C15942317A7C1003C78EA /* ExtensionString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionString.swift; sourceTree = "<group>"; };
+		378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearningUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
+		92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearningUITests/Pods-AudioLearningUITests.release.xcconfig"; sourceTree = "<group>"; };
+		A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningUITests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningUITests/Pods-AudioLearningUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearning.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearningTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA8C2E11421DFD75D5A617F7 /* Pods-AudioLearning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC48C94981C4ACB07B3A656B /* Pods_AudioLearningUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +108,8 @@
 				332C156423174CF9003C78EA /* AudioLearningTests */,
 				332C156F23174CF9003C78EA /* AudioLearningUITests */,
 				332C154E23174CF8003C78EA /* Products */,
+				9243F4B01F630AFE22117B14 /* Pods */,
+				BDD71CB169ED77CBAEF81A30 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -175,6 +192,30 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		9243F4B01F630AFE22117B14 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EA8C2E11421DFD75D5A617F7 /* Pods-AudioLearning.debug.xcconfig */,
+				4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */,
+				461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */,
+				06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */,
+				A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */,
+				92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		BDD71CB169ED77CBAEF81A30 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */,
+				C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */,
+				378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -182,10 +223,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 332C157523174CF9003C78EA /* Build configuration list for PBXNativeTarget "AudioLearning" */;
 			buildPhases = (
+				FE03CA5B658BF72BA822EBAD /* [CP] Check Pods Manifest.lock */,
 				332C154923174CF8003C78EA /* Sources */,
 				332C154A23174CF8003C78EA /* Frameworks */,
 				332C154B23174CF8003C78EA /* Resources */,
 				332C157F23174E4B003C78EA /* Swiftlint */,
+				828CC3D487A62AA3AA562289 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -200,6 +243,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 332C157823174CF9003C78EA /* Build configuration list for PBXNativeTarget "AudioLearningTests" */;
 			buildPhases = (
+				80B7928115530CA5EB368CA0 /* [CP] Check Pods Manifest.lock */,
 				332C155D23174CF9003C78EA /* Sources */,
 				332C155E23174CF9003C78EA /* Frameworks */,
 				332C155F23174CF9003C78EA /* Resources */,
@@ -218,6 +262,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 332C157B23174CF9003C78EA /* Build configuration list for PBXNativeTarget "AudioLearningUITests" */;
 			buildPhases = (
+				ABDC0795984A7C18A219F59B /* [CP] Check Pods Manifest.lock */,
 				332C156823174CF9003C78EA /* Sources */,
 				332C156923174CF9003C78EA /* Frameworks */,
 				332C156A23174CF9003C78EA /* Resources */,
@@ -321,6 +366,89 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		80B7928115530CA5EB368CA0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AudioLearningTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		828CC3D487A62AA3AA562289 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioLearning/Pods-AudioLearning-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioLearning/Pods-AudioLearning-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AudioLearning/Pods-AudioLearning-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ABDC0795984A7C18A219F59B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AudioLearningUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FE03CA5B658BF72BA822EBAD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AudioLearning-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -508,6 +636,7 @@
 		};
 		332C157623174CF9003C78EA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA8C2E11421DFD75D5A617F7 /* Pods-AudioLearning.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -525,6 +654,7 @@
 		};
 		332C157723174CF9003C78EA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -542,6 +672,7 @@
 		};
 		332C157923174CF9003C78EA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -562,6 +693,7 @@
 		};
 		332C157A23174CF9003C78EA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -582,6 +714,7 @@
 		};
 		332C157C23174CF9003C78EA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -601,6 +734,7 @@
 		};
 		332C157D23174CF9003C78EA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

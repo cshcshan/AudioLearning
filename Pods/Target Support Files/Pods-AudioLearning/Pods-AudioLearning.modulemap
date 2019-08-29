@@ -1,0 +1,6 @@
+framework module Pods_AudioLearning {
+  umbrella header "Pods-AudioLearning-umbrella.h"
+
+  export *
+  module * { export * }
+}

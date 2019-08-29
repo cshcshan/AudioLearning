@@ -14,6 +14,12 @@
 		332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155923174CF9003C78EA /* LaunchScreen.storyboard */; };
 		332C156623174CF9003C78EA /* AudioLearningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C156523174CF9003C78EA /* AudioLearningTests.swift */; };
 		332C157123174CF9003C78EA /* AudioLearningUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C157023174CF9003C78EA /* AudioLearningUITests.swift */; };
+		332C15882317834F003C78EA /* ParseHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15872317834F003C78EA /* ParseHelperTests.swift */; };
+		332C158B2317878C003C78EA /* 6-minute-english.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C158A2317878C003C78EA /* 6-minute-english.html */; };
+		332C158D231789A6003C78EA /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158C231789A6003C78EA /* ParseHelper.swift */; };
+		332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158E23178A5A003C78EA /* EpisodeModelTests.swift */; };
+		332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* EpisodeModel.swift */; };
+		332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* ExtensionString.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,12 @@
 		332C156C23174CF9003C78EA /* AudioLearningUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioLearningUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C157023174CF9003C78EA /* AudioLearningUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLearningUITests.swift; sourceTree = "<group>"; };
 		332C157223174CF9003C78EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		332C15872317834F003C78EA /* ParseHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseHelperTests.swift; sourceTree = "<group>"; };
+		332C158A2317878C003C78EA /* 6-minute-english.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "6-minute-english.html"; sourceTree = "<group>"; };
+		332C158C231789A6003C78EA /* ParseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
+		332C158E23178A5A003C78EA /* EpisodeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModelTests.swift; sourceTree = "<group>"; };
+		332C15912317A5C4003C78EA /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
+		332C15942317A7C1003C78EA /* ExtensionString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +109,9 @@
 		332C154F23174CF8003C78EA /* AudioLearning */ = {
 			isa = PBXGroup;
 			children = (
+				332C15902317A5BD003C78EA /* Models */,
+				332C158423177683003C78EA /* Utilities */,
+				332C15892317874B003C78EA /* Resources */,
 				332C155023174CF8003C78EA /* AppDelegate.swift */,
 				332C155223174CF8003C78EA /* ViewController.swift */,
 				332C155423174CF8003C78EA /* Main.storyboard */,
@@ -111,6 +126,8 @@
 			isa = PBXGroup;
 			children = (
 				332C156523174CF9003C78EA /* AudioLearningTests.swift */,
+				332C15872317834F003C78EA /* ParseHelperTests.swift */,
+				332C158E23178A5A003C78EA /* EpisodeModelTests.swift */,
 				332C156723174CF9003C78EA /* Info.plist */,
 			);
 			path = AudioLearningTests;
@@ -123,6 +140,39 @@
 				332C157223174CF9003C78EA /* Info.plist */,
 			);
 			path = AudioLearningUITests;
+			sourceTree = "<group>";
+		};
+		332C158423177683003C78EA /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				332C15932317A727003C78EA /* Extensions */,
+				332C158C231789A6003C78EA /* ParseHelper.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		332C15892317874B003C78EA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				332C158A2317878C003C78EA /* 6-minute-english.html */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		332C15902317A5BD003C78EA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				332C15912317A5C4003C78EA /* EpisodeModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		332C15932317A727003C78EA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				332C15942317A7C1003C78EA /* ExtensionString.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,6 +280,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				332C158B2317878C003C78EA /* 6-minute-english.html in Resources */,
 				332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */,
 				332C155823174CF9003C78EA /* Assets.xcassets in Resources */,
 				332C155623174CF8003C78EA /* Main.storyboard in Resources */,
@@ -278,8 +329,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */,
 				332C155323174CF8003C78EA /* ViewController.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
+				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
+				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +342,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				332C156623174CF9003C78EA /* AudioLearningTests.swift in Sources */,
+				332C15882317834F003C78EA /* ParseHelperTests.swift in Sources */,
+				332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

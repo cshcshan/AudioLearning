@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,14 +12,14 @@
 		332C155623174CF8003C78EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155423174CF8003C78EA /* Main.storyboard */; };
 		332C155823174CF9003C78EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 332C155723174CF9003C78EA /* Assets.xcassets */; };
 		332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155923174CF9003C78EA /* LaunchScreen.storyboard */; };
-		332C156623174CF9003C78EA /* AudioLearningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C156523174CF9003C78EA /* AudioLearningTests.swift */; };
 		332C157123174CF9003C78EA /* AudioLearningUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C157023174CF9003C78EA /* AudioLearningUITests.swift */; };
-		332C15882317834F003C78EA /* ParseHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15872317834F003C78EA /* ParseHelperTests.swift */; };
+		332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */; };
 		332C158B2317878C003C78EA /* 6-minute-english.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C158A2317878C003C78EA /* 6-minute-english.html */; };
 		332C158D231789A6003C78EA /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158C231789A6003C78EA /* ParseHelper.swift */; };
 		332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158E23178A5A003C78EA /* EpisodeModelTests.swift */; };
 		332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* EpisodeModel.swift */; };
 		332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* ExtensionString.swift */; };
+		332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15962317EF43003C78EA /* ExtensionStringTests.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
 		EC48C94981C4ACB07B3A656B /* Pods_AudioLearningUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */; };
@@ -52,17 +52,17 @@
 		332C155A23174CF9003C78EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		332C155C23174CF9003C78EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		332C156123174CF9003C78EA /* AudioLearningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioLearningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		332C156523174CF9003C78EA /* AudioLearningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLearningTests.swift; sourceTree = "<group>"; };
 		332C156723174CF9003C78EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		332C156C23174CF9003C78EA /* AudioLearningUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioLearningUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C157023174CF9003C78EA /* AudioLearningUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLearningUITests.swift; sourceTree = "<group>"; };
 		332C157223174CF9003C78EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		332C15872317834F003C78EA /* ParseHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseHelperTests.swift; sourceTree = "<group>"; };
+		332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseSixMinutesHelperTests.swift; sourceTree = "<group>"; };
 		332C158A2317878C003C78EA /* 6-minute-english.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "6-minute-english.html"; sourceTree = "<group>"; };
 		332C158C231789A6003C78EA /* ParseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
 		332C158E23178A5A003C78EA /* EpisodeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModelTests.swift; sourceTree = "<group>"; };
 		332C15912317A5C4003C78EA /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		332C15942317A7C1003C78EA /* ExtensionString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionString.swift; sourceTree = "<group>"; };
+		332C15962317EF43003C78EA /* ExtensionStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStringTests.swift; sourceTree = "<group>"; };
 		378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearningUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
@@ -142,9 +142,9 @@
 		332C156423174CF9003C78EA /* AudioLearningTests */ = {
 			isa = PBXGroup;
 			children = (
-				332C156523174CF9003C78EA /* AudioLearningTests.swift */,
-				332C15872317834F003C78EA /* ParseHelperTests.swift */,
 				332C158E23178A5A003C78EA /* EpisodeModelTests.swift */,
+				332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */,
+				332C15962317EF43003C78EA /* ExtensionStringTests.swift */,
 				332C156723174CF9003C78EA /* Info.plist */,
 			);
 			path = AudioLearningTests;
@@ -202,7 +202,6 @@
 				A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */,
 				92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -469,8 +468,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				332C156623174CF9003C78EA /* AudioLearningTests.swift in Sources */,
-				332C15882317834F003C78EA /* ParseHelperTests.swift in Sources */,
+				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
+				332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */,
 				332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

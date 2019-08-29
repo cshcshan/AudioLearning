@@ -14,12 +14,14 @@ struct EpisodeModel {
     var desc: String?
     var date: Date?
     var imagePath: String?
+    var link: String?
     
-    init(episode: String?, title: String?, desc: String?, date: Date?, imagePath: String?) {
+    init(episode: String?, title: String?, desc: String?, date: Date?, imagePath: String?, link: String?) {
         self.episode = episode
         self.title = title
         self.desc = desc
         self.date = date
         self.imagePath = imagePath
+        self.link = link
     }
 }

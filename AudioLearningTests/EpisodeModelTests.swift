@@ -10,11 +10,11 @@ import XCTest
 @testable import AudioLearning
 
 class EpisodeModelTests: XCTestCase {
-
+    
     override func setUp() {
         super.setUp()
     }
-
+    
     override func tearDown() {
         super.tearDown()
     }
@@ -25,11 +25,23 @@ class EpisodeModelTests: XCTestCase {
         let desc = "Libra, Bitcoin... would you invest in digital money?"
         let date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         let imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
-        let sut = EpisodeModel(episode: episode, title: title, desc: desc, date: date, imagePath: imagePath)
+        let link = "/learningenglish/english/features/6-minute-english/ep-190815"
+        let sut = EpisodeModel(episode: episode, title: title, desc: desc, date: date, imagePath: imagePath, link: link)
         XCTAssertEqual(sut.episode, episode)
         XCTAssertEqual(sut.title, title)
         XCTAssertEqual(sut.desc, desc)
         XCTAssertEqual(sut.date, date)
         XCTAssertEqual(sut.imagePath, imagePath)
+        XCTAssertEqual(sut.link, link)
+    }
+    
+    func testInit_WithNil() {
+        let sut = EpisodeModel(episode: nil, title: nil, desc: nil, date: nil, imagePath: nil, link: nil)
+        XCTAssertEqual(sut.episode, nil)
+        XCTAssertEqual(sut.title, nil)
+        XCTAssertEqual(sut.desc, nil)
+        XCTAssertEqual(sut.date, nil)
+        XCTAssertEqual(sut.imagePath, nil)
+        XCTAssertEqual(sut.link, nil)
     }
 }

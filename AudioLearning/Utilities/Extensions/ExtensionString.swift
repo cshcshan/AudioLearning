@@ -15,4 +15,17 @@ extension String {
         dateFormatter.dateFormat = dateFormat
         return dateFormatter.date(from: self)
     }
+    
+    func convertHtml() -> NSAttributedString {
+//        let html = self.replacingOccurrences(of: "\n", with: "<br/>")
+        let html = self
+        guard let data = html.data(using: .utf8) else { return NSAttributedString() }
+        let options: [NSAttributedString.DocumentReadingOptionKey: Any]
+            = [.documentType: NSAttributedString.DocumentType.html,
+               .characterEncoding: String.Encoding.utf8.rawValue]
+        guard let attrStr
+            = try? NSAttributedString(data: data, options: options,
+                                      documentAttributes: nil) else { return NSAttributedString() }
+        return attrStr
+    }
 }

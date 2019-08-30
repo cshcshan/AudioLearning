@@ -7,6 +7,7 @@ target 'AudioLearning' do
 
   # Pods for AudioLearning
   pod 'SwiftSoup'
+  pod 'ReachabilitySwift'
 
   target 'AudioLearningTests' do
     inherit! :search_paths

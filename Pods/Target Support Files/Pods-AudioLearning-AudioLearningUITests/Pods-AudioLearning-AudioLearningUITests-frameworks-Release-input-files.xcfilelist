@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework
+${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework

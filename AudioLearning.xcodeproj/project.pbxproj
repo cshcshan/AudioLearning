@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		065222BE62AC9A3B56CEEA18 /* Pods_AudioLearning_AudioLearningUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FECDDB130FA1D10802F11A57 /* Pods_AudioLearning_AudioLearningUITests.framework */; };
 		332C155123174CF8003C78EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155023174CF8003C78EA /* AppDelegate.swift */; };
 		332C155323174CF8003C78EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155223174CF8003C78EA /* ViewController.swift */; };
 		332C155623174CF8003C78EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155423174CF8003C78EA /* Main.storyboard */; };
@@ -25,7 +26,6 @@
 		332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
-		EC48C94981C4ACB07B3A656B /* Pods_AudioLearningUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,14 +69,16 @@
 		332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModelTests.swift; sourceTree = "<group>"; };
 		332C159A2318CE10003C78EA /* ep-190815.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "ep-190815.html"; sourceTree = "<group>"; };
 		332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModel.swift; sourceTree = "<group>"; };
-		378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearningUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
+		81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; sourceTree = "<group>"; };
 		92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearningUITests/Pods-AudioLearningUITests.release.xcconfig"; sourceTree = "<group>"; };
 		A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningUITests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningUITests/Pods-AudioLearningUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B2579CE3CD69FBFFEFEB7B46 /* Pods-AudioLearning-AudioLearningUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning-AudioLearningUITests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearning.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearningTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8C2E11421DFD75D5A617F7 /* Pods-AudioLearning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.debug.xcconfig"; sourceTree = "<group>"; };
+		FECDDB130FA1D10802F11A57 /* Pods_AudioLearning_AudioLearningUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioLearning_AudioLearningUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC48C94981C4ACB07B3A656B /* Pods_AudioLearningUITests.framework in Frameworks */,
+				065222BE62AC9A3B56CEEA18 /* Pods_AudioLearning_AudioLearningUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +212,8 @@
 				06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */,
 				A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */,
 				92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */,
+				B2579CE3CD69FBFFEFEB7B46 /* Pods-AudioLearning-AudioLearningUITests.debug.xcconfig */,
+				81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -219,7 +223,7 @@
 			children = (
 				B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */,
 				C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */,
-				378F863281EE5433AF5E8D61 /* Pods_AudioLearningUITests.framework */,
+				FECDDB130FA1D10802F11A57 /* Pods_AudioLearning_AudioLearningUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -274,6 +278,7 @@
 				332C156823174CF9003C78EA /* Sources */,
 				332C156923174CF9003C78EA /* Frameworks */,
 				332C156A23174CF9003C78EA /* Resources */,
+				0BA9D33E145451EE1260330A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -358,6 +363,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0BA9D33E145451EE1260330A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		332C157F23174E4B003C78EA /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -430,7 +452,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AudioLearningUITests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-AudioLearning-AudioLearningUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -725,7 +747,7 @@
 		};
 		332C157C23174CF9003C78EA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A2CD1942272DFC4A52A35F42 /* Pods-AudioLearningUITests.debug.xcconfig */;
+			baseConfigurationReference = B2579CE3CD69FBFFEFEB7B46 /* Pods-AudioLearning-AudioLearningUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -745,7 +767,7 @@
 		};
 		332C157D23174CF9003C78EA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 92CEDDE6FC9FE6FC10FCFD1C /* Pods-AudioLearningUITests.release.xcconfig */;
+			baseConfigurationReference = 81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_AudioLearningUITestsVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_AudioLearningUITestsVersionString[];
+FOUNDATION_EXPORT double ReachabilityVersionNumber;
+FOUNDATION_EXPORT const unsigned char ReachabilityVersionString[];
 

@@ -37,11 +37,11 @@ class EpisodeModelTests: XCTestCase {
     
     func testInit_WithNil() {
         let sut = EpisodeModel(episode: nil, title: nil, desc: nil, date: nil, imagePath: nil, link: nil)
-        XCTAssertEqual(sut.episode, nil)
-        XCTAssertEqual(sut.title, nil)
-        XCTAssertEqual(sut.desc, nil)
-        XCTAssertEqual(sut.date, nil)
-        XCTAssertEqual(sut.imagePath, nil)
-        XCTAssertEqual(sut.link, nil)
+        XCTAssertNil(sut.episode)
+        XCTAssertNil(sut.title)
+        XCTAssertNil(sut.desc)
+        XCTAssertNil(sut.date)
+        XCTAssertNil(sut.imagePath)
+        XCTAssertNil(sut.link)
     }
 }

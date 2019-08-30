@@ -23,6 +23,18 @@ class ParseSixMinutesHelper: ParseHelperProtocol {
         return episodeModels
     }
     
+    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String) -> EpisodeDetailModel? {
+        guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return nil }
+        let scriptHtml = getScriptHtml(by: document)
+        let audioLink = getAudioLink(by: document)
+        return EpisodeDetailModel(link: nil, scriptHtml: scriptHtml, audioLink: audioLink)
+    }
+}
+
+extension ParseSixMinutesHelper {
+    
+    // MARK: List
+    
     private func getTopCourseContentItemToEpisodeModels(from document: Document) -> EpisodeModel? {
         guard let elements = try? document.select("[data-widget-index=\"4\"]"),
             let element = elements.first() else { return nil }
@@ -83,9 +95,7 @@ class ParseSixMinutesHelper: ParseHelperProtocol {
         guard let episodeAndDates = try? listElement.select("div.details > h3"),
             let episodeAndDate = episodeAndDates.first(),
             let episodes = try? listElement.select("div.details > h3 > b"),
-            let episode = episodes.first() else {
-                return nil
-        }
+            let episode = episodes.first() else { return nil }
         try? episodeAndDate.removeChild(episode)
         guard let date = try? episodeAndDate.text() else { return nil }
         return date.replacingOccurrences(of: "/", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -100,6 +110,28 @@ class ParseSixMinutesHelper: ParseHelperProtocol {
     
     func getLink(by listElement: Element) -> String? {
         guard let links = try? listElement.select("div.text > h2 > a"),
+            let link = links.first(),
+            let href = try? link.attr("href") else { return nil }
+        return href.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+extension ParseSixMinutesHelper {
+    
+    // MARK: Detail
+    
+    func getScriptHtml(by document: Document) -> String? {
+        guard let scripts = try? document.select("div.6 > div.text"),
+            let script = scripts.first() else { return nil }
+        if let ulNodes = try? script.select("ul"), let ulNode = ulNodes.first() {
+            try? script.removeChild(ulNode)
+        }
+        guard let html = try? script.html() else { return nil }
+        return html
+    }
+    
+    func getAudioLink(by document: Document) -> String? {
+        guard let links = try? document.select("a.bbcle-download-extension-mp3"),
             let link = links.first(),
             let href = try? link.attr("href") else { return nil }
         return href.trimmingCharacters(in: .whitespacesAndNewlines)

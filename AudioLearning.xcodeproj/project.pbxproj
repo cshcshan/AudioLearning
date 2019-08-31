@@ -293,6 +293,7 @@
 				332C155D23174CF9003C78EA /* Sources */,
 				332C155E23174CF9003C78EA /* Frameworks */,
 				332C155F23174CF9003C78EA /* Resources */,
+				2D812AB3657AB022324F2040 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -412,6 +413,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D812AB3657AB022324F2040 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		332C157F23174E4B003C78EA /* Swiftlint */ = {

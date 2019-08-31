@@ -6,12 +6,16 @@ target 'AudioLearning' do
   use_frameworks!
 
   # Pods for AudioLearning
-  pod 'SwiftSoup'
   pod 'ReachabilitySwift'
+  pod 'SwiftSoup'
+  pod 'RxSwift', '~> 5'
+  pod 'RxCocoa', '~> 5'
 
   target 'AudioLearningTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RxBlocking', '~> 5'
+    pod 'RxTest', '~> 5'
   end
 
   target 'AudioLearningUITests' do

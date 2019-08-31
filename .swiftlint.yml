@@ -1,8 +1,9 @@
 disabled_rules:
   - trailing_whitespace
+  - empty_enum_arguments
   
-opt_in_rules:
-  - vertical_whitespace_between_cases
+# opt_in_rules:
+#   - vertical_whitespace_between_cases
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Pods

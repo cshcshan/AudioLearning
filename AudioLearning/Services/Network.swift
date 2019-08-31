@@ -8,33 +8,44 @@
 
 import Foundation
 
-protocol NetworkProtocol {
+protocol URLSessionProtocol {
     typealias Handler = (Data?, URLResponse?, Error?) -> Void
     func performRequest(for url: URL, completionHandler: @escaping Handler)
 }
 
-extension URLSession: NetworkProtocol {
-    typealias Handler = NetworkProtocol.Handler
-    func performRequest(for url: URL, completionHandler: @escaping NetworkProtocol.Handler) {
+extension URLSession: URLSessionProtocol {
+    typealias Handler = URLSessionProtocol.Handler
+    func performRequest(for url: URL, completionHandler: @escaping URLSessionProtocol.Handler) {
         let task = dataTask(with: url, completionHandler: completionHandler)
         task.resume()
     }
 }
 
 class Network {
-    enum Result {
-        case data(Data)
-        case error(Error)
+    enum Result: Equatable {
+        case data(Data?)
+        case error(Error?)
+        
+        static func == (lhs: Network.Result, rhs: Network.Result) -> Bool {
+            switch (lhs, rhs) {
+            case (let .data(lhsData), let .data(rhsData)):
+                return lhsData == rhsData
+            case (.error(_), .error(_)):
+                return true
+            default:
+                return false
+            }
+        }
     }
     
-    private let network: NetworkProtocol
+    private let urlSession: URLSessionProtocol
     
-    init(network: NetworkProtocol = URLSession.shared) {
-        self.network = network
+    init(urlSession: URLSessionProtocol = URLSession.shared) {
+        self.urlSession = urlSession
     }
     
     func get(from url: URL, completionHandler: @escaping (Result) -> Void) {
-        network.performRequest(for: url) { (data, _, error) in
+        urlSession.performRequest(for: url) { (data, _, error) in
             if let error = error {
                 return completionHandler(.error(error))
             }

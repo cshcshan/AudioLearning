@@ -26,6 +26,7 @@
 		332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */; };
 		33E377C323190D8F00C6671B /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C223190D8F00C6671B /* Network.swift */; };
 		33E377C523190E8200C6671B /* MockNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C423190E8200C6671B /* MockNetwork.swift */; };
+		33E377C9231A49FE00C6671B /* NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C8231A49FE00C6671B /* NetworkTests.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
 /* End PBXBuildFile section */
@@ -73,6 +74,7 @@
 		332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModel.swift; sourceTree = "<group>"; };
 		33E377C223190D8F00C6671B /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		33E377C423190E8200C6671B /* MockNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetwork.swift; sourceTree = "<group>"; };
+		33E377C8231A49FE00C6671B /* NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
 		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
 		81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				332C158E23178A5A003C78EA /* EpisodeModelTests.swift */,
 				332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */,
 				332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */,
+				33E377C8231A49FE00C6671B /* NetworkTests.swift */,
 				332C15962317EF43003C78EA /* ExtensionStringTests.swift */,
 				33E377C423190E8200C6671B /* MockNetwork.swift */,
 				332C156723174CF9003C78EA /* Info.plist */,
@@ -518,6 +521,7 @@
 			files = (
 				332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */,
 				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
+				33E377C9231A49FE00C6671B /* NetworkTests.swift in Sources */,
 				33E377C523190E8200C6671B /* MockNetwork.swift in Sources */,
 				332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */,
 				332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */,

@@ -7,22 +7,43 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
+
+protocol APIServiceProtocol {
+    func getEpisodeList() -> Observable<[EpisodeModel]>
+}
 
 class APIService {
     enum URLPath: String {
         case episodeList = "http://www.bbc.co.uk/learningenglish/english/features/6-minute-english"
     }
     
-    var network: Network
+    var urlSession: URLSession
+    var parseSMHelper: ParseSixMinutesHelper
     
-    init(network: Network) {
-        self.network = network
+    init(urlSession: URLSession = URLSession.shared, parseSMHelper: ParseSixMinutesHelper) {
+        self.urlSession = urlSession
+        self.parseSMHelper = parseSMHelper
     }
     
-    func getEpisodeList(completionHandler: @escaping (Network.Result) -> Void) {
-        guard let url = URL(string: URLPath.episodeList.rawValue) else {
-            return completionHandler(.error(Errors.urlIsNull))
+    func getEpisodeList() -> Observable<[EpisodeModel]> {
+        let urlString = URLPath.episodeList.rawValue
+        guard let url = URL(string: urlString) else {
+            return .error(Errors.urlIsNull)
         }
-        network.get(from: url, completionHandler: completionHandler)
+        let request = URLRequest(url: url)
+        return urlSession.rx
+            .response(request: request)
+            .map { [weak self] (response: HTTPURLResponse, data: Data) -> [EpisodeModel] in
+                guard 200..<300 ~= response.statusCode else {
+                    throw Errors.statusCode
+                }
+                guard let html = String(data: data, encoding: .utf8) else {
+                    throw Errors.convertDataToHtml
+                }
+                let episodeModels = self?.parseSMHelper.parseHtmlToEpisodeModels(by: html, urlString: urlString)
+                return episodeModels ?? []
+        }
     }
 }

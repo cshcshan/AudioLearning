@@ -1,5 +1,5 @@
 //
-//  APIManagerTests.swift
+//  APIServiceTests.swift
 //  AudioLearningTests
 //
 //  Created by Han Chen on 2019/8/31.
@@ -9,16 +9,16 @@
 import XCTest
 @testable import AudioLearning
 
-class APIManagerTests: XCTestCase {
+class APIServiceTests: XCTestCase {
     
-    var sut: APIManager!
+    var sut: APIService!
     var network: Network!
     var urlSession: MockURLSession!
 
     override func setUp() {
         urlSession = MockURLSession()
         network = Network(urlSession: urlSession)
-        sut = APIManager(network: network)
+        sut = APIService(network: network)
         super.setUp()
     }
 

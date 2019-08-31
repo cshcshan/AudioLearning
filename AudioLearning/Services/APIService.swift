@@ -1,5 +1,5 @@
 //
-//  APIManager.swift
+//  APIService.swift
 //  AudioLearning
 //
 //  Created by Han Chen on 2019/8/31.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class APIManager {
+class APIService {
     enum URLPath: String {
         case episodeList = "http://www.bbc.co.uk/learningenglish/english/features/6-minute-english"
     }

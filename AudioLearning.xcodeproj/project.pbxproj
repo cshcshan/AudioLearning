@@ -25,10 +25,10 @@
 		332C159B2318CE10003C78EA /* ep-190815.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C159A2318CE10003C78EA /* ep-190815.html */; };
 		332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */; };
 		33E377C323190D8F00C6671B /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C223190D8F00C6671B /* Network.swift */; };
-		33E377C523190E8200C6671B /* MockNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C423190E8200C6671B /* MockNetwork.swift */; };
+		33E377C523190E8200C6671B /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C423190E8200C6671B /* MockURLSession.swift */; };
 		33E377C9231A49FE00C6671B /* NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E377C8231A49FE00C6671B /* NetworkTests.swift */; };
-		33E37809231A53F300C6671B /* APIManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E37808231A53F300C6671B /* APIManagerTests.swift */; };
-		33E3780B231A605D00C6671B /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780A231A605D00C6671B /* APIManager.swift */; };
+		33E37809231A53F300C6671B /* APIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E37808231A53F300C6671B /* APIServiceTests.swift */; };
+		33E3780B231A605D00C6671B /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780A231A605D00C6671B /* APIService.swift */; };
 		33E3780D231A66B300C6671B /* EnumError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780C231A66B300C6671B /* EnumError.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
@@ -76,10 +76,10 @@
 		332C159A2318CE10003C78EA /* ep-190815.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "ep-190815.html"; sourceTree = "<group>"; };
 		332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModel.swift; sourceTree = "<group>"; };
 		33E377C223190D8F00C6671B /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
-		33E377C423190E8200C6671B /* MockNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetwork.swift; sourceTree = "<group>"; };
+		33E377C423190E8200C6671B /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 		33E377C8231A49FE00C6671B /* NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
-		33E37808231A53F300C6671B /* APIManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManagerTests.swift; sourceTree = "<group>"; };
-		33E3780A231A605D00C6671B /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		33E37808231A53F300C6671B /* APIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTests.swift; sourceTree = "<group>"; };
+		33E3780A231A605D00C6671B /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		33E3780C231A66B300C6671B /* EnumError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumError.swift; sourceTree = "<group>"; };
 		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
@@ -147,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				332C15902317A5BD003C78EA /* Models */,
+				33E3780E231A758900C6671B /* ViewModels */,
 				33E377C123190D8F00C6671B /* Services */,
 				332C158423177683003C78EA /* Utilities */,
 				332C15892317874B003C78EA /* Resources */,
@@ -163,13 +164,13 @@
 		332C156423174CF9003C78EA /* AudioLearningTests */ = {
 			isa = PBXGroup;
 			children = (
+				33E377C8231A49FE00C6671B /* NetworkTests.swift */,
+				33E37808231A53F300C6671B /* APIServiceTests.swift */,
 				332C158E23178A5A003C78EA /* EpisodeModelTests.swift */,
 				332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */,
 				332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */,
-				33E377C8231A49FE00C6671B /* NetworkTests.swift */,
-				33E37808231A53F300C6671B /* APIManagerTests.swift */,
 				332C15962317EF43003C78EA /* ExtensionStringTests.swift */,
-				33E377C423190E8200C6671B /* MockNetwork.swift */,
+				33E377C423190E8200C6671B /* MockURLSession.swift */,
 				332C156723174CF9003C78EA /* Info.plist */,
 			);
 			path = AudioLearningTests;
@@ -224,9 +225,16 @@
 			isa = PBXGroup;
 			children = (
 				33E377C223190D8F00C6671B /* Network.swift */,
-				33E3780A231A605D00C6671B /* APIManager.swift */,
+				33E3780A231A605D00C6671B /* APIService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		33E3780E231A758900C6671B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		9243F4B01F630AFE22117B14 /* Pods */ = {
@@ -514,7 +522,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33E3780B231A605D00C6671B /* APIManager.swift in Sources */,
+				33E3780B231A605D00C6671B /* APIService.swift in Sources */,
 				332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */,
 				332C155323174CF8003C78EA /* ViewController.swift in Sources */,
 				33E3780D231A66B300C6671B /* EnumError.swift in Sources */,
@@ -533,10 +541,10 @@
 				332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */,
 				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
 				33E377C9231A49FE00C6671B /* NetworkTests.swift in Sources */,
-				33E377C523190E8200C6671B /* MockNetwork.swift in Sources */,
+				33E377C523190E8200C6671B /* MockURLSession.swift in Sources */,
 				332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */,
 				332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */,
-				33E37809231A53F300C6671B /* APIManagerTests.swift in Sources */,
+				33E37809231A53F300C6671B /* APIServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

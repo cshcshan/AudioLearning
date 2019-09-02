@@ -10,6 +10,5 @@ import Foundation
 
 enum Errors: Error {
     case urlIsNull
-    case statusCode
     case convertDataToHtml
 }

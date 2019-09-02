@@ -12,7 +12,11 @@ import RxSwift
 
 class MockAPIService: APIServiceProtocol {
     
-    func getEpisodeList() -> Observable<[EpisodeModel]> {
-        return .empty()
+    init() {}
+    
+    var episodesReturnValue: Observable<[EpisodeModel]> = .empty()
+    
+    func getEpisodes() -> Observable<[EpisodeModel]> {
+        return episodesReturnValue
     }
 }

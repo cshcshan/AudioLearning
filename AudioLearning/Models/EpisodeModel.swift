@@ -25,3 +25,5 @@ struct EpisodeModel {
         self.link = link
     }
 }
+
+extension EpisodeModel: Equatable {}

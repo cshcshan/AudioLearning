@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 protocol APIServiceProtocol {
-    func getEpisodeList() -> Observable<[EpisodeModel]>
+    func getEpisodes() -> Observable<[EpisodeModel]>
 }
 
 class APIService {
@@ -27,7 +27,7 @@ class APIService {
         self.parseSMHelper = parseSMHelper
     }
     
-    func getEpisodeList() -> Observable<[EpisodeModel]> {
+    func getEpisodes() -> Observable<[EpisodeModel]> {
         let urlString = URLPath.episodeList.rawValue
         guard let url = URL(string: urlString) else {
             return .error(Errors.urlIsNull)
@@ -37,7 +37,7 @@ class APIService {
             .response(request: request)
             .map { [weak self] (response: HTTPURLResponse, data: Data) -> [EpisodeModel] in
                 guard 200..<300 ~= response.statusCode else {
-                    throw Errors.statusCode
+                    throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
                 }
                 guard let html = String(data: data, encoding: .utf8) else {
                     throw Errors.convertDataToHtml

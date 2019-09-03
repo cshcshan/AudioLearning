@@ -47,7 +47,7 @@ class EpisodeListViewModelTests: XCTestCase {
                                           desc: "Age and political views",
                                           date: "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
                                           imagePath: "http://ichef.bbci.co.uk/images/ic/976xn/p07jtrrn.jpg",
-                                          link: "/learningenglish/english/features/6-minute-english/ep-190822")
+                                          path: "/learningenglish/english/features/6-minute-english/ep-190822")
         
         apiService.episodesReturnValue = .just(episodesModels)
         

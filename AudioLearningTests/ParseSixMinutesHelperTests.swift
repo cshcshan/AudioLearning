@@ -115,7 +115,7 @@ class ParseSixMinutesHelperTests: XCTestCase {
         }
         let model = sut.parseHtmlToEpisodeDetailModel(by: htmlString, urlString: path)
         XCTAssertNotNil(model)
-        XCTAssertNil(model!.link)
+        XCTAssertNil(model!.path)
         XCTAssertNotNil(model!.scriptHtml)
         XCTAssertNotNil(model!.audioLink)
     }
@@ -123,7 +123,7 @@ class ParseSixMinutesHelperTests: XCTestCase {
     func testParseHtmlToEpisodeDetailModel_WithNil() {
         let model = sut.parseHtmlToEpisodeDetailModel(by: "", urlString: "")
         XCTAssertNotNil(model)
-        XCTAssertNil(model!.link)
+        XCTAssertNil(model!.path)
         XCTAssertNil(model!.scriptHtml)
         XCTAssertNil(model!.audioLink)
     }
@@ -178,13 +178,13 @@ extension ParseSixMinutesHelperTests {
         XCTAssertEqual("http://ichef.bbci.co.uk/images/ic/976xn/p07jtrrn.jpg", imagePath)
     }
     
-    func testGetLink_TopItem() {
+    func testGetPath_TopItem() {
         guard let element = topItemElement else {
             XCTFail("Get an error when getting topItemElement.")
             return
         }
-        let link = sut.getLink(by: element)
-        XCTAssertEqual("/learningenglish/english/features/6-minute-english/ep-190822", link)
+        let path = sut.getPath(by: element)
+        XCTAssertEqual("/learningenglish/english/features/6-minute-english/ep-190822", path)
     }
 }
 
@@ -237,13 +237,13 @@ extension ParseSixMinutesHelperTests {
         XCTAssertEqual("http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg", imagePath)
     }
     
-    func testGetLink_FromList() {
+    func testGetPath_FromList() {
         guard let element = listElement else {
             XCTFail("Get an error when getting listElement.")
             return
         }
-        let link = sut.getLink(by: element)
-        XCTAssertEqual("/learningenglish/english/features/6-minute-english/ep-190815", link)
+        let path = sut.getPath(by: element)
+        XCTAssertEqual("/learningenglish/english/features/6-minute-english/ep-190815", path)
     }
 }
 

@@ -42,7 +42,7 @@ class ParseSixMinutesHelper: ParseHelperProtocol {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return nil }
         let scriptHtml = getScriptHtml(by: document)
         let audioLink = getAudioLink(by: document)
-        return EpisodeDetailModel(link: nil, scriptHtml: scriptHtml, audioLink: audioLink)
+        return EpisodeDetailModel(path: nil, scriptHtml: scriptHtml, audioLink: audioLink)
     }
 }
 
@@ -58,13 +58,13 @@ extension ParseSixMinutesHelper {
         let desc = getDesc(by: element)
         let date = getDate(by: element)
         let imagePath = getImagePath(by: element)
-        let link = getLink(by: element)
+        let path = getPath(by: element)
         return EpisodeModel(episode: episode,
                             title: title,
                             desc: desc,
                             date: date?.toDate(dateFormat: "dd MMM yyyy"),
                             imagePath: imagePath,
-                            link: link)
+                            path: path)
     }
     
     private func getListToEpisodeModels(from document: Document) -> [EpisodeModel] {
@@ -75,13 +75,13 @@ extension ParseSixMinutesHelper {
             let desc = getDesc(by: element)
             let date = getDate(by: element)
             let imagePath = getImagePath(by: element)
-            let link = getLink(by: element)
+            let path = getPath(by: element)
             return EpisodeModel(episode: episode,
                                 title: title,
                                 desc: desc,
                                 date: date?.toDate(dateFormat: "dd MMM yyyy"),
                                 imagePath: imagePath,
-                                link: link)
+                                path: path)
         })
     }
     
@@ -123,7 +123,7 @@ extension ParseSixMinutesHelper {
         return src.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    func getLink(by listElement: Element) -> String? {
+    func getPath(by listElement: Element) -> String? {
         guard let links = try? listElement.select(HtmlQuery.smTitle.rawValue),
             let link = links.first(),
             let href = try? link.attr(HtmlQuery.smHref.rawValue) else { return nil }

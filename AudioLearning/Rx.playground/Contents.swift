@@ -70,3 +70,18 @@ subject.subscribe(onNext: { (int) in
     print("Completed.")
 })
 subject.on(.next(3))
+
+print("F: ---")
+
+var o = Observable<String>.create { (observer) -> Disposable in
+    observer.onNext("Observable 1")
+    return Disposables.create()
+}
+o.subscribe(onNext: { (str) in
+    print(str)
+})
+o = Observable<String>.create { (observer) -> Disposable in
+    observer.onNext("Observable 2")
+    return Disposables.create()
+}
+

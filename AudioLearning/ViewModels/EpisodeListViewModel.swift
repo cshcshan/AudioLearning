@@ -17,7 +17,7 @@ class EpisodeListViewModel {
     
     // Output
     private(set) var episodes: Observable<[EpisodeModel]>
-    private(set) var alert: PublishSubject<AlertModel>
+    private(set) var alert: Observable<AlertModel>
     
     private let apiService: APIServiceProtocol!
     
@@ -29,14 +29,13 @@ class EpisodeListViewModel {
         let alertSubject = PublishSubject<AlertModel>()
         alert = alertSubject
         
-        self.episodes = reload.flatMapLatest { (_) in
+        self.episodes = reload.flatMapLatest({ (_) in
             apiService.getEpisodes()
-                .catchError { (error) -> Observable<[EpisodeModel]> in
-                    let alertModel = AlertModel(title: "Get Episode List Error",
-                                                message: error.localizedDescription)
-                    alertSubject.onNext(alertModel)
-                    return .empty()
-                }
-        }
+        }).catchError({ (error) -> Observable<[EpisodeModel]> in
+            let alertModel = AlertModel(title: "Get Episode List Error",
+                                        message: error.localizedDescription)
+            alertSubject.onNext(alertModel)
+            return .empty()
+        })
     }
 }

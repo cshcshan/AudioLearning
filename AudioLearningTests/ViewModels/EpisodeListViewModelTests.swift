@@ -88,7 +88,7 @@ class EpisodeListViewModelTests: XCTestCase {
             .bind(to: sut.reload)
             .disposed(by: disposeBag)
         
-        // ###
+        // execute reload.flatMapLatest by episodes.subscribe()
         sut.episodes
             .subscribe()
             .disposed(by: disposeBag)

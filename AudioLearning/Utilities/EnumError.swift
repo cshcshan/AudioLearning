@@ -10,5 +10,6 @@ import Foundation
 
 enum Errors: Error {
     case urlIsNull
+    case pathIsNull
     case convertDataToHtml
 }

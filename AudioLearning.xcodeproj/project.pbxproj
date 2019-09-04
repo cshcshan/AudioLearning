@@ -28,6 +28,9 @@
 		33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9F231E323000340C17 /* EpisodeListViewController.swift */; };
 		33892AA2231E324800340C17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33892AA1231E324800340C17 /* Main.storyboard */; };
 		33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */; };
+		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
+		33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* ExtensionDate.swift */; };
+		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
 		33E3780B231A605D00C6671B /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780A231A605D00C6671B /* APIService.swift */; };
 		33E3780D231A66B300C6671B /* EnumError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780C231A66B300C6671B /* EnumError.swift */; };
 		33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3781B231ABD1600C6671B /* MockAPIService.swift */; };
@@ -86,6 +89,10 @@
 		33892A9F231E323000340C17 /* EpisodeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewController.swift; sourceTree = "<group>"; };
 		33892AA1231E324800340C17 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
+		33892AA5231E935400340C17 /* ClosureDemo.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ClosureDemo.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
+		33892AA8231F6AA500340C17 /* ExtensionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDate.swift; sourceTree = "<group>"; };
+		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
 		33E3780A231A605D00C6671B /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		33E3780C231A66B300C6671B /* EnumError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumError.swift; sourceTree = "<group>"; };
 		33E3781B231ABD1600C6671B /* MockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
@@ -171,6 +178,7 @@
 				332C155923174CF9003C78EA /* LaunchScreen.storyboard */,
 				332C155C23174CF9003C78EA /* Info.plist */,
 				33E3781D231CB24400C6671B /* Rx.playground */,
+				33892AA5231E935400340C17 /* ClosureDemo.playground */,
 			);
 			path = AudioLearning;
 			sourceTree = "<group>";
@@ -229,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				332C15942317A7C1003C78EA /* ExtensionString.swift */,
+				33892AA8231F6AA500340C17 /* ExtensionDate.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -265,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				332C15962317EF43003C78EA /* ExtensionStringTests.swift */,
+				33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */,
 				332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */,
 			);
 			path = Utilities;
@@ -275,6 +285,7 @@
 			children = (
 				33892AA1231E324800340C17 /* Main.storyboard */,
 				33892A9F231E323000340C17 /* EpisodeListViewController.swift */,
+				33892AA6231F65D800340C17 /* EpisodeCell.swift */,
 				33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */,
 			);
 			path = Views;
@@ -604,7 +615,9 @@
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */,
+				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
+				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -616,6 +629,7 @@
 				33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */,
 				332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */,
 				33E37821231CB61300C6671B /* EpisodeListViewModelTests.swift in Sources */,
+				33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */,
 				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
 				332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */,
 				33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */,

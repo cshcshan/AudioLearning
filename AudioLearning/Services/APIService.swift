@@ -15,7 +15,7 @@ protocol APIServiceProtocol {
     func getEpisodeDetail(path: String) -> Observable<EpisodeDetailModel>
 }
 
-class APIService {
+class APIService: APIServiceProtocol {
     enum URLPath: String {
         case domain = "http://www.bbc.co.uk"
         case episodeList = "http://www.bbc.co.uk/learningenglish/english/features/6-minute-english"

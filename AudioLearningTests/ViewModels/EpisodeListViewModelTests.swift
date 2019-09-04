@@ -60,9 +60,10 @@ class EpisodeListViewModelTests: XCTestCase {
             .disposed(by: disposeBag)
         
         // MockObservable combines with Input
-        scheduler.createColdObservable([.next(0, ()),
-                                        .next(10, ()),
-                                        .next(200, ())])
+        scheduler
+            .createColdObservable([.next(0, ()),
+                                   .next(10, ()),
+                                   .next(200, ())])
             .bind(to: sut.reload)
             .disposed(by: disposeBag)
         
@@ -72,6 +73,30 @@ class EpisodeListViewModelTests: XCTestCase {
         
         let firstModel = episodes.events.first!.value.element!.first!
         XCTAssertEqual(firstModel, expectingModel)
+    }
+    
+    func testInit_WithRefreshing() {
+        let refreshing = scheduler.createObserver(Bool.self)
+        sut.refreshing
+            .bind(to: refreshing)
+            .disposed(by: disposeBag)
+        
+        scheduler
+            .createColdObservable([.next(0, ()),
+                                   .next(10, ())])
+            .bind(to: sut.reload)
+            .disposed(by: disposeBag)
+        
+        // execute reload.flatMapLatest by episodes.subscribe()
+        sut.episodes
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        scheduler.start()
+        
+        XCTAssertEqual(refreshing.events.count, 2)
+        XCTAssertEqual(refreshing.events, [.next(0, (true)),
+                                           .next(10, (true))])
     }
     
     func testInit_WithError() {

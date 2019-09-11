@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import RxSwift
 
-class EpisodeListCoordinator: Coordinator {
+class EpisodeListCoordinator: BaseCoordinator<Void> {
     
     private let window: UIWindow
     private var navigationController: UINavigationController!
@@ -17,10 +18,11 @@ class EpisodeListCoordinator: Coordinator {
         self.window = window
     }
     
-    func start() {
+    override func start() -> Observable<Void> {
         self.showEpisodeList()
         self.window.rootViewController = navigationController
         self.window.makeKeyAndVisible()
+        return .never()
     }
     
     private func showEpisodeList() {
@@ -29,9 +31,31 @@ class EpisodeListCoordinator: Coordinator {
         let apiService = APIService(parseSMHelper: parseSixMinutesHelper)
         let viewModel = EpisodeListViewModel(apiService: apiService)
         
+        /*
+         Note:
+            If didn't store childCoordinator to BaseCoordinator.childCoordinators,
+            the observable 'showEpisodeDetail' from viewModel will be disposed at the end of AppCoordinator.
+         */
+        viewModel.showEpisodeDetail
+            .subscribe(onNext: { [weak self] (episodeModel) in
+                guard let `self` = self else { return }
+                self.showEpisodeDetail(apiService: apiService, episodeModel: episodeModel)
+            })
+            .disposed(by: disposeBag)
+
         // ViewController
         let episodeListViewController = EpisodeListViewController.initialize(from: "Main", storyboardID: "EpisodeList")
         episodeListViewController.viewModel = viewModel
         navigationController = UINavigationController(rootViewController: episodeListViewController)
+    }
+    
+    private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
+        // ViewModel
+        let viewModel = EpisodeDetailViewModel(apiService: apiService, episodeModel: episodeModel)
+        
+        // ViewController
+        let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Main", storyboardID: "EpisodeDetail")
+        episodeDetailViewController.viewModel = viewModel
+        navigationController.pushViewController(episodeDetailViewController, animated: true)
     }
 }

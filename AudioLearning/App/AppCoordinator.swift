@@ -7,22 +7,18 @@
 //
 
 import UIKit
+import RxSwift
 
-protocol Coordinator {
-    init(window: UIWindow)
-    func start()
-}
+class AppCoordinator: BaseCoordinator<Void> {
 
-class AppCoordinator: Coordinator {
-    
     private let window: UIWindow
-    
+
     required init(window: UIWindow) {
         self.window = window
     }
-    
-    func start() {
+
+    override func start() -> Observable<Void> {
         let episodeListCoordinator = EpisodeListCoordinator(window: window)
-        episodeListCoordinator.start()
+        return coordinate(to: episodeListCoordinator)
     }
 }

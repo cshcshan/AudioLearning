@@ -34,6 +34,7 @@
 		33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07472328806D0030EBBA /* AppCoordinator.swift */; };
 		33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074B232886620030EBBA /* StoryboardGettable.swift */; };
 		33DB074E232898B50030EBBA /* EpisodeListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */; };
+		33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */; };
 		33E3780B231A605D00C6671B /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780A231A605D00C6671B /* APIService.swift */; };
 		33E3780D231A66B300C6671B /* EnumError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780C231A66B300C6671B /* EnumError.swift */; };
 		33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3781B231ABD1600C6671B /* MockAPIService.swift */; };
@@ -99,6 +100,7 @@
 		33DB07472328806D0030EBBA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		33DB074B232886620030EBBA /* StoryboardGettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardGettable.swift; sourceTree = "<group>"; };
 		33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListCoordinator.swift; sourceTree = "<group>"; };
+		33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		33E3780A231A605D00C6671B /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		33E3780C231A66B300C6671B /* EnumError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumError.swift; sourceTree = "<group>"; };
 		33E3781B231ABD1600C6671B /* MockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				332C158C231789A6003C78EA /* ParseHelper.swift */,
 				33E3780C231A66B300C6671B /* EnumError.swift */,
 				33DB074B232886620030EBBA /* StoryboardGettable.swift */,
+				33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -636,6 +639,7 @@
 				33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */,
 				332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */,
 				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,
+				33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,

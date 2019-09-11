@@ -68,5 +68,9 @@ class EpisodeListViewController: UIViewController, StoryboardGettable {
             .controlEvent(.valueChanged)
             .bind(to: viewModel.reload)
             .disposed(by: disposeBag)
+        
+        tableView.rx.modelSelected(EpisodeModel.self)
+            .bind(to: viewModel.selectEpisode)
+            .disposed(by: disposeBag)
     }
 }

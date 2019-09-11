@@ -10,16 +10,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class EpisodeListViewController: UIViewController {
+class EpisodeListViewController: UIViewController, StoryboardGettable {
     
     @IBOutlet weak var tableView: UITableView!
     private let refreshControl = UIRefreshControl()
     
-    private lazy var viewModel: EpisodeListViewModel = {
-        let parseSMHelper = ParseSixMinutesHelper()
-        let apiService = APIService(parseSMHelper: parseSMHelper)
-        return EpisodeListViewModel(apiService: apiService)
-    }()
+    var viewModel: EpisodeListViewModel!
     private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -27,16 +23,6 @@ class EpisodeListViewController: UIViewController {
         setupUI()
         setupBindings()
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     private func setupUI() {
         refreshControl.sendActions(for: .valueChanged)

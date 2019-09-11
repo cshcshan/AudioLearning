@@ -17,37 +17,43 @@ class EpisodeListViewModel {
     private(set) var selectEpisode: AnyObserver<EpisodeModel>
     
     // Output
-    private(set) var episodes: Observable<[EpisodeModel]>
+    private(set) var episodes: Observable<[EpisodeModel]>!
     private(set) var alert: Observable<AlertModel>
     private(set) var refreshing: Observable<Bool>
     private(set) var showEpisodeDetail: Observable<EpisodeModel>
     
     private let apiService: APIServiceProtocol!
     
+    private let reloadSubject = PublishSubject<Void>()
+    private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
+    private let alertSubject = PublishSubject<AlertModel>()
+    private let refreshingSubject = PublishSubject<Bool>()
+    
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
         
-        let reloadSubject = PublishSubject<Void>()
         reload = reloadSubject.asObserver()
-        
-        let selectEpisodeSubject = PublishSubject<EpisodeModel>()
         selectEpisode = selectEpisodeSubject.asObserver()
         showEpisodeDetail = selectEpisodeSubject.asObservable()
+        alert = alertSubject.asObservable()
+        refreshing = refreshingSubject.asObservable()
         
-        let alertSubject = PublishSubject<AlertModel>()
-        alert = alertSubject
-        
-        let refreshingSubject = PublishSubject<Bool>()
-        refreshing = refreshingSubject
-        
-        self.episodes = reloadSubject.flatMapLatest({ (_) -> Observable<[EpisodeModel]> in
-            refreshingSubject.onNext(true)
-            return apiService.getEpisodes()
-        }).catchError({ (error) -> Observable<[EpisodeModel]> in
-            let alertModel = AlertModel(title: "Get Episode List Error",
-                                        message: error.localizedDescription)
-            alertSubject.onNext(alertModel)
-            return .empty()
-        })
+        episodes = reloadData()
+    }
+    
+    private func reloadData() -> Observable<[EpisodeModel]> {
+        return reloadSubject
+            .flatMapLatest({ [weak self] (_) -> Observable<[EpisodeModel]> in
+                guard let `self` = self else { return .empty() }
+                self.refreshingSubject.onNext(true)
+                return self.apiService.getEpisodes()
+            }).catchError({ [weak self] (error) -> Observable<[EpisodeModel]> in
+                guard let `self` = self else { return .empty() }
+                self.refreshingSubject.onNext(false)
+                let alertModel = AlertModel(title: "Get Episode List Error",
+                                            message: error.localizedDescription)
+                self.alertSubject.onNext(alertModel)
+                return self.reloadData()
+            })
     }
 }

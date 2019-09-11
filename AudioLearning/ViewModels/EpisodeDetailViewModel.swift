@@ -12,13 +12,14 @@ import RxCocoa
 class EpisodeDetailViewModel {
     
     // Input
-    private(set) var reload: PublishSubject<Void>
+    private(set) var reload: AnyObserver<Void>
     
     // Output
     private(set) var title: String
-    private(set) var scriptHtml: Observable<String>
+    private(set) var scriptHtml: BehaviorSubject<String>
     private(set) var audioLink: Observable<String>
     private(set) var alert: Observable<AlertModel>
+    private(set) var refreshing: Observable<Bool>
     
     private let apiService: APIServiceProtocol!
     private let episodeModel: EpisodeModel
@@ -31,24 +32,36 @@ class EpisodeDetailViewModel {
         
         self.disposeBag = DisposeBag()
         
-        self.reload = PublishSubject<Void>().asObserver()
+        let reloadSubject = PublishSubject<Void>()
+        self.reload = reloadSubject.asObserver()
         
         self.title = episodeModel.title ?? ""
         
         let alertSubject = PublishSubject<AlertModel>()
         self.alert = alertSubject
         
-        let episodeDetailModels = reload.flatMapLatest({ (_) in
-            apiService.getEpisodeDetail(path: episodeModel.path ?? "")
+        let refreshingSubject = PublishSubject<Bool>()
+        self.refreshing = refreshingSubject
+        
+        let episodeDetailModels = reloadSubject.flatMapLatest({ (_) -> Observable<EpisodeDetailModel> in
+            refreshingSubject.onNext(true)
+            return apiService.getEpisodeDetail(path: episodeModel.path ?? "")
         }).catchError({ (error) -> Observable<EpisodeDetailModel> in
-            let alertModel = AlertModel(title: "Get Episode List Error",
+            refreshingSubject.onNext(false)
+            let alertModel = AlertModel(title: "Load Episode Detail Error",
                                         message: error.localizedDescription)
             alertSubject.onNext(alertModel)
             return .empty()
         })
-        scriptHtml = episodeDetailModels.map({ (model) -> String in
-            model.scriptHtml ?? ""
-        })
+        
+        let scriptHtmlSubject = BehaviorSubject<String>(value: "")
+        scriptHtml = scriptHtmlSubject
+        episodeDetailModels
+            .subscribe(onNext: { (model) in
+                scriptHtmlSubject.onNext(model.scriptHtml ?? "")
+            })
+            .disposed(by: disposeBag)
+        
         audioLink = episodeDetailModels.map({ (model) -> String in
             model.audioLink ?? ""
         })

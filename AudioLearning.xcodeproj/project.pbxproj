@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		065222BE62AC9A3B56CEEA18 /* Pods_AudioLearning_AudioLearningUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FECDDB130FA1D10802F11A57 /* Pods_AudioLearning_AudioLearningUITests.framework */; };
 		332C155123174CF8003C78EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155023174CF8003C78EA /* AppDelegate.swift */; };
-		332C155323174CF8003C78EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155223174CF8003C78EA /* ViewController.swift */; };
 		332C155823174CF9003C78EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 332C155723174CF9003C78EA /* Assets.xcassets */; };
 		332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155923174CF9003C78EA /* LaunchScreen.storyboard */; };
 		332C157123174CF9003C78EA /* AudioLearningUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C157023174CF9003C78EA /* AudioLearningUITests.swift */; };
@@ -35,6 +34,7 @@
 		33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074B232886620030EBBA /* StoryboardGettable.swift */; };
 		33DB074E232898B50030EBBA /* EpisodeListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */; };
 		33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */; };
+		33DB07522328FAD80030EBBA /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07512328FAD80030EBBA /* BaseViewController.swift */; };
 		33E3780B231A605D00C6671B /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780A231A605D00C6671B /* APIService.swift */; };
 		33E3780D231A66B300C6671B /* EnumError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780C231A66B300C6671B /* EnumError.swift */; };
 		33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3781B231ABD1600C6671B /* MockAPIService.swift */; };
@@ -69,7 +69,6 @@
 		06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.release.xcconfig"; sourceTree = "<group>"; };
 		332C154D23174CF8003C78EA /* AudioLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C155023174CF8003C78EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		332C155223174CF8003C78EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		332C155723174CF9003C78EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		332C155A23174CF9003C78EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		332C155C23174CF9003C78EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -101,6 +100,7 @@
 		33DB074B232886620030EBBA /* StoryboardGettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardGettable.swift; sourceTree = "<group>"; };
 		33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListCoordinator.swift; sourceTree = "<group>"; };
 		33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		33DB07512328FAD80030EBBA /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		33E3780A231A605D00C6671B /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		33E3780C231A66B300C6671B /* EnumError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumError.swift; sourceTree = "<group>"; };
 		33E3781B231ABD1600C6671B /* MockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
@@ -181,9 +181,7 @@
 				33E377C123190D8F00C6671B /* Services */,
 				332C158423177683003C78EA /* Utilities */,
 				332C15892317874B003C78EA /* Resources */,
-				332C155223174CF8003C78EA /* ViewController.swift */,
 				332C155723174CF9003C78EA /* Assets.xcassets */,
-				332C155923174CF9003C78EA /* LaunchScreen.storyboard */,
 				332C155C23174CF9003C78EA /* Info.plist */,
 				33E3781D231CB24400C6671B /* Rx.playground */,
 				33892AA5231E935400340C17 /* ClosureDemo.playground */,
@@ -220,6 +218,7 @@
 				33E3780C231A66B300C6671B /* EnumError.swift */,
 				33DB074B232886620030EBBA /* StoryboardGettable.swift */,
 				33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */,
+				33DB07512328FAD80030EBBA /* BaseViewController.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -293,6 +292,7 @@
 		33892A9E231E320800340C17 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				332C155923174CF9003C78EA /* LaunchScreen.storyboard */,
 				33892AA1231E324800340C17 /* Main.storyboard */,
 				33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */,
 				33892A9F231E323000340C17 /* EpisodeListViewController.swift */,
@@ -628,8 +628,8 @@
 				33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */,
 				33E3780B231A605D00C6671B /* APIService.swift in Sources */,
 				332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */,
+				33DB07522328FAD80030EBBA /* BaseViewController.swift in Sources */,
 				33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */,
-				332C155323174CF8003C78EA /* ViewController.swift in Sources */,
 				33E3781F231CB5EE00C6671B /* EpisodeListViewModel.swift in Sources */,
 				33E3780D231A66B300C6671B /* EnumError.swift in Sources */,
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,

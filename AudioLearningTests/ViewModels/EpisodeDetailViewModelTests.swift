@@ -60,8 +60,9 @@ class EpisodeDetailViewModelTests: XCTestCase {
             .disposed(by: disposeBag)
         scheduler.start()
         
-        XCTAssertEqual(scriptHtml.events.count, 1)
-        XCTAssertEqual(scriptHtml.events, [.next(10, episodeDetailModel.scriptHtml!)])
+        XCTAssertEqual(scriptHtml.events.count, 2)
+        XCTAssertEqual(scriptHtml.events, [.next(0, ""),
+                                           .next(10, episodeDetailModel.scriptHtml!)])
     }
     
     func testInit_AudioLink() {
@@ -85,7 +86,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     
     func testInit_WithError() {
         let error = NSError(domain: "unit test", code: 2, userInfo: nil)
-        let expectingModel = AlertModel(title: "Get Episode List Error",
+        let expectingModel = AlertModel(title: "Load Episode Detail Error",
                                         message: error.localizedDescription)
         apiService.episodeDetailReturnValue = .error(error)
         

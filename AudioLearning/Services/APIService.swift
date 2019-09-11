@@ -19,6 +19,10 @@ class APIService: APIServiceProtocol {
     enum URLPath: String {
         case domain = "http://www.bbc.co.uk"
         case episodeList = "http://www.bbc.co.uk/learningenglish/english/features/6-minute-english"
+        
+        var url: URL? {
+            return URL(string: self.rawValue)
+        }
     }
     
     var urlSession: URLSession
@@ -30,8 +34,7 @@ class APIService: APIServiceProtocol {
     }
     
     func getEpisodes() -> Observable<[EpisodeModel]> {
-        let urlString = URLPath.episodeList.rawValue
-        guard let url = URL(string: urlString) else {
+        guard let url = URLPath.episodeList.url else {
             return .error(Errors.urlIsNull)
         }
         let request = URLRequest(url: url)
@@ -44,7 +47,7 @@ class APIService: APIServiceProtocol {
                 guard let html = String(data: data, encoding: .utf8) else {
                     throw Errors.convertDataToHtml
                 }
-                let episodeModels = self?.parseSMHelper.parseHtmlToEpisodeModels(by: html, urlString: urlString)
+                let episodeModels = self?.parseSMHelper.parseHtmlToEpisodeModels(by: html, urlString: url.absoluteString)
                 return episodeModels ?? []
         }
     }
@@ -53,7 +56,7 @@ class APIService: APIServiceProtocol {
         guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
             return .error(Errors.pathIsNull)
         }
-        guard let domain = URL(string: path) else {
+        guard let domain = URLPath.domain.url else {
             return .error(Errors.urlIsNull)
         }
         let url = domain.appendingPathComponent(path)

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class EpisodeListViewController: UIViewController, StoryboardGettable {
+class EpisodeListViewController: BaseViewController, StoryboardGettable {
     
     @IBOutlet weak var tableView: UITableView!
     private let refreshControl = UIRefreshControl()
@@ -32,12 +32,12 @@ class EpisodeListViewController: UIViewController, StoryboardGettable {
     }
 
     private func setupBindings() {
-        
         // ViewModel's output to the ViewController
         viewModel.episodes
             .observeOn(MainScheduler.instance)
             .do(onNext: { [weak self] (_) in
-                self?.refreshControl.endRefreshing()
+                guard let `self` = self else { return }
+                self.refreshControl.endRefreshing()
             })
             .bind(to: tableView.rx.items(cellIdentifier: "EpisodeCell", cellType: EpisodeCell.self),
                   curriedArgument: { (row, model, cell) in
@@ -46,7 +46,9 @@ class EpisodeListViewController: UIViewController, StoryboardGettable {
             .disposed(by: disposeBag)
         
         viewModel.refreshing
-            .subscribe(onNext: { (refreshing) in
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (refreshing) in
+                guard let `self` = self else { return }
                 if refreshing {
                     self.refreshControl.beginRefreshing()
                 } else {
@@ -56,8 +58,13 @@ class EpisodeListViewController: UIViewController, StoryboardGettable {
             .disposed(by: disposeBag)
         
         viewModel.alert
-            .subscribe(onNext: { (alert) in
-                print("alert title: \(alert.title ?? ""), message: \(alert.message ?? "")")
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (alert) in
+                guard let `self` = self else { return }
+                self.showConfirmAlert(title: alert.title,
+                                      message: alert.message,
+                                      confirmHandler: nil,
+                                      completionHandler: nil)
             })
             .disposed(by: disposeBag)
         
@@ -69,7 +76,8 @@ class EpisodeListViewController: UIViewController, StoryboardGettable {
             .bind(to: viewModel.reload)
             .disposed(by: disposeBag)
         
-        tableView.rx.modelSelected(EpisodeModel.self)
+        tableView.rx
+            .modelSelected(EpisodeModel.self)
             .bind(to: viewModel.selectEpisode)
             .disposed(by: disposeBag)
     }

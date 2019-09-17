@@ -35,7 +35,7 @@ class EpisodeListViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInit() {
+    func testInit_WithEpisodes() {
         let bundle = Bundle(for: type(of: self))
         let urlString = bundle.path(forResource: "6-minute-english", ofType: "html")!
         let url = URL(fileURLWithPath: urlString)

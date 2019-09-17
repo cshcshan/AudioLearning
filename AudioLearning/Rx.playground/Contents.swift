@@ -13,39 +13,48 @@ let observer: AnyObserver<String> = AnyObserver { (event) in
     }
 }
 
-Observable.just("Hello world").subscribe(observer)
+Observable
+    .just("Hello world 1")
+    .subscribe(observer)
+Observable
+    .just("Hello world 2")
+    .subscribe(observer)
 
 print("B: ---")
 
-Observable.just("This is RxSwift.").subscribe(onNext: { (str) in
-    print("next 2: \(str)")
-})
+Observable
+    .just("This is RxSwift.")
+    .subscribe(onNext: { (str) in
+        print("next 2: \(str)")
+    })
 
 print("C: ---")
 
 let behaviorSubject = BehaviorSubject<String>(value: "initial value")
-_ = behaviorSubject.subscribe(onNext: { (str) in
-    print(str)
-}, onError: { (error) in
-    print("Won't got an error")
-}, onCompleted: {
-    print("Completed")
-}) {
-    print("onDisposed")
+_ = behaviorSubject
+    .subscribe(onNext: { (str) in
+        print(str)
+    }, onError: { (error) in
+        print("Won't got an error")
+    }, onCompleted: {
+        print("Completed")
+    }) {
+        print("onDisposed")
 }
 behaviorSubject.onNext("second value")
 
 print("D: ---")
 
 let behaviorRelay = BehaviorRelay(value: "initial value 2")
-_ = behaviorRelay.subscribe(onNext: { (str) in
-    print(str)
-}, onError: { (error) in
-    print("Won't got an error")
-}, onCompleted: {
-    print("Completed")
-}) {
-    print("onDisposed")
+_ = behaviorRelay
+    .subscribe(onNext: { (str) in
+        print(str)
+    }, onError: { (error) in
+        print("Won't got an error")
+    }, onCompleted: {
+        print("Completed")
+    }) {
+        print("onDisposed")
 }
 behaviorRelay.accept("second value 2")
 
@@ -54,34 +63,40 @@ print("E: ---")
 let alert = PublishSubject<String>()
 alert.onNext("This is alert 1.")
 //alert.onCompleted()
-alert.subscribe(onNext: { (str) in
-    print(str)
-}, onCompleted: {
-    print("Completed")
-})
+alert
+    .subscribe(onNext: { (str) in
+        print(str)
+    }, onCompleted: {
+        print("Completed")
+    })
 alert.onNext("This is alert 2.")
 
 let subject = BehaviorSubject(value: 1)
 subject.on(.next(2))
 //subject.on(.completed)
-subject.subscribe(onNext: { (int) in
-    print(int)
-}, onCompleted: {
-    print("Completed.")
-})
+subject
+    .subscribe(onNext: { (int) in
+        print(int)
+    }, onCompleted: {
+        print("Completed.")
+    })
 subject.on(.next(3))
+subject.onNext(4)
 
 print("F: ---")
 
-var o = Observable<String>.create { (observer) -> Disposable in
-    observer.onNext("Observable 1")
-    return Disposables.create()
-}
-o.subscribe(onNext: { (str) in
-    print(str)
-})
-o = Observable<String>.create { (observer) -> Disposable in
-    observer.onNext("Observable 2")
-    return Disposables.create()
-}
+var o = Observable<String>
+    .create({ (observer) -> Disposable in
+        observer.onNext("Observable 1")
+        return Disposables.create()
+    })
+o
+    .subscribe(onNext: { (str) in
+        print(str)
+    })
+o = Observable<String>
+    .create({ (observer) -> Disposable in
+        observer.onNext("Observable 2")
+        return Disposables.create()
+    })
 

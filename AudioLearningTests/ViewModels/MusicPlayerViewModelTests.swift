@@ -376,6 +376,34 @@ extension MusicPlayerViewModelTests {
     }
 }
 
+// Change Speed
+
+extension MusicPlayerViewModelTests {
+    
+    func testChangeSpeed() {
+        player.musicSpeedRate = 1
+        
+        let speedRate = scheduler.createObserver(Float.self)
+        sut.speedRate
+            .drive(speedRate)
+            .disposed(by: disposeBag)
+        scheduler.createHotObservable([.next(10, 2),
+                                       .next(20, 3),
+                                       .next(30, 0.5)])
+            .bind(to: sut.changeSpeed)
+            .disposed(by: disposeBag)
+        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
+        sut.isPlaying
+            .drive()
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(speedRate.events.count, 3)
+        XCTAssertEqual(speedRate.events, [.next(10, 2),
+                                          .next(20, 3),
+                                          .next(30, 0.5)])
+    }
+}
+
 // Change Audio Position
 
 extension MusicPlayerViewModelTests {

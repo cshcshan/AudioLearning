@@ -25,6 +25,7 @@ protocol HCAudioPlayerProtocol {
     var rewind: AnyObserver<Int64>! { get }
     var speedUp: AnyObserver<Float>! { get }
     var speedDown: AnyObserver<Float>! { get }
+    var changeSpeed: AnyObserver<Float>! { get }
     var changeAudioPosition: AnyObserver<Float>! { get }
     // Outputs
     var status: Observable<HCAudioPlayer.Status>! { get }
@@ -52,6 +53,7 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
     private(set) var rewind: AnyObserver<Int64>!
     private(set) var speedUp: AnyObserver<Float>!
     private(set) var speedDown: AnyObserver<Float>!
+    private(set) var changeSpeed: AnyObserver<Float>!
     private(set) var changeAudioPosition: AnyObserver<Float>!
     
     // Outputs
@@ -136,6 +138,16 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
                 if player.rate < 0 { player.rate = 0 }
                 return player.rate
             })
+        
+        // Change Speed
+        let changeSpeedSubject = PublishSubject<Float>()
+        changeSpeed = changeSpeedSubject.asObserver()
+        changeSpeedSubject
+            .subscribe(onNext: { [weak self] (speedRate) in
+                guard let player = self?.player else { return }
+                player.rate = speedRate
+            })
+            .disposed(by: disposeBag)
         
         // Change Audio Location
         let changeAudioLocationSubject = PublishSubject<Float>()

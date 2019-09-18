@@ -19,6 +19,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
     var rewind: AnyObserver<Int64>!
     var speedUp: AnyObserver<Float>!
     var speedDown: AnyObserver<Float>!
+    var changeSpeed: AnyObserver<Float>!
     var changeAudioPosition: AnyObserver<Float>!
     
     // Outputs
@@ -78,8 +79,11 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
         speedUp = speedUpSubject.asObserver()
         let speedDownSubject = PublishSubject<Float>()
         speedDown = speedDownSubject.asObserver()
-        speedRate = Observable.of(speedUpSubject.asObservable(),
-                                  speedDownSubject.asObservable().map({ -$0 }))
+        
+        let speedRateSubject = PublishSubject<Float>()
+        speedRate = speedRateSubject.asObservable()
+        Observable.of(speedUpSubject.asObservable(),
+                      speedDownSubject.asObservable().map({ -$0 }))
             .merge()
             .map({ [weak self] (rate) -> Float in
                 guard let `self` = self else { return 1 }
@@ -87,6 +91,19 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
                 if self.musicSpeedRate < 0 { self.musicSpeedRate = 0 }
                 return self.musicSpeedRate
             })
+            .subscribe(onNext: { (rate) in
+                speedRateSubject.onNext(rate)
+            })
+            .disposed(by: disposeBag)
+        
+        // Change Speed
+        let changeSpeedSubject = PublishSubject<Float>()
+        changeSpeed = changeSpeedSubject.asObserver()
+        changeSpeedSubject
+            .subscribe(onNext: { (speedRate) in
+                speedRateSubject.onNext(speedRate)
+            })
+            .disposed(by: disposeBag)
         
         // Change Audio Position
         let changeAudioPositionSubject = PublishSubject<Float>()

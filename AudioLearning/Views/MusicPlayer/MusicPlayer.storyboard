@@ -48,35 +48,48 @@
                                 <state key="normal" image="rewind-10"/>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cub-8p-CxN">
-                                <rect key="frame" x="18" y="124" width="378" height="31"/>
+                                <rect key="frame" x="18" y="172" width="378" height="31"/>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ve-XF-7B3">
-                                <rect key="frame" x="20" y="154" width="33.5" height="17.5"/>
+                                <rect key="frame" x="20" y="202" width="33.5" height="17.5"/>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWd-ZO-Tx4">
-                                <rect key="frame" x="360.5" y="154" width="33.5" height="17.5"/>
+                                <rect key="frame" x="360.5" y="202" width="33.5" height="17.5"/>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="oWY-Vf-ALC">
+                                <rect key="frame" x="20" y="134" width="374" height="29"/>
+                                <segments>
+                                    <segment title="0.5x"/>
+                                    <segment title="0.75x"/>
+                                    <segment title="1x"/>
+                                    <segment title="1.5x"/>
+                                    <segment title="2x"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="OgP-D3-wFP" firstAttribute="trailing" secondItem="cub-8p-CxN" secondAttribute="trailing" constant="20" id="3ow-iZ-rDu"/>
+                            <constraint firstItem="cub-8p-CxN" firstAttribute="top" secondItem="oWY-Vf-ALC" secondAttribute="bottom" constant="10" id="6vb-QE-vwT"/>
+                            <constraint firstItem="oWY-Vf-ALC" firstAttribute="leading" secondItem="cub-8p-CxN" secondAttribute="leading" id="73m-Qr-73m"/>
                             <constraint firstItem="cub-8p-CxN" firstAttribute="leading" secondItem="OgP-D3-wFP" secondAttribute="leading" constant="20" id="8cX-RP-PkY"/>
                             <constraint firstItem="D3i-iu-iq0" firstAttribute="centerY" secondItem="C1o-SW-h2f" secondAttribute="centerY" id="BEL-bQ-pgq"/>
                             <constraint firstItem="C1o-SW-h2f" firstAttribute="centerX" secondItem="ntN-mA-7ci" secondAttribute="centerX" id="Hoj-h6-fYw"/>
                             <constraint firstItem="C1o-SW-h2f" firstAttribute="leading" secondItem="SDG-YQ-VFf" secondAttribute="trailing" constant="30" id="Hqx-3E-aiY"/>
+                            <constraint firstItem="oWY-Vf-ALC" firstAttribute="trailing" secondItem="cub-8p-CxN" secondAttribute="trailing" id="PYg-s5-8g2"/>
                             <constraint firstItem="SDG-YQ-VFf" firstAttribute="centerY" secondItem="C1o-SW-h2f" secondAttribute="centerY" id="Y0L-cz-D4P"/>
                             <constraint firstItem="3ve-XF-7B3" firstAttribute="leading" secondItem="cub-8p-CxN" secondAttribute="leading" id="aBe-gu-FWd"/>
-                            <constraint firstItem="cub-8p-CxN" firstAttribute="top" secondItem="C1o-SW-h2f" secondAttribute="bottom" constant="10" id="gQv-GD-ibG"/>
                             <constraint firstItem="3ve-XF-7B3" firstAttribute="top" secondItem="cub-8p-CxN" secondAttribute="bottom" id="iZv-zy-bia"/>
                             <constraint firstItem="HWd-ZO-Tx4" firstAttribute="centerY" secondItem="3ve-XF-7B3" secondAttribute="centerY" id="mDm-Jm-rgw"/>
                             <constraint firstItem="D3i-iu-iq0" firstAttribute="leading" secondItem="C1o-SW-h2f" secondAttribute="trailing" constant="30" id="ngb-TX-ckH"/>
                             <constraint firstItem="HWd-ZO-Tx4" firstAttribute="trailing" secondItem="cub-8p-CxN" secondAttribute="trailing" id="wjy-0s-XUe"/>
+                            <constraint firstItem="oWY-Vf-ALC" firstAttribute="top" secondItem="C1o-SW-h2f" secondAttribute="bottom" constant="20" id="y2l-vB-mxp"/>
                             <constraint firstItem="C1o-SW-h2f" firstAttribute="top" secondItem="OgP-D3-wFP" secondAttribute="top" constant="20" id="zhq-MY-fmV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="OgP-D3-wFP"/>
@@ -87,6 +100,7 @@
                         <outlet property="progressTimerLabel" destination="3ve-XF-7B3" id="nQM-gh-X2w"/>
                         <outlet property="rewindButton" destination="SDG-YQ-VFf" id="vDL-AX-8k2"/>
                         <outlet property="slider" destination="cub-8p-CxN" id="Cas-mx-1N7"/>
+                        <outlet property="speedSegmentedControl" destination="oWY-Vf-ALC" id="IXv-Xl-Vxn"/>
                         <outlet property="totalLengthLabel" destination="HWd-ZO-Tx4" id="hJ0-UF-ILY"/>
                     </connections>
                 </viewController>

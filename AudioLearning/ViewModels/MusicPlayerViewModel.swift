@@ -18,6 +18,7 @@ class MusicPlayerViewModel {
     private(set) var rewind10Seconds: AnyObserver<Void>!
     private(set) var speedUp: AnyObserver<Float>!
     private(set) var speedDown: AnyObserver<Float>!
+    private(set) var changeSpeed: AnyObserver<Float>!
     private(set) var changeAudioPosition: AnyObserver<Float>!
     
     // Outputs
@@ -94,6 +95,15 @@ class MusicPlayerViewModel {
         
         speedUp = player.speedUp
         speedDown = player.speedDown
+        
+        let changeSpeedSubject = PublishSubject<Float>()
+        changeSpeed = changeSpeedSubject.asObserver()
+        changeSpeedSubject
+            .subscribe(onNext: { [weak self] (speedRate) in
+                guard let player = self?.player else { return }
+                player.changeSpeed.onNext(speedRate)
+            })
+            .disposed(by: disposeBag)
         
         let changeAudioPositionSubject = PublishSubject<Float>()
         changeAudioPosition = changeAudioPositionSubject.asObserver()

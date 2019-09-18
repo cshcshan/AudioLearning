@@ -14,6 +14,7 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!
     @IBOutlet weak var rewindButton: UIButton!
+    @IBOutlet weak var speedSegmentedControl: UISegmentedControl!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var progressTimerLabel: UILabel!
     @IBOutlet weak var totalLengthLabel: UILabel!
@@ -26,8 +27,13 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         setupUI(isReady: false)
         setupBindings()
+    }
+    
+    private func setupUI() {
+        speedSegmentedControl.tintColor = UIColor.darkGray
     }
     
     private func setupBindings() {
@@ -40,6 +46,19 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
             .disposed(by: disposeBag)
         rewindButton.rx.tap
             .bind(to: viewModel.rewind10Seconds)
+            .disposed(by: disposeBag)
+        speedSegmentedControl.rx.selectedSegmentIndex
+            .map({ (index) -> Float in
+                switch index {
+                case 0: return 0.5
+                case 1: return 0.75
+                case 2: return 1
+                case 3: return 1.5
+                case 4: return 2
+                default: return 1
+                }
+            })
+            .bind(to: viewModel.changeSpeed)
             .disposed(by: disposeBag)
         slider.rx.value
             .bind(to: viewModel.changeAudioPosition)
@@ -82,8 +101,10 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
         playButton.isEnabled = isReady
         forwardButton.isEnabled = isReady
         rewindButton.isEnabled = isReady
+        speedSegmentedControl.isEnabled = isReady
         slider.isEnabled = isReady
         if isReady == false {
+            speedSegmentedControl.selectedSegmentIndex = 2
             slider.value = 0
             progressTimerLabel.text = ""
             totalLengthLabel.text = ""

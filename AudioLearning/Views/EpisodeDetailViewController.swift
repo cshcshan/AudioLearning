@@ -14,9 +14,11 @@ class EpisodeDetailViewController: BaseViewController, StoryboardGettable {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var htmlTextView: UITextView!
+    @IBOutlet weak var playerView: UIView!
     private let refreshControl = UIRefreshControl()
     
     var viewModel: EpisodeDetailViewModel!
+    var musicPlayerViewController: MusicPlayerViewController!
     private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -26,6 +28,9 @@ class EpisodeDetailViewController: BaseViewController, StoryboardGettable {
     }
     
     private func setupUI() {
+        addChild(musicPlayerViewController)
+        musicPlayerViewController.view.frame = playerView.bounds
+        playerView.addSubview(musicPlayerViewController.view)
         scrollView.isScrollEnabled = false
         scrollView.addSubview(refreshControl)
         htmlTextView.isEditable = false

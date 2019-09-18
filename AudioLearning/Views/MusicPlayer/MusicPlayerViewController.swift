@@ -7,25 +7,86 @@
 //
 
 import UIKit
+import RxSwift
 
-class MusicPlayerViewController: UIViewController {
+class MusicPlayerViewController: UIViewController, StoryboardGettable {
     
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var forwardButton: UIButton!
+    @IBOutlet weak var rewindButton: UIButton!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var progressTimerLabel: UILabel!
     @IBOutlet weak var totalLengthLabel: UILabel!
     
+    var viewModel: MusicPlayerViewModel!
+    private let disposeBag = DisposeBag()
     
-    @IBAction func playButtonPressed(_ sender: UIButton) {
+    private let playImage = UIImage(named: "play")
+    private let pauseImage = UIImage(named: "pause")
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI(isReady: false)
+        setupBindings()
     }
     
-    @IBAction func forwardButtonPressed(_ sender: UIButton) {
+    private func setupBindings() {
+        playButton.rx.tap
+            .bind(to: viewModel.tappedPlayPause)
+            .disposed(by: disposeBag)
+        
+        forwardButton.rx.tap
+            .bind(to: viewModel.forward10Seconds)
+            .disposed(by: disposeBag)
+        rewindButton.rx.tap
+            .bind(to: viewModel.rewind10Seconds)
+            .disposed(by: disposeBag)
+        slider.rx.value
+            .bind(to: viewModel.changeAudioPosition)
+            .disposed(by: disposeBag)
+        
+        viewModel.readyToPlay
+            .drive(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.setupUI(isReady: true)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.isPlaying
+            .drive(onNext: { [weak self] (isPlaying) in
+                guard let `self` = self else { return }
+                self.playButton.setImage(isPlaying ? self.pauseImage : self.playImage,
+                                         for: UIControl.State())
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.currentTime
+            .drive(progressTimerLabel.rx.text)
+            .disposed(by: disposeBag)
+        viewModel.totalTime
+            .drive(totalLengthLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.currentSeconds
+            .drive(slider.rx.value)
+            .disposed(by: disposeBag)
+        viewModel.totalSeconds
+            .drive(onNext: { [weak self] (seconds) in
+                guard let slider = self?.slider else { return }
+                slider.maximumValue = seconds
+            })
+            .disposed(by: disposeBag)
     }
     
-    @IBAction func rewindButtonPressed(_ sender: UIButton) {
+    private func setupUI(isReady: Bool) {
+        playButton.isEnabled = isReady
+        forwardButton.isEnabled = isReady
+        rewindButton.isEnabled = isReady
+        slider.isEnabled = isReady
+        if isReady == false {
+            slider.value = 0
+            progressTimerLabel.text = ""
+            totalLengthLabel.text = ""
+        }
     }
-    
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-    }
-    
 }

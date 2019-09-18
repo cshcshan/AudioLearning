@@ -12,13 +12,14 @@ import RxSwift
 class MockHCAudioPlayer: HCAudioPlayerProtocol {
     
     // Inputs
-    var newMusic: AnyObserver<URL>!
+    var newAudio: AnyObserver<URL>!
     var play: AnyObserver<Void>!
     var pause: AnyObserver<Void>!
-    var skipForward: AnyObserver<Int64>!
-    var skipRewind: AnyObserver<Int64>!
+    var forward: AnyObserver<Int64>!
+    var rewind: AnyObserver<Int64>!
     var speedUp: AnyObserver<Float>!
     var speedDown: AnyObserver<Float>!
+    var changeAudioPosition: AnyObserver<Float>!
     
     // Outputs
     var status: Observable<HCAudioPlayer.Status>!
@@ -46,8 +47,8 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
     
     private func setupInputs() {
         // New Music
-        let newMusicSubject = PublishSubject<URL>()
-        newMusic = newMusicSubject.asObserver()
+        let newAudioSubject = PublishSubject<URL>()
+        newAudio = newAudioSubject.asObserver()
         
         // Play and Pause
         let playSubject = PublishSubject<Void>()
@@ -57,13 +58,13 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
         _ = Observable.of(playSubject.map({ true }),
                               pauseSubject.map({ false })).merge()
         
-        // Skip Forward and Skip Rewind
-        let skipForwardSubject = PublishSubject<Int64>()
-        skipForward = skipForwardSubject.asObserver()
-        let skipRewindSubject = PublishSubject<Int64>()
-        skipRewind = skipRewindSubject.asObserver()
-        let mergeSkip = Observable.of(skipForwardSubject.asObservable(),
-                                      skipRewindSubject.asObservable().map({ -$0 })).merge()
+        // Forward and Rewind
+        let forwardSubject = PublishSubject<Int64>()
+        forward = forwardSubject.asObserver()
+        let rewindSubject = PublishSubject<Int64>()
+        rewind = rewindSubject.asObserver()
+        let mergeSkip = Observable.of(forwardSubject.asObservable(),
+                                      rewindSubject.asObservable().map({ -$0 })).merge()
         mergeSkip
             .subscribe(onNext: { [weak self] (seconds) in
                 guard let `self` = self else { return }
@@ -86,6 +87,16 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
                 if self.musicSpeedRate < 0 { self.musicSpeedRate = 0 }
                 return self.musicSpeedRate
             })
+        
+        // Change Audio Position
+        let changeAudioPositionSubject = PublishSubject<Float>()
+        changeAudioPosition = changeAudioPositionSubject.asObserver()
+        changeAudioPositionSubject
+            .subscribe(onNext: { [weak self] (position) in
+                guard let `self` = self else { return }
+                self.currentSecondsSubject.onNext(Double(position))
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setupOutputs() {

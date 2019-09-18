@@ -50,12 +50,27 @@ class EpisodeListCoordinator: BaseCoordinator<Void> {
     }
     
     private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
+        // MusicViewModel and ViewController
+        let player = HCAudioPlayer()
+        let musicPlayerViewModel = MusicPlayerViewModel(player: player)
+        let musicPlayerViewController = MusicPlayerViewController.initialize(from: "MusicPlayer", storyboardID: "MusicPlayerViewController")
+        musicPlayerViewController.viewModel = musicPlayerViewModel
+        
         // ViewModel
         let viewModel = EpisodeDetailViewModel(apiService: apiService, episodeModel: episodeModel)
+        
+        viewModel.audioLink
+            .map({ (link) -> URL in
+                guard let url = URL(string: link) else { throw Errors.urlIsNull }
+                return url
+            })
+            .bind(to: musicPlayerViewModel.settingNewAudio)
+            .disposed(by: disposeBag)
         
         // ViewController
         let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Main", storyboardID: "EpisodeDetail")
         episodeDetailViewController.viewModel = viewModel
+        episodeDetailViewController.musicPlayerViewController = musicPlayerViewController
         navigationController.pushViewController(episodeDetailViewController, animated: true)
     }
 }

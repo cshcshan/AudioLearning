@@ -18,13 +18,14 @@ private enum ObserverKey: String {
 
 protocol HCAudioPlayerProtocol {
     // Inputs
-    var newMusic: AnyObserver<URL>! { get }
+    var newAudio: AnyObserver<URL>! { get }
     var play: AnyObserver<Void>! { get }
     var pause: AnyObserver<Void>! { get }
-    var skipForward: AnyObserver<Int64>! { get }
-    var skipRewind: AnyObserver<Int64>! { get }
+    var forward: AnyObserver<Int64>! { get }
+    var rewind: AnyObserver<Int64>! { get }
     var speedUp: AnyObserver<Float>! { get }
     var speedDown: AnyObserver<Float>! { get }
+    var changeAudioPosition: AnyObserver<Float>! { get }
     // Outputs
     var status: Observable<HCAudioPlayer.Status>! { get }
     var speedRate: Observable<Float>! { get }
@@ -44,13 +45,14 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
     }
     
     // Inputs
-    private(set) var newMusic: AnyObserver<URL>!
+    private(set) var newAudio: AnyObserver<URL>!
     private(set) var play: AnyObserver<Void>!
     private(set) var pause: AnyObserver<Void>!
-    private(set) var skipForward: AnyObserver<Int64>!
-    private(set) var skipRewind: AnyObserver<Int64>!
+    private(set) var forward: AnyObserver<Int64>!
+    private(set) var rewind: AnyObserver<Int64>!
     private(set) var speedUp: AnyObserver<Float>!
     private(set) var speedDown: AnyObserver<Float>!
+    private(set) var changeAudioPosition: AnyObserver<Float>!
     
     // Outputs
     private(set) var status: Observable<HCAudioPlayer.Status>!
@@ -70,18 +72,17 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
     private var item: AVPlayerItem?
     private let disposeBag = DisposeBag()
     
-    init(player: AVPlayer) {
+    override init() {
         super.init()
         setupInputs()
         setupOutputs()
-        setupPlayer(player)
     }
     
     private func setupInputs() {
         // New Music
-        let newMusicSubject = PublishSubject<URL>()
-        newMusic = newMusicSubject.asObserver()
-        newMusicSubject
+        let newAudioSubject = PublishSubject<URL>()
+        newAudio = newAudioSubject.asObserver()
+        newAudioSubject
             .subscribe(onNext: { [weak self] (url) in
                 guard let `self` = self else { return }
                 self.setupPlayer(AVPlayer(url: url))
@@ -106,13 +107,13 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
             })
             .disposed(by: disposeBag)
         
-        // Skip Forward and Skip Rewind
-        let skipForwardSubject = PublishSubject<Int64>()
-        skipForward = skipForwardSubject.asObserver()
-        let skipRewindSubject = PublishSubject<Int64>()
-        skipRewind = skipRewindSubject.asObserver()
-        Observable.of(skipForwardSubject.asObservable(),
-                      skipRewindSubject.asObservable().map({ -$0 }))
+        // Forward and Rewind
+        let forwardSubject = PublishSubject<Int64>()
+        forward = forwardSubject.asObserver()
+        let rewindSubject = PublishSubject<Int64>()
+        rewind = rewindSubject.asObserver()
+        Observable.of(forwardSubject.asObservable(),
+                      rewindSubject.asObservable().map({ -$0 }))
             .merge()
             .subscribe(onNext: { [weak self] (seconds) in
                 guard let player = self?.player else { return }
@@ -135,6 +136,16 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
                 if player.rate < 0 { player.rate = 0 }
                 return player.rate
             })
+        
+        // Change Audio Location
+        let changeAudioLocationSubject = PublishSubject<Float>()
+        changeAudioPosition = changeAudioLocationSubject.asObserver()
+        changeAudioLocationSubject
+            .subscribe(onNext: { [weak self] (position) in
+                guard let player = self?.player else { return }
+                player.seek(to: CMTime(value: CMTimeValue(position), timescale: 1))
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setupOutputs() {
@@ -149,7 +160,7 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
 extension HCAudioPlayer {
     
     private func setupPlayer(_ player: AVPlayer) {
-        if self.item != nil {  removeItemObservers()  }
+        if self.item != nil { removeItemObservers() }
         
         self.player = player
         self.item = player.currentItem

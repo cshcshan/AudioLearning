@@ -56,7 +56,7 @@ extension MusicPlayerViewModelTests {
         let url2 = URL(string: "https://www.cshan.com/2")!
         scheduler.createHotObservable([.next(10, url1),
                                        .next(20, url2)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         
         scheduler.start()
@@ -102,7 +102,7 @@ extension MusicPlayerViewModelTests {
         scheduler.createHotObservable([.next(5, url1),
                                        .next(15, url2),
                                        .next(25, url3)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         scheduler.createHotObservable([.next(10, ()),
                                        .next(20, ()),
@@ -134,7 +134,7 @@ extension MusicPlayerViewModelTests {
         scheduler.createHotObservable([.next(5, url1),
                                        .next(15, url2),
                                        .next(25, url3)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         scheduler.createHotObservable([.next(20, ()),
                                        .next(30, ())])
@@ -162,7 +162,7 @@ extension MusicPlayerViewModelTests {
         let url2 = URL(string: "https://www.cshan.com/2")!
         scheduler.createHotObservable([.next(5, url1),
                                        .next(25, url2)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         scheduler.createHotObservable([.next(10, ()),
                                        .next(20, ()),
@@ -191,7 +191,7 @@ extension MusicPlayerViewModelTests {
         let url2 = URL(string: "https://www.cshan.com/2")!
         scheduler.createHotObservable([.next(15, url1),
                                        .next(25, url2)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         scheduler.createHotObservable([.next(10, ()),
                                        .next(20, ()),
@@ -222,7 +222,7 @@ extension MusicPlayerViewModelTests {
         scheduler.createHotObservable([.next(5, url1),
                                        .next(15, url1),
                                        .next(25, url1)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         scheduler.createHotObservable([.next(10, ()),
                                        .next(20, ()),
@@ -253,7 +253,7 @@ extension MusicPlayerViewModelTests {
         scheduler.createHotObservable([.next(5, url1),
                                        .next(15, url1),
                                        .next(25, url2)])
-            .bind(to: sut.putNewAudio)
+            .bind(to: sut.settingNewAudio)
             .disposed(by: disposeBag)
         scheduler.createHotObservable([.next(10, ()),
                                        .next(20, ()),
@@ -274,20 +274,20 @@ extension MusicPlayerViewModelTests {
     }
 }
 
-// MARK: - Skip
+// MARK: - Foward and Rewind
 
 extension MusicPlayerViewModelTests {
     
     func testSkipForward_With10S() {
         player.musicCurrentSeconds = 20
         
-        let currentSeconds = scheduler.createObserver(Double.self)
-        sut.currentSeconds
-            .drive(currentSeconds)
+        let currentTime = scheduler.createObserver(String.self)
+        sut.currentTime
+            .drive(currentTime)
             .disposed(by: disposeBag)
         
-        scheduler.createHotObservable([.next(15, 10)])
-            .bind(to: sut.skipForward)
+        scheduler.createHotObservable([.next(15, ())])
+            .bind(to: sut.forward10Seconds)
             .disposed(by: disposeBag)
         
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
@@ -297,20 +297,20 @@ extension MusicPlayerViewModelTests {
         
         scheduler.start()
         
-        XCTAssertEqual(currentSeconds.events.count, 1)
-        XCTAssertEqual(currentSeconds.events, [.next(15, 30)])
+        XCTAssertEqual(currentTime.events.count, 1)
+        XCTAssertEqual(currentTime.events, [.next(15, "00:30")])
     }
 
     func testSkipRewind_With10S() {
         player.musicCurrentSeconds = 20
         
-        let currentSeconds = scheduler.createObserver(Double.self)
-        sut.currentSeconds
-            .drive(currentSeconds)
+        let currentTime = scheduler.createObserver(String.self)
+        sut.currentTime
+            .drive(currentTime)
             .disposed(by: disposeBag)
         
-        scheduler.createHotObservable([.next(15, 10)])
-            .bind(to: sut.skipRewind)
+        scheduler.createHotObservable([.next(15, ())])
+            .bind(to: sut.rewind10Seconds)
             .disposed(by: disposeBag)
         
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
@@ -320,8 +320,8 @@ extension MusicPlayerViewModelTests {
         
         scheduler.start()
         
-        XCTAssertEqual(currentSeconds.events.count, 1)
-        XCTAssertEqual(currentSeconds.events, [.next(15, 10)])
+        XCTAssertEqual(currentTime.events.count, 1)
+        XCTAssertEqual(currentTime.events, [.next(15, "00:10")])
     }
 }
 
@@ -373,5 +373,30 @@ extension MusicPlayerViewModelTests {
         
         XCTAssertEqual(speedRate.events.count, 1)
         XCTAssertEqual(speedRate.events, [.next(15, 1.5)])
+    }
+}
+
+// Change Audio Position
+
+extension MusicPlayerViewModelTests {
+    
+    func testChangeAudioPosition() {
+        player.musicCurrentSeconds = 10
+        let currentSeconds = scheduler.createObserver(Float.self)
+        sut.currentSeconds
+            .drive(currentSeconds)
+            .disposed(by: disposeBag)
+        scheduler.createHotObservable([.next(10, 50),
+                                       .next(15, 85)])
+            .bind(to: sut.changeAudioPosition)
+            .disposed(by: disposeBag)
+        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
+        sut.isPlaying
+            .drive()
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(currentSeconds.events.count, 2)
+        XCTAssertEqual(currentSeconds.events, [.next(10, 50),
+                                               .next(15, 85)])
     }
 }

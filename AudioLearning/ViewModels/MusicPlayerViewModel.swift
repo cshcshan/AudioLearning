@@ -11,19 +11,23 @@ import RxCocoa
 
 class MusicPlayerViewModel {
     
-    // Input
+    // Inputs
     private(set) var tappedPlayPause: AnyObserver<Void>
-    private(set) var putNewAudio: AnyObserver<URL>
-    private(set) var skipForward: AnyObserver<Int64>!
-    private(set) var skipRewind: AnyObserver<Int64>!
+    private(set) var settingNewAudio: AnyObserver<URL>
+    private(set) var forward10Seconds: AnyObserver<Void>!
+    private(set) var rewind10Seconds: AnyObserver<Void>!
     private(set) var speedUp: AnyObserver<Float>!
     private(set) var speedDown: AnyObserver<Float>!
+    private(set) var changeAudioPosition: AnyObserver<Float>!
     
-    // Output
+    // Outputs
+    private(set) var readyToPlay: Driver<Void>!
     private(set) var isPlaying: Driver<Bool>!
     private(set) var speedRate: Driver<Float>!
-    private(set) var currentSeconds: Driver<Double>!
-    private(set) var totalSeconds: Driver<Double>!
+    private(set) var currentTime: Driver<String>!
+    private(set) var totalTime: Driver<String>!
+    private(set) var currentSeconds: Driver<Float>!
+    private(set) var totalSeconds: Driver<Float>!
     private(set) var loadingBuffer: Driver<Double>!
     private(set) var loadingBufferPercent: Driver<Double>!
     
@@ -34,21 +38,30 @@ class MusicPlayerViewModel {
     init(player: HCAudioPlayerProtocol) {
         self.player = player
         
-        let putNewAudioSubject = PublishSubject<URL>()
-        putNewAudio = putNewAudioSubject.asObserver()
+        // Inputs
+        
+        let settingNewAudioSubject = PublishSubject<URL>()
+        settingNewAudio = settingNewAudioSubject.asObserver()
         let tappedPlayPauseSubject = PublishSubject<Void>()
         tappedPlayPause = tappedPlayPauseSubject.asObserver()
         isPlaying = Observable.of(tappedPlayPauseSubject.asObservable().map({ $0 as AnyObject }),
-                                  putNewAudioSubject.asObservable().map({ $0 as AnyObject }))
+                                  settingNewAudioSubject.asObservable().map({ $0 as AnyObject }),
+                                  player.status.map({ $0 as AnyObject }))
             .merge()
             .scan(false, accumulator: { [weak self] (aggregateValue, newValue) -> Bool in
                 guard let `self` = self else { return false }
-                if let url = newValue as? URL {
+                if let status = newValue as? HCAudioPlayer.Status {
+                    if status == .finish {
+                        return false
+                    } else {
+                        return aggregateValue
+                    }
+                } else if let url = newValue as? URL {
                     guard self.url != url else {
                         // if self.url == url, then isPlaying will not be affected
                         return aggregateValue
                     }
-                    self.url = url
+                    self.setAudio(url: url)
                     return false
                 } else {
                     if self.url == nil {
@@ -62,21 +75,77 @@ class MusicPlayerViewModel {
             .startWith(false)
             .asDriver(onErrorJustReturn: false)
         
-        skipForward = player.skipForward
-        skipRewind = player.skipRewind
+        let forward10SecondsSubject = PublishSubject<Void>()
+        forward10Seconds = forward10SecondsSubject.asObserver()
+        forward10SecondsSubject
+            .subscribe(onNext: { [weak self] (_) in
+                guard let player = self?.player else { return }
+                player.forward.onNext(10)
+            })
+            .disposed(by: disposeBag)
+        let rewind10SecondsSubject = PublishSubject<Void>()
+        rewind10Seconds = rewind10SecondsSubject.asObserver()
+        rewind10SecondsSubject
+            .subscribe(onNext: { [weak self] (_) in
+                guard let player = self?.player else { return }
+                player.rewind.onNext(10)
+            })
+            .disposed(by: disposeBag)
+        
         speedUp = player.speedUp
         speedDown = player.speedDown
         
+        let changeAudioPositionSubject = PublishSubject<Float>()
+        changeAudioPosition = changeAudioPositionSubject.asObserver()
+        changeAudioPositionSubject
+            .subscribe(onNext: { [weak self] (position) in
+                guard let player = self?.player else { return }
+                player.changeAudioPosition.onNext(position)
+            })
+            .disposed(by: disposeBag)
+        
+        // Outputs
+        
+        let readyToPlaySubject = PublishSubject<Void>()
+        readyToPlay = readyToPlaySubject.asDriver(onErrorJustReturn: ())
+        player.status
+            .subscribe(onNext: { (status) in
+                if status == .readyToPlay {
+                    readyToPlaySubject.onNext(())
+                }
+            })
+            .disposed(by: disposeBag)
         speedRate = player.speedRate
             .asDriver(onErrorJustReturn: 0)
+        
+        currentTime = player.currentSeconds
+            .map({ [weak self] (seconds) -> String in
+                guard let `self` = self else { return "" }
+                return self.convertTime(seconds: seconds)
+            })
+            .asDriver(onErrorJustReturn: "")
+        totalTime = player.totalSeconds
+            .map({ [weak self] (seconds) -> String in
+                guard let `self` = self else { return "" }
+                return self.convertTime(seconds: seconds)
+            })
+            .asDriver(onErrorJustReturn: "")
         currentSeconds = player.currentSeconds
+            .map({ Float($0) })
             .asDriver(onErrorJustReturn: 0)
         totalSeconds = player.totalSeconds
+            .map({ Float($0) })
             .asDriver(onErrorJustReturn: 0)
+        
         loadingBuffer = player.loadingBuffer
             .asDriver(onErrorJustReturn: 0)
         loadingBufferPercent = player.loadingBufferPercent
             .asDriver(onErrorJustReturn: 0)
+    }
+    
+    private func setAudio(url: URL) {
+        player.newAudio.onNext(url)
+        self.url = url
     }
     
     private func playMusic(_ isPlay: Bool) {
@@ -85,5 +154,13 @@ class MusicPlayerViewModel {
         } else {
             player.pause.onNext(())
         }
+    }
+    
+    private func convertTime(seconds: Double) -> String {
+        let minute = Int(seconds / 60)
+        let second = Int(seconds.truncatingRemainder(dividingBy: 60))
+        let minuteStr = String(format: "%02d", minute)
+        let secondStr = String(format: "%02d", second)
+        return "\(minuteStr):\(secondStr)"
     }
 }

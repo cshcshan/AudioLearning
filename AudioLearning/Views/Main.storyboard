@@ -99,7 +99,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-a5-ewG">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="701.5"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="CZR-nE-psP">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -116,15 +116,34 @@
                                     <constraint firstAttribute="bottom" secondItem="CZR-nE-psP" secondAttribute="bottom" id="pWH-N7-zFw"/>
                                 </constraints>
                             </scrollView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K0T-rh-Eyf">
+                                <rect key="frame" x="0.0" y="745.5" width="414" height="1"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="JgO-zp-BZs"/>
+                                </constraints>
+                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d57-Gl-261">
+                                <rect key="frame" x="0.0" y="746.5" width="414" height="115.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="115.5" id="HXU-xT-fmR"/>
+                                </constraints>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="K0T-rh-Eyf" firstAttribute="leading" secondItem="OIE-x3-fZ8" secondAttribute="leading" id="4Ds-hf-7O1"/>
+                            <constraint firstItem="K0T-rh-Eyf" firstAttribute="top" secondItem="GdN-a5-ewG" secondAttribute="bottom" id="4sJ-2e-bFb"/>
                             <constraint firstItem="CZR-nE-psP" firstAttribute="height" secondItem="OIE-x3-fZ8" secondAttribute="height" id="B60-Z0-D55"/>
                             <constraint firstItem="GdN-a5-ewG" firstAttribute="top" secondItem="NRA-aO-tp4" secondAttribute="top" id="FvB-Mv-9dP"/>
+                            <constraint firstItem="NRA-aO-tp4" firstAttribute="bottom" secondItem="d57-Gl-261" secondAttribute="bottom" id="QJ1-rj-TOs"/>
                             <constraint firstItem="NRA-aO-tp4" firstAttribute="trailing" secondItem="GdN-a5-ewG" secondAttribute="trailing" id="T0y-iF-sVr"/>
                             <constraint firstItem="CZR-nE-psP" firstAttribute="width" secondItem="OIE-x3-fZ8" secondAttribute="width" id="UT6-Up-Rbu"/>
                             <constraint firstItem="GdN-a5-ewG" firstAttribute="leading" secondItem="NRA-aO-tp4" secondAttribute="leading" id="VwQ-Xm-hFg"/>
-                            <constraint firstItem="NRA-aO-tp4" firstAttribute="bottom" secondItem="GdN-a5-ewG" secondAttribute="bottom" id="tNP-NJ-BOz"/>
+                            <constraint firstItem="NRA-aO-tp4" firstAttribute="trailing" secondItem="K0T-rh-Eyf" secondAttribute="trailing" id="bq7-ZR-IOV"/>
+                            <constraint firstItem="d57-Gl-261" firstAttribute="leading" secondItem="NRA-aO-tp4" secondAttribute="leading" id="cJA-VA-q4B"/>
+                            <constraint firstItem="d57-Gl-261" firstAttribute="top" secondItem="K0T-rh-Eyf" secondAttribute="bottom" id="eO9-q7-nVM"/>
+                            <constraint firstItem="NRA-aO-tp4" firstAttribute="trailing" secondItem="d57-Gl-261" secondAttribute="trailing" id="mYF-vf-xQH"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NRA-aO-tp4"/>
                     </view>
@@ -136,6 +155,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kwN-Ra-wdB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1224.6376811594205" y="-674.33035714285711"/>
+        </scene>
+        <!--MusicPlayer-->
+        <scene sceneID="epv-ao-CPU">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MusicPlayer" id="0oz-W0-9gT" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DEH-pl-WOu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1385" y="-181"/>
         </scene>
     </scenes>
 </document>

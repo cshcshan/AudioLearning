@@ -18,7 +18,7 @@ class MusicPlayerViewModel {
     private(set) var rewind10Seconds: AnyObserver<Void>!
     private(set) var speedUp: AnyObserver<Float>!
     private(set) var speedDown: AnyObserver<Float>!
-    private(set) var changeSpeed: AnyObserver<Float>!
+    private(set) var changeSpeed: AnyObserver<Float>! // will call 'change speed' when playing music 
     private(set) var changeAudioPosition: AnyObserver<Float>!
     
     // Outputs
@@ -97,8 +97,11 @@ class MusicPlayerViewModel {
         
         let changeSpeedSubject = PublishSubject<Float>()
         changeSpeed = changeSpeedSubject.asObserver()
-        changeSpeedSubject
-            .subscribe(onNext: { [weak self] (speedRate) in
+        Observable.combineLatest(isPlaying.asObservable(),
+                                 changeSpeedSubject.asObservable())
+            .debug("combine isPlaying and changeSpeedSubject")
+            .subscribe(onNext: { [weak self] (isPlaying, speedRate) in
+                guard isPlaying else { return }
                 guard let player = self?.player else { return }
                 player.changeSpeed.onNext(speedRate)
             })

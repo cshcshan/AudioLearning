@@ -33,7 +33,7 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     }
     
     private func setupUI() {
-        speedSegmentedControl.tintColor = .lightGray
+        speedSegmentedControl.tintColor = .darkGray
     }
     
     private func setupBindings() {

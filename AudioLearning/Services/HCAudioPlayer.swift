@@ -76,8 +76,17 @@ class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
     
     override init() {
         super.init()
+        setupAudioSessionCategory()
         setupInputs()
         setupOutputs()
+    }
+    
+    deinit {
+        removeItemObservers()
+    }
+    
+    private func setupAudioSessionCategory() {
+        try? AVAudioSession.sharedInstance().setCategory(.playback, options: .allowAirPlay)
     }
     
     private func setupInputs() {

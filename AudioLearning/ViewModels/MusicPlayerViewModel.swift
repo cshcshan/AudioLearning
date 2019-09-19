@@ -99,7 +99,6 @@ class MusicPlayerViewModel {
         changeSpeed = changeSpeedSubject.asObserver()
         Observable.combineLatest(isPlaying.asObservable(),
                                  changeSpeedSubject.asObservable())
-            .debug("combine isPlaying and changeSpeedSubject")
             .subscribe(onNext: { [weak self] (isPlaying, speedRate) in
                 guard isPlaying else { return }
                 guard let player = self?.player else { return }

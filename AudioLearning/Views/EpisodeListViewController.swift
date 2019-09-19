@@ -25,6 +25,7 @@ class EpisodeListViewController: BaseViewController, StoryboardGettable {
     }
     
     private func setupUI() {
+        automaticallyAdjustsScrollViewInsets = false
         refreshControl.sendActions(for: .valueChanged)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80

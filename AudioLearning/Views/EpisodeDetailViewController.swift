@@ -28,6 +28,7 @@ class EpisodeDetailViewController: BaseViewController, StoryboardGettable {
     }
     
     private func setupUI() {
+        automaticallyAdjustsScrollViewInsets = false
         addChild(musicPlayerViewController)
         musicPlayerViewController.view.frame = playerView.bounds
         playerView.addSubview(musicPlayerViewController.view)

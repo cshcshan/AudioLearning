@@ -97,7 +97,6 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
             .disposed(by: disposeBag)
         
         viewModel.loadingBufferRate
-            .debug("loadingBufferRate")
             .drive(slider.bufferProgressView.rx.progress)
             .disposed(by: disposeBag)
     }

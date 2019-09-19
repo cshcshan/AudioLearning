@@ -15,7 +15,7 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     @IBOutlet weak var forwardButton: UIButton!
     @IBOutlet weak var rewindButton: UIButton!
     @IBOutlet weak var speedSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var slider: BufferingSlider!
     @IBOutlet weak var progressTimerLabel: UILabel!
     @IBOutlet weak var totalLengthLabel: UILabel!
     
@@ -33,7 +33,7 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     }
     
     private func setupUI() {
-        speedSegmentedControl.tintColor = UIColor.darkGray
+        speedSegmentedControl.tintColor = .lightGray
     }
     
     private func setupBindings() {
@@ -94,6 +94,11 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
                 guard let slider = self?.slider else { return }
                 slider.maximumValue = seconds
             })
+            .disposed(by: disposeBag)
+        
+        viewModel.loadingBufferRate
+            .debug("loadingBufferRate")
+            .drive(slider.bufferProgressView.rx.progress)
             .disposed(by: disposeBag)
     }
     

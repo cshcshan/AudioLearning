@@ -47,8 +47,21 @@
                                 </constraints>
                                 <state key="normal" image="rewind-10"/>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cub-8p-CxN">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="oWY-Vf-ALC">
+                                <rect key="frame" x="20" y="134" width="374" height="29"/>
+                                <segments>
+                                    <segment title="0.5x"/>
+                                    <segment title="0.75x"/>
+                                    <segment title="1x"/>
+                                    <segment title="1.5x"/>
+                                    <segment title="2x"/>
+                                </segments>
+                            </segmentedControl>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cub-8p-CxN" customClass="BufferingSlider" customModule="AudioLearning" customModuleProvider="target">
                                 <rect key="frame" x="18" y="172" width="378" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ZDi-32-IMx"/>
+                                </constraints>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ve-XF-7B3">
                                 <rect key="frame" x="20" y="202" width="33.5" height="17.5"/>
@@ -62,16 +75,6 @@
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="oWY-Vf-ALC">
-                                <rect key="frame" x="20" y="134" width="374" height="29"/>
-                                <segments>
-                                    <segment title="0.5x"/>
-                                    <segment title="0.75x"/>
-                                    <segment title="1x"/>
-                                    <segment title="1.5x"/>
-                                    <segment title="2x"/>
-                                </segments>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -106,7 +109,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="th6-ni-xMW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="199" y="-289"/>
+            <point key="canvasLocation" x="198.55072463768118" y="-289.28571428571428"/>
         </scene>
     </scenes>
     <resources>

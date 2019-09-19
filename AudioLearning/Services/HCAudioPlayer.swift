@@ -211,13 +211,14 @@ extension HCAudioPlayer {
         statusSubject.onNext(.finish)
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == ObserverKey.status.rawValue {
             guard let player = player else { return }
             let playerStatus = HCAudioPlayer.Status(rawValue: player.status.rawValue) ?? HCAudioPlayer.Status.unknown
             statusSubject.onNext(playerStatus)
             if player.status == .readyToPlay {
                 guard let item = player.currentItem else { return }
+                currentSecondsSubject.onNext(0)
                 totalSecondsSubject.onNext(CMTimeGetSeconds(item.duration))
             }
         } else if keyPath == ObserverKey.loadedTimeRanges.rawValue {

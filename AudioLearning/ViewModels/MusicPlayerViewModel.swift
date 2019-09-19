@@ -29,8 +29,7 @@ class MusicPlayerViewModel {
     private(set) var totalTime: Driver<String>!
     private(set) var currentSeconds: Driver<Float>!
     private(set) var totalSeconds: Driver<Float>!
-    private(set) var loadingBuffer: Driver<Double>!
-    private(set) var loadingBufferPercent: Driver<Double>!
+    private(set) var loadingBufferRate: Driver<Float>!
     
     private let disposeBag = DisposeBag()
     private var url: URL!
@@ -147,9 +146,8 @@ class MusicPlayerViewModel {
             .map({ Float($0) })
             .asDriver(onErrorJustReturn: 0)
         
-        loadingBuffer = player.loadingBuffer
-            .asDriver(onErrorJustReturn: 0)
-        loadingBufferPercent = player.loadingBufferPercent
+        loadingBufferRate = player.loadingBufferPercent
+            .map({ Float($0 / 100) })
             .asDriver(onErrorJustReturn: 0)
     }
     

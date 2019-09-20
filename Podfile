@@ -10,6 +10,7 @@ target 'AudioLearning' do
   pod 'SwiftSoup'
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
+  pod 'RealmSwift'
 
   target 'AudioLearningTests' do
     inherit! :search_paths

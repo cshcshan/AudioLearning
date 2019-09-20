@@ -33,7 +33,23 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     }
     
     private func setupUI() {
+        setupBlurEffect()
         speedSegmentedControl.tintColor = .darkGray
+    }
+    
+    private func setupBlurEffect() {
+        // Blur Effect
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(blurView)
+        view.sendSubviewToBack(blurView)
+        let views = ["subview": blurView]
+        let horizontal = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|",
+                                                        options: [], metrics: nil, views: views)
+        let vertical = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|",
+                                                      options: [], metrics: nil, views: views)
+        view.addConstraints(horizontal + vertical)
     }
     
     private func setupBindings() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -20,11 +20,11 @@
             <objects>
                 <viewController storyboardIdentifier="MusicPlayerViewController" id="POU-P1-jJ7" customClass="MusicPlayerViewController" customModule="AudioLearning" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ntN-mA-7ci">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1o-SW-h2f">
-                                <rect key="frame" x="182" y="64" width="50" height="50"/>
+                                <rect key="frame" x="162.5" y="40" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Aks-LL-em4"/>
                                     <constraint firstAttribute="width" secondItem="C1o-SW-h2f" secondAttribute="height" multiplier="1:1" id="wKa-nO-rPa"/>
@@ -32,7 +32,7 @@
                                 <state key="normal" image="play"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D3i-iu-iq0">
-                                <rect key="frame" x="262" y="64" width="50" height="50"/>
+                                <rect key="frame" x="242.5" y="40" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="WIL-Ci-ejX"/>
                                     <constraint firstAttribute="width" secondItem="D3i-iu-iq0" secondAttribute="height" multiplier="1:1" id="yDO-5A-h6t"/>
@@ -40,7 +40,7 @@
                                 <state key="normal" image="forward-10"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDG-YQ-VFf">
-                                <rect key="frame" x="102" y="64" width="50" height="50"/>
+                                <rect key="frame" x="82.5" y="40" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="DWq-si-0Rr"/>
                                     <constraint firstAttribute="width" secondItem="SDG-YQ-VFf" secondAttribute="height" multiplier="1:1" id="K18-bA-A4k"/>
@@ -48,7 +48,7 @@
                                 <state key="normal" image="rewind-10"/>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="oWY-Vf-ALC">
-                                <rect key="frame" x="20" y="134" width="374" height="29"/>
+                                <rect key="frame" x="20" y="110" width="335" height="29"/>
                                 <segments>
                                     <segment title="0.5x"/>
                                     <segment title="0.75x"/>
@@ -58,19 +58,19 @@
                                 </segments>
                             </segmentedControl>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cub-8p-CxN" customClass="BufferingSlider" customModule="AudioLearning" customModuleProvider="target">
-                                <rect key="frame" x="18" y="172" width="378" height="31"/>
+                                <rect key="frame" x="18" y="148" width="339" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ZDi-32-IMx"/>
                                 </constraints>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ve-XF-7B3">
-                                <rect key="frame" x="20" y="202" width="33.5" height="17.5"/>
+                                <rect key="frame" x="20" y="178" width="33.5" height="17.5"/>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWd-ZO-Tx4">
-                                <rect key="frame" x="360.5" y="202" width="33.5" height="17.5"/>
+                                <rect key="frame" x="321.5" y="178" width="33.5" height="17.5"/>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -109,7 +109,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="th6-ni-xMW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="198.55072463768118" y="-289.28571428571428"/>
+            <point key="canvasLocation" x="197.59999999999999" y="-290.10494752623691"/>
         </scene>
     </scenes>
     <resources>

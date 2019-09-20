@@ -99,7 +99,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-a5-ewG">
-                                <rect key="frame" x="0.0" y="44" width="414" height="621.5"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="741"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="CZR-nE-psP">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -117,26 +117,28 @@
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K0T-rh-Eyf">
-                                <rect key="frame" x="0.0" y="665.5" width="414" height="1"/>
+                                <rect key="frame" x="0.0" y="785" width="414" height="1"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="JgO-zp-BZs"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQB-zp-Vsj">
-                                <rect key="frame" x="0.0" y="666.5" width="414" height="195.5"/>
+                                <rect key="frame" x="0.0" y="786" width="414" height="76"/>
                                 <subviews>
-                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d57-Gl-261">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="195.5"/>
-                                    </containerView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="horizontal-line" translatesAutoresizingMaskIntoConstraints="NO" id="etg-dS-WKV">
+                                        <rect key="frame" x="177" y="5" width="60" height="5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="kHX-tV-gBi"/>
+                                            <constraint firstAttribute="height" constant="5" id="yI2-hL-I70"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="d57-Gl-261" firstAttribute="leading" secondItem="zQB-zp-Vsj" secondAttribute="leading" id="289-WI-B4H"/>
-                                    <constraint firstAttribute="bottom" secondItem="d57-Gl-261" secondAttribute="bottom" id="6Xd-PZ-8CR"/>
-                                    <constraint firstItem="d57-Gl-261" firstAttribute="top" secondItem="zQB-zp-Vsj" secondAttribute="top" id="BeN-TT-Ucu"/>
-                                    <constraint firstAttribute="trailing" secondItem="d57-Gl-261" secondAttribute="trailing" id="RBf-u8-yzn"/>
-                                    <constraint firstAttribute="height" constant="195.5" id="krx-3p-r9N"/>
+                                    <constraint firstItem="etg-dS-WKV" firstAttribute="centerX" secondItem="zQB-zp-Vsj" secondAttribute="centerX" id="RhJ-77-mVg"/>
+                                    <constraint firstAttribute="height" constant="76" id="krx-3p-r9N"/>
+                                    <constraint firstItem="etg-dS-WKV" firstAttribute="top" secondItem="zQB-zp-Vsj" secondAttribute="top" constant="5" id="wad-dB-zem"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -160,6 +162,7 @@
                     <connections>
                         <outlet property="htmlTextView" destination="CZR-nE-psP" id="0BO-1V-Fc9"/>
                         <outlet property="playerView" destination="zQB-zp-Vsj" id="ABD-fZ-GaJ"/>
+                        <outlet property="playerViewHeight" destination="krx-3p-r9N" id="sXR-eC-LRG"/>
                         <outlet property="scrollView" destination="GdN-a5-ewG" id="9am-NE-ClB"/>
                     </connections>
                 </viewController>
@@ -168,4 +171,7 @@
             <point key="canvasLocation" x="1224.6376811594205" y="-674.33035714285711"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="horizontal-line" width="30" height="30"/>
+    </resources>
 </document>

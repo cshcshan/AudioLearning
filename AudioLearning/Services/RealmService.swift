@@ -11,20 +11,23 @@ import RealmSwift
 class RealmService {
     
     static let shared = RealmService()
-    private var realm: Realm?
     
-    private init() {
+    private init() {}
+    
+    func instanceRealm() -> Realm? {
+        var realm: Realm?
         do {
             realm = try Realm()
         } catch let error {
             print("Got an error when instance Realm.\n \(error)")
         }
+        return realm
     }
     
     func add<T: Object>(objects: [T]) -> [T]? {
-        guard let realm = realm else { return nil }
+        guard let realm = instanceRealm() else { return nil }
         realm.beginWrite()
-        realm.add(objects)
+        realm.add(objects, update: .modified)
         do {
             try realm.commitWrite()
         } catch let error {
@@ -35,9 +38,9 @@ class RealmService {
     }
     
     func add<T: Object>(object: T) -> T? {
-        guard let realm = realm else { return nil }
+        guard let realm = instanceRealm() else { return nil }
         realm.beginWrite()
-        realm.add(object)
+        realm.add(object, update: .modified)
         do {
             try realm.commitWrite()
         } catch let error {
@@ -49,12 +52,13 @@ class RealmService {
     
     func update<T: Object>(type: T.Type, predicate: NSPredicate, updateHandler: ((_ data: Results<T>?) -> Void)) -> Bool {
         var result = true
-        guard let objects = realm?.objects(type).filter(predicate) else { return false }
-        realm?.beginWrite()
+        guard let realm = instanceRealm() else { return false }
+        let objects = realm.objects(type).filter(predicate)
+        realm.beginWrite()
         updateHandler(objects)
-        realm?.add(objects, update: .modified)
+        realm.add(objects, update: .modified)
         do {
-            try realm?.commitWrite()
+            try realm.commitWrite()
         } catch let error {
             result = false
             print("Got an error when update objects from Realm.\n \(error)")
@@ -64,11 +68,12 @@ class RealmService {
     
     func delete<T: Object>(type: T.Type, predicate: NSPredicate) -> Bool {
         var result = true
-        guard let objects = realm?.objects(type).filter(predicate) else { return false }
-        realm?.beginWrite()
-        realm?.delete(objects)
+        guard let realm = instanceRealm() else { return false }
+        let objects = realm.objects(type).filter(predicate)
+        realm.beginWrite()
+        realm.delete(objects)
         do {
-            try realm?.commitWrite()
+            try realm.commitWrite()
         } catch let error {
             result = false
             print("Got an error when delete objects from Realm.\n \(error)")
@@ -78,11 +83,12 @@ class RealmService {
     
     func deleteAll<T: Object>(type: T.Type) -> Bool {
         var result = true
-        guard let objects = realm?.objects(T.self) else { return false }
-        realm?.beginWrite()
-        realm?.delete(objects)
+        guard let realm = instanceRealm() else { return false }
+        let objects = realm.objects(T.self)
+        realm.beginWrite()
+        realm.delete(objects)
         do {
-            try realm?.commitWrite()
+            try realm.commitWrite()
         } catch let error {
             result = false
             print("Got an error when delete objects from Realm.\n \(error)")
@@ -92,13 +98,13 @@ class RealmService {
     
     /// sortedByAsc = [key(String): Ascending(Bool)]
     func loadAll<T: Object>(sortedByAsc: [String: Bool]? = nil) -> [T] {
-        guard let realm = realm else { return [] }
+        guard let realm = instanceRealm() else { return [] }
         let results = realm.objects(T.self)
         return sorted(from: results, by: sortedByAsc)
     }
     
     func filter<T: Object>(by predicate: NSPredicate, sortedByAscending: [String: Bool]? = nil) -> [T] {
-        guard let realm = realm else { return [] }
+        guard let realm = instanceRealm() else { return [] }
         let results = realm.objects(T.self).filter(predicate)
         return sorted(from: results, by: sortedByAscending)
     }

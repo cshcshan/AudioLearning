@@ -46,10 +46,11 @@ class EpisodeDetailViewModelTests: XCTestCase {
     }
     
     func testInit_ScriptHtml() {
-        let episodeDetailModel = EpisodeDetailModel(path: "path",
-                                                    scriptHtml: "<div><p>Hello</p></div>",
-                                                    audioLink: "audio link")
-        apiService.episodeDetailReturnValue = .just(episodeDetailModel)
+        let episodeDetailRealmModel = EpisodeDetailRealmModel()
+        episodeDetailRealmModel.path = "path"
+        episodeDetailRealmModel.scriptHtml = "<div><p>Hello</p></div>"
+        episodeDetailRealmModel.audioLink = "audio link"
+        apiService.episodeDetailReturnValue = .just(episodeDetailRealmModel)
         
         let scriptHtml = scheduler.createObserver(String.self)
         sut.scriptHtml
@@ -62,14 +63,15 @@ class EpisodeDetailViewModelTests: XCTestCase {
         
         XCTAssertEqual(scriptHtml.events.count, 2)
         XCTAssertEqual(scriptHtml.events, [.next(0, ""),
-                                           .next(10, episodeDetailModel.scriptHtml!)])
+                                           .next(10, episodeDetailRealmModel.scriptHtml!)])
     }
     
     func testInit_AudioLink() {
-        let episodeDetailModel = EpisodeDetailModel(path: "path",
-                                                    scriptHtml: "<div><p>Hello</p></div>",
-                                                    audioLink: "audio-link")
-        apiService.episodeDetailReturnValue = .just(episodeDetailModel)
+        let episodeDetailRealmModel = EpisodeDetailRealmModel()
+        episodeDetailRealmModel.path = "path"
+        episodeDetailRealmModel.scriptHtml = "<div><p>Hello</p></div>"
+        episodeDetailRealmModel.audioLink = "audio-link"
+        apiService.episodeDetailReturnValue = .just(episodeDetailRealmModel)
         
         let audioLink = scheduler.createObserver(String.self)
         sut.audioLink
@@ -81,7 +83,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         scheduler.start()
         
         XCTAssertEqual(audioLink.events.count, 1)
-        XCTAssertEqual(audioLink.events, [.next(10, episodeDetailModel.audioLink!)])
+        XCTAssertEqual(audioLink.events, [.next(10, episodeDetailRealmModel.audioLink!)])
     }
     
     func testInit_WithError() {

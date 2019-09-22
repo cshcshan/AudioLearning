@@ -12,8 +12,8 @@ import RxCocoa
 class MusicPlayerViewModel {
     
     // Inputs
-    private(set) var tappedPlayPause: AnyObserver<Void>
-    private(set) var settingNewAudio: AnyObserver<URL>
+    private(set) var tappedPlayPause: AnyObserver<Void>!
+    private(set) var settingNewAudio: AnyObserver<URL>!
     private(set) var forward10Seconds: AnyObserver<Void>!
     private(set) var rewind10Seconds: AnyObserver<Void>!
     private(set) var speedUp: AnyObserver<Float>!
@@ -37,9 +37,11 @@ class MusicPlayerViewModel {
     
     init(player: HCAudioPlayerProtocol) {
         self.player = player
-        
-        // Inputs
-        
+        setupInputs()
+        setupOutputs()
+    }
+    
+    private func setupInputs() {
         let settingNewAudioSubject = PublishSubject<URL>()
         settingNewAudio = settingNewAudioSubject.asObserver()
         let tappedPlayPauseSubject = PublishSubject<Void>()
@@ -114,9 +116,9 @@ class MusicPlayerViewModel {
                 player.changeAudioPosition.onNext(position)
             })
             .disposed(by: disposeBag)
-        
-        // Outputs
-        
+    }
+    
+    private func setupOutputs() {
         let readyToPlaySubject = PublishSubject<Void>()
         readyToPlay = readyToPlaySubject.asDriver(onErrorJustReturn: ())
         player.status

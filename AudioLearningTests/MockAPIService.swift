@@ -12,18 +12,33 @@ import RxSwift
 
 class MockAPIService: APIServiceProtocol {
     
-    init() {}
+    private(set) var loadEpisodes: AnyObserver<Void>!
+    private(set) var loadEpisodeDetail: AnyObserver<String>!
+    private(set) var episodes: Observable<[EpisodeRealmModel]>!
+    private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
     
-    var episodesReturnValue: Observable<[EpisodeModel]> = .empty()
-    var episodeDetailReturnValue: Observable<EpisodeDetailModel> = .empty()
+    var episodesReturnValue: Observable<[EpisodeRealmModel]> = .empty()
+    var episodeDetailReturnValue: Observable<EpisodeDetailRealmModel?> = .empty()
     private(set) var episodeDetailPath: String?
     
-    func getEpisodes() -> Observable<[EpisodeModel]> {
-        return episodesReturnValue
-    }
-    
-    func getEpisodeDetail(path: String) -> Observable<EpisodeDetailModel> {
-        self.episodeDetailPath = path
-        return episodeDetailReturnValue
+    init() {
+        let loadEpisodesSubject = PublishSubject<Void>()
+        loadEpisodes = loadEpisodesSubject.asObserver()
+        
+        let loadEpisodeDetailSubject = PublishSubject<String>()
+        loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
+        
+        episodes = loadEpisodesSubject
+            .flatMapLatest({ [weak self] (_) -> Observable<[EpisodeRealmModel]> in
+                guard let `self` = self else { return .empty() }
+                return self.episodesReturnValue
+            })
+        
+        episodeDetail = loadEpisodeDetailSubject
+            .flatMapLatest({ [weak self] (path) -> Observable<EpisodeDetailRealmModel?> in
+                guard let `self` = self else { return .empty() }
+                self.episodeDetailPath = path
+                return self.episodeDetailReturnValue
+            })
     }
 }

@@ -24,35 +24,34 @@ class EpisodeDetailViewModel {
     private let apiService: APIServiceProtocol!
     private let episodeModel: EpisodeModel
     
-    private let disposeBag: DisposeBag!
+    private let reloadSubject = PublishSubject<Void>()
+    private let alertSubject = PublishSubject<AlertModel>()
+    private let refreshingSubject = PublishSubject<Bool>()
+    
+    private let disposeBag = DisposeBag()
     
     init(apiService: APIServiceProtocol, episodeModel: EpisodeModel) {
         self.apiService = apiService
         self.episodeModel = episodeModel
         
-        self.disposeBag = DisposeBag()
+        reload = reloadSubject.asObserver()
+        title = episodeModel.title ?? ""
+        alert = alertSubject
+        refreshing = refreshingSubject
         
-        let reloadSubject = PublishSubject<Void>()
-        self.reload = reloadSubject.asObserver()
-        
-        self.title = episodeModel.title ?? ""
-        
-        let alertSubject = PublishSubject<AlertModel>()
-        self.alert = alertSubject
-        
-        let refreshingSubject = PublishSubject<Bool>()
-        self.refreshing = refreshingSubject
-        
-        let episodeDetailModels = reloadSubject
-            .flatMapLatest({ (_) -> Observable<EpisodeDetailModel> in
-                refreshingSubject.onNext(true)
-                return apiService.getEpisodeDetail(path: episodeModel.path ?? "")
+        let episodeDetailModels = apiService.episodeDetail
+            .flatMapLatest({ (episodeDetailRealmModel) -> Observable<EpisodeDetailModel> in
+                guard let episodeDetailRealmModel = episodeDetailRealmModel else { return .empty() }
+                let model = RealmService.shared.add(object: episodeDetailRealmModel)
+                let episodeDetailModel = EpisodeDetailModel(path: model?.path, scriptHtml: model?.scriptHtml, audioLink: model?.audioLink)
+                return Observable.just(episodeDetailModel)
             })
-            .catchError({ (error) -> Observable<EpisodeDetailModel> in
-                refreshingSubject.onNext(false)
+            .catchError({ [weak self] (error) -> Observable<EpisodeDetailModel> in
+                guard let `self` = self else { return .empty() }
+                self.refreshingSubject.onNext(false)
                 let alertModel = AlertModel(title: "Load Episode Detail Error",
                                             message: error.localizedDescription)
-                alertSubject.onNext(alertModel)
+                self.alertSubject.onNext(alertModel)
                 return .empty()
             })
             .share() // use share() to avoid multiple subscriptions from the same Observable
@@ -64,8 +63,17 @@ class EpisodeDetailViewModel {
             })
             .disposed(by: disposeBag)
         
-        audioLink = episodeDetailModels.map({ (model) -> String in
-            model.audioLink ?? ""
-        })
+        audioLink = episodeDetailModels
+            .map({ (model) -> String in
+                model.audioLink ?? ""
+            })
+        
+        reloadSubject
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.refreshingSubject.onNext(true)
+                apiService.loadEpisodeDetail.onNext(episodeModel.path ?? "")
+            })
+            .disposed(by: disposeBag)
     }
 }

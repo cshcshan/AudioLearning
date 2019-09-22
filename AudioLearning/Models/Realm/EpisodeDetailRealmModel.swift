@@ -11,12 +11,11 @@ import RealmSwift
 
 @objcMembers
 class EpisodeDetailRealmModel: Object {
-    dynamic var id: String? // UUID
     dynamic var path: String?
     dynamic var scriptHtml: String?
     dynamic var audioLink: String?
     
     override static func primaryKey() -> String {
-        return "id"
+        return "path"
     }
 }

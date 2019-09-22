@@ -112,7 +112,7 @@ class ParseSixMinutesHelperTests: XCTestCase {
         }
         let model = sut.parseHtmlToEpisodeDetailModel(by: htmlString, urlString: path)
         XCTAssertNotNil(model)
-        XCTAssertNil(model!.path)
+        XCTAssertNotNil(model!.path)
         XCTAssertNotNil(model!.scriptHtml)
         XCTAssertNotNil(model!.audioLink)
     }
@@ -120,7 +120,7 @@ class ParseSixMinutesHelperTests: XCTestCase {
     func testParseHtmlToEpisodeDetailModel_WithNil() {
         let model = sut.parseHtmlToEpisodeDetailModel(by: "", urlString: "")
         XCTAssertNotNil(model)
-        XCTAssertNil(model!.path)
+        XCTAssertNotNil(model!.path)
         XCTAssertNil(model!.scriptHtml)
         XCTAssertNil(model!.audioLink)
     }

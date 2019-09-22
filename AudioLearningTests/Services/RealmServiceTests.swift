@@ -92,7 +92,7 @@ class RealmServiceTests: XCTestCase {
         let updateExpectationt = expectation(description: "Updated")
         
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
-        let result = sut.update(type: EpisodeRealmModel.self, predicate: predicate) { (data) in
+        let result = sut.update(type: EpisodeRealmModel.self, predicate: predicate) { (_) in
             updateExpectationt.fulfill()
         }
         XCTAssertTrue(result)

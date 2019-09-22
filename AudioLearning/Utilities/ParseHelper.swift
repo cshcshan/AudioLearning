@@ -9,7 +9,8 @@
 import SwiftSoup
 
 protocol ParseHelperProtocol {
-    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeModel]
+    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel]
+    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String) -> EpisodeDetailRealmModel?
 }
 
 enum HtmlQuery: String {
@@ -29,7 +30,7 @@ enum HtmlQuery: String {
 
 class ParseSixMinutesHelper: ParseHelperProtocol {
     
-    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeModel] {
+    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel] {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return [] }
         var episodeModels = getListToEpisodeModels(from: document)
         if let episodeModel = getTopItemToEpisodeModels(from: document) {
@@ -38,11 +39,13 @@ class ParseSixMinutesHelper: ParseHelperProtocol {
         return episodeModels
     }
     
-    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String) -> EpisodeDetailModel? {
+    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String) -> EpisodeDetailRealmModel? {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return nil }
-        let scriptHtml = getScriptHtml(by: document)
-        let audioLink = getAudioLink(by: document)
-        return EpisodeDetailModel(path: nil, scriptHtml: scriptHtml, audioLink: audioLink)
+        let model = EpisodeDetailRealmModel()
+        model.path = urlString
+        model.scriptHtml = getScriptHtml(by: document)
+        model.audioLink = getAudioLink(by: document)
+        return model
     }
 }
 
@@ -50,38 +53,30 @@ extension ParseSixMinutesHelper {
     
     // MARK: List
     
-    private func getTopItemToEpisodeModels(from document: Document) -> EpisodeModel? {
+    private func getTopItemToEpisodeModels(from document: Document) -> EpisodeRealmModel? {
         guard let elements = try? document.select(HtmlQuery.smTopItem.rawValue),
             let element = elements.first() else { return nil }
-        let episode = getEpisode(by: element)
-        let title = getTitle(by: element)
-        let desc = getDesc(by: element)
-        let date = getDate(by: element)
-        let imagePath = getImagePath(by: element)
-        let path = getPath(by: element)
-        return EpisodeModel(episode: episode,
-                            title: title,
-                            desc: desc,
-                            date: date?.toDate(dateFormat: "dd MMM yyyy"),
-                            imagePath: imagePath,
-                            path: path)
+        let model = EpisodeRealmModel()
+        model.episode = getEpisode(by: element)
+        model.title = getTitle(by: element)
+        model.desc = getDesc(by: element)
+        model.date = getDate(by: element)?.toDate(dateFormat: "dd MMM yyyy")
+        model.imagePath = getImagePath(by: element)
+        model.path = getPath(by: element)
+        return model
     }
     
-    private func getListToEpisodeModels(from document: Document) -> [EpisodeModel] {
+    private func getListToEpisodeModels(from document: Document) -> [EpisodeRealmModel] {
         guard let elements = try? document.select(HtmlQuery.smList.rawValue) else { return [] }
-        return elements.map({ (element) -> EpisodeModel in
-            let episode = getEpisode(by: element)
-            let title = getTitle(by: element)
-            let desc = getDesc(by: element)
-            let date = getDate(by: element)
-            let imagePath = getImagePath(by: element)
-            let path = getPath(by: element)
-            return EpisodeModel(episode: episode,
-                                title: title,
-                                desc: desc,
-                                date: date?.toDate(dateFormat: "dd MMM yyyy"),
-                                imagePath: imagePath,
-                                path: path)
+        return elements.map({ (element) -> EpisodeRealmModel in
+            let model = EpisodeRealmModel()
+            model.episode = getEpisode(by: element)
+            model.title = getTitle(by: element)
+            model.desc = getDesc(by: element)
+            model.date = getDate(by: element)?.toDate(dateFormat: "dd MMM yyyy")
+            model.imagePath = getImagePath(by: element)
+            model.path = getPath(by: element)
+            return model
         })
     }
     

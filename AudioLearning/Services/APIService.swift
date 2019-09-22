@@ -11,8 +11,13 @@ import RxSwift
 import RxCocoa
 
 protocol APIServiceProtocol {
-    func getEpisodes() -> Observable<[EpisodeModel]>
-    func getEpisodeDetail(path: String) -> Observable<EpisodeDetailModel>
+    // Inputs
+    var loadEpisodes: AnyObserver<Void>! { get }
+    var loadEpisodeDetail: AnyObserver<String>! { get }
+    
+    // Outputs
+    var episodes: Observable<[EpisodeRealmModel]>! { get }
+    var episodeDetail: Observable<EpisodeDetailRealmModel?>! { get }
 }
 
 class APIService: APIServiceProtocol {
@@ -25,53 +30,74 @@ class APIService: APIServiceProtocol {
         }
     }
     
-    var urlSession: URLSession
-    var parseSMHelper: ParseSixMinutesHelper
+    // Inputs
+    private(set) var loadEpisodes: AnyObserver<Void>!
+    private(set) var loadEpisodeDetail: AnyObserver<String>!
+    
+    // Outputs
+    private(set) var episodes: Observable<[EpisodeRealmModel]>!
+    private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
+    
+    private var urlSession: URLSession
+    private var parseSMHelper: ParseSixMinutesHelper
     
     init(urlSession: URLSession = URLSession.shared, parseSMHelper: ParseSixMinutesHelper) {
         self.urlSession = urlSession
         self.parseSMHelper = parseSMHelper
+        setupBindings()
     }
     
-    func getEpisodes() -> Observable<[EpisodeModel]> {
-        guard let url = URLPath.episodeList.url else {
-            return .error(Errors.urlIsNull)
-        }
-        let request = URLRequest(url: url)
-        return urlSession.rx
-            .response(request: request)
-            .map { [weak self] (response: HTTPURLResponse, data: Data) -> [EpisodeModel] in
-                guard 200..<300 ~= response.statusCode else {
-                    throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
+    private func setupBindings() {
+        let loadEpisodesSubject = PublishSubject<Void>()
+        loadEpisodes = loadEpisodesSubject.asObserver()
+        
+        let loadEpisodeDetailSubject = PublishSubject<String>()
+        loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
+        
+        self.episodes = loadEpisodesSubject
+            .flatMapLatest({ [weak self] (_) -> Observable<[EpisodeRealmModel]> in
+                guard let `self` = self else { return .empty() }
+                guard let url = URLPath.episodeList.url else {
+                    return .error(Errors.urlIsNull)
                 }
-                guard let html = String(data: data, encoding: .utf8) else {
-                    throw Errors.convertDataToHtml
+                let request = URLRequest(url: url)
+                return self.urlSession.rx
+                    .response(request: request)
+                    .map({ [weak self] (response: HTTPURLResponse, data: Data) -> [EpisodeRealmModel] in
+                        guard let `self` = self else { return [] }
+                        guard 200..<300 ~= response.statusCode else {
+                            throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
+                        }
+                        guard let html = String(data: data, encoding: .utf8) else {
+                            throw Errors.convertDataToHtml
+                        }
+                        return self.parseSMHelper.parseHtmlToEpisodeModels(by: html, urlString: url.absoluteString)
+                    })
+            })
+        
+        self.episodeDetail = loadEpisodeDetailSubject
+            .flatMapLatest({ [weak self] (path) -> Observable<EpisodeDetailRealmModel?> in
+                guard let `self` = self else { return .empty() }
+                guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
+                    return .error(Errors.pathIsNull)
                 }
-                let episodeModels = self?.parseSMHelper.parseHtmlToEpisodeModels(by: html, urlString: url.absoluteString)
-                return episodeModels ?? []
-        }
-    }
-    
-    func getEpisodeDetail(path: String) -> Observable<EpisodeDetailModel> {
-        guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
-            return .error(Errors.pathIsNull)
-        }
-        guard let domain = URLPath.domain.url else {
-            return .error(Errors.urlIsNull)
-        }
-        let url = domain.appendingPathComponent(path)
-        let request = URLRequest(url: url)
-        return urlSession.rx
-            .response(request: request)
-            .map { [weak self] (response, data) -> EpisodeDetailModel in
-                guard 200..<300 ~= response.statusCode else {
-                    throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
+                guard let domain = URLPath.domain.url else {
+                    return .error(Errors.urlIsNull)
                 }
-                guard let html = String(data: data, encoding: .utf8) else {
-                    throw Errors.convertDataToHtml
-                }
-                let episodeDetailModel = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(by: html, urlString: url.absoluteString)
-                return episodeDetailModel ?? EpisodeDetailModel(path: nil, scriptHtml: nil, audioLink: nil)
-        }
+                let url = domain.appendingPathComponent(path)
+                let request = URLRequest(url: url)
+                return self.urlSession.rx
+                    .response(request: request)
+                    .map({ [weak self] (response, data) -> EpisodeDetailRealmModel? in
+                        guard 200..<300 ~= response.statusCode else {
+                            throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
+                        }
+                        guard let html = String(data: data, encoding: .utf8) else {
+                            throw Errors.convertDataToHtml
+                        }
+                        let episodeDetailModel = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(by: html, urlString: url.absoluteString)
+                        return episodeDetailModel
+                    })
+            })
     }
 }

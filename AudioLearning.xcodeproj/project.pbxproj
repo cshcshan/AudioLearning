@@ -26,6 +26,11 @@
 		334644BE2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */; };
 		334644C32330E4F90040407E /* MockHCAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334644C22330E4F90040407E /* MockHCAudioPlayer.swift */; };
 		334645012332514D0040407E /* BufferingSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334645002332514D0040407E /* BufferingSlider.swift */; };
+		3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABEF2334EDB30031B9C1 /* EpisodeRealmModel.swift */; };
+		3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */; };
+		3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF42334F1A90031B9C1 /* RealmService.swift */; };
+		3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */; };
+		3353ABFA233725FC0031B9C1 /* EpisodeDetailRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */; };
 		33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */; };
 		33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */; };
 		33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9F231E323000340C17 /* EpisodeListViewController.swift */; };
@@ -99,6 +104,11 @@
 		334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 190815_6min_english_cryptocurrency.mp3; sourceTree = "<group>"; };
 		334644C22330E4F90040407E /* MockHCAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHCAudioPlayer.swift; sourceTree = "<group>"; };
 		334645002332514D0040407E /* BufferingSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferingSlider.swift; sourceTree = "<group>"; };
+		3353ABEF2334EDB30031B9C1 /* EpisodeRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeRealmModel.swift; sourceTree = "<group>"; };
+		3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionFileManager.swift; sourceTree = "<group>"; };
+		3353ABF42334F1A90031B9C1 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
+		3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmServiceTests.swift; sourceTree = "<group>"; };
+		3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailRealmModel.swift; sourceTree = "<group>"; };
 		33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModelTests.swift; sourceTree = "<group>"; };
 		33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModel.swift; sourceTree = "<group>"; };
 		33892A9F231E323000340C17 /* EpisodeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewController.swift; sourceTree = "<group>"; };
@@ -210,6 +220,7 @@
 			children = (
 				33892A9A231E0BB700340C17 /* Models */,
 				33892A99231E0BAB00340C17 /* ViewModels */,
+				3353ABF62334FF9F0031B9C1 /* Services */,
 				33892A9B231E0BC900340C17 /* Utilities */,
 				33E3781B231ABD1600C6671B /* MockAPIService.swift */,
 				334644C22330E4F90040407E /* MockHCAudioPlayer.swift */,
@@ -252,6 +263,7 @@
 		332C15902317A5BD003C78EA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3353ABEE2334ED9A0031B9C1 /* Realm */,
 				332C15912317A5C4003C78EA /* EpisodeModel.swift */,
 				332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */,
 				33E37824231D016900C6671B /* AlertModel.swift */,
@@ -262,8 +274,9 @@
 		332C15932317A727003C78EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				332C15942317A7C1003C78EA /* ExtensionString.swift */,
 				33892AA8231F6AA500340C17 /* ExtensionDate.swift */,
+				3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */,
+				332C15942317A7C1003C78EA /* ExtensionString.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -284,6 +297,23 @@
 				33DB0798232A0E4A0030EBBA /* MusicPlayerViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		3353ABEE2334ED9A0031B9C1 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				3353ABEF2334EDB30031B9C1 /* EpisodeRealmModel.swift */,
+				3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		3353ABF62334FF9F0031B9C1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		33892A99231E0BAB00340C17 /* ViewModels */ = {
@@ -363,6 +393,7 @@
 			children = (
 				33E3780A231A605D00C6671B /* APIService.swift */,
 				334644B6232F6AC80040407E /* HCAudioPlayer.swift */,
+				3353ABF42334F1A90031B9C1 /* RealmService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -404,6 +435,7 @@
 				332C154A23174CF8003C78EA /* Frameworks */,
 				332C154B23174CF8003C78EA /* Resources */,
 				332C157F23174E4B003C78EA /* Swiftlint */,
+				3353ABF12334EF910031B9C1 /* TODO|FIXME Run Script */,
 				828CC3D487A62AA3AA562289 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -589,6 +621,24 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		3353ABF12334EF910031B9C1 /* TODO|FIXME Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "TODO|FIXME Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "KEYWORDS=\"TODO|FIXME|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}/${PRODUCT_MODULE_NAME}/*\" \\( -name \"*.swift\" \\) -print0 | \\\nxargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | \\\nperl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"\n";
+		};
 		80B7928115530CA5EB368CA0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -688,10 +738,13 @@
 				33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */,
 				33E3781F231CB5EE00C6671B /* EpisodeListViewModel.swift in Sources */,
 				33DB07582329CEE00030EBBA /* MusicPlayerViewController.swift in Sources */,
+				3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */,
 				33E3780D231A66B300C6671B /* EnumError.swift in Sources */,
+				3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */,
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
 				33DB074E232898B50030EBBA /* EpisodeListCoordinator.swift in Sources */,
+				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */,
 				334645012332514D0040407E /* BufferingSlider.swift in Sources */,
@@ -702,6 +755,7 @@
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
+				3353ABFA233725FC0031B9C1 /* EpisodeDetailRealmModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,6 +766,7 @@
 				33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */,
 				332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */,
 				33E37821231CB61300C6671B /* EpisodeListViewModelTests.swift in Sources */,
+				3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */,
 				33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */,
 				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
 				33DB075D2329D0150030EBBA /* MusicPlayerViewModelTests.swift in Sources */,

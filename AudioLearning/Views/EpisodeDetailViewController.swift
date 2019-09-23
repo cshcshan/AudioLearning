@@ -85,7 +85,7 @@ class EpisodeDetailViewController: BaseViewController, StoryboardGettable {
             })
             .disposed(by: disposeBag)
         
-        viewModel.reload.onNext(())
+        viewModel.initalLoad.onNext(())
     }
 }
 

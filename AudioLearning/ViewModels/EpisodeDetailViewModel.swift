@@ -12,19 +12,21 @@ import RxCocoa
 class EpisodeDetailViewModel {
     
     // Input
-    private(set) var reload: AnyObserver<Void>
+    private(set) var initalLoad: AnyObserver<Void>!
+    private(set) var reload: AnyObserver<Void>!
     
     // Output
     private(set) var title: String
     private(set) var scriptHtml = BehaviorSubject<String>(value: "")
     private(set) var audioLink: Observable<String>!
-    private(set) var alert: Observable<AlertModel>
-    private(set) var refreshing: Observable<Bool>
+    private(set) var alert: Observable<AlertModel>!
+    private(set) var refreshing: Observable<Bool>!
     
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeDetailRealmModel>!
     private let episodeModel: EpisodeModel
     
+    private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
@@ -36,26 +38,20 @@ class EpisodeDetailViewModel {
         self.realmService = realmService
         self.episodeModel = episodeModel
         
+        initalLoad = initalLoadSubject.asObserver()
         reload = reloadSubject.asObserver()
         title = episodeModel.title ?? ""
         alert = alertSubject
         refreshing = refreshingSubject
         
-        let episodeDetailModels = apiService.episodeDetail
-            .flatMapLatest({ (episodeDetailRealmModel) -> Observable<EpisodeDetailModel> in
-                guard let episodeDetailRealmModel = episodeDetailRealmModel else { return .empty() }
-                return realmService.add(object: episodeDetailRealmModel)
-                    .map({ (model) -> EpisodeDetailModel in
-                        return EpisodeDetailModel(path: model?.path, scriptHtml: model?.scriptHtml, audioLink: model?.audioLink)
-                    })
-            })
-            .catchError({ [weak self] (error) -> Observable<EpisodeDetailModel> in
-                guard let `self` = self else { return .empty() }
-                self.refreshingSubject.onNext(false)
-                let alertModel = AlertModel(title: "Load Episode Detail Error",
-                                            message: error.localizedDescription)
-                self.alertSubject.onNext(alertModel)
-                return .empty()
+        reloadDataFromServer()
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        let episodeDetailModels = realmService.filterObjects
+            .flatMapLatest({ (episodeDetailRealmModels) -> Observable<EpisodeDetailModel> in
+                guard let model = episodeDetailRealmModels.first else { return .empty() }
+                return .just(EpisodeDetailModel(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
             })
             .share() // use share() to avoid multiple subscriptions from the same Observable
 
@@ -71,12 +67,45 @@ class EpisodeDetailViewModel {
                 model.audioLink ?? ""
             })
         
-        reloadSubject
+        initalLoadSubject
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
+                self.loadData()
                 self.refreshingSubject.onNext(true)
-                apiService.loadEpisodeDetail.onNext(episodeModel.path ?? "")
+                apiService.loadEpisodeDetail.onNext(episodeModel)
             })
             .disposed(by: disposeBag)
+        
+        reloadSubject
+            .subscribe(onNext: { (_) in
+                apiService.loadEpisodeDetail.onNext(episodeModel)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func reloadDataFromServer() -> Observable<Void> {
+        return apiService.episodeDetail
+            .flatMapLatest({ [weak self] (episodeDetailRealmModel) -> Observable<Void> in
+                guard let `self` = self else { return .empty() }
+                guard let episodeDetailRealmModel = episodeDetailRealmModel else { return .empty() }
+                _ = self.realmService.add(object: episodeDetailRealmModel)
+                self.loadData()
+                self.refreshingSubject.onNext(false)
+                return .empty()
+            })
+            .catchError({ [weak self] (error) -> Observable<Void> in
+                guard let `self` = self else { return .empty() }
+                self.refreshingSubject.onNext(false)
+                let alertModel = AlertModel(title: "Load Episode Detail Error",
+                                            message: error.localizedDescription)
+                self.alertSubject.onNext(alertModel)
+                return .empty()
+            })
+    }
+    
+    private func loadData() {
+        guard let episode = episodeModel.episode else { return }
+        let predicate = NSPredicate(format: "episode == %@", episode)
+        realmService.filter.onNext((predicate, nil))
     }
 }

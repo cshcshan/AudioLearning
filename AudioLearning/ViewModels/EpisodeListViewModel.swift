@@ -45,7 +45,7 @@ class EpisodeListViewModel {
         alert = alertSubject.asObservable()
         refreshing = refreshingSubject.asObservable()
         
-        reloadData()
+        reloadDataFromServer()
             .subscribe()
             .disposed(by: disposeBag)
         
@@ -62,7 +62,7 @@ class EpisodeListViewModel {
         initalLoadSubject
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
-                realmService.loadAll.onNext(["episode": false])
+                self.loadData()
                 self.refreshingSubject.onNext(true)
                 apiService.loadEpisodes.onNext(())
             })
@@ -75,12 +75,12 @@ class EpisodeListViewModel {
             .disposed(by: disposeBag)
     }
     
-    private func reloadData() -> Observable<Void> {
+    private func reloadDataFromServer() -> Observable<Void> {
         return apiService.episodes
             .flatMapLatest({ [weak self] (episodeRealmModels) -> Observable<Void> in
                 guard let `self` = self else { return .empty() }
                 _ = self.realmService.add(objects: episodeRealmModels)
-                self.realmService.loadAll.onNext(["episode": false])
+                self.loadData()
                 self.refreshingSubject.onNext(false)
                 return .empty()
             })
@@ -90,7 +90,11 @@ class EpisodeListViewModel {
                 let alertModel = AlertModel(title: "Get Episode List Error",
                                             message: error.localizedDescription)
                 self.alertSubject.onNext(alertModel)
-                return self.reloadData()
+                return self.reloadDataFromServer()
             })
+    }
+    
+    private func loadData() {
+        realmService.loadAll.onNext(["episode": false])
     }
 }

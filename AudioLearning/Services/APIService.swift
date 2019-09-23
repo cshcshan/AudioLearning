@@ -13,7 +13,7 @@ import RxCocoa
 protocol APIServiceProtocol {
     // Inputs
     var loadEpisodes: AnyObserver<Void>! { get }
-    var loadEpisodeDetail: AnyObserver<String>! { get }
+    var loadEpisodeDetail: AnyObserver<EpisodeModel>! { get }
     
     // Outputs
     var episodes: Observable<[EpisodeRealmModel]>! { get }
@@ -32,7 +32,7 @@ class APIService: APIServiceProtocol {
     
     // Inputs
     private(set) var loadEpisodes: AnyObserver<Void>!
-    private(set) var loadEpisodeDetail: AnyObserver<String>!
+    private(set) var loadEpisodeDetail: AnyObserver<EpisodeModel>!
     
     // Outputs
     private(set) var episodes: Observable<[EpisodeRealmModel]>!
@@ -54,7 +54,7 @@ class APIService: APIServiceProtocol {
         let loadEpisodesSubject = PublishSubject<Void>()
         loadEpisodes = loadEpisodesSubject.asObserver()
         
-        let loadEpisodeDetailSubject = PublishSubject<String>()
+        let loadEpisodeDetailSubject = PublishSubject<EpisodeModel>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
         
         self.episodes = loadEpisodesSubject
@@ -79,8 +79,11 @@ class APIService: APIServiceProtocol {
             })
         
         self.episodeDetail = loadEpisodeDetailSubject
-            .flatMapLatest({ [weak self] (path) -> Observable<EpisodeDetailRealmModel?> in
+            .flatMapLatest({ [weak self] (episodeModel) -> Observable<EpisodeDetailRealmModel?> in
                 guard let `self` = self else { return .empty() }
+                guard let episode = episodeModel.episode, let path = episodeModel.path else {
+                    return .error(Errors.pathIsNull)
+                }
                 guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
                     return .error(Errors.pathIsNull)
                 }
@@ -98,7 +101,7 @@ class APIService: APIServiceProtocol {
                         guard let html = String(data: data, encoding: .utf8) else {
                             throw Errors.convertDataToHtml
                         }
-                        let episodeDetailModel = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(by: html, urlString: url.absoluteString)
+                        let episodeDetailModel = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(by: html, urlString: url.absoluteString, episode: episode)
                         return episodeDetailModel
                     })
             })

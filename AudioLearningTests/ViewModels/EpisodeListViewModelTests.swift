@@ -88,7 +88,7 @@ class EpisodeListViewModelTests: XCTestCase {
         scheduler
             .createColdObservable([.next(0, ()),
                                    .next(10, ())])
-            .bind(to: sut.reload)
+            .bind(to: sut.initalLoad)
             .disposed(by: disposeBag)
         
         // execute reload.flatMapLatest by episodes.subscribe()

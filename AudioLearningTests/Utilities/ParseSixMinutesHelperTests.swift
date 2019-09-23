@@ -110,16 +110,18 @@ class ParseSixMinutesHelperTests: XCTestCase {
             XCTFail("Cannt get the content of ep-190815.html")
             return
         }
-        let model = sut.parseHtmlToEpisodeDetailModel(by: htmlString, urlString: path)
+        let model = sut.parseHtmlToEpisodeDetailModel(by: htmlString, urlString: path, episode: "Episode 190815")
         XCTAssertNotNil(model)
+        XCTAssertNotNil(model!.episode)
         XCTAssertNotNil(model!.path)
         XCTAssertNotNil(model!.scriptHtml)
         XCTAssertNotNil(model!.audioLink)
     }
     
     func testParseHtmlToEpisodeDetailModel_WithNil() {
-        let model = sut.parseHtmlToEpisodeDetailModel(by: "", urlString: "")
+        let model = sut.parseHtmlToEpisodeDetailModel(by: "", urlString: "", episode: "")
         XCTAssertNotNil(model)
+        XCTAssertNotNil(model!.episode)
         XCTAssertNotNil(model!.path)
         XCTAssertNil(model!.scriptHtml)
         XCTAssertNil(model!.audioLink)

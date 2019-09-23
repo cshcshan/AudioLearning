@@ -10,7 +10,7 @@ import SwiftSoup
 
 protocol ParseHelperProtocol {
     func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel]
-    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String) -> EpisodeDetailRealmModel?
+    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String, episode: String) -> EpisodeDetailRealmModel?
 }
 
 enum HtmlQuery: String {
@@ -39,9 +39,10 @@ class ParseSixMinutesHelper: ParseHelperProtocol {
         return episodeModels
     }
     
-    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String) -> EpisodeDetailRealmModel? {
+    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String, episode: String) -> EpisodeDetailRealmModel? {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return nil }
         let model = EpisodeDetailRealmModel()
+        model.episode = episode
         model.path = urlString
         model.scriptHtml = getScriptHtml(by: document)
         model.audioLink = getAudioLink(by: document)

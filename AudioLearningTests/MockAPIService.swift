@@ -13,7 +13,7 @@ import RxSwift
 class MockAPIService: APIServiceProtocol {
     
     private(set) var loadEpisodes: AnyObserver<Void>!
-    private(set) var loadEpisodeDetail: AnyObserver<String>!
+    private(set) var loadEpisodeDetail: AnyObserver<EpisodeModel>!
     private(set) var episodes: Observable<[EpisodeRealmModel]>!
     private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
     
@@ -25,7 +25,7 @@ class MockAPIService: APIServiceProtocol {
         let loadEpisodesSubject = PublishSubject<Void>()
         loadEpisodes = loadEpisodesSubject.asObserver()
         
-        let loadEpisodeDetailSubject = PublishSubject<String>()
+        let loadEpisodeDetailSubject = PublishSubject<EpisodeModel>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
         
         episodes = loadEpisodesSubject
@@ -35,9 +35,10 @@ class MockAPIService: APIServiceProtocol {
             })
         
         episodeDetail = loadEpisodeDetailSubject
-            .flatMapLatest({ [weak self] (path) -> Observable<EpisodeDetailRealmModel?> in
+            .flatMapLatest({ [weak self] (episodeModel) -> Observable<EpisodeDetailRealmModel?> in
                 guard let `self` = self else { return .empty() }
-                self.episodeDetailPath = path
+                guard let episode = episodeModel.episode else { return .empty() }
+                self.episodeDetailPath = episode
                 return self.episodeDetailReturnValue
             })
     }

@@ -18,6 +18,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     var sut: EpisodeDetailViewModel!
     var apiService: MockAPIService!
     var realmService: RealmService<EpisodeDetailRealmModel>!
+    var episodeModel: EpisodeModel!
     
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
@@ -25,12 +26,12 @@ class EpisodeDetailViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "unit-testing-db"
-        let episodeModel = EpisodeModel(episode: "Episode 190815",
-                                        title: "Cryptocurrencies",
-                                        desc: "Libra, Bitcoin... would you invest in digital money?",
-                                        date: "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
-                                        imagePath: "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg",
-                                        path: "/learningenglish/english/features/6-minute-english/ep-190815")
+        episodeModel = EpisodeModel(episode: "Episode 190815",
+                                    title: "Cryptocurrencies",
+                                    desc: "Libra, Bitcoin... would you invest in digital money?",
+                                    date: "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
+                                    imagePath: "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg",
+                                    path: "/learningenglish/english/features/6-minute-english/ep-190815")
         apiService = MockAPIService()
         realmService = RealmService()
         sut = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
@@ -51,6 +52,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     
     func testInit_ScriptHtml() {
         let episodeDetailRealmModel = EpisodeDetailRealmModel()
+        episodeDetailRealmModel.episode = episodeModel.episode
         episodeDetailRealmModel.path = "path"
         episodeDetailRealmModel.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealmModel.audioLink = "audio link"
@@ -72,6 +74,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     
     func testInit_AudioLink() {
         let episodeDetailRealmModel = EpisodeDetailRealmModel()
+        episodeDetailRealmModel.episode = episodeModel.episode
         episodeDetailRealmModel.path = "path"
         episodeDetailRealmModel.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealmModel.audioLink = "audio-link"
@@ -127,6 +130,6 @@ class EpisodeDetailViewModelTests: XCTestCase {
         
         scheduler.start()
         
-        XCTAssertEqual(apiService.episodeDetailPath, "/learningenglish/english/features/6-minute-english/ep-190815")
+        XCTAssertEqual(apiService.episodeDetailPath, episodeModel.episode)
     }
 }

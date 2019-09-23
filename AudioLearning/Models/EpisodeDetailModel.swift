@@ -7,12 +7,10 @@
 //
 
 struct EpisodeDetailModel {
-    var path: String?
     var scriptHtml: String?
     var audioLink: String?
     
-    init(path: String?, scriptHtml: String?, audioLink: String?) {
-        self.path = path
+    init(scriptHtml: String?, audioLink: String?) {
         self.scriptHtml = scriptHtml
         self.audioLink = audioLink
     }

@@ -39,7 +39,7 @@ class EpisodeListViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInit_WithEpisodes() {
+    func testInit_Episodes() {
         let bundle = Bundle(for: type(of: self))
         let urlString = bundle.path(forResource: "6-minute-english", ofType: "html")!
         let url = URL(fileURLWithPath: urlString)
@@ -79,7 +79,7 @@ class EpisodeListViewModelTests: XCTestCase {
         XCTAssertEqual(firstModel, expectingModel)
     }
     
-    func testInit_WithRefreshing() {
+    func testInit_Refreshing() {
         let refreshing = scheduler.createObserver(Bool.self)
         sut.refreshing
             .bind(to: refreshing)
@@ -101,6 +101,41 @@ class EpisodeListViewModelTests: XCTestCase {
         XCTAssertEqual(refreshing.events.count, 2)
         XCTAssertEqual(refreshing.events, [.next(0, (true)),
                                            .next(10, (true))])
+    }
+    
+    func testInit_ShowEpisodeDetail() {
+        var episode = "Episode 190815"
+        var title = "Cryptocurrencies"
+        var desc = "Libra, Bitcoin... would you invest in digital money?"
+        var date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
+        var imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
+        var path = "/learningenglish/english/features/6-minute-english/ep-190815"
+        let episodeModel190815 = EpisodeModel(episode: episode, title: title, desc: desc, date: date, imagePath: imagePath, path: path)
+        
+        episode = "Episode 190822"
+        title = "Does your age affect your political views?"
+        desc = "Age and political views"
+        date = "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
+        imagePath = ""
+        path = "/learningenglish/english/features/6-minute-english/ep-190822"
+        let episodeModel190822 = EpisodeModel(episode: episode, title: title, desc: desc, date: date, imagePath: imagePath, path: path)
+        
+        let showEpisodeDetail = scheduler.createObserver(EpisodeModel.self)
+        sut.showEpisodeDetail
+            .bind(to: showEpisodeDetail)
+            .disposed(by: disposeBag)
+        
+        scheduler
+            .createColdObservable([.next(10, episodeModel190815),
+                                   .next(20, episodeModel190822)])
+            .bind(to: sut.selectEpisode)
+            .disposed(by: disposeBag)
+        
+        scheduler.start()
+        
+        XCTAssertEqual(showEpisodeDetail.events.count, 2)
+        XCTAssertEqual(showEpisodeDetail.events, [.next(10, episodeModel190815),
+                                                  .next(20, episodeModel190822)])
     }
     
     func testInit_WithError() {

@@ -118,7 +118,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         XCTAssertEqual(alert.events, [.next(300, expectingModel)])
     }
     
-    func testInit_APIPath() {
+    func testInit_Episode() {
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
             .disposed(by: disposeBag)

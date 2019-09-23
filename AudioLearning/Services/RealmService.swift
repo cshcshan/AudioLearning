@@ -7,14 +7,42 @@
 //
 
 import RealmSwift
+import RxSwift
 
-class RealmService {
+class RealmService<T: Object> {
     
-    static let shared = RealmService()
+    // Inputs
+    private(set) var loadAll = PublishSubject<[String: Bool]?>()
+    private(set) var filter = PublishSubject<(NSPredicate, [String: Bool]?)>()
     
-    private init() {}
+    // Outputs
+    private(set) var allObjects: Observable<[T]>!
+    private(set) var filterObjects: Observable<[T]>!
+
+    private var allObjectsSubject = PublishSubject<[T]>()
+    private var filterObjectsSubject = PublishSubject<[T]>()
     
-    func instanceRealm() -> Realm? {
+    private let disposeBag = DisposeBag()
+    
+    init() {
+        allObjects = allObjectsSubject.asObservable()
+        filterObjects = filterObjectsSubject.asObservable()
+        
+        loadAll
+            .subscribe(onNext: { [weak self] (sortedByAsc) in
+                guard let `self` = self else { return }
+                self.allObjectsSubject.onNext(self.loadAll(sortedByAsc: sortedByAsc))
+            })
+            .disposed(by: disposeBag)
+        
+        filter
+            .subscribe(onNext: { (predicate, sortedByAsc) in
+                self.filterObjectsSubject.onNext(self.filter(by: predicate, sortedByAscending: sortedByAsc))
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func instanceRealm() -> Realm? {
         var realm: Realm?
         do {
             realm = try Realm()
@@ -24,35 +52,35 @@ class RealmService {
         return realm
     }
     
-    func add<T: Object>(objects: [T]) -> [T]? {
-        guard let realm = instanceRealm() else { return nil }
+    func add(objects: [T]) -> Observable<[T]?> {
+        guard let realm = instanceRealm() else { return .just(nil) }
         realm.beginWrite()
         realm.add(objects, update: .modified)
         do {
             try realm.commitWrite()
         } catch let error {
             print("Got an error when save objects to Realm.\n \(error)")
-            return nil
+            return .just(nil)
         }
-        return objects
+        return .just(objects)
     }
     
-    func add<T: Object>(object: T) -> T? {
-        guard let realm = instanceRealm() else { return nil }
+    func add(object: T) -> Observable<T?> {
+        guard let realm = instanceRealm() else { return .just(nil) }
         realm.beginWrite()
         realm.add(object, update: .modified)
         do {
             try realm.commitWrite()
         } catch let error {
             print("Got an error when save an object to Realm.\n \(error)")
-            return nil
+            return .just(nil)
         }
-        return object
+        return .just(object)
     }
     
-    func update<T: Object>(type: T.Type, predicate: NSPredicate, updateHandler: ((_ data: Results<T>?) -> Void)) -> Bool {
+    func update(type: T.Type, predicate: NSPredicate, updateHandler: ((_ data: Results<T>?) -> Void)) -> Observable<Bool> {
         var result = true
-        guard let realm = instanceRealm() else { return false }
+        guard let realm = instanceRealm() else { return .just(false) }
         let objects = realm.objects(type).filter(predicate)
         realm.beginWrite()
         updateHandler(objects)
@@ -63,12 +91,12 @@ class RealmService {
             result = false
             print("Got an error when update objects from Realm.\n \(error)")
         }
-        return result
+        return .just(result)
     }
     
-    func delete<T: Object>(type: T.Type, predicate: NSPredicate) -> Bool {
+    func delete(type: T.Type, predicate: NSPredicate) -> Observable<Bool> {
         var result = true
-        guard let realm = instanceRealm() else { return false }
+        guard let realm = instanceRealm() else { return .just(false) }
         let objects = realm.objects(type).filter(predicate)
         realm.beginWrite()
         realm.delete(objects)
@@ -78,12 +106,12 @@ class RealmService {
             result = false
             print("Got an error when delete objects from Realm.\n \(error)")
         }
-        return result
+        return .just(result)
     }
     
-    func deleteAll<T: Object>(type: T.Type) -> Bool {
+    func deleteAll(type: T.Type) -> Observable<Bool> {
         var result = true
-        guard let realm = instanceRealm() else { return false }
+        guard let realm = instanceRealm() else { return .just(false) }
         let objects = realm.objects(T.self)
         realm.beginWrite()
         realm.delete(objects)
@@ -93,23 +121,23 @@ class RealmService {
             result = false
             print("Got an error when delete objects from Realm.\n \(error)")
         }
-        return result
+        return .just(result)
     }
     
     /// sortedByAsc = [key(String): Ascending(Bool)]
-    func loadAll<T: Object>(sortedByAsc: [String: Bool]? = nil) -> [T] {
+    private func loadAll(sortedByAsc: [String: Bool]? = nil) -> [T] {
         guard let realm = instanceRealm() else { return [] }
         let results = realm.objects(T.self)
         return sorted(from: results, by: sortedByAsc)
     }
     
-    func filter<T: Object>(by predicate: NSPredicate, sortedByAscending: [String: Bool]? = nil) -> [T] {
+    private func filter(by predicate: NSPredicate, sortedByAscending: [String: Bool]? = nil) -> [T] {
         guard let realm = instanceRealm() else { return [] }
         let results = realm.objects(T.self).filter(predicate)
         return sorted(from: results, by: sortedByAscending)
     }
     
-    private func sorted<T: Object>(from results: Results<T>, by rules: [String: Bool]?) -> [T] {
+    private func sorted(from results: Results<T>, by rules: [String: Bool]?) -> [T] {
         var results = results
         guard let rules = rules else { return Array(results) }
         for rule in rules {

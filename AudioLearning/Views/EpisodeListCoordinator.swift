@@ -29,7 +29,8 @@ class EpisodeListCoordinator: BaseCoordinator<Void> {
         // ViewModel
         let parseSixMinutesHelper = ParseSixMinutesHelper()
         let apiService = APIService(parseSMHelper: parseSixMinutesHelper)
-        let viewModel = EpisodeListViewModel(apiService: apiService)
+        let realmService = RealmService<EpisodeRealmModel>()
+        let viewModel = EpisodeListViewModel(apiService: apiService, realmService: realmService)
         
         /*
          Note:
@@ -57,7 +58,8 @@ class EpisodeListCoordinator: BaseCoordinator<Void> {
         musicPlayerViewController.viewModel = musicPlayerViewModel
         
         // ViewModel
-        let viewModel = EpisodeDetailViewModel(apiService: apiService, episodeModel: episodeModel)
+        let realmService = RealmService<EpisodeDetailRealmModel>()
+        let viewModel = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
         
         viewModel.audioLink
             .map({ (link) -> URL in

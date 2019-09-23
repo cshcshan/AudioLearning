@@ -22,6 +22,7 @@ class EpisodeDetailViewModel {
     private(set) var refreshing: Observable<Bool>
     
     private let apiService: APIServiceProtocol!
+    private let realmService: RealmService<EpisodeDetailRealmModel>!
     private let episodeModel: EpisodeModel
     
     private let reloadSubject = PublishSubject<Void>()
@@ -30,8 +31,9 @@ class EpisodeDetailViewModel {
     
     private let disposeBag = DisposeBag()
     
-    init(apiService: APIServiceProtocol, episodeModel: EpisodeModel) {
+    init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeDetailRealmModel>, episodeModel: EpisodeModel) {
         self.apiService = apiService
+        self.realmService = realmService
         self.episodeModel = episodeModel
         
         reload = reloadSubject.asObserver()
@@ -42,9 +44,10 @@ class EpisodeDetailViewModel {
         let episodeDetailModels = apiService.episodeDetail
             .flatMapLatest({ (episodeDetailRealmModel) -> Observable<EpisodeDetailModel> in
                 guard let episodeDetailRealmModel = episodeDetailRealmModel else { return .empty() }
-                let model = RealmService.shared.add(object: episodeDetailRealmModel)
-                let episodeDetailModel = EpisodeDetailModel(path: model?.path, scriptHtml: model?.scriptHtml, audioLink: model?.audioLink)
-                return Observable.just(episodeDetailModel)
+                return realmService.add(object: episodeDetailRealmModel)
+                    .map({ (model) -> EpisodeDetailModel in
+                        return EpisodeDetailModel(path: model?.path, scriptHtml: model?.scriptHtml, audioLink: model?.audioLink)
+                    })
             })
             .catchError({ [weak self] (error) -> Observable<EpisodeDetailModel> in
                 guard let `self` = self else { return .empty() }

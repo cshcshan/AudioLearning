@@ -13,6 +13,7 @@ import RxCocoa
 class EpisodeListViewModel {
     
     // Input
+    private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectEpisode: AnyObserver<EpisodeModel>!
     
@@ -23,7 +24,9 @@ class EpisodeListViewModel {
     private(set) var showEpisodeDetail: Observable<EpisodeModel>!
     
     private let apiService: APIServiceProtocol!
+    private let realmService: RealmService<EpisodeRealmModel>!
     
+    private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
     private let alertSubject = PublishSubject<AlertModel>()
@@ -31,39 +34,57 @@ class EpisodeListViewModel {
     
     private let disposeBag = DisposeBag()
     
-    init(apiService: APIServiceProtocol) {
+    init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeRealmModel>) {
         self.apiService = apiService
+        self.realmService = realmService
         
+        initalLoad = initalLoadSubject.asObserver()
         reload = reloadSubject.asObserver()
         selectEpisode = selectEpisodeSubject.asObserver()
         showEpisodeDetail = selectEpisodeSubject.asObservable()
         alert = alertSubject.asObservable()
         refreshing = refreshingSubject.asObservable()
         
-        episodes = reloadData()
+        reloadData()
+            .subscribe()
+            .disposed(by: disposeBag)
         
-        reloadSubject
+        episodes = realmService.allObjects
+            .flatMapLatest({ (episodeRealmModels) -> Observable<[EpisodeModel]> in
+                var episodeModels = [EpisodeModel]()
+                for episodeRealmModel in episodeRealmModels {
+                    let episodeModel = EpisodeModel(episode: episodeRealmModel.episode, title: episodeRealmModel.title, desc: episodeRealmModel.desc, date: episodeRealmModel.date, imagePath: episodeRealmModel.imagePath, path: episodeRealmModel.path)
+                    episodeModels.append(episodeModel)
+                }
+                return .just(episodeModels)
+            })
+        
+        initalLoadSubject
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
+                realmService.loadAll.onNext(["episode": false])
                 self.refreshingSubject.onNext(true)
+                apiService.loadEpisodes.onNext(())
+            })
+            .disposed(by: disposeBag)
+        
+        reloadSubject
+            .subscribe(onNext: { (_) in
                 apiService.loadEpisodes.onNext(())
             })
             .disposed(by: disposeBag)
     }
     
-    private func reloadData() -> Observable<[EpisodeModel]> {
+    private func reloadData() -> Observable<Void> {
         return apiService.episodes
-            .flatMapLatest({ (episodeRealmModels) -> Observable<[EpisodeModel]> in
-                var episodeModels = [EpisodeModel]()
-                guard let models = RealmService.shared.add(objects: episodeRealmModels) else {
-                    return Observable.just(episodeModels)
-                }
-                for model in models {
-                    let model = EpisodeModel(episode: model.episode, title: model.title, desc: model.desc, date: model.date, imagePath: model.imagePath, path: model.path)
-                    episodeModels.append(model)
-                }
-                return Observable.just(episodeModels)
-            }).catchError({ [weak self] (error) -> Observable<[EpisodeModel]> in
+            .flatMapLatest({ [weak self] (episodeRealmModels) -> Observable<Void> in
+                guard let `self` = self else { return .empty() }
+                _ = self.realmService.add(objects: episodeRealmModels)
+                self.realmService.loadAll.onNext(["episode": false])
+                self.refreshingSubject.onNext(false)
+                return .empty()
+            })
+            .catchError({ [weak self] (error) -> Observable<Void> in
                 guard let `self` = self else { return .empty() }
                 self.refreshingSubject.onNext(false)
                 let alertModel = AlertModel(title: "Get Episode List Error",

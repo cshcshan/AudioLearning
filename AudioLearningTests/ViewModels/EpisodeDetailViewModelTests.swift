@@ -10,18 +10,21 @@ import XCTest
 import RxTest
 import RxSwift
 import RxCocoa
+import RealmSwift
 @testable import AudioLearning
 
 class EpisodeDetailViewModelTests: XCTestCase {
     
     var sut: EpisodeDetailViewModel!
     var apiService: MockAPIService!
+    var realmService: RealmService<EpisodeDetailRealmModel>!
     
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
 
     override func setUp() {
         super.setUp()
+        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "unit-testing-db"
         let episodeModel = EpisodeModel(episode: "Episode 190815",
                                         title: "Cryptocurrencies",
                                         desc: "Libra, Bitcoin... would you invest in digital money?",
@@ -29,7 +32,8 @@ class EpisodeDetailViewModelTests: XCTestCase {
                                         imagePath: "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg",
                                         path: "/learningenglish/english/features/6-minute-english/ep-190815")
         apiService = MockAPIService()
-        sut = EpisodeDetailViewModel(apiService: apiService, episodeModel: episodeModel)
+        realmService = RealmService()
+        sut = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
         
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()

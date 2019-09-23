@@ -10,6 +10,7 @@ import XCTest
 import RxTest
 import RxSwift
 import RxCocoa
+import RealmSwift
 @testable import AudioLearning
 
 // swiftlint:disable force_try
@@ -17,14 +18,17 @@ class EpisodeListViewModelTests: XCTestCase {
     
     var sut: EpisodeListViewModel!
     var apiService: MockAPIService!
+    var realmService: RealmService<EpisodeRealmModel>!
     
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
 
     override func setUp() {
         super.setUp()
+        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "unit-testing-db"
         apiService = MockAPIService()
-        sut = EpisodeListViewModel(apiService: apiService)
+        realmService = RealmService()
+        sut = EpisodeListViewModel(apiService: apiService, realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
         disposeBag = DisposeBag()
     }

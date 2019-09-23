@@ -70,7 +70,7 @@ class EpisodeListViewController: BaseViewController, StoryboardGettable {
             .disposed(by: disposeBag)
         
         // ViewController's UI actions to ViewModel
-        viewModel.reload.on(.next(()))
+        viewModel.initalLoad.onNext(())
         
         refreshControl.rx
             .controlEvent(.valueChanged)

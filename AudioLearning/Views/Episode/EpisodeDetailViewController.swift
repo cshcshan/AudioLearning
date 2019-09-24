@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class EpisodeDetailViewController: BaseViewController, StoryboardGettable {
+class EpisodeDetailViewController: BaseViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var htmlTextView: UITextView!
@@ -58,6 +58,8 @@ class EpisodeDetailViewController: BaseViewController, StoryboardGettable {
                 }
             })
             .disposed(by: disposeBag)
+        
+        navigationItem.title = viewModel.title
         
         viewModel.scriptHtml
             .observeOn(MainScheduler.instance)

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class EpisodeListViewController: BaseViewController, StoryboardGettable {
+class EpisodeListViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     private let refreshControl = UIRefreshControl()
@@ -40,6 +40,7 @@ class EpisodeListViewController: BaseViewController, StoryboardGettable {
             .bind(to: viewModel.tapVocabulary)
             .disposed(by: disposeBag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
+        navigationItem.title = "6 Minute English"
     }
 
     private func setupBindings() {

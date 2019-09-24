@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class VocabularyListViewController: BaseViewController, StoryboardGettable {
+class VocabularyListViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     private let disposeBag = DisposeBag()
@@ -34,6 +34,7 @@ class VocabularyListViewController: BaseViewController, StoryboardGettable {
             .bind(to: viewModel.addVocabulary)
             .disposed(by: disposeBag)
         navigationItem.rightBarButtonItems = [addItem]
+        navigationItem.title = "Vocabulary"
     }
     
     private func setupBindings() {

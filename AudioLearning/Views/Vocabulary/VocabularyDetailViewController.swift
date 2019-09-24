@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class VocabularyDetailViewController: BaseViewController, StoryboardGettable {
+class VocabularyDetailViewController: BaseViewController {
     
     @IBOutlet weak var wordTextField: UITextField!
     @IBOutlet weak var noteTextView: UITextView!

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BaseViewController: UIViewController {
+class BaseViewController: UIViewController, StoryboardGettable {
     
     func showConfirmAlert(title: String?, message: String?,
                           confirmHandler: ((UIAlertAction) -> Void)?,

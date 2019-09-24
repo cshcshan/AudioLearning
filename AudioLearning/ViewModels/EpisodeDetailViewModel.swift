@@ -11,6 +11,10 @@ import RxCocoa
 
 class EpisodeDetailViewModel {
     
+    // Inputs and Outputs
+    private(set) var shrinkMusicPlayer = PublishSubject<Void>()
+    private(set) var enlargeMusicPlayer = PublishSubject<Void>()
+    
     // Input
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!

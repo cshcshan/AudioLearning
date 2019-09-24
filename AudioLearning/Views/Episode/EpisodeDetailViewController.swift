@@ -88,6 +88,9 @@ class EpisodeDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         viewModel.initalLoad.onNext(())
+        
+        playerViewHeight.constant == minPlayerViewHeight ?
+            viewModel.shrinkMusicPlayer.onNext(()) : viewModel.enlargeMusicPlayer.onNext(())
     }
 }
 
@@ -109,6 +112,8 @@ extension EpisodeDetailViewController {
         case .changed:
             if finalY > maxPlayerViewHeight { finalY = maxPlayerViewHeight }
             if finalY < minPlayerViewHeight { finalY = minPlayerViewHeight }
+            finalY == self.minPlayerViewHeight ?
+                self.viewModel.shrinkMusicPlayer.onNext(()) : self.viewModel.enlargeMusicPlayer.onNext(())
             playerViewHeight.constant = finalY
             playerView.superview?.layoutIfNeeded()
         case .ended:
@@ -121,6 +126,8 @@ extension EpisodeDetailViewController {
             }
             UIView.animate(withDuration: 0.4) { [weak self] in
                 guard let `self` = self else { return }
+                finalY == self.minPlayerViewHeight ?
+                    self.viewModel.shrinkMusicPlayer.onNext(()) : self.viewModel.enlargeMusicPlayer.onNext(())
                 self.playerViewHeight.constant = finalY
                 self.playerView.superview?.layoutIfNeeded()
             }

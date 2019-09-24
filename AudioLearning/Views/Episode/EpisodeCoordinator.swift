@@ -76,6 +76,18 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .bind(to: musicPlayerViewModel.settingNewAudio)
             .disposed(by: disposeBag)
         
+        viewModel.shrinkMusicPlayer
+            .subscribe(onNext: { (_) in
+                musicPlayerViewModel.changeSpeedSegmentedControlAlpha.onNext(0)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.enlargeMusicPlayer
+            .subscribe(onNext: { (_) in
+                musicPlayerViewModel.changeSpeedSegmentedControlAlpha.onNext(1)
+            })
+            .disposed(by: disposeBag)
+        
         // ViewController
         let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
         episodeDetailViewController.viewModel = viewModel

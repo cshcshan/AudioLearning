@@ -115,6 +115,10 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
         viewModel.loadingBufferRate
             .drive(slider.bufferProgressView.rx.progress)
             .disposed(by: disposeBag)
+        
+        viewModel.speedSegmentedControlAlpha
+            .drive(speedSegmentedControl.rx.alpha)
+            .disposed(by: disposeBag)
     }
     
     private func setupUI(isReady: Bool) {

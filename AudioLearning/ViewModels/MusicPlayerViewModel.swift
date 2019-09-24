@@ -20,6 +20,7 @@ class MusicPlayerViewModel {
     private(set) var speedDown: AnyObserver<Float>!
     private(set) var changeSpeed: AnyObserver<Float>! // will call 'change speed' when playing music 
     private(set) var changeAudioPosition: AnyObserver<Float>!
+    private(set) var changeSpeedSegmentedControlAlpha: AnyObserver<CGFloat>!
     
     // Outputs
     private(set) var readyToPlay: Driver<Void>!
@@ -30,6 +31,7 @@ class MusicPlayerViewModel {
     private(set) var currentSeconds: Driver<Float>!
     private(set) var totalSeconds: Driver<Float>!
     private(set) var loadingBufferRate: Driver<Float>!
+    private(set) var speedSegmentedControlAlpha: Driver<CGFloat>!
     
     private let disposeBag = DisposeBag()
     private var url: URL!
@@ -116,6 +118,10 @@ class MusicPlayerViewModel {
                 player.changeAudioPosition.onNext(position)
             })
             .disposed(by: disposeBag)
+        
+        let changeSpeedSegmentedControlAlphaSubject = PublishSubject<CGFloat>()
+        changeSpeedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asObserver()
+        speedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asDriver(onErrorJustReturn: 1)
     }
     
     private func setupOutputs() {

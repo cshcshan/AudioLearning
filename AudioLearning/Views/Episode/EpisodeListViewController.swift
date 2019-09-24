@@ -26,10 +26,20 @@ class EpisodeListViewController: BaseViewController, StoryboardGettable {
     
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
+        setupNavigationBar()
         refreshControl.sendActions(for: .valueChanged)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80
         tableView.insertSubview(refreshControl, at: 0)
+    }
+    
+    private func setupNavigationBar() {
+        let image = UIImage(named: "dictionary-filled")
+        let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
+        vocabularyItem.rx.tap
+            .bind(to: viewModel.tapVocabulary)
+            .disposed(by: disposeBag)
+        navigationItem.rightBarButtonItems = [vocabularyItem]
     }
 
     private func setupBindings() {
@@ -69,9 +79,6 @@ class EpisodeListViewController: BaseViewController, StoryboardGettable {
             })
             .disposed(by: disposeBag)
         
-        // ViewController's UI actions to ViewModel
-        viewModel.initalLoad.onNext(())
-        
         refreshControl.rx
             .controlEvent(.valueChanged)
             .bind(to: viewModel.reload)
@@ -81,5 +88,8 @@ class EpisodeListViewController: BaseViewController, StoryboardGettable {
             .modelSelected(EpisodeModel.self)
             .bind(to: viewModel.selectEpisode)
             .disposed(by: disposeBag)
+        
+        // ViewController's UI actions to ViewModel
+        viewModel.initalLoad.onNext(())
     }
 }

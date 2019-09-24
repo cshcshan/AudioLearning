@@ -10,6 +10,13 @@
 		065222BE62AC9A3B56CEEA18 /* Pods_AudioLearning_AudioLearningUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FECDDB130FA1D10802F11A57 /* Pods_AudioLearning_AudioLearningUITests.framework */; };
 		330657532338CC1E00381CC6 /* VocabularyDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657522338CC1E00381CC6 /* VocabularyDetailViewModel.swift */; };
 		330657552338CF6000381CC6 /* VocabularyDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657542338CF6000381CC6 /* VocabularyDetailViewModelTests.swift */; };
+		330657592339CF2500381CC6 /* Vocabulary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 330657582339CF2500381CC6 /* Vocabulary.storyboard */; };
+		3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306575A2339CF6000381CC6 /* VocabularyListViewController.swift */; };
+		3306575D2339CFE800381CC6 /* VocabularyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306575C2339CFE800381CC6 /* VocabularyDetailViewController.swift */; };
+		3306575F2339D03700381CC6 /* VocabularyCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306575E2339D03700381CC6 /* VocabularyCoordinator.swift */; };
+		330657612339E43600381CC6 /* VocabularyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657602339E43600381CC6 /* VocabularyCell.swift */; };
+		330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657622339ED5500381CC6 /* VocabularySaveModel.swift */; };
+		330657652339EE9900381CC6 /* VocabularySaveModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */; };
 		332C155123174CF8003C78EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155023174CF8003C78EA /* AppDelegate.swift */; };
 		332C155823174CF9003C78EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 332C155723174CF9003C78EA /* Assets.xcassets */; };
 		332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155923174CF9003C78EA /* LaunchScreen.storyboard */; };
@@ -39,14 +46,14 @@
 		33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */; };
 		33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */; };
 		33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9F231E323000340C17 /* EpisodeListViewController.swift */; };
-		33892AA2231E324800340C17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33892AA1231E324800340C17 /* Main.storyboard */; };
+		33892AA2231E324800340C17 /* Episode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33892AA1231E324800340C17 /* Episode.storyboard */; };
 		33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */; };
 		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
 		33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* ExtensionDate.swift */; };
 		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
 		33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07472328806D0030EBBA /* AppCoordinator.swift */; };
 		33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074B232886620030EBBA /* StoryboardGettable.swift */; };
-		33DB074E232898B50030EBBA /* EpisodeListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */; };
+		33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */; };
 		33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */; };
 		33DB07522328FAD80030EBBA /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07512328FAD80030EBBA /* BaseViewController.swift */; };
 		33DB07562329CEC40030EBBA /* MusicPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DB07552329CEC40030EBBA /* MusicPlayer.storyboard */; };
@@ -87,6 +94,13 @@
 		06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.release.xcconfig"; sourceTree = "<group>"; };
 		330657522338CC1E00381CC6 /* VocabularyDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VocabularyDetailViewModel.swift; sourceTree = "<group>"; };
 		330657542338CF6000381CC6 /* VocabularyDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyDetailViewModelTests.swift; sourceTree = "<group>"; };
+		330657582339CF2500381CC6 /* Vocabulary.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Vocabulary.storyboard; sourceTree = "<group>"; };
+		3306575A2339CF6000381CC6 /* VocabularyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewController.swift; sourceTree = "<group>"; };
+		3306575C2339CFE800381CC6 /* VocabularyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyDetailViewController.swift; sourceTree = "<group>"; };
+		3306575E2339D03700381CC6 /* VocabularyCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyCoordinator.swift; sourceTree = "<group>"; };
+		330657602339E43600381CC6 /* VocabularyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyCell.swift; sourceTree = "<group>"; };
+		330657622339ED5500381CC6 /* VocabularySaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModel.swift; sourceTree = "<group>"; };
+		330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModelTests.swift; sourceTree = "<group>"; };
 		332C154D23174CF8003C78EA /* AudioLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C155023174CF8003C78EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		332C155723174CF9003C78EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -122,7 +136,7 @@
 		33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModelTests.swift; sourceTree = "<group>"; };
 		33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModel.swift; sourceTree = "<group>"; };
 		33892A9F231E323000340C17 /* EpisodeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewController.swift; sourceTree = "<group>"; };
-		33892AA1231E324800340C17 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		33892AA1231E324800340C17 /* Episode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Episode.storyboard; sourceTree = "<group>"; };
 		33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
 		33892AA5231E935400340C17 /* ClosureDemo.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ClosureDemo.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
@@ -130,7 +144,7 @@
 		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
 		33DB07472328806D0030EBBA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		33DB074B232886620030EBBA /* StoryboardGettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardGettable.swift; sourceTree = "<group>"; };
-		33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListCoordinator.swift; sourceTree = "<group>"; };
+		33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCoordinator.swift; sourceTree = "<group>"; };
 		33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		33DB07512328FAD80030EBBA /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		33DB07552329CEC40030EBBA /* MusicPlayer.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MusicPlayer.storyboard; sourceTree = "<group>"; };
@@ -185,6 +199,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		330657562339CEFD00381CC6 /* Episode */ = {
+			isa = PBXGroup;
+			children = (
+				33892AA1231E324800340C17 /* Episode.storyboard */,
+				33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */,
+				33892A9F231E323000340C17 /* EpisodeListViewController.swift */,
+				33892AA6231F65D800340C17 /* EpisodeCell.swift */,
+				33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */,
+			);
+			path = Episode;
+			sourceTree = "<group>";
+		};
+		330657572339CF1400381CC6 /* Vocabulary */ = {
+			isa = PBXGroup;
+			children = (
+				330657582339CF2500381CC6 /* Vocabulary.storyboard */,
+				3306575E2339D03700381CC6 /* VocabularyCoordinator.swift */,
+				3306575A2339CF6000381CC6 /* VocabularyListViewController.swift */,
+				330657602339E43600381CC6 /* VocabularyCell.swift */,
+				3306575C2339CFE800381CC6 /* VocabularyDetailViewController.swift */,
+			);
+			path = Vocabulary;
+			sourceTree = "<group>";
+		};
 		332C154423174CF8003C78EA = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +314,7 @@
 				3353ABEE2334ED9A0031B9C1 /* Realm */,
 				332C15912317A5C4003C78EA /* EpisodeModel.swift */,
 				332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */,
+				330657622339ED5500381CC6 /* VocabularySaveModel.swift */,
 				33E37824231D016900C6671B /* AlertModel.swift */,
 			);
 			path = Models;
@@ -346,6 +385,7 @@
 			children = (
 				332C158E23178A5A003C78EA /* EpisodeModelTests.swift */,
 				332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */,
+				330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */,
 				33E37826231D01AC00C6671B /* AlertModelTests.swift */,
 			);
 			path = Models;
@@ -365,11 +405,8 @@
 			isa = PBXGroup;
 			children = (
 				332C155923174CF9003C78EA /* LaunchScreen.storyboard */,
-				33892AA1231E324800340C17 /* Main.storyboard */,
-				33DB074D232898B50030EBBA /* EpisodeListCoordinator.swift */,
-				33892A9F231E323000340C17 /* EpisodeListViewController.swift */,
-				33892AA6231F65D800340C17 /* EpisodeCell.swift */,
-				33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */,
+				330657562339CEFD00381CC6 /* Episode */,
+				330657572339CF1400381CC6 /* Vocabulary */,
 				33DB07542329CEB00030EBBA /* MusicPlayer */,
 				334644FF233251270040407E /* Components */,
 			);
@@ -559,8 +596,9 @@
 				334644BE2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 in Resources */,
 				332C158B2317878C003C78EA /* 6-minute-english.html in Resources */,
 				332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */,
+				330657592339CF2500381CC6 /* Vocabulary.storyboard in Resources */,
 				332C155823174CF9003C78EA /* Assets.xcassets in Resources */,
-				33892AA2231E324800340C17 /* Main.storyboard in Resources */,
+				33892AA2231E324800340C17 /* Episode.storyboard in Resources */,
 				33DB07562329CEC40030EBBA /* MusicPlayer.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -749,6 +787,7 @@
 				33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */,
 				33E3780B231A605D00C6671B /* APIService.swift in Sources */,
 				332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */,
+				330657612339E43600381CC6 /* VocabularyCell.swift in Sources */,
 				330657532338CC1E00381CC6 /* VocabularyDetailViewModel.swift in Sources */,
 				33DB07522328FAD80030EBBA /* BaseViewController.swift in Sources */,
 				33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */,
@@ -758,9 +797,11 @@
 				33E3780D231A66B300C6671B /* EnumError.swift in Sources */,
 				3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */,
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,
+				330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
-				33DB074E232898B50030EBBA /* EpisodeListCoordinator.swift in Sources */,
+				33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */,
 				3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */,
+				3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */,
 				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */,
@@ -768,8 +809,10 @@
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,
 				33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */,
 				332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */,
+				3306575D2339CFE800381CC6 /* VocabularyDetailViewController.swift in Sources */,
 				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,
 				33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */,
+				3306575F2339D03700381CC6 /* VocabularyCoordinator.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
@@ -791,6 +834,7 @@
 				330657552338CF6000381CC6 /* VocabularyDetailViewModelTests.swift in Sources */,
 				332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */,
 				33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */,
+				330657652339EE9900381CC6 /* VocabularySaveModelTests.swift in Sources */,
 				332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */,
 				334644C32330E4F90040407E /* MockHCAudioPlayer.swift in Sources */,
 				33E37827231D01AC00C6671B /* AlertModelTests.swift in Sources */,

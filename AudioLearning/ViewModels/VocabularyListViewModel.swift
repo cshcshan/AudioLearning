@@ -15,13 +15,16 @@ class VocabularyListViewModel {
     // Inputs
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectVocabulary: AnyObserver<VocabularyRealmModel>!
+    private(set) var addVocabulary: AnyObserver<Void>!
     
     // Outputs
     private(set) var vocabularies: Observable<[VocabularyRealmModel]>!
     private(set) var showVocabularyDetail: Observable<VocabularyRealmModel>!
+    private(set) var showAddVocabularyDetail: Observable<Void>!
     
     private let reloadSubject = PublishSubject<Void>()
     private let selectVocabularySubject = PublishSubject<VocabularyRealmModel>()
+    private let addVocabularySubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
@@ -29,6 +32,8 @@ class VocabularyListViewModel {
         vocabularies = realmService.allObjects
         selectVocabulary = selectVocabularySubject.asObserver()
         showVocabularyDetail = selectVocabularySubject.asObservable()
+        addVocabulary = addVocabularySubject.asObserver()
+        showAddVocabularyDetail = addVocabularySubject.asObservable()
         
         reloadSubject
             .subscribe(onNext: { (_) in

@@ -138,6 +138,19 @@ class EpisodeListViewModelTests: XCTestCase {
                                                   .next(20, episodeModel190822)])
     }
     
+    func testInit_ShowVocabulary() {
+        let showVocabulary = scheduler.createObserver(Void.self)
+        sut.showVocabulary
+            .bind(to: showVocabulary)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ()),
+                                        .next(20, ())])
+            .bind(to: sut.tapVocabulary)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(showVocabulary.events.count, 2)
+    }
+    
     func testInit_WithError() {
         let error = NSError(domain: "unit test", code: 2, userInfo: nil)
         let expectingModel = AlertModel(title: "Get Episode List Error",

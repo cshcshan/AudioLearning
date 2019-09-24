@@ -16,12 +16,14 @@ class EpisodeListViewModel {
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectEpisode: AnyObserver<EpisodeModel>!
+    private(set) var tapVocabulary: AnyObserver<Void>!
     
     // Output
     private(set) var episodes: Observable<[EpisodeModel]>!
     private(set) var alert: Observable<AlertModel>!
     private(set) var refreshing: Observable<Bool>!
     private(set) var showEpisodeDetail: Observable<EpisodeModel>!
+    private(set) var showVocabulary: Observable<Void>!
     
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeRealmModel>!
@@ -29,6 +31,7 @@ class EpisodeListViewModel {
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
+    private let tapVocabularySubject = PublishSubject<Void>()
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
     
@@ -42,6 +45,8 @@ class EpisodeListViewModel {
         reload = reloadSubject.asObserver()
         selectEpisode = selectEpisodeSubject.asObserver()
         showEpisodeDetail = selectEpisodeSubject.asObservable()
+        tapVocabulary = tapVocabularySubject.asObserver()
+        showVocabulary = tapVocabularySubject.asObservable()
         alert = alertSubject.asObservable()
         refreshing = refreshingSubject.asObservable()
         

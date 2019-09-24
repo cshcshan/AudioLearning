@@ -1,5 +1,5 @@
 //
-//  EpisodeListCoordinator.swift
+//  EpisodeCoordinator.swift
 //  AudioLearning
 //
 //  Created by Han Chen on 2019/9/11.
@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class EpisodeListCoordinator: BaseCoordinator<Void> {
+class EpisodeCoordinator: BaseCoordinator<Void> {
     
     private let window: UIWindow
     private var navigationController: UINavigationController!
@@ -43,11 +43,18 @@ class EpisodeListCoordinator: BaseCoordinator<Void> {
                 self.showEpisodeDetail(apiService: apiService, episodeModel: episodeModel)
             })
             .disposed(by: disposeBag)
-
+        
         // ViewController
-        let episodeListViewController = EpisodeListViewController.initialize(from: "Main", storyboardID: "EpisodeList")
+        let episodeListViewController = EpisodeListViewController.initialize(from: "Episode", storyboardID: "EpisodeList")
         episodeListViewController.viewModel = viewModel
         navigationController = UINavigationController(rootViewController: episodeListViewController)
+        
+        viewModel.showVocabulary
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.showVocabulary(on: episodeListViewController)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
@@ -70,9 +77,14 @@ class EpisodeListCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Main", storyboardID: "EpisodeDetail")
+        let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
         episodeDetailViewController.viewModel = viewModel
         episodeDetailViewController.musicPlayerViewController = musicPlayerViewController
         navigationController.pushViewController(episodeDetailViewController, animated: true)
+    }
+    
+    private func showVocabulary(on rootViewController: UIViewController) {
+        let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController)
+        _ = coordinate(to: vocabularyCoordinator)
     }
 }

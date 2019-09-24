@@ -92,11 +92,10 @@ class VocabularyDetailViewModelTests: XCTestCase {
     }
     
     func testClose_FromSave() {
-        let model190815 = VocabularyRealmModel()
-        model190815.episode = "Episode 190815"
-        model190815.word = "Apple"
-        model190815.note = "蘋果🍎"
-        model190815.updateDate = Date()
+        let episode = "Episode 190815"
+        let word = "Apple"
+        let note = "蘋果🍎"
+        let model190815 = VocabularySaveModel(episode: episode, word: word, note: note)
         
         let close = scheduler.createObserver(Void.self)
         sut.close

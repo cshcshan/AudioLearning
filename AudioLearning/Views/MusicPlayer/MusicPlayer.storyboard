@@ -29,7 +29,7 @@
                                     <constraint firstAttribute="width" constant="50" id="Aks-LL-em4"/>
                                     <constraint firstAttribute="width" secondItem="C1o-SW-h2f" secondAttribute="height" multiplier="1:1" id="wKa-nO-rPa"/>
                                 </constraints>
-                                <state key="normal" image="play"/>
+                                <state key="normal" image="play-white"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D3i-iu-iq0">
                                 <rect key="frame" x="242.5" y="40" width="50" height="50"/>
@@ -114,7 +114,7 @@
     </scenes>
     <resources>
         <image name="forward-10" width="50" height="50"/>
-        <image name="play" width="50" height="50"/>
+        <image name="play-white" width="50" height="50"/>
         <image name="rewind-10" width="50" height="50"/>
     </resources>
 </document>

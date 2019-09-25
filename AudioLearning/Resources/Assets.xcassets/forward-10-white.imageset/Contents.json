@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "rewind-10.png",
+      "filename" : "forward-10-white.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "rewind-10@2x.png",
+      "filename" : "forward-10-white@2x.png",
       "scale" : "2x"
     },
     {

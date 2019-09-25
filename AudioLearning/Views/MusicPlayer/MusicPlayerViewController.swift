@@ -22,19 +22,34 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     var viewModel: MusicPlayerViewModel!
     private let disposeBag = DisposeBag()
     
-    private let playImage = UIImage(named: "play")
-    private let pauseImage = UIImage(named: "pause")
+    private let playImage = UIImage(named: "play-white")
+    private let pauseImage = UIImage(named: "pause-white")
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUIColor()
         setupUI()
         setupUI(isReady: false)
         setupBindings()
     }
     
+    private func setupUIColor() {
+        let backgroundColor = Appearance.textColor
+        let foreColor = Appearance.backgroundColor
+        view.backgroundColor = backgroundColor
+        let forwardImage = appearanceMode == .dark ?
+            UIImage(named: "forward-10") : UIImage(named: "forward-10-white")
+        let rewindImage = appearanceMode == .dark ?
+            UIImage(named: "rewind-10") : UIImage(named: "rewind-10-white")
+        forwardButton.setImage(forwardImage, for: UIControl.State())
+        rewindButton.setImage(rewindImage, for: UIControl.State())
+        speedSegmentedControl.tintColor = foreColor
+        progressTimerLabel.textColor = foreColor
+        totalLengthLabel.textColor = foreColor
+    }
+    
     private func setupUI() {
         setupBlurEffect()
-        speedSegmentedControl.tintColor = .darkGray
     }
     
     private func setupBlurEffect() {

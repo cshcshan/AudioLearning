@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VocabularyCell: UITableViewCell {
+class VocabularyCell: BaseTableViewCell {
     
     @IBOutlet weak var wordLabel: UILabel!
     @IBOutlet weak var episodeLabel: UILabel!
@@ -21,6 +21,14 @@ class VocabularyCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+    }
+    
+    override func setupUIColor() {
+        backgroundColor = Appearance.backgroundColor
+        wordLabel.backgroundColor = Appearance.backgroundColor
+        wordLabel.textColor = Appearance.textColor
+        episodeLabel.backgroundColor = Appearance.backgroundColor
+        episodeLabel.textColor = Appearance.textColor
     }
     
     private func bindUI() {

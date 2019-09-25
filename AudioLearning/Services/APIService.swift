@@ -43,8 +43,8 @@ class APIService: APIServiceProtocol {
     
     init(urlSession: URLSession = URLSession.shared, parseSMHelper: ParseSixMinutesHelper) {
         let configuration = urlSession.configuration
-        configuration.timeoutIntervalForRequest = 3
-        configuration.timeoutIntervalForResource = 10
+        configuration.timeoutIntervalForRequest = 10
+        configuration.timeoutIntervalForResource = 30
         self.urlSession = URLSession(configuration: configuration)
         self.parseSMHelper = parseSMHelper
         setupBindings()

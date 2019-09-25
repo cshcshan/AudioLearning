@@ -22,12 +22,19 @@ class VocabularyDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         setupBindings()
     }
     
-    private func setupUI() {
-        
+    override func setupUIColor() {
+        view.backgroundColor = Appearance.backgroundColor
+        wordTextField.backgroundColor = Appearance.backgroundColor
+        wordTextField.textColor = Appearance.textColor
+        noteTextView.backgroundColor = Appearance.backgroundColor
+        noteTextView.textColor = Appearance.textColor
+        saveButton.backgroundColor = Appearance.backgroundColor
+        saveButton.setTitleColor(Appearance.textColor, for: UIControl.State())
+        cancelButton.backgroundColor = Appearance.backgroundColor
+        cancelButton.setTitleColor(Appearance.textColor, for: UIControl.State())
     }
     
     private func setupBindings() {

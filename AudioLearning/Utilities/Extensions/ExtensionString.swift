@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String {
     
@@ -16,8 +17,16 @@ extension String {
         return dateFormatter.date(from: self)
     }
     
-    func convertHtml() -> NSAttributedString {
-        let html = self.replacingOccurrences(of: "\n", with: "<br/>")
+    func convertHtml(backgroundColor: UIColor? = nil, fontColor: UIColor? = nil, fontName: String? = nil, fontSize: CGFloat? = nil) -> NSAttributedString {
+        var html = self.replacingOccurrences(of: "\n", with: "<br/>")
+        if backgroundColor != nil || fontColor != nil || fontName != nil || fontSize == nil {
+            var style = ""
+            if let backgroundColor = backgroundColor { style += "background-color:\(backgroundColor.hexString);" }
+            if let fontColor = fontColor { style += "color:\(fontColor.hexString);" }
+            if let fontName = fontName { style += "font-family:'\(fontName)';" }
+            if let fontSize = fontSize { style += "font-size:\(fontSize)px;" }
+            html = "<style>body{\(style)}</style>\(html)"
+        }
         guard let data = html.data(using: .utf8) else { return NSAttributedString() }
         let options: [NSAttributedString.DocumentReadingOptionKey: Any]
             = [.documentType: NSAttributedString.DocumentType.html,

@@ -10,6 +10,21 @@ import UIKit
 
 class BaseViewController: UIViewController, StoryboardGettable {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUIColor()
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.backgroundColor = appearanceMode == .dark ? UIColor.black : UIColor.white
+            navigationBar.barTintColor = appearanceMode == .dark ? UIColor.black : UIColor.white
+            navigationBar.tintColor = Appearance.textColor
+            navigationBar.isTranslucent = false
+            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Appearance.textColor,
+                                                 NSAttributedString.Key.font: UIFont(name: "AvenirNext-DemiBold", size: 20.0)!]
+        }
+    }
+    
+    func setupUIColor() {}
+    
     func showConfirmAlert(title: String?, message: String?,
                           confirmHandler: ((UIAlertAction) -> Void)?,
                           completionHandler: (() -> Void)?) {

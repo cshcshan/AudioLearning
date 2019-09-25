@@ -24,6 +24,11 @@ class EpisodeListViewController: BaseViewController {
         setupBindings()
     }
     
+    override func setupUIColor() {
+        view.backgroundColor = Appearance.backgroundColor
+        tableView.backgroundColor = Appearance.backgroundColor
+    }
+    
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
         setupNavigationBar()
@@ -58,15 +63,7 @@ class EpisodeListViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         viewModel.refreshing
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (refreshing) in
-                guard let `self` = self else { return }
-                if refreshing {
-                    self.refreshControl.beginRefreshing()
-                } else {
-                    self.refreshControl.endRefreshing()
-                }
-            })
+            .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
         
         viewModel.alert

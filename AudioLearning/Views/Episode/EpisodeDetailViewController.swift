@@ -14,6 +14,7 @@ class EpisodeDetailViewController: BaseViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var htmlTextView: UITextView!
+    @IBOutlet weak var separateLineView: UIView!
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var playerViewHeight: NSLayoutConstraint!
     private let refreshControl = UIRefreshControl()
@@ -28,6 +29,13 @@ class EpisodeDetailViewController: BaseViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+    }
+    
+    override func setupUIColor() {
+        view.backgroundColor = Appearance.backgroundColor
+        scrollView.backgroundColor = Appearance.backgroundColor
+        htmlTextView.backgroundColor = Appearance.backgroundColor
+        separateLineView.backgroundColor = Appearance.textColor
     }
     
     private func setupUI() {
@@ -48,15 +56,7 @@ class EpisodeDetailViewController: BaseViewController {
     
     private func setupBindings() {
         viewModel.refreshing
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (refreshing) in
-                guard let `self` = self else { return }
-                if refreshing {
-                    self.refreshControl.beginRefreshing()
-                } else {
-                    self.refreshControl.endRefreshing()
-                }
-            })
+            .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
         
         navigationItem.title = viewModel.title
@@ -67,7 +67,10 @@ class EpisodeDetailViewController: BaseViewController {
                 guard let `self` = self else { return NSAttributedString() }
                 let fontName = self.htmlTextView.font!.fontName
                 let fontSize = self.htmlTextView.font!.pointSize
-                return "<style>body{font-family:'\(fontName)';font-size:\(fontSize)px;}</style>\(html)".convertHtml()
+                return html.convertHtml(backgroundColor: Appearance.backgroundColor,
+                                        fontColor: Appearance.textColor,
+                                        fontName: fontName,
+                                        fontSize: fontSize)
             })
             .do(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }

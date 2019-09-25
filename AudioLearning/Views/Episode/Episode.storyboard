@@ -180,6 +180,7 @@
                         <outlet property="playerView" destination="zQB-zp-Vsj" id="ABD-fZ-GaJ"/>
                         <outlet property="playerViewHeight" destination="krx-3p-r9N" id="sXR-eC-LRG"/>
                         <outlet property="scrollView" destination="GdN-a5-ewG" id="9am-NE-ClB"/>
+                        <outlet property="separateLineView" destination="K0T-rh-Eyf" id="ODI-SK-5po"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kwN-Ra-wdB" userLabel="First Responder" sceneMemberID="firstResponder"/>

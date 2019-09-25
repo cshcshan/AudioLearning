@@ -23,9 +23,16 @@ class VocabularyListViewController: BaseViewController {
         setupBindings()
     }
     
+    override func setupUIColor() {
+        view.backgroundColor = Appearance.backgroundColor
+        tableView.backgroundColor = Appearance.backgroundColor
+    }
+    
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
         setupNavigationBar()
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 60
     }
     
     private func setupNavigationBar() {

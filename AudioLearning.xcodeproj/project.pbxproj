@@ -17,6 +17,10 @@
 		330657612339E43600381CC6 /* VocabularyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657602339E43600381CC6 /* VocabularyCell.swift */; };
 		330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657622339ED5500381CC6 /* VocabularySaveModel.swift */; };
 		330657652339EE9900381CC6 /* VocabularySaveModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */; };
+		33065785233B207E00381CC6 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33065784233B207D00381CC6 /* Color.xcassets */; };
+		33065787233B23DD00381CC6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065786233B23DD00381CC6 /* Constants.swift */; };
+		33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */; };
+		3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */; };
 		332C155123174CF8003C78EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155023174CF8003C78EA /* AppDelegate.swift */; };
 		332C155823174CF9003C78EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 332C155723174CF9003C78EA /* Assets.xcassets */; };
 		332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332C155923174CF9003C78EA /* LaunchScreen.storyboard */; };
@@ -101,6 +105,10 @@
 		330657602339E43600381CC6 /* VocabularyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyCell.swift; sourceTree = "<group>"; };
 		330657622339ED5500381CC6 /* VocabularySaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModel.swift; sourceTree = "<group>"; };
 		330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModelTests.swift; sourceTree = "<group>"; };
+		33065784233B207D00381CC6 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
+		33065786233B23DD00381CC6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIColor.swift; sourceTree = "<group>"; };
+		3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		332C154D23174CF8003C78EA /* AudioLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C155023174CF8003C78EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		332C155723174CF9003C78EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -223,6 +231,16 @@
 			path = Vocabulary;
 			sourceTree = "<group>";
 		};
+		3306578E233B406000381CC6 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				332C158A2317878C003C78EA /* 6-minute-english.html */,
+				332C159A2318CE10003C78EA /* ep-190815.html */,
+				334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
 		332C154423174CF8003C78EA = {
 			isa = PBXGroup;
 			children = (
@@ -255,7 +273,6 @@
 				33E377C123190D8F00C6671B /* Services */,
 				332C158423177683003C78EA /* Utilities */,
 				332C15892317874B003C78EA /* Resources */,
-				332C155723174CF9003C78EA /* Assets.xcassets */,
 				332C155C23174CF9003C78EA /* Info.plist */,
 				33E3781D231CB24400C6671B /* Rx.playground */,
 				33892AA5231E935400340C17 /* ClosureDemo.playground */,
@@ -301,9 +318,10 @@
 		332C15892317874B003C78EA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				332C158A2317878C003C78EA /* 6-minute-english.html */,
-				332C159A2318CE10003C78EA /* ep-190815.html */,
-				334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */,
+				3306578E233B406000381CC6 /* Demo */,
+				33065786233B23DD00381CC6 /* Constants.swift */,
+				332C155723174CF9003C78EA /* Assets.xcassets */,
+				33065784233B207D00381CC6 /* Color.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -326,6 +344,7 @@
 				33892AA8231F6AA500340C17 /* ExtensionDate.swift */,
 				3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */,
 				332C15942317A7C1003C78EA /* ExtensionString.swift */,
+				33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -436,6 +455,7 @@
 			children = (
 				33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */,
 				33DB07512328FAD80030EBBA /* BaseViewController.swift */,
+				3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -600,6 +620,7 @@
 				332C155823174CF9003C78EA /* Assets.xcassets in Resources */,
 				33892AA2231E324800340C17 /* Episode.storyboard in Resources */,
 				33DB07562329CEC40030EBBA /* MusicPlayer.storyboard in Resources */,
+				33065785233B207E00381CC6 /* Color.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +825,7 @@
 				3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */,
 				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
+				3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */,
 				33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */,
 				334645012332514D0040407E /* BufferingSlider.swift in Sources */,
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,
@@ -814,9 +836,11 @@
 				33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */,
 				3306575F2339D03700381CC6 /* VocabularyCoordinator.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
+				33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
 				3353ABFA233725FC0031B9C1 /* EpisodeDetailRealmModel.swift in Sources */,
+				33065787233B23DD00381CC6 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

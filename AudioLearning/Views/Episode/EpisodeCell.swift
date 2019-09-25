@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EpisodeCell: UITableViewCell {
+class EpisodeCell: BaseTableViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -22,6 +22,16 @@ class EpisodeCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+    }
+    
+    override func setupUIColor() {
+        backgroundColor = Appearance.backgroundColor
+        titleLabel.backgroundColor = Appearance.backgroundColor
+        titleLabel.textColor = Appearance.textColor
+        dateLabel.backgroundColor = Appearance.backgroundColor
+        dateLabel.textColor = Appearance.textColor
+        descLabel.backgroundColor = Appearance.backgroundColor
+        descLabel.textColor = Appearance.textColor
     }
     
     private func bindUI() {

@@ -78,10 +78,10 @@ class RealmService<T: Object> {
         return .just(object)
     }
     
-    func update(type: T.Type, predicate: NSPredicate, updateHandler: ((_ data: Results<T>?) -> Void)) -> Observable<Bool> {
+    func update(predicate: NSPredicate, updateHandler: ((_ data: Results<T>?) -> Void)) -> Observable<Bool> {
         var result = true
         guard let realm = instanceRealm() else { return .just(false) }
-        let objects = realm.objects(type).filter(predicate)
+        let objects = realm.objects(T.self).filter(predicate)
         realm.beginWrite()
         updateHandler(objects)
         realm.add(objects, update: .modified)
@@ -94,10 +94,10 @@ class RealmService<T: Object> {
         return .just(result)
     }
     
-    func delete(type: T.Type, predicate: NSPredicate) -> Observable<Bool> {
+    func delete(predicate: NSPredicate) -> Observable<Bool> {
         var result = true
         guard let realm = instanceRealm() else { return .just(false) }
-        let objects = realm.objects(type).filter(predicate)
+        let objects = realm.objects(T.self).filter(predicate)
         realm.beginWrite()
         realm.delete(objects)
         do {
@@ -109,7 +109,7 @@ class RealmService<T: Object> {
         return .just(result)
     }
     
-    func deleteAll(type: T.Type) -> Observable<Bool> {
+    func deleteAll() -> Observable<Bool> {
         var result = true
         guard let realm = instanceRealm() else { return .just(false) }
         let objects = realm.objects(T.self)

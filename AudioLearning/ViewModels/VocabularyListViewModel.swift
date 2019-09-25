@@ -19,6 +19,7 @@ class VocabularyListViewModel {
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectVocabulary: AnyObserver<VocabularyRealmModel>!
     private(set) var addVocabulary: AnyObserver<Void>!
+    private(set) var deleteVocabulary: AnyObserver<VocabularyRealmModel>!
     
     // Outputs
     private(set) var vocabularies: Observable<[VocabularyRealmModel]>!
@@ -28,6 +29,7 @@ class VocabularyListViewModel {
     private let reloadSubject = PublishSubject<Void>()
     private let selectVocabularySubject = PublishSubject<VocabularyRealmModel>()
     private let addVocabularySubject = PublishSubject<Void>()
+    private let deleteVocabularySubject = PublishSubject<VocabularyRealmModel>()
     private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
@@ -37,6 +39,7 @@ class VocabularyListViewModel {
         showVocabularyDetail = selectVocabularySubject.asObservable()
         addVocabulary = addVocabularySubject.asObserver()
         showAddVocabularyDetail = addVocabularySubject.asObservable()
+        deleteVocabulary = deleteVocabularySubject.asObserver()
         
         Observable.of(showVocabularyDetail.map({ $0 as AnyObject }),
                                                  showAddVocabularyDetail.map({ $0 as AnyObject }))
@@ -50,6 +53,27 @@ class VocabularyListViewModel {
         reloadSubject
             .subscribe(onNext: { (_) in
                 realmService.loadAll.onNext(["updateDate": false])
+            })
+            .disposed(by: disposeBag)
+        
+        let deleteSuccessSubject = PublishSubject<Bool>()
+        deleteSuccessSubject
+            .subscribe(onNext: { [weak self] (success) in
+                guard let `self` = self else { return }
+                guard success else { return }
+                self.reloadSubject.onNext(())
+            })
+            .disposed(by: disposeBag)
+        
+        deleteVocabularySubject
+            .subscribe(onNext: { [weak self] (vocabularyRealmModel) in
+                guard let `self` = self else { return }
+                guard let word = vocabularyRealmModel.word else { return }
+                realmService.delete(predicate: NSPredicate(format: "word == %@", word))
+                    .subscribe(onNext: { (success) in
+                        deleteSuccessSubject.onNext(success)
+                    })
+                    .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
     }

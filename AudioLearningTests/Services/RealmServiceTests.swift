@@ -73,7 +73,7 @@ class RealmServiceTests: XCTestCase {
         
         let updateExpectation = expectation(description: "Updated")
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
-        sut.update(type: EpisodeRealmModel.self, predicate: predicate, updateHandler: { (data) in
+        sut.update(predicate: predicate, updateHandler: { (data) in
             guard let data = data else { return }
             let objects = Array(data)
             for object in objects {
@@ -105,7 +105,7 @@ class RealmServiceTests: XCTestCase {
         
         let updateExpectationt = expectation(description: "Updated")
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
-        sut.update(type: EpisodeRealmModel.self, predicate: predicate, updateHandler: { (_) in
+        sut.update(predicate: predicate, updateHandler: { (_) in
             updateExpectationt.fulfill()
         })
             .bind(to: success)
@@ -130,7 +130,7 @@ class RealmServiceTests: XCTestCase {
     func testDelete() {
         let success = scheduler.createObserver(Bool.self)
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
-        sut.delete(type: EpisodeRealmModel.self, predicate: predicate)
+        sut.delete(predicate: predicate)
             .bind(to: success)
             .disposed(by: disposeBag)
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
@@ -151,7 +151,7 @@ class RealmServiceTests: XCTestCase {
 
     func testDeleteAll() {
         let success = scheduler.createObserver(Bool.self)
-        sut.deleteAll(type: EpisodeRealmModel.self)
+        sut.deleteAll()
             .bind(to: success)
             .disposed(by: disposeBag)
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
@@ -258,6 +258,6 @@ extension RealmServiceTests {
     }
     
     private func flushData() {
-        _ = sut.deleteAll(type: EpisodeRealmModel.self)
+        _ = sut.deleteAll()
     }
 }

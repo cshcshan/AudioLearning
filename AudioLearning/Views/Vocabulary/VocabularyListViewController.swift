@@ -85,6 +85,10 @@ class VocabularyListViewController: BaseViewController {
             .bind(to: viewModel.selectVocabulary)
             .disposed(by: disposeBag)
         
+        tableView.rx.modelDeleted(VocabularyRealmModel.self)
+            .bind(to: viewModel.deleteVocabulary)
+            .disposed(by: disposeBag)
+        
         viewModel.reload.onNext(())
     }
 }

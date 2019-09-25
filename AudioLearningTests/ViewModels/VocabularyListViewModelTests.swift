@@ -98,6 +98,6 @@ extension VocabularyListViewModelTests {
     }
     
     private func flushData() {
-        _ = realmService.deleteAll(type: VocabularyRealmModel.self)
+        _ = realmService.deleteAll()
     }
 }

@@ -14,10 +14,12 @@ class EpisodeDetailViewModel {
     // Inputs and Outputs
     private(set) var shrinkMusicPlayer = PublishSubject<Void>()
     private(set) var enlargeMusicPlayer = PublishSubject<Void>()
+    private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
     
     // Input
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
+    private(set) var addVocabulary: AnyObserver<String>!
     
     // Output
     private(set) var title: String
@@ -25,6 +27,7 @@ class EpisodeDetailViewModel {
     private(set) var audioLink: Observable<String>!
     private(set) var alert: Observable<AlertModel>!
     private(set) var refreshing: Observable<Bool>!
+    private(set) var showAddVocabularyDetail: Observable<String>!
     
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeDetailRealmModel>!
@@ -32,6 +35,7 @@ class EpisodeDetailViewModel {
     
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
+    private let addVocabularySubject = PublishSubject<String>()
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
     
@@ -44,9 +48,18 @@ class EpisodeDetailViewModel {
         
         initalLoad = initalLoadSubject.asObserver()
         reload = reloadSubject.asObserver()
+        addVocabulary = addVocabularySubject.asObserver()
+        showAddVocabularyDetail = addVocabularySubject.asObservable()
         title = episodeModel.title ?? ""
         alert = alertSubject
         refreshing = refreshingSubject
+        
+        showAddVocabularyDetail
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.hideVocabularyDetailView.onNext(false)
+            })
+            .disposed(by: disposeBag)
         
         reloadDataFromServer()
             .subscribe()

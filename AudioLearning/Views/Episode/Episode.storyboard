@@ -159,12 +159,33 @@
                                     <constraint firstItem="etg-dS-WKV" firstAttribute="top" secondItem="zQB-zp-Vsj" secondAttribute="top" constant="5" id="wad-dB-zem"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V14-0A-Nc3">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GG1-uR-FBF">
+                                        <rect key="frame" x="41.5" y="259" width="331" height="200"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="OeC-c3-LPY"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="GG1-uR-FBF" firstAttribute="centerY" secondItem="V14-0A-Nc3" secondAttribute="centerY" constant="-50" id="SMf-UL-eeg"/>
+                                    <constraint firstItem="GG1-uR-FBF" firstAttribute="centerX" secondItem="V14-0A-Nc3" secondAttribute="centerX" id="f8h-Gr-Qeq"/>
+                                    <constraint firstItem="GG1-uR-FBF" firstAttribute="width" secondItem="V14-0A-Nc3" secondAttribute="width" multiplier="0.8" id="mXo-so-AQ2"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="K0T-rh-Eyf" firstAttribute="leading" secondItem="OIE-x3-fZ8" secondAttribute="leading" id="4Ds-hf-7O1"/>
+                            <constraint firstItem="V14-0A-Nc3" firstAttribute="leading" secondItem="NRA-aO-tp4" secondAttribute="leading" id="5VH-3z-yBV"/>
                             <constraint firstItem="wzW-dy-kFZ" firstAttribute="top" secondItem="NRA-aO-tp4" secondAttribute="top" id="661-4Z-75R"/>
                             <constraint firstItem="NRA-aO-tp4" firstAttribute="bottom" secondItem="zQB-zp-Vsj" secondAttribute="bottom" id="6w4-f0-ukC"/>
+                            <constraint firstItem="V14-0A-Nc3" firstAttribute="trailing" secondItem="NRA-aO-tp4" secondAttribute="trailing" id="8zf-Ln-OLZ"/>
+                            <constraint firstItem="V14-0A-Nc3" firstAttribute="top" secondItem="NRA-aO-tp4" secondAttribute="top" id="AA7-XT-qHC"/>
                             <constraint firstItem="K0T-rh-Eyf" firstAttribute="top" secondItem="wzW-dy-kFZ" secondAttribute="bottom" id="AAq-a2-EfW"/>
                             <constraint firstItem="zQB-zp-Vsj" firstAttribute="top" secondItem="K0T-rh-Eyf" secondAttribute="bottom" id="B4W-Mj-fL5"/>
                             <constraint firstAttribute="trailing" secondItem="zQB-zp-Vsj" secondAttribute="trailing" id="atL-G9-el1"/>
@@ -172,15 +193,18 @@
                             <constraint firstItem="wzW-dy-kFZ" firstAttribute="leading" secondItem="NRA-aO-tp4" secondAttribute="leading" id="fff-w4-CVf"/>
                             <constraint firstItem="zQB-zp-Vsj" firstAttribute="leading" secondItem="OIE-x3-fZ8" secondAttribute="leading" id="kI1-NU-1YD"/>
                             <constraint firstAttribute="trailing" secondItem="wzW-dy-kFZ" secondAttribute="trailing" id="p83-l8-hkH"/>
+                            <constraint firstItem="NRA-aO-tp4" firstAttribute="bottom" secondItem="V14-0A-Nc3" secondAttribute="bottom" id="pnp-2h-FZr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NRA-aO-tp4"/>
                     </view>
                     <connections>
                         <outlet property="htmlTextView" destination="CZR-nE-psP" id="0BO-1V-Fc9"/>
+                        <outlet property="maskView" destination="V14-0A-Nc3" id="vgD-O8-Vnm"/>
                         <outlet property="playerView" destination="zQB-zp-Vsj" id="ABD-fZ-GaJ"/>
                         <outlet property="playerViewHeight" destination="krx-3p-r9N" id="sXR-eC-LRG"/>
                         <outlet property="scrollView" destination="GdN-a5-ewG" id="9am-NE-ClB"/>
                         <outlet property="separateLineView" destination="K0T-rh-Eyf" id="ODI-SK-5po"/>
+                        <outlet property="vocabularyDetailView" destination="GG1-uR-FBF" id="euX-CY-Vs8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kwN-Ra-wdB" userLabel="First Responder" sceneMemberID="firstResponder"/>

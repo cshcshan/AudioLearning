@@ -17,10 +17,13 @@ class EpisodeDetailViewController: BaseViewController {
     @IBOutlet weak var separateLineView: UIView!
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var playerViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var maskView: UIView!
+    @IBOutlet weak var vocabularyDetailView: UIView!
     private let refreshControl = UIRefreshControl()
     
     var viewModel: EpisodeDetailViewModel!
     var musicPlayerViewController: MusicPlayerViewController!
+    var vocabularyDetailViewController: VocabularyDetailViewController!
     private let maxPlayerViewHeight: CGFloat = 195.5
     private let minPlayerViewHeight: CGFloat = 76
     private let disposeBag = DisposeBag()
@@ -29,6 +32,7 @@ class EpisodeDetailViewController: BaseViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+        setupMenuItem()
     }
     
     override func setupUIColor() {
@@ -36,6 +40,7 @@ class EpisodeDetailViewController: BaseViewController {
         scrollView.backgroundColor = Appearance.backgroundColor
         htmlTextView.backgroundColor = Appearance.backgroundColor
         separateLineView.backgroundColor = Appearance.textColor
+        maskView.backgroundColor = (appearanceMode == .dark ? Appearance.textColor : Appearance.backgroundColor).withAlphaComponent(0.4)
     }
     
     private func setupUI() {
@@ -52,6 +57,12 @@ class EpisodeDetailViewController: BaseViewController {
         // htmlTextView
         htmlTextView.isEditable = false
         htmlTextView.isScrollEnabled = true
+        // vocabularyDetailView
+        addChild(vocabularyDetailViewController)
+        vocabularyDetailView.backgroundColor = .clear
+        vocabularyDetailViewController.view.frame = vocabularyDetailView.bounds
+        vocabularyDetailView.addSubview(vocabularyDetailViewController.view)
+        vocabularyDetailViewController.view.layer.cornerRadius = 10
     }
     
     private func setupBindings() {
@@ -87,6 +98,17 @@ class EpisodeDetailViewController: BaseViewController {
                                       message: alert.message,
                                       confirmHandler: nil,
                                       completionHandler: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.hideVocabularyDetailView
+            .bind(to: maskView.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        viewModel.showAddVocabularyDetail
+            .subscribe(onNext: { [weak self] (text) in
+                guard let `self` = self else { return }
+                self.vocabularyDetailViewController.viewModel.addWithWord.onNext(text)
             })
             .disposed(by: disposeBag)
         
@@ -136,5 +158,21 @@ extension EpisodeDetailViewController {
             }
         default: break
         }
+    }
+}
+
+// MARK: - Add Vocabulary
+
+extension EpisodeDetailViewController {
+    
+    private func setupMenuItem() {
+        let item = UIMenuItem(title: "Add Vocabulary", action: #selector(addVocabulary))
+        UIMenuController.shared.menuItems = [item]
+    }
+    
+    @objc func addVocabulary() {
+        guard let textRange = htmlTextView.selectedTextRange else { return }
+        guard let text = htmlTextView.text(in: textRange) else { return }
+        viewModel.addVocabulary.onNext(text)
     }
 }

@@ -14,6 +14,7 @@ class VocabularyDetailViewModel {
     // Inputs
     private(set) var load: AnyObserver<VocabularyRealmModel>!
     private(set) var add: AnyObserver<Void>!
+    private(set) var addWithWord: AnyObserver<String>!
     private(set) var save: AnyObserver<(VocabularySaveModel)>!
     private(set) var cancel: AnyObserver<Void>!
     
@@ -25,6 +26,7 @@ class VocabularyDetailViewModel {
     
     private let loadSubject = PublishSubject<VocabularyRealmModel>()
     private let addSubject = PublishSubject<Void>()
+    private let addWithWordSubject = PublishSubject<String>()
     private let saveSubject = PublishSubject<VocabularySaveModel>()
     private let savedSubject = PublishSubject<Void>()
     private let cancelSubject = PublishSubject<Void>()
@@ -39,10 +41,19 @@ class VocabularyDetailViewModel {
         
         load = loadSubject.asObserver()
         add = addSubject.asObserver()
+        addWithWord = addWithWordSubject.asObserver()
         save = saveSubject.asObserver()
         saved = savedSubject.asObservable()
         cancel = cancelSubject.asObserver()
         close = closeSubject.asObservable()
+        
+        realmService.filterObjects
+            .subscribe(onNext: { (vocabularyRealmModels) in
+                guard let model = vocabularyRealmModels.first else { return }
+                self.word.onNext(model.word ?? "")
+                self.note.onNext(model.note ?? "")
+            })
+            .disposed(by: disposeBag)
         
         loadSubject
             .subscribe(onNext: { [weak self] (vocabularyRealmModel) in
@@ -57,6 +68,15 @@ class VocabularyDetailViewModel {
                 guard let `self` = self else { return }
                 self.word.onNext("")
                 self.note.onNext("")
+            })
+            .disposed(by: disposeBag)
+        
+        addWithWordSubject
+            .subscribe(onNext: { [weak self] (text) in
+                guard let `self` = self else { return }
+                self.word.onNext(text)
+                self.note.onNext("")
+                realmService.filter.onNext((NSPredicate(format: "word == %@", text), nil))
             })
             .disposed(by: disposeBag)
         

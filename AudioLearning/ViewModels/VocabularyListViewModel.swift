@@ -42,7 +42,7 @@ class VocabularyListViewModel {
         deleteVocabulary = deleteVocabularySubject.asObserver()
         
         Observable.of(showVocabularyDetail.map({ $0 as AnyObject }),
-                                                 showAddVocabularyDetail.map({ $0 as AnyObject }))
+                      showAddVocabularyDetail.map({ $0 as AnyObject }))
             .merge()
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }

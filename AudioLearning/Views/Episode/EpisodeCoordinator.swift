@@ -92,11 +92,28 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
         episodeDetailViewController.viewModel = viewModel
         episodeDetailViewController.musicPlayerViewController = musicPlayerViewController
+        episodeDetailViewController.vocabularyDetailViewController = showVocabularyDetail(episodeDetailViewModel: viewModel)
         navigationController.pushViewController(episodeDetailViewController, animated: true)
     }
     
     private func showVocabulary(on rootViewController: UIViewController) {
         let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController)
         _ = coordinate(to: vocabularyCoordinator)
+    }
+    
+    private func showVocabularyDetail(episodeDetailViewModel: EpisodeDetailViewModel) -> VocabularyDetailViewController {
+        // ViewModel
+        let realmService = RealmService<VocabularyRealmModel>()
+        let viewModel = VocabularyDetailViewModel(realmService: realmService)
+        
+        viewModel.close.map({ true })
+            .bind(to: episodeDetailViewModel.hideVocabularyDetailView)
+            .disposed(by: disposeBag)
+        
+        // ViewController
+        let viewController = VocabularyDetailViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyDetailViewController")
+        viewController.viewModel = viewModel
+        
+        return viewController
     }
 }

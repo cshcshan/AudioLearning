@@ -59,6 +59,24 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F3n-cn-Ie4">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gnw-Ac-yjl">
+                                        <rect key="frame" x="41.5" y="259" width="331" height="200"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="WbN-z3-ceh"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="gnw-Ac-yjl" firstAttribute="centerY" secondItem="F3n-cn-Ie4" secondAttribute="centerY" constant="-50" id="caF-uh-C1C"/>
+                                    <constraint firstItem="gnw-Ac-yjl" firstAttribute="centerX" secondItem="F3n-cn-Ie4" secondAttribute="centerX" id="fhQ-a0-8C0"/>
+                                    <constraint firstItem="gnw-Ac-yjl" firstAttribute="width" secondItem="F3n-cn-Ie4" secondAttribute="width" multiplier="0.8" id="xzY-pd-csF"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -66,11 +84,17 @@
                             <constraint firstItem="duU-0A-fp3" firstAttribute="leading" secondItem="n2t-vP-iO3" secondAttribute="leading" id="7Qo-Mm-yDB"/>
                             <constraint firstItem="duU-0A-fp3" firstAttribute="top" secondItem="n2t-vP-iO3" secondAttribute="top" id="CKX-R9-sZW"/>
                             <constraint firstItem="n2t-vP-iO3" firstAttribute="trailing" secondItem="duU-0A-fp3" secondAttribute="trailing" id="Rtc-fg-euM"/>
+                            <constraint firstItem="F3n-cn-Ie4" firstAttribute="leading" secondItem="n2t-vP-iO3" secondAttribute="leading" id="Znc-OE-OHs"/>
+                            <constraint firstItem="n2t-vP-iO3" firstAttribute="bottom" secondItem="F3n-cn-Ie4" secondAttribute="bottom" id="dNz-5s-gO4"/>
+                            <constraint firstItem="F3n-cn-Ie4" firstAttribute="top" secondItem="n2t-vP-iO3" secondAttribute="top" id="m5n-LM-2YM"/>
+                            <constraint firstItem="n2t-vP-iO3" firstAttribute="trailing" secondItem="F3n-cn-Ie4" secondAttribute="trailing" id="xno-NN-z1l"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="n2t-vP-iO3"/>
                     </view>
                     <connections>
+                        <outlet property="maskView" destination="F3n-cn-Ie4" id="Fsa-0g-Zzv"/>
                         <outlet property="tableView" destination="duU-0A-fp3" id="Obc-DM-Jah"/>
+                        <outlet property="vocabularyDetailView" destination="gnw-Ac-yjl" id="7y6-Cd-n5X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n8Z-HL-F6V" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -88,14 +112,14 @@
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Word" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zp9-Vk-1bk">
                                 <rect key="frame" x="16" y="60" width="382" height="30"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="HdE-aD-WsG">
                                 <rect key="frame" x="16" y="100" width="382" height="706"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="bYW-5K-yqe">

@@ -12,6 +12,9 @@ import RxCocoa
 
 class VocabularyListViewModel {
     
+    // Inputs and Outputs
+    private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
+    
     // Inputs
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectVocabulary: AnyObserver<VocabularyRealmModel>!
@@ -34,6 +37,15 @@ class VocabularyListViewModel {
         showVocabularyDetail = selectVocabularySubject.asObservable()
         addVocabulary = addVocabularySubject.asObserver()
         showAddVocabularyDetail = addVocabularySubject.asObservable()
+        
+        Observable.of(showVocabularyDetail.map({ $0 as AnyObject }),
+                                                 showAddVocabularyDetail.map({ $0 as AnyObject }))
+            .merge()
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.hideVocabularyDetailView.onNext(false)
+            })
+            .disposed(by: disposeBag)
         
         reloadSubject
             .subscribe(onNext: { (_) in

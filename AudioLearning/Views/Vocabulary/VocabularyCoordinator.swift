@@ -27,27 +27,14 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
         let realmService = RealmService<VocabularyRealmModel>()
         let viewModel = VocabularyListViewModel(realmService: realmService)
         
-        viewModel.showVocabularyDetail
-            .subscribe(onNext: { [weak self] (model) in
-                guard let `self` = self else { return }
-                self.showVocabularyDetail(vocabularyListViewModel: viewModel, model: model)
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.showAddVocabularyDetail
-            .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
-                self.showAddVocabularyDetail(vocabularyListViewModel: viewModel)
-            })
-            .disposed(by: disposeBag)
-        
         // ViewController
         let viewController = VocabularyListViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyListViewController")
         viewController.viewModel = viewModel
+        viewController.vocabularyDetailViewController = showVocabularyDetail(vocabularyListViewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    private func showVocabularyDetail(vocabularyListViewModel: VocabularyListViewModel, handler: @escaping ((VocabularyDetailViewModel) -> Void)) {
+    private func showVocabularyDetail(vocabularyListViewModel: VocabularyListViewModel) -> VocabularyDetailViewController {
         // ViewModel
         let realmService = RealmService<VocabularyRealmModel>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
@@ -58,19 +45,14 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
         
+        viewModel.close.map({ true })
+            .bind(to: vocabularyListViewModel.hideVocabularyDetailView)
+            .disposed(by: disposeBag)
+        
         // ViewController
         let viewController = VocabularyDetailViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyDetailViewController")
         viewController.viewModel = viewModel
-        navigationController.pushViewController(viewController, animated: true)
         
-        handler(viewModel)
-    }
-    
-    private func showVocabularyDetail(vocabularyListViewModel: VocabularyListViewModel, model: VocabularyRealmModel) {
-        showVocabularyDetail(vocabularyListViewModel: vocabularyListViewModel, handler: { $0.load.onNext(model) })
-    }
-    
-    private func showAddVocabularyDetail(vocabularyListViewModel: VocabularyListViewModel) {
-        showVocabularyDetail(vocabularyListViewModel: vocabularyListViewModel, handler: { $0.add.onNext(()) })
+        return viewController
     }
 }

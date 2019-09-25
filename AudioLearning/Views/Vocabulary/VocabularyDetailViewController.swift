@@ -22,19 +22,36 @@ class VocabularyDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         setupBindings()
     }
     
     override func setupUIColor() {
         view.backgroundColor = Appearance.backgroundColor
         wordTextField.backgroundColor = Appearance.backgroundColor
+        wordTextField.tintColor = Appearance.textColor
         wordTextField.textColor = Appearance.textColor
         noteTextView.backgroundColor = Appearance.backgroundColor
+        noteTextView.tintColor = Appearance.textColor
         noteTextView.textColor = Appearance.textColor
         saveButton.backgroundColor = Appearance.backgroundColor
         saveButton.setTitleColor(Appearance.textColor, for: UIControl.State())
         cancelButton.backgroundColor = Appearance.backgroundColor
         cancelButton.setTitleColor(Appearance.textColor, for: UIControl.State())
+    }
+    
+    private func setupUI() {
+        wordTextField.layer.cornerRadius = 3
+        wordTextField.layer.borderColor = Appearance.textColor.cgColor
+        wordTextField.layer.borderWidth = 1
+        noteTextView.layer.cornerRadius = 3
+        noteTextView.layer.borderColor = Appearance.textColor.cgColor
+        noteTextView.layer.borderWidth = 1
+        noteTextView.contentInset = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else { return }
+            self.wordTextField.becomeFirstResponder()
+        }
     }
     
     private func setupBindings() {

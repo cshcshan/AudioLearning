@@ -19,8 +19,12 @@ class VocabularyCell: BaseTableViewCell {
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        wordLabel.backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        wordLabel.textColor = highlighted ? Appearance.backgroundColor : Appearance.textColor
+        episodeLabel.backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        episodeLabel.textColor = highlighted ? Appearance.backgroundColor : Appearance.textColor
     }
     
     override func setupUIColor() {

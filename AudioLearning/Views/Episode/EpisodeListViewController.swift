@@ -58,7 +58,8 @@ class EpisodeListViewController: BaseViewController {
             })
             .bind(to: tableView.rx.items(cellIdentifier: "EpisodeCell", cellType: EpisodeCell.self),
                   curriedArgument: { (row, model, cell) in
-                cell.episodeModel = model
+                    cell.selectionStyle = .none
+                    cell.episodeModel = model
             })
             .disposed(by: disposeBag)
         

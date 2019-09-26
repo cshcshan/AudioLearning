@@ -61,6 +61,7 @@ class VocabularyListViewController: BaseViewController {
         
         viewModel.vocabularies
             .bind(to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self), curriedArgument: { (_, model, cell) in
+                cell.selectionStyle = .none
                 cell.vocabularyRealmModel = model
             })
             .disposed(by: disposeBag)

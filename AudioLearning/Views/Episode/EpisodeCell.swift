@@ -20,8 +20,24 @@ class EpisodeCell: BaseTableViewCell {
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        titleLabel.backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        titleLabel.textColor = highlighted ? Appearance.backgroundColor : Appearance.textColor
+        dateLabel.backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        dateLabel.textColor = highlighted ? Appearance.backgroundColor : Appearance.textColor
+        descLabel.backgroundColor = highlighted ? Appearance.textColor : Appearance.backgroundColor
+        descLabel.textColor = highlighted ? Appearance.backgroundColor : Appearance.textColor
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        backgroundColor = selected ? Appearance.textColor : Appearance.backgroundColor
+        titleLabel.backgroundColor = selected ? Appearance.textColor : Appearance.backgroundColor
+        titleLabel.textColor = selected ? Appearance.backgroundColor : Appearance.textColor
+        dateLabel.backgroundColor = selected ? Appearance.textColor : Appearance.backgroundColor
+        dateLabel.textColor = selected ? Appearance.backgroundColor : Appearance.textColor
+        descLabel.backgroundColor = selected ? Appearance.textColor : Appearance.backgroundColor
+        descLabel.textColor = selected ? Appearance.backgroundColor : Appearance.textColor
     }
     
     override func setupUIColor() {

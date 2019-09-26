@@ -19,6 +19,7 @@ class EpisodeDetailViewModel {
     // Input
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
+    private(set) var tapVocabulary: AnyObserver<Void>!
     private(set) var addVocabulary: AnyObserver<String>!
     
     // Output
@@ -27,6 +28,7 @@ class EpisodeDetailViewModel {
     private(set) var audioLink: Observable<String>!
     private(set) var alert: Observable<AlertModel>!
     private(set) var refreshing: Observable<Bool>!
+    private(set) var showVocabulary: Observable<Void>!
     private(set) var showAddVocabularyDetail: Observable<String>!
     
     private let apiService: APIServiceProtocol!
@@ -35,6 +37,7 @@ class EpisodeDetailViewModel {
     
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
+    private let tapVocabularySubject = PublishSubject<Void>()
     private let addVocabularySubject = PublishSubject<String>()
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
@@ -48,6 +51,8 @@ class EpisodeDetailViewModel {
         
         initalLoad = initalLoadSubject.asObserver()
         reload = reloadSubject.asObserver()
+        tapVocabulary = tapVocabularySubject.asObserver()
+        showVocabulary = tapVocabularySubject.asObservable()
         addVocabulary = addVocabularySubject.asObserver()
         showAddVocabularyDetail = addVocabularySubject.asObservable()
         title = episodeModel.title ?? ""

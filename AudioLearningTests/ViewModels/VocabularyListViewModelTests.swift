@@ -60,7 +60,23 @@ class VocabularyListViewModelTests: XCTestCase {
                                                          .next(50, false)])
     }
     
-    func testVocabularies() {
+    func testVocabularies_EpisodeIsNotNil() {
+        let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
+        sut.vocabularies
+            .bind(to: vocabularies)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(5, "Episode 190811")])
+            .bind(to: sut.setEpisode)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ())])
+            .bind(to: sut.reload)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(vocabularies.events.count, 1)
+        XCTAssertEqual(vocabularies.events.first?.value.element?.count, 1)
+    }
+    
+    func testVocabularies_EpisodeIsNil() {
         let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
         sut.vocabularies
             .bind(to: vocabularies)
@@ -75,12 +91,14 @@ class VocabularyListViewModelTests: XCTestCase {
     
     func testShowVocabularyDetail() {
         let model190815 = VocabularyRealmModel()
+        model190815.id = "190815"
         model190815.episode = "Episode 190815"
         model190815.word = "Apple"
         model190815.note = "蘋果🍎"
         model190815.updateDate = Date()
         
         let model190822 = VocabularyRealmModel()
+        model190815.id = "190822"
         model190822.episode = "Episode 190822"
         model190822.word = "Phone"
         model190822.note = "手機📱"
@@ -123,7 +141,8 @@ extension VocabularyListViewModelTests {
         var models = [VocabularyRealmModel]()
         for index in 1...10 {
             let model = VocabularyRealmModel()
-            model.episode = "Episode 190815"
+            model.id = "\(index)"
+            model.episode = "Episode 19081\(index)"
             model.word = "Hello \(index)"
             model.note = "World \(index)"
             model.updateDate = Date()

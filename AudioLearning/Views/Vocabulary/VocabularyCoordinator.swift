@@ -12,9 +12,11 @@ import RxSwift
 class VocabularyCoordinator: BaseCoordinator<Void> {
     
     private var navigationController: UINavigationController!
+    private var episode: String?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, episode: String?) {
         self.navigationController = navigationController
+        self.episode = episode
     }
     
     override func start() -> Observable<Void> {
@@ -26,6 +28,7 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
         // ViewModel
         let realmService = RealmService<VocabularyRealmModel>()
         let viewModel = VocabularyListViewModel(realmService: realmService)
+        viewModel.setEpisode.onNext(episode)
         
         // Vocabulary Detail
         let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)

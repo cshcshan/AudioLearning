@@ -52,7 +52,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
-                self.showVocabulary(on: viewController)
+                self.showVocabulary(on: viewController, episode: nil)
             })
             .disposed(by: disposeBag)
     }
@@ -89,19 +89,26 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         viewModel.showAddVocabularyDetail
-            .subscribe(onNext: { (text) in
-                vocabularyDetailVC.viewModel.addWithWord.onNext(text)
+            .subscribe(onNext: { (word) in
+                vocabularyDetailVC.viewModel.addWithWord.onNext((episodeModel.episode, word))
             })
             .disposed(by: disposeBag)
         
         // ViewController
-        let episodeDetailVC = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
-        episodeDetailVC.viewModel = viewModel
-        episodeDetailVC.musicPlayerView = musicPlayerVC.view
-        episodeDetailVC.vocabularyDetailView = vocabularyDetailVC.view
-        episodeDetailVC.addChild(musicPlayerVC)
-        episodeDetailVC.addChild(vocabularyDetailVC)
-        navigationController.pushViewController(episodeDetailVC, animated: true)
+        let viewController = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
+        viewController.viewModel = viewModel
+        viewController.musicPlayerView = musicPlayerVC.view
+        viewController.vocabularyDetailView = vocabularyDetailVC.view
+        viewController.addChild(musicPlayerVC)
+        viewController.addChild(vocabularyDetailVC)
+        navigationController.pushViewController(viewController, animated: true)
+        
+        viewModel.showVocabulary
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.showVocabulary(on: viewController, episode: episodeModel.episode)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func newMusicPlayerVC() -> MusicPlayerViewController {
@@ -130,8 +137,8 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         return viewController
     }
     
-    private func showVocabulary(on rootViewController: UIViewController) {
-        let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController)
+    private func showVocabulary(on rootViewController: UIViewController, episode: String?) {
+        let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController, episode: episode)
         _ = coordinate(to: vocabularyCoordinator)
     }
 }

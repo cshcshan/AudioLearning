@@ -11,12 +11,13 @@ import RealmSwift
 
 @objcMembers
 class VocabularyRealmModel: Object {
+    dynamic var id: String?
     dynamic var episode: String?
     dynamic var word: String?
     dynamic var note: String?
     dynamic var updateDate: Date?
     
     override static func primaryKey() -> String {
-        return "word"
+        return "id"
     }
 }

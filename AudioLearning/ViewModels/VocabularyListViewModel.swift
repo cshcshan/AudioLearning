@@ -16,6 +16,7 @@ class VocabularyListViewModel {
     private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
     
     // Inputs
+    private(set) var setEpisode: AnyObserver<String?>!
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectVocabulary: AnyObserver<VocabularyRealmModel>!
     private(set) var addVocabulary: AnyObserver<Void>!
@@ -26,6 +27,9 @@ class VocabularyListViewModel {
     private(set) var showVocabularyDetail: Observable<VocabularyRealmModel>!
     private(set) var showAddVocabularyDetail: Observable<Void>!
     
+    private var episode: String?
+    
+    private let setEpisodeSubject = PublishSubject<String?>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectVocabularySubject = PublishSubject<VocabularyRealmModel>()
     private let addVocabularySubject = PublishSubject<Void>()
@@ -33,8 +37,9 @@ class VocabularyListViewModel {
     private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
+        setEpisode = setEpisodeSubject.asObserver()
         reload = reloadSubject.asObserver()
-        vocabularies = realmService.allObjects
+        vocabularies = Observable.of(realmService.allObjects, realmService.filterObjects).merge()
         selectVocabulary = selectVocabularySubject.asObserver()
         showVocabularyDetail = selectVocabularySubject.asObservable()
         addVocabulary = addVocabularySubject.asObserver()
@@ -50,9 +55,22 @@ class VocabularyListViewModel {
             })
             .disposed(by: disposeBag)
         
+        setEpisodeSubject
+            .subscribe(onNext: { [weak self] (episode) in
+                guard let `self` = self else { return }
+                self.episode = episode
+            })
+            .disposed(by: disposeBag)
+        
         reloadSubject
-            .subscribe(onNext: { (_) in
-                realmService.loadAll.onNext(["updateDate": false])
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                let sortedByAsc = ["updateDate": false]
+                if let episode = self.episode {
+                    realmService.filter.onNext((NSPredicate(format: "episode == %@", episode), sortedByAsc))
+                } else {
+                    realmService.loadAll.onNext(sortedByAsc)
+                }
             })
             .disposed(by: disposeBag)
         

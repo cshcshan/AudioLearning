@@ -14,7 +14,7 @@ class VocabularyDetailViewModel {
     // Inputs
     private(set) var load: AnyObserver<VocabularyRealmModel>!
     private(set) var add: AnyObserver<Void>!
-    private(set) var addWithWord: AnyObserver<String>!
+    private(set) var addWithWord: AnyObserver<(String?, String)>! // episode and word
     private(set) var save: AnyObserver<(VocabularySaveModel)>!
     private(set) var cancel: AnyObserver<Void>!
     
@@ -24,9 +24,11 @@ class VocabularyDetailViewModel {
     private(set) var saved: Observable<Void>!
     private(set) var close: Observable<Void>!
     
+    private var episode: String?
+    
     private let loadSubject = PublishSubject<VocabularyRealmModel>()
     private let addSubject = PublishSubject<Void>()
-    private let addWithWordSubject = PublishSubject<String>()
+    private let addWithWordSubject = PublishSubject<(String?, String)>()
     private let saveSubject = PublishSubject<VocabularySaveModel>()
     private let savedSubject = PublishSubject<Void>()
     private let cancelSubject = PublishSubject<Void>()
@@ -72,11 +74,17 @@ class VocabularyDetailViewModel {
             .disposed(by: disposeBag)
         
         addWithWordSubject
-            .subscribe(onNext: { [weak self] (text) in
+            .subscribe(onNext: { [weak self] (episode, word) in
                 guard let `self` = self else { return }
-                self.word.onNext(text)
+                self.episode = episode
+                self.word.onNext(word)
                 self.note.onNext("")
-                realmService.filter.onNext((NSPredicate(format: "word == %@", text), nil))
+                var predicate: NSPredicate = NSPredicate(format: "word == %@", word)
+                if let episode = episode {
+                    let episodePredicate = NSPredicate(format: "episode == %@", episode)
+                    predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, episodePredicate])
+                }
+                realmService.filter.onNext((predicate, nil))
             })
             .disposed(by: disposeBag)
         
@@ -84,7 +92,8 @@ class VocabularyDetailViewModel {
             .subscribe(onNext: { [weak self] (saveModel) in
                 guard let `self` = self else { return }
                 let model = VocabularyRealmModel()
-                model.episode = saveModel.episode
+                model.id = UUID().uuidString
+                model.episode = self.episode
                 model.word = saveModel.word
                 model.note = saveModel.note
                 model.updateDate = Date()

@@ -12,18 +12,15 @@ import XCTest
 class VocabularySaveModelTests: XCTestCase {
     
     func testInit() {
-        let episode = "New Episode"
         let word = "Apple"
         let note = "蘋果🍎"
-        let sut = VocabularySaveModel(episode: episode, word: word, note: note)
-        XCTAssertEqual(sut.episode, episode)
+        let sut = VocabularySaveModel(word: word, note: note)
         XCTAssertEqual(sut.word, word)
         XCTAssertEqual(sut.note, note)
     }
     
     func testInit_WithNil() {
-        let sut = VocabularySaveModel(episode: nil, word: nil, note: nil)
-        XCTAssertNil(sut.episode)
+        let sut = VocabularySaveModel(word: nil, note: nil)
         XCTAssertNil(sut.word)
         XCTAssertNil(sut.note)
     }

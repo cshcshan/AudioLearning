@@ -86,8 +86,8 @@ extension VocabularyDetailViewModelTests {
         sut.word
             .bind(to: word)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello"),
-                                        .next(20, "World")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello")),
+                                        .next(20, (nil, "World"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -108,7 +108,7 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(20, ())])
             .bind(to: sut.add)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(30, "Hello")])
+        scheduler.createColdObservable([.next(30, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -127,7 +127,7 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.add)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(20, "Hello")])
+        scheduler.createColdObservable([.next(20, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(30, (realmModel190815))])
@@ -146,7 +146,7 @@ extension VocabularyDetailViewModelTests {
         sut.word
             .bind(to: word)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(20, (realmModel190815))])
@@ -168,7 +168,7 @@ extension VocabularyDetailViewModelTests {
         sut.word
             .bind(to: word)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(20, ())])
@@ -196,7 +196,7 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(20, (realmModel190815))])
             .bind(to: sut.load)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(30, "Hello")])
+        scheduler.createColdObservable([.next(30, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -215,7 +215,7 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(10, (realmModel190815))])
             .bind(to: sut.load)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(20, "Hello")])
+        scheduler.createColdObservable([.next(20, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(30, ())])
@@ -266,8 +266,8 @@ extension VocabularyDetailViewModelTests {
         sut.note
             .bind(to: note)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello 1"),
-                                        .next(20, "Hello 2")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello 1")),
+                                        .next(20, (nil, "Hello 2"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -284,8 +284,8 @@ extension VocabularyDetailViewModelTests {
         sut.note
             .bind(to: note)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello"),
-                                        .next(20, "World")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello")),
+                                        .next(20, (nil, "World"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -306,10 +306,10 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(20, ())])
             .bind(to: sut.add)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(30, "Hello 1")])
+        scheduler.createColdObservable([.next(30, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(40, "Not Found")])
+        scheduler.createColdObservable([.next(40, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -330,10 +330,10 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.add)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(20, "Hello 1")])
+        scheduler.createColdObservable([.next(20, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(30, "Not Found")])
+        scheduler.createColdObservable([.next(30, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(40, realmModel190815)])
@@ -354,10 +354,10 @@ extension VocabularyDetailViewModelTests {
         sut.note
             .bind(to: note)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello 1")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(20, "Not Found")])
+        scheduler.createColdObservable([.next(20, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(30, realmModel190815)])
@@ -381,7 +381,7 @@ extension VocabularyDetailViewModelTests {
         sut.note
             .bind(to: note)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Not Found")])
+        scheduler.createColdObservable([.next(10, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(20, realmModel190815)])
@@ -390,7 +390,7 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(30, ())])
             .bind(to: sut.add)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(40, "Hello 1")])
+        scheduler.createColdObservable([.next(40, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -408,10 +408,10 @@ extension VocabularyDetailViewModelTests {
         sut.note
             .bind(to: note)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Not Found")])
+        scheduler.createColdObservable([.next(10, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(20, "Hello 1")])
+        scheduler.createColdObservable([.next(20, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(30, ())])
@@ -435,7 +435,7 @@ extension VocabularyDetailViewModelTests {
         sut.note
             .bind(to: note)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, "Hello 1")])
+        scheduler.createColdObservable([.next(10, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(20, ())])
@@ -444,7 +444,7 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(30, realmModel190815)])
             .bind(to: sut.load)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(40, "Not Found")])
+        scheduler.createColdObservable([.next(40, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -468,10 +468,10 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(20, realmModel190815)])
             .bind(to: sut.load)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(30, "Not Found")])
+        scheduler.createColdObservable([.next(30, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(40, "Hello 1")])
+        scheduler.createColdObservable([.next(40, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.start()
@@ -492,10 +492,10 @@ extension VocabularyDetailViewModelTests {
         scheduler.createColdObservable([.next(10, realmModel190815)])
             .bind(to: sut.load)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(20, "Not Found")])
+        scheduler.createColdObservable([.next(20, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(30, "Hello 1")])
+        scheduler.createColdObservable([.next(30, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(40, ())])
@@ -564,6 +564,7 @@ extension VocabularyDetailViewModelTests {
         var models = [VocabularyRealmModel]()
         for index in 1...10 {
             let model = VocabularyRealmModel()
+            model.id = "\(index)"
             model.episode = "Episode 190815"
             model.word = "Hello \(index)"
             model.note = "World \(index)"
@@ -574,25 +575,25 @@ extension VocabularyDetailViewModelTests {
     }
     
     private func setupModels() {
+        realmModel190815.id = "realmModel190815"
         realmModel190815.episode = "Episode 190815"
         realmModel190815.word = "Apple"
         realmModel190815.note = "蘋果🍎"
         realmModel190815.updateDate = Date()
         
+        realmModel190822.id = "realmModel190815"
         realmModel190822.episode = "Episode 190822"
         realmModel190822.word = "Phone"
         realmModel190822.note = "手機📱"
         realmModel190822.updateDate = Date()
         
-        let episode190815 = "Episode 190815"
         let word190815 = "Apple"
         let note190815 = "蘋果🍎"
-        saveModel190815 = VocabularySaveModel(episode: episode190815, word: word190815, note: note190815)
+        saveModel190815 = VocabularySaveModel(word: word190815, note: note190815)
         
-        let episode190822 = "Episode 190822"
         let word190822 = "Phone"
         let note190822 = "電話📱"
-        saveModel190822 = VocabularySaveModel(episode: episode190822, word: word190822, note: note190822)
+        saveModel190822 = VocabularySaveModel(word: word190822, note: note190822)
     }
     
     private func flushData() {

@@ -64,8 +64,7 @@ class VocabularyDetailViewController: BaseViewController {
         saveButton.rx.tap
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
-                let model = VocabularySaveModel(episode: nil,
-                                                word: self.wordTextField.text,
+                let model = VocabularySaveModel(word: self.wordTextField.text,
                                                 note: self.noteTextView.text)
                 self.viewModel.save.onNext(model)
             })

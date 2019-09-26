@@ -46,6 +46,7 @@ class EpisodeDetailViewController: BaseViewController {
     
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
+        setupNavigationBar()
         // playerView
         musicPlayerView.frame = playerView.bounds
         playerView.addSubview(musicPlayerView)
@@ -62,6 +63,16 @@ class EpisodeDetailViewController: BaseViewController {
         vocabularyDetailContainerView.frame = vocabularyDetailView.bounds
         vocabularyDetailContainerView.addSubview(vocabularyDetailView)
         vocabularyDetailView.layer.cornerRadius = 10
+    }
+    
+    private func setupNavigationBar() {
+        let image = UIImage(named: "dictionary-filled")
+        let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
+        vocabularyItem.rx.tap
+            .bind(to: viewModel.tapVocabulary)
+            .disposed(by: disposeBag)
+        navigationItem.rightBarButtonItems = [vocabularyItem]
+        navigationItem.title = "6 Minute English"
     }
     
     private func setupBindings() {

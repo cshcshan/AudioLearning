@@ -141,6 +141,34 @@ class EpisodeDetailViewModelTests: XCTestCase {
         XCTAssertEqual(audioLink.events, [.next(10, episodeDetailRealmModel.audioLink!)])
     }
     
+    func testShowVocabulary() {
+        let showVocabulary = scheduler.createObserver(Void.self)
+        sut.showVocabulary
+            .bind(to: showVocabulary)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ()),
+                                        .next(20, ())])
+            .bind(to: sut.tapVocabulary)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(showVocabulary.events.count, 2)
+    }
+    
+    func testShowAddVocabularyDetail() {
+        let showAddVocabularyDetail = scheduler.createObserver(String.self)
+        sut.showAddVocabularyDetail
+            .bind(to: showAddVocabularyDetail)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, "Hello"),
+                                        .next(20, "World")])
+            .bind(to: sut.addVocabulary)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(showAddVocabularyDetail.events.count, 2)
+        XCTAssertEqual(showAddVocabularyDetail.events, [.next(10, "Hello"),
+                                                        .next(20, "World")])
+    }
+    
     func testInit_WithError() {
         let error = NSError(domain: "unit test", code: 2, userInfo: nil)
         let expectingModel = AlertModel(title: "Load Episode Detail Error",

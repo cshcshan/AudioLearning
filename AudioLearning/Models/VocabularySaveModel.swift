@@ -7,12 +7,10 @@
 //
 
 struct VocabularySaveModel {
-    var episode: String?
     var word: String?
     var note: String?
     
-    init(episode: String?, word: String?, note: String?) {
-        self.episode = episode
+    init(word: String?, note: String?) {
         self.word = word
         self.note = note
     }

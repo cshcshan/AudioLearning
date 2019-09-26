@@ -38,7 +38,29 @@ class VocabularyListViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInit_Vocabularies() {
+    func testHideVocabularyDetailView() {
+        let hideVocabularyDetailView = scheduler.createObserver(Bool.self)
+        sut.hideVocabularyDetailView
+            .bind(to: hideVocabularyDetailView)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, false),
+                                        .next(20, true),
+                                        .next(30, true),
+                                        .next(40, true),
+                                        .next(50, false)])
+            .bind(to: sut.hideVocabularyDetailView)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(hideVocabularyDetailView.events.count, 6)
+        XCTAssertEqual(hideVocabularyDetailView.events, [.next(0, true),
+                                                         .next(10, false),
+                                                         .next(20, true),
+                                                         .next(30, true),
+                                                         .next(40, true),
+                                                         .next(50, false)])
+    }
+    
+    func testVocabularies() {
         let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
         sut.vocabularies
             .bind(to: vocabularies)
@@ -51,7 +73,7 @@ class VocabularyListViewModelTests: XCTestCase {
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 10)
     }
     
-    func testInit_ShowVocabularyDetail() {
+    func testShowVocabularyDetail() {
         let model190815 = VocabularyRealmModel()
         model190815.episode = "Episode 190815"
         model190815.word = "Apple"
@@ -75,6 +97,19 @@ class VocabularyListViewModelTests: XCTestCase {
         scheduler.start()
         XCTAssertEqual(showVocabularyDetail.events, [.next(10, model190815),
                                                      .next(20, model190822)])
+    }
+    
+    func testShowAddVocabularyDetail() {
+        let showAddVocabularyDetail = scheduler.createObserver(Void.self)
+        sut.showAddVocabularyDetail
+            .bind(to: showAddVocabularyDetail)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ()),
+                                        .next(20, ())])
+            .bind(to: sut.addVocabulary)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(showAddVocabularyDetail.events.count, 2)
     }
 }
 

@@ -39,7 +39,7 @@ class EpisodeListViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInit_Episodes() {
+    func testEpisodes() {
         let bundle = Bundle(for: type(of: self))
         let urlString = bundle.path(forResource: "6-minute-english", ofType: "html")!
         let url = URL(fileURLWithPath: urlString)
@@ -79,7 +79,7 @@ class EpisodeListViewModelTests: XCTestCase {
         XCTAssertEqual(firstModel, expectingModel)
     }
     
-    func testInit_Refreshing() {
+    func testRefreshing() {
         let refreshing = scheduler.createObserver(Bool.self)
         sut.refreshing
             .bind(to: refreshing)
@@ -103,7 +103,7 @@ class EpisodeListViewModelTests: XCTestCase {
                                            .next(10, (true))])
     }
     
-    func testInit_ShowEpisodeDetail() {
+    func testShowEpisodeDetail() {
         var episode = "Episode 190815"
         var title = "Cryptocurrencies"
         var desc = "Libra, Bitcoin... would you invest in digital money?"
@@ -138,7 +138,7 @@ class EpisodeListViewModelTests: XCTestCase {
                                                   .next(20, episodeModel190822)])
     }
     
-    func testInit_ShowVocabulary() {
+    func testShowVocabulary() {
         let showVocabulary = scheduler.createObserver(Void.self)
         sut.showVocabulary
             .bind(to: showVocabulary)

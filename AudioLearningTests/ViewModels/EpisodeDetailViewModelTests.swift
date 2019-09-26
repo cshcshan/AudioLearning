@@ -46,11 +46,59 @@ class EpisodeDetailViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInit_Title() {
+    func testShrinkMusicPlayer() {
+        let shrinkMusicPlayer = scheduler.createObserver(Void.self)
+        sut.shrinkMusicPlayer
+            .bind(to: shrinkMusicPlayer)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ()),
+                                        .next(20, ())])
+            .bind(to: sut.shrinkMusicPlayer)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(shrinkMusicPlayer.events.count, 2)
+    }
+    
+    func testEnlargeMusicPlayer() {
+        let enlargeMusicPlayer = scheduler.createObserver(Void.self)
+        sut.enlargeMusicPlayer
+            .bind(to: enlargeMusicPlayer)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ()),
+                                        .next(20, ())])
+            .bind(to: sut.enlargeMusicPlayer)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(enlargeMusicPlayer.events.count, 2)
+    }
+    
+    func testHideVocabularyDetailView() {
+        let hideVocabularyDetailView = scheduler.createObserver(Bool.self)
+        sut.hideVocabularyDetailView
+            .bind(to: hideVocabularyDetailView)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, false),
+                                        .next(20, true),
+                                        .next(30, true),
+                                        .next(40, true),
+                                        .next(50, false)])
+            .bind(to: sut.hideVocabularyDetailView)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(hideVocabularyDetailView.events.count, 6)
+        XCTAssertEqual(hideVocabularyDetailView.events, [.next(0, true),
+                                                         .next(10, false),
+                                                         .next(20, true),
+                                                         .next(30, true),
+                                                         .next(40, true),
+                                                         .next(50, false)])
+    }
+    
+    func testTitle() {
         XCTAssertEqual(sut.title, "Cryptocurrencies")
     }
     
-    func testInit_ScriptHtml() {
+    func testScriptHtml() {
         let episodeDetailRealmModel = EpisodeDetailRealmModel()
         episodeDetailRealmModel.episode = episodeModel.episode
         episodeDetailRealmModel.path = "path"
@@ -72,7 +120,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
                                            .next(10, episodeDetailRealmModel.scriptHtml!)])
     }
     
-    func testInit_AudioLink() {
+    func testAudioLink() {
         let episodeDetailRealmModel = EpisodeDetailRealmModel()
         episodeDetailRealmModel.episode = episodeModel.episode
         episodeDetailRealmModel.path = "path"
@@ -118,7 +166,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         XCTAssertEqual(alert.events, [.next(300, expectingModel)])
     }
     
-    func testInit_Episode() {
+    func testEpisode() {
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
             .disposed(by: disposeBag)

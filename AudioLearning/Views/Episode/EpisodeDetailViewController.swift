@@ -20,6 +20,7 @@ class EpisodeDetailViewController: BaseViewController {
     @IBOutlet weak var maskView: UIView!
     @IBOutlet weak var vocabularyDetailContainerView: UIView!
     private let refreshControl = UIRefreshControl()
+    private var item: UIMenuItem!
     
     var viewModel: EpisodeDetailViewModel!
     var musicPlayerView: UIView!
@@ -32,7 +33,7 @@ class EpisodeDetailViewController: BaseViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
-        setupMenuItem()
+        enableMenuItem()
     }
     
     override func setupUIColor() {
@@ -117,7 +118,9 @@ class EpisodeDetailViewController: BaseViewController {
         
         viewModel.hideVocabularyDetailView
             .filter({ $0 == true })
-            .flatMap({ (_) -> Observable<TimeInterval> in
+            .flatMap({ [weak self] (_) -> Observable<TimeInterval> in
+                guard let `self` = self else { return .just(TimeInterval(0)) }
+                self.enableMenuItem()
                 return .just(TimeInterval(0.4))
             })
             .bind(to: maskView.rx.fadeOut)
@@ -125,7 +128,9 @@ class EpisodeDetailViewController: BaseViewController {
         
         viewModel.hideVocabularyDetailView
             .filter({ $0 == false })
-            .flatMap({ (_) -> Observable<TimeInterval> in
+            .flatMap({ [weak self] (_) -> Observable<TimeInterval> in
+                guard let `self` = self else { return .just(TimeInterval(0)) }
+                self.disableMenuItem()
                 return .just(TimeInterval(0.4))
             })
             .bind(to: maskView.rx.fadeIn)
@@ -180,13 +185,19 @@ extension EpisodeDetailViewController {
     }
 }
 
-// MARK: - Add Vocabulary
+// MARK: - Add to Vocabulary
 
 extension EpisodeDetailViewController {
     
-    private func setupMenuItem() {
-        let item = UIMenuItem(title: "Add Vocabulary", action: #selector(addVocabulary))
+    private func enableMenuItem() {
+        if item == nil {
+            item = UIMenuItem(title: "Add to Vocabulary", action: #selector(addVocabulary))
+        }
         UIMenuController.shared.menuItems = [item]
+    }
+    
+    private func disableMenuItem() {
+        UIMenuController.shared.menuItems = []
     }
     
     @objc func addVocabulary() {

@@ -27,14 +27,30 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
         let realmService = RealmService<VocabularyRealmModel>()
         let viewModel = VocabularyListViewModel(realmService: realmService)
         
+        // Vocabulary Detail
+        let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)
+        
+        viewModel.showVocabularyDetail
+            .subscribe(onNext: { (vocabularyRealmModel) in
+                vocabularyDetailVC.viewModel.load.onNext(vocabularyRealmModel)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.showAddVocabularyDetail
+            .subscribe(onNext: { (_) in
+                vocabularyDetailVC.viewModel.add.onNext(())
+            })
+            .disposed(by: disposeBag)
+        
         // ViewController
         let viewController = VocabularyListViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyListViewController")
         viewController.viewModel = viewModel
-        viewController.vocabularyDetailViewController = showVocabularyDetail(vocabularyListViewModel: viewModel)
+        viewController.vocabularyDetailView = vocabularyDetailVC.view
+        viewController.addChild(vocabularyDetailVC)
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    private func showVocabularyDetail(vocabularyListViewModel: VocabularyListViewModel) -> VocabularyDetailViewController {
+    private func newVocabularyDetailVC(vocabularyListViewModel: VocabularyListViewModel) -> VocabularyDetailViewController {
         // ViewModel
         let realmService = RealmService<VocabularyRealmModel>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)

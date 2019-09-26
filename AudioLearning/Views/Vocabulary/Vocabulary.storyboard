@@ -94,7 +94,7 @@
                     <connections>
                         <outlet property="maskView" destination="F3n-cn-Ie4" id="Fsa-0g-Zzv"/>
                         <outlet property="tableView" destination="duU-0A-fp3" id="Obc-DM-Jah"/>
-                        <outlet property="vocabularyDetailView" destination="gnw-Ac-yjl" id="7y6-Cd-n5X"/>
+                        <outlet property="vocabularyDetailContainerView" destination="gnw-Ac-yjl" id="eFn-fQ-0hj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n8Z-HL-F6V" userLabel="First Responder" sceneMemberID="firstResponder"/>

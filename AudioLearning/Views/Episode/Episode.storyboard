@@ -204,7 +204,7 @@
                         <outlet property="playerViewHeight" destination="krx-3p-r9N" id="sXR-eC-LRG"/>
                         <outlet property="scrollView" destination="GdN-a5-ewG" id="9am-NE-ClB"/>
                         <outlet property="separateLineView" destination="K0T-rh-Eyf" id="ODI-SK-5po"/>
-                        <outlet property="vocabularyDetailView" destination="GG1-uR-FBF" id="euX-CY-Vs8"/>
+                        <outlet property="vocabularyDetailContainerView" destination="GG1-uR-FBF" id="Ipo-NW-5fV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kwN-Ra-wdB" userLabel="First Responder" sceneMemberID="firstResponder"/>

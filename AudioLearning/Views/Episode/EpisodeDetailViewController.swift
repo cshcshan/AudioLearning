@@ -18,12 +18,12 @@ class EpisodeDetailViewController: BaseViewController {
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var playerViewHeight: NSLayoutConstraint!
     @IBOutlet weak var maskView: UIView!
-    @IBOutlet weak var vocabularyDetailView: UIView!
+    @IBOutlet weak var vocabularyDetailContainerView: UIView!
     private let refreshControl = UIRefreshControl()
     
     var viewModel: EpisodeDetailViewModel!
-    var musicPlayerViewController: MusicPlayerViewController!
-    var vocabularyDetailViewController: VocabularyDetailViewController!
+    var musicPlayerView: UIView!
+    var vocabularyDetailView: UIView!
     private let maxPlayerViewHeight: CGFloat = 195.5
     private let minPlayerViewHeight: CGFloat = 76
     private let disposeBag = DisposeBag()
@@ -46,10 +46,9 @@ class EpisodeDetailViewController: BaseViewController {
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
         // playerView
-        addChild(musicPlayerViewController)
-        musicPlayerViewController.view.frame = playerView.bounds
-        playerView.addSubview(musicPlayerViewController.view)
-        playerView.sendSubviewToBack(musicPlayerViewController.view)
+        musicPlayerView.frame = playerView.bounds
+        playerView.addSubview(musicPlayerView)
+        playerView.sendSubviewToBack(musicPlayerView)
         addPanToPlayerView()
         // refreshControl
         scrollView.isScrollEnabled = false
@@ -58,11 +57,10 @@ class EpisodeDetailViewController: BaseViewController {
         htmlTextView.isEditable = false
         htmlTextView.isScrollEnabled = true
         // vocabularyDetailView
-        addChild(vocabularyDetailViewController)
-        vocabularyDetailView.backgroundColor = .clear
-        vocabularyDetailViewController.view.frame = vocabularyDetailView.bounds
-        vocabularyDetailView.addSubview(vocabularyDetailViewController.view)
-        vocabularyDetailViewController.view.layer.cornerRadius = 10
+        vocabularyDetailContainerView.backgroundColor = .clear
+        vocabularyDetailContainerView.frame = vocabularyDetailView.bounds
+        vocabularyDetailContainerView.addSubview(vocabularyDetailView)
+        vocabularyDetailView.layer.cornerRadius = 10
     }
     
     private func setupBindings() {
@@ -103,13 +101,6 @@ class EpisodeDetailViewController: BaseViewController {
         
         viewModel.hideVocabularyDetailView
             .bind(to: maskView.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        viewModel.showAddVocabularyDetail
-            .subscribe(onNext: { [weak self] (text) in
-                guard let `self` = self else { return }
-                self.vocabularyDetailViewController.viewModel.addWithWord.onNext(text)
-            })
             .disposed(by: disposeBag)
         
         viewModel.initalLoad.onNext(())

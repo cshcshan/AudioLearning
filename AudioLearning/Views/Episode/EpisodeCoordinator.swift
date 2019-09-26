@@ -45,63 +45,72 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let episodeListViewController = EpisodeListViewController.initialize(from: "Episode", storyboardID: "EpisodeList")
-        episodeListViewController.viewModel = viewModel
-        navigationController = UINavigationController(rootViewController: episodeListViewController)
+        let viewController = EpisodeListViewController.initialize(from: "Episode", storyboardID: "EpisodeList")
+        viewController.viewModel = viewModel
+        navigationController = UINavigationController(rootViewController: viewController)
         
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
-                self.showVocabulary(on: episodeListViewController)
+                self.showVocabulary(on: viewController)
             })
             .disposed(by: disposeBag)
     }
     
     private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
-        // MusicViewModel and ViewController
-        let player = HCAudioPlayer()
-        let musicPlayerViewModel = MusicPlayerViewModel(player: player)
-        let musicPlayerViewController = MusicPlayerViewController.initialize(from: "MusicPlayer", storyboardID: "MusicPlayerViewController")
-        musicPlayerViewController.viewModel = musicPlayerViewModel
-        
         // ViewModel
         let realmService = RealmService<EpisodeDetailRealmModel>()
         let viewModel = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
+        
+        // Music and Vocabulary Detail
+        let musicPlayerVC = newMusicPlayerVC()
+        let vocabularyDetailVC = newVocabularyDetailVC(episodeDetailViewModel: viewModel)
         
         viewModel.audioLink
             .map({ (link) -> URL in
                 guard let url = URL(string: link) else { throw Errors.urlIsNull }
                 return url
             })
-            .bind(to: musicPlayerViewModel.settingNewAudio)
+            .bind(to: musicPlayerVC.viewModel.settingNewAudio)
             .disposed(by: disposeBag)
         
         viewModel.shrinkMusicPlayer
             .subscribe(onNext: { (_) in
-                musicPlayerViewModel.changeSpeedSegmentedControlAlpha.onNext(0)
+                musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(0)
             })
             .disposed(by: disposeBag)
         
         viewModel.enlargeMusicPlayer
             .subscribe(onNext: { (_) in
-                musicPlayerViewModel.changeSpeedSegmentedControlAlpha.onNext(1)
+                musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(1)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.showAddVocabularyDetail
+            .subscribe(onNext: { (text) in
+                vocabularyDetailVC.viewModel.addWithWord.onNext(text)
             })
             .disposed(by: disposeBag)
         
         // ViewController
-        let episodeDetailViewController = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
-        episodeDetailViewController.viewModel = viewModel
-        episodeDetailViewController.musicPlayerViewController = musicPlayerViewController
-        episodeDetailViewController.vocabularyDetailViewController = showVocabularyDetail(episodeDetailViewModel: viewModel)
-        navigationController.pushViewController(episodeDetailViewController, animated: true)
+        let episodeDetailVC = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
+        episodeDetailVC.viewModel = viewModel
+        episodeDetailVC.musicPlayerView = musicPlayerVC.view
+        episodeDetailVC.vocabularyDetailView = vocabularyDetailVC.view
+        episodeDetailVC.addChild(musicPlayerVC)
+        episodeDetailVC.addChild(vocabularyDetailVC)
+        navigationController.pushViewController(episodeDetailVC, animated: true)
     }
     
-    private func showVocabulary(on rootViewController: UIViewController) {
-        let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController)
-        _ = coordinate(to: vocabularyCoordinator)
+    private func newMusicPlayerVC() -> MusicPlayerViewController {
+        let player = HCAudioPlayer()
+        let musicPlayerViewModel = MusicPlayerViewModel(player: player)
+        let viewController = MusicPlayerViewController.initialize(from: "MusicPlayer", storyboardID: "MusicPlayerViewController")
+        viewController.viewModel = musicPlayerViewModel
+        return viewController
     }
     
-    private func showVocabularyDetail(episodeDetailViewModel: EpisodeDetailViewModel) -> VocabularyDetailViewController {
+    private func newVocabularyDetailVC(episodeDetailViewModel: EpisodeDetailViewModel) -> VocabularyDetailViewController {
         // ViewModel
         let realmService = RealmService<VocabularyRealmModel>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
@@ -115,5 +124,10 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         viewController.viewModel = viewModel
         
         return viewController
+    }
+    
+    private func showVocabulary(on rootViewController: UIViewController) {
+        let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController)
+        _ = coordinate(to: vocabularyCoordinator)
     }
 }

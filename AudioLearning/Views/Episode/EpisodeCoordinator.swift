@@ -60,7 +60,9 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
     private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
         // ViewModel
         let realmService = RealmService<EpisodeDetailRealmModel>()
-        let viewModel = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
+        let viewModel = EpisodeDetailViewModel(apiService: apiService,
+                                               realmService: realmService,
+                                               episodeModel: episodeModel)
         
         // Music and Vocabulary Detail
         let musicPlayerVC = newMusicPlayerVC()
@@ -105,7 +107,8 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
     private func newMusicPlayerVC() -> MusicPlayerViewController {
         let player = HCAudioPlayer()
         let musicPlayerViewModel = MusicPlayerViewModel(player: player)
-        let viewController = MusicPlayerViewController.initialize(from: "MusicPlayer", storyboardID: "MusicPlayerViewController")
+        let viewController = MusicPlayerViewController.initialize(from: "MusicPlayer",
+                                                                  storyboardID: "MusicPlayerViewController")
         viewController.viewModel = musicPlayerViewModel
         return viewController
     }
@@ -120,7 +123,8 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let viewController = VocabularyDetailViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyDetailViewController")
+        let viewController = VocabularyDetailViewController.initialize(from: "Vocabulary",
+                                                                       storyboardID: "VocabularyDetailViewController")
         viewController.viewModel = viewModel
         
         return viewController

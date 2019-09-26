@@ -57,6 +57,7 @@ extension ExtensionStringTests {
     }
 }
 
+// swiftlint:disable line_length
 extension ExtensionStringTests {
     
     // MARK: convertHtmlToNSAttributedString
@@ -75,3 +76,4 @@ extension ExtensionStringTests {
         XCTAssertEqual(result, expectaing)
     }
 }
+// swiftlint:enable line_length

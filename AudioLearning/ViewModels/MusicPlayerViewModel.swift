@@ -54,27 +54,7 @@ class MusicPlayerViewModel {
             .merge()
             .scan(false, accumulator: { [weak self] (aggregateValue, newValue) -> Bool in
                 guard let `self` = self else { return false }
-                if let status = newValue as? HCAudioPlayer.Status {
-                    if status == .finish {
-                        return false
-                    } else {
-                        return aggregateValue
-                    }
-                } else if let url = newValue as? URL {
-                    guard self.url != url else {
-                        // if self.url == url, then isPlaying will not be affected
-                        return aggregateValue
-                    }
-                    self.setAudio(url: url)
-                    return false
-                } else {
-                    if self.url == nil {
-                        return false
-                    } else {
-                        self.playMusic(!aggregateValue)
-                        return !aggregateValue
-                    }
-                }
+                return self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
             })
             .startWith(false)
             .asDriver(onErrorJustReturn: false)
@@ -159,6 +139,30 @@ class MusicPlayerViewModel {
         loadingBufferRate = player.loadingBufferPercent
             .map({ Float($0 / 100) })
             .asDriver(onErrorJustReturn: 0)
+    }
+    
+    private func updateIsPlayingStatus(aggregateValue: Bool, newValue: AnyObject) -> Bool {
+        if let status = newValue as? HCAudioPlayer.Status {
+            if status == .finish {
+                return false
+            } else {
+                return aggregateValue
+            }
+        } else if let url = newValue as? URL {
+            guard self.url != url else {
+                // if self.url == url, then isPlaying will not be affected
+                return aggregateValue
+            }
+            self.setAudio(url: url)
+            return false
+        } else {
+            if self.url == nil {
+                return false
+            } else {
+                self.playMusic(!aggregateValue)
+                return !aggregateValue
+            }
+        }
     }
     
     private func setAudio(url: URL) {

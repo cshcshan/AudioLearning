@@ -59,6 +59,22 @@ class VocabularyListViewController: BaseViewController {
             .bind(to: maskView.rx.isHidden)
             .disposed(by: disposeBag)
         
+        viewModel.hideVocabularyDetailView
+            .filter({ $0 == true })
+            .flatMap({ (_) -> Observable<TimeInterval> in
+                return .just(TimeInterval(0.4))
+            })
+            .bind(to: maskView.rx.fadeOut)
+            .disposed(by: disposeBag)
+        
+        viewModel.hideVocabularyDetailView
+            .filter({ $0 == false })
+            .flatMap({ (_) -> Observable<TimeInterval> in
+                return .just(TimeInterval(0.4))
+            })
+            .bind(to: maskView.rx.fadeIn)
+            .disposed(by: disposeBag)
+        
         viewModel.vocabularies
             .bind(to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self), curriedArgument: { (_, model, cell) in
                 cell.selectionStyle = .none

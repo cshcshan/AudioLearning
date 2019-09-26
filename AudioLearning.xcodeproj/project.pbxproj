@@ -73,6 +73,7 @@
 		33E37823231CEFA700C6671B /* ep-190815.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C159A2318CE10003C78EA /* ep-190815.html */; };
 		33E37825231D016900C6671B /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E37824231D016900C6671B /* AlertModel.swift */; };
 		33E37827231D01AC00C6671B /* AlertModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E37826231D01AC00C6671B /* AlertModelTests.swift */; };
+		33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
 /* End PBXBuildFile section */
@@ -167,6 +168,7 @@
 		33E37820231CB61300C6671B /* EpisodeListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewModelTests.swift; sourceTree = "<group>"; };
 		33E37824231D016900C6671B /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		33E37826231D01AC00C6671B /* AlertModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModelTests.swift; sourceTree = "<group>"; };
+		33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionReactive.swift; sourceTree = "<group>"; };
 		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
 		81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 			children = (
 				33892AA8231F6AA500340C17 /* ExtensionDate.swift */,
 				3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */,
+				33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */,
 				332C15942317A7C1003C78EA /* ExtensionString.swift */,
 				33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */,
 			);
@@ -826,6 +829,7 @@
 				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */,
+				33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */,
 				33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */,
 				334645012332514D0040407E /* BufferingSlider.swift in Sources */,
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,

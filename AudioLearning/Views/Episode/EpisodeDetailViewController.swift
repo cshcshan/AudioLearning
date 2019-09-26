@@ -103,6 +103,22 @@ class EpisodeDetailViewController: BaseViewController {
             .bind(to: maskView.rx.isHidden)
             .disposed(by: disposeBag)
         
+        viewModel.hideVocabularyDetailView
+            .filter({ $0 == true })
+            .flatMap({ (_) -> Observable<TimeInterval> in
+                return .just(TimeInterval(0.4))
+            })
+            .bind(to: maskView.rx.fadeOut)
+            .disposed(by: disposeBag)
+        
+        viewModel.hideVocabularyDetailView
+            .filter({ $0 == false })
+            .flatMap({ (_) -> Observable<TimeInterval> in
+                return .just(TimeInterval(0.4))
+            })
+            .bind(to: maskView.rx.fadeIn)
+            .disposed(by: disposeBag)
+        
         viewModel.initalLoad.onNext(())
         
         playerViewHeight.constant == minPlayerViewHeight ?

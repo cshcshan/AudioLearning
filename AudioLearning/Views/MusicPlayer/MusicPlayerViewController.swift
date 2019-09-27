@@ -134,6 +134,10 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
         viewModel.speedSegmentedControlAlpha
             .drive(speedSegmentedControl.rx.alpha)
             .disposed(by: disposeBag)
+        
+        viewModel.sliderAlpha
+            .drive(slider.rx.alpha)
+            .disposed(by: disposeBag)
     }
     
     private func setupUI(isReady: Bool) {

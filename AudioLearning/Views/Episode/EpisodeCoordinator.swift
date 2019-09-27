@@ -79,12 +79,14 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         viewModel.shrinkMusicPlayer
             .subscribe(onNext: { (_) in
                 musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(0)
+                musicPlayerVC.viewModel.changeSliderAlpha.onNext(0)
             })
             .disposed(by: disposeBag)
         
         viewModel.enlargeMusicPlayer
             .subscribe(onNext: { (_) in
                 musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(1)
+                musicPlayerVC.viewModel.changeSliderAlpha.onNext(1)
             })
             .disposed(by: disposeBag)
         

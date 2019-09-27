@@ -52,6 +52,7 @@ class EpisodeDetailViewController: BaseViewController {
         musicPlayerView.frame = playerView.bounds
         playerView.addSubview(musicPlayerView)
         playerView.sendSubviewToBack(musicPlayerView)
+        animatePlayerViewHeight()
         addPanToPlayerView()
         // refreshControl
         scrollView.isScrollEnabled = false
@@ -146,6 +147,18 @@ class EpisodeDetailViewController: BaseViewController {
 // MARK: - Pan Player View Up & Down
 
 extension EpisodeDetailViewController {
+    
+    func animatePlayerViewHeight() {
+        playerViewHeight.constant = maxPlayerViewHeight
+        playerView.superview?.setNeedsLayout()
+        playerView.superview?.layoutIfNeeded()
+        playerViewHeight.constant = minPlayerViewHeight
+        playerView.superview?.setNeedsLayout()
+        UIView.animate(withDuration: 0.8, animations: { [weak self] in
+            guard let `self` = self else { return }
+            self.playerView.superview?.layoutIfNeeded()
+        })
+    }
     
     func addPanToPlayerView() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanPlayerView))

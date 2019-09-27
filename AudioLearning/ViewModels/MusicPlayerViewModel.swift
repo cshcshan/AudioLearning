@@ -21,6 +21,7 @@ class MusicPlayerViewModel {
     private(set) var changeSpeed: AnyObserver<Float>! // will call 'change speed' when playing music 
     private(set) var changeAudioPosition: AnyObserver<Float>!
     private(set) var changeSpeedSegmentedControlAlpha: AnyObserver<CGFloat>!
+    private(set) var changeSliderAlpha: AnyObserver<CGFloat>!
     
     // Outputs
     private(set) var readyToPlay: Driver<Void>!
@@ -32,6 +33,7 @@ class MusicPlayerViewModel {
     private(set) var totalSeconds: Driver<Float>!
     private(set) var loadingBufferRate: Driver<Float>!
     private(set) var speedSegmentedControlAlpha: Driver<CGFloat>!
+    private(set) var sliderAlpha: Driver<CGFloat>!
     
     private let disposeBag = DisposeBag()
     private var url: URL!
@@ -102,6 +104,10 @@ class MusicPlayerViewModel {
         let changeSpeedSegmentedControlAlphaSubject = PublishSubject<CGFloat>()
         changeSpeedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asObserver()
         speedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asDriver(onErrorJustReturn: 1)
+        
+        let changeSliderAlphaSubject = PublishSubject<CGFloat>()
+        changeSliderAlpha = changeSliderAlphaSubject.asObserver()
+        sliderAlpha = changeSliderAlphaSubject.asDriver(onErrorJustReturn: 1)
     }
     
     private func setupOutputs() {

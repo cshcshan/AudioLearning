@@ -41,6 +41,8 @@ class VocabularyDetailViewController: BaseViewController {
     }
     
     private func setupUI() {
+        wordTextField.attributedPlaceholder = NSAttributedString(string: "Word",
+                                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray.withAlphaComponent(0.4)])
         wordTextField.layer.cornerRadius = 3
         wordTextField.layer.borderColor = Appearance.textColor.cgColor
         wordTextField.layer.borderWidth = 1

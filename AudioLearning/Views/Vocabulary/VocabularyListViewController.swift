@@ -30,7 +30,7 @@ class VocabularyListViewController: BaseViewController {
     override func setupUIColor() {
         view.backgroundColor = Appearance.backgroundColor
         tableView.backgroundColor = Appearance.backgroundColor
-        maskView.backgroundColor = (appearanceMode == .dark ? Appearance.textColor : Appearance.backgroundColor).withAlphaComponent(0.4)
+        maskView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
     }
     
     private func setupUI() {

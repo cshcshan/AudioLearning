@@ -14,7 +14,6 @@ class EpisodeDetailViewController: BaseViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var htmlTextView: UITextView!
-    @IBOutlet weak var separateLineView: UIView!
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var playerViewHeight: NSLayoutConstraint!
     @IBOutlet weak var maskView: UIView!
@@ -40,7 +39,6 @@ class EpisodeDetailViewController: BaseViewController {
         view.backgroundColor = Appearance.backgroundColor
         scrollView.backgroundColor = Appearance.backgroundColor
         htmlTextView.backgroundColor = Appearance.backgroundColor
-        separateLineView.backgroundColor = Appearance.textColor
         maskView.backgroundColor = (appearanceMode == .dark ?
             Appearance.textColor : Appearance.backgroundColor).withAlphaComponent(0.4)
     }
@@ -49,6 +47,7 @@ class EpisodeDetailViewController: BaseViewController {
         automaticallyAdjustsScrollViewInsets = false
         setupNavigationBar()
         // playerView
+        setupPlayerViewShadow()
         musicPlayerView.frame = playerView.bounds
         playerView.addSubview(musicPlayerView)
         playerView.sendSubviewToBack(musicPlayerView)
@@ -67,6 +66,15 @@ class EpisodeDetailViewController: BaseViewController {
         vocabularyDetailContainerView.frame = vocabularyDetailView.bounds
         vocabularyDetailContainerView.addSubview(vocabularyDetailView)
         vocabularyDetailView.layer.cornerRadius = 10
+    }
+    
+    private func setupPlayerViewShadow() {
+        playerView.layer.masksToBounds = false
+        playerView.layer.shadowColor = Appearance.textColor.cgColor
+        playerView.layer.shadowOpacity = 0.8
+        playerView.layer.shadowOffset = CGSize(width: -2, height: -5)
+        playerView.layer.shadowRadius = 5
+        playerView.layer.shadowPath = UIBezierPath(rect: playerView.bounds).cgPath
     }
     
     private func setupNavigationBar() {

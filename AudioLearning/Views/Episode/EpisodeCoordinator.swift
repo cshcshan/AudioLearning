@@ -103,7 +103,6 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         viewController.vocabularyDetailView = vocabularyDetailVC.view
         viewController.addChild(musicPlayerVC)
         viewController.addChild(vocabularyDetailVC)
-        navigationController.pushViewController(viewController, animated: true)
         
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
@@ -111,6 +110,17 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
                 self.showVocabulary(on: viewController, episode: episodeModel.episode)
             })
             .disposed(by: disposeBag)
+        
+        vocabularyDetailVC.viewModel.alert
+            .subscribe(onNext: { (alert) in
+                viewController.showConfirmAlert(title: alert.title,
+                                                message: alert.message,
+                                                confirmHandler: nil,
+                                                completionHandler: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        navigationController.pushViewController(viewController, animated: true)
     }
     
     private func newMusicPlayerVC() -> MusicPlayerViewController {

@@ -50,6 +50,16 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
         viewController.viewModel = viewModel
         viewController.vocabularyDetailView = vocabularyDetailVC.view
         viewController.addChild(vocabularyDetailVC)
+        
+        vocabularyDetailVC.viewModel.alert
+            .subscribe(onNext: { (alert) in
+                viewController.showConfirmAlert(title: alert.title,
+                                                message: alert.message,
+                                                confirmHandler: nil,
+                                                completionHandler: nil)
+            })
+            .disposed(by: disposeBag)
+        
         navigationController.pushViewController(viewController, animated: true)
     }
     

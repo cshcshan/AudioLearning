@@ -23,8 +23,7 @@ class VocabularyDetailViewModel {
     private(set) var note = BehaviorSubject<String>(value: "")
     private(set) var saved: Observable<Void>!
     private(set) var close: Observable<Void>!
-    
-    private var episode: String?
+    private(set) var alert: Observable<AlertModel>!
     
     private let loadSubject = PublishSubject<VocabularyRealmModel>()
     private let addSubject = PublishSubject<Void>()
@@ -33,9 +32,11 @@ class VocabularyDetailViewModel {
     private let savedSubject = PublishSubject<Void>()
     private let cancelSubject = PublishSubject<Void>()
     private let closeSubject = PublishSubject<Void>()
+    private let alertSubject = PublishSubject<AlertModel>()
     
     private let realmService: RealmService<VocabularyRealmModel>
     private var model: VocabularyRealmModel?
+    private var episode: String?
     private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
@@ -48,6 +49,7 @@ class VocabularyDetailViewModel {
         saved = savedSubject.asObservable()
         cancel = cancelSubject.asObserver()
         close = closeSubject.asObservable()
+        alert = alertSubject.asObservable()
         
         realmService.filterObjects
             .subscribe(onNext: { (vocabularyRealmModels) in
@@ -60,6 +62,7 @@ class VocabularyDetailViewModel {
         loadSubject
             .subscribe(onNext: { [weak self] (vocabularyRealmModel) in
                 guard let `self` = self else { return }
+                self.model = vocabularyRealmModel
                 self.word.onNext(vocabularyRealmModel.word ?? "")
                 self.note.onNext(vocabularyRealmModel.note ?? "")
             })
@@ -68,6 +71,7 @@ class VocabularyDetailViewModel {
         addSubject
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
+                self.model = nil
                 self.word.onNext("")
                 self.note.onNext("")
             })
@@ -76,6 +80,7 @@ class VocabularyDetailViewModel {
         addWithWordSubject
             .subscribe(onNext: { [weak self] (episode, word) in
                 guard let `self` = self else { return }
+                self.model = nil
                 self.episode = episode
                 self.word.onNext(word)
                 self.note.onNext("")
@@ -91,13 +96,19 @@ class VocabularyDetailViewModel {
         saveSubject
             .subscribe(onNext: { [weak self] (saveModel) in
                 guard let `self` = self else { return }
-                let model = VocabularyRealmModel()
-                model.id = UUID().uuidString
-                model.episode = self.episode
-                model.word = saveModel.word
-                model.note = saveModel.note
-                model.updateDate = Date()
-                _ = realmService.add(object: model)
+                let alert = {
+                    let alertModel = AlertModel(title: "Save word failed", message: "Word cannot be empty.")
+                    self.alertSubject.onNext(alertModel)
+                }
+                guard let word = saveModel.word else { return alert() }
+                guard word.count > 0 else { return alert() }
+                let newModel = VocabularyRealmModel()
+                newModel.id = self.model == nil ? UUID().uuidString : self.model!.id
+                newModel.episode = self.episode
+                newModel.word = saveModel.word
+                newModel.note = saveModel.note
+                newModel.updateDate = Date()
+                _ = realmService.add(object: newModel)
                 self.savedSubject.onNext(())
                 self.closeSubject.onNext(())
             })

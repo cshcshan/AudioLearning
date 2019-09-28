@@ -55,8 +55,10 @@ class EpisodeDetailViewController: BaseViewController {
         animatePlayerViewHeight()
         addPanToPlayerView()
         // refreshControl
+        refreshControl.tintColor = Appearance.textColor
         scrollView.isScrollEnabled = false
         scrollView.addSubview(refreshControl)
+        scrollView.contentOffset = CGPoint(x: 0, y: -refreshControl.frame.height) // for changing refreshControl's tintColor
         // htmlTextView
         htmlTextView.isEditable = false
         htmlTextView.isScrollEnabled = true

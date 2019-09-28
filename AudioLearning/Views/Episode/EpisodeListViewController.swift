@@ -32,10 +32,14 @@ class EpisodeListViewController: BaseViewController {
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
         setupNavigationBar()
+        // refreshControl
         refreshControl.sendActions(for: .valueChanged)
+        refreshControl.tintColor = Appearance.textColor
+        tableView.contentOffset = CGPoint(x: 0, y: -refreshControl.frame.height) // for changing refreshControl's tintColor
+        tableView.insertSubview(refreshControl, at: 0)
+        // tableView
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80
-        tableView.insertSubview(refreshControl, at: 0)
     }
     
     private func setupNavigationBar() {

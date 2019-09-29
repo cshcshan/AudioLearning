@@ -111,7 +111,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
             .bind(to: scriptHtml)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.reload)
+            .bind(to: sut.load)
             .disposed(by: disposeBag)
         scheduler.start()
         
@@ -133,7 +133,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
             .bind(to: audioLink)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.reload)
+            .bind(to: sut.load)
             .disposed(by: disposeBag)
         scheduler.start()
         
@@ -180,7 +180,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
             .bind(to: alert)
             .disposed(by: disposeBag)
         scheduler.createColdObservable([.next(300, ())])
-            .bind(to: sut.reload)
+            .bind(to: sut.load)
             .disposed(by: disposeBag)
         
         // execute reload.flatMapLatest by scriptHtml.subscribe()
@@ -196,7 +196,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     
     func testEpisode() {
         scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.reload)
+            .bind(to: sut.load)
             .disposed(by: disposeBag)
         
         // execute reload.flatMapLatest by scriptHtml.subscribe()

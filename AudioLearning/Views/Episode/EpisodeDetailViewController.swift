@@ -146,7 +146,7 @@ class EpisodeDetailViewController: BaseViewController {
             .bind(to: maskView.rx.fadeIn)
             .disposed(by: disposeBag)
         
-        viewModel.initalLoad.onNext(())
+        viewModel.load.onNext(())
         
         playerViewHeight.constant == minPlayerViewHeight ?
             viewModel.shrinkMusicPlayer.onNext(()) : viewModel.enlargeMusicPlayer.onNext(())

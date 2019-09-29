@@ -17,8 +17,7 @@ class EpisodeDetailViewModel {
     private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
     
     // Input
-    private(set) var initalLoad: AnyObserver<Void>!
-    private(set) var reload: AnyObserver<Void>!
+    private(set) var load: AnyObserver<Void>!
     private(set) var tapVocabulary: AnyObserver<Void>!
     private(set) var addVocabulary: AnyObserver<String>!
     
@@ -35,8 +34,7 @@ class EpisodeDetailViewModel {
     private let realmService: RealmService<EpisodeDetailRealmModel>!
     private let episodeModel: EpisodeModel
     
-    private let initalLoadSubject = PublishSubject<Void>()
-    private let reloadSubject = PublishSubject<Void>()
+    private let loadSubject = PublishSubject<Void>()
     private let tapVocabularySubject = PublishSubject<Void>()
     private let addVocabularySubject = PublishSubject<String>()
     private let alertSubject = PublishSubject<AlertModel>()
@@ -49,8 +47,7 @@ class EpisodeDetailViewModel {
         self.realmService = realmService
         self.episodeModel = episodeModel
         
-        initalLoad = initalLoadSubject.asObserver()
-        reload = reloadSubject.asObserver()
+        load = loadSubject.asObserver()
         tapVocabulary = tapVocabularySubject.asObserver()
         showVocabulary = tapVocabularySubject.asObservable()
         addVocabulary = addVocabularySubject.asObserver()
@@ -70,37 +67,46 @@ class EpisodeDetailViewModel {
             .subscribe()
             .disposed(by: disposeBag)
         
+        let loadEpisodeDetailModels = realmService.filterObjects
+            .flatMapLatest({ [weak self] (episodeDetailRealmModels) -> Observable<EpisodeDetailModel> in
+                guard let `self` = self else { return .empty() }
+                guard let model = episodeDetailRealmModels.first else {
+                    self.refreshingSubject.onNext(true)
+                    apiService.loadEpisodeDetail.onNext(episodeModel)
+                    return .empty()
+                }
+                return .just(EpisodeDetailModel(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
+            })
+            .take(1)
+            .share() // use share() to avoid multiple subscriptions from the same Observable
+        
         let episodeDetailModels = realmService.filterObjects
             .flatMapLatest({ (episodeDetailRealmModels) -> Observable<EpisodeDetailModel> in
                 guard let model = episodeDetailRealmModels.first else { return .empty() }
                 return .just(EpisodeDetailModel(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
             })
+            .skip(1)
             .share() // use share() to avoid multiple subscriptions from the same Observable
-
-        episodeDetailModels
+        
+        Observable.of(loadEpisodeDetailModels, episodeDetailModels)
+            .merge()
             .subscribe(onNext: { [weak self] (model) in
-                guard let scriptHtml = self?.scriptHtml else { return }
-                scriptHtml.onNext(model.scriptHtml ?? "")
+                guard let `self` = self else { return }
+                self.refreshingSubject.onNext(false)
+                self.scriptHtml.onNext(model.scriptHtml ?? "")
             })
             .disposed(by: disposeBag)
         
-        audioLink = episodeDetailModels
+        audioLink = Observable.of(loadEpisodeDetailModels, episodeDetailModels)
+            .merge()
             .map({ (model) -> String in
                 model.audioLink ?? ""
             })
         
-        initalLoadSubject
+        loadSubject
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
                 self.loadData()
-                self.refreshingSubject.onNext(true)
-                apiService.loadEpisodeDetail.onNext(episodeModel)
-            })
-            .disposed(by: disposeBag)
-        
-        reloadSubject
-            .subscribe(onNext: { (_) in
-                apiService.loadEpisodeDetail.onNext(episodeModel)
             })
             .disposed(by: disposeBag)
     }

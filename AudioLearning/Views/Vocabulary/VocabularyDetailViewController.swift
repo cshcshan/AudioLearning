@@ -50,10 +50,6 @@ class VocabularyDetailViewController: BaseViewController {
         noteTextView.layer.borderColor = Appearance.textColor.cgColor
         noteTextView.layer.borderWidth = 1
         noteTextView.contentInset = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
-        DispatchQueue.main.async { [weak self] in
-            guard let `self` = self else { return }
-            self.wordTextField.becomeFirstResponder()
-        }
     }
     
     private func setupBindings() {

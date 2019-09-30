@@ -24,6 +24,7 @@ class EpisodeDetailViewController: BaseViewController {
     var viewModel: EpisodeDetailViewModel!
     var musicPlayerView: UIView!
     var vocabularyDetailView: UIView!
+    private var oldPlayerViewOffsetY: CGFloat = 0
     private let maxPlayerViewHeight: CGFloat = 195.5
     private let minPlayerViewHeight: CGFloat = 76
     private let disposeBag = DisposeBag()
@@ -83,7 +84,6 @@ class EpisodeDetailViewController: BaseViewController {
             .bind(to: viewModel.tapVocabulary)
             .disposed(by: disposeBag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
-        navigationItem.title = "6 Minute English"
     }
     
     private func setupBindings() {
@@ -175,11 +175,15 @@ extension EpisodeDetailViewController {
     }
     
     @objc func handlePanPlayerView(_ recognizer: UIPanGestureRecognizer) {
-        let translation = recognizer.translation(in: playerView)
-        let currentY = playerViewHeight.constant
-        var finalY = currentY - translation.y
+        guard let view = recognizer.view else { return }
+        let offset = recognizer.translation(in: view)
+        let currentHeight = playerViewHeight.constant
+        let offsetY = oldPlayerViewOffsetY - offset.y
+        var finalY = currentHeight + offsetY
         
         switch recognizer.state {
+        case .began:
+            oldPlayerViewOffsetY = 0
         case .changed:
             if finalY > maxPlayerViewHeight { finalY = maxPlayerViewHeight }
             if finalY < minPlayerViewHeight { finalY = minPlayerViewHeight }
@@ -187,6 +191,7 @@ extension EpisodeDetailViewController {
                 self.viewModel.shrinkMusicPlayer.onNext(()) : self.viewModel.enlargeMusicPlayer.onNext(())
             playerViewHeight.constant = finalY
             playerView.superview?.layoutIfNeeded()
+            oldPlayerViewOffsetY = offset.y
         case .ended:
             let distanceFromMax = abs(maxPlayerViewHeight - finalY)
             let distanceFromMin = abs(minPlayerViewHeight - finalY)
@@ -202,6 +207,7 @@ extension EpisodeDetailViewController {
                 self.playerViewHeight.constant = finalY
                 self.playerView.superview?.layoutIfNeeded()
             }
+            oldPlayerViewOffsetY = 0
         default: break
         }
     }

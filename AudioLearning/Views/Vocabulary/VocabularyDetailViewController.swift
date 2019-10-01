@@ -70,5 +70,13 @@ class VocabularyDetailViewController: BaseViewController {
         cancelButton.rx.tap
             .bind(to: viewModel.cancel)
             .disposed(by: disposeBag)
+        
+        Observable.of(viewModel.close, viewModel.saved)
+            .merge()
+            .subscribe(onNext: { (_) in
+                self.navigationController?.view.endEditing(true)
+                self.view.endEditing(true)
+            })
+            .disposed(by: disposeBag)
     }
 }

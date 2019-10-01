@@ -24,7 +24,7 @@ class EpisodeDetailViewController: BaseViewController {
     var viewModel: EpisodeDetailViewModel!
     var musicPlayerView: UIView!
     var vocabularyDetailView: UIView!
-    private var oldPlayerViewOffsetY: CGFloat = 0
+    private var beganPlayerViewHeight: CGFloat = .zero
     private let maxPlayerViewHeight: CGFloat = 195.5
     private let minPlayerViewHeight: CGFloat = 76
     private let disposeBag = DisposeBag()
@@ -177,27 +177,24 @@ extension EpisodeDetailViewController {
     @objc func handlePanPlayerView(_ recognizer: UIPanGestureRecognizer) {
         guard let view = recognizer.view else { return }
         let offset = recognizer.translation(in: view)
-        let currentHeight = playerViewHeight.constant
-        let offsetY = oldPlayerViewOffsetY - offset.y
-        var finalY = currentHeight + offsetY
+        let velocity = recognizer.velocity(in: view)
         
         switch recognizer.state {
         case .began:
-            oldPlayerViewOffsetY = 0
+            beganPlayerViewHeight = playerViewHeight.constant
         case .changed:
+            var finalY = beganPlayerViewHeight - offset.y
             if finalY > maxPlayerViewHeight { finalY = maxPlayerViewHeight }
             if finalY < minPlayerViewHeight { finalY = minPlayerViewHeight }
-            finalY == self.minPlayerViewHeight ?
-                self.viewModel.shrinkMusicPlayer.onNext(()) : self.viewModel.enlargeMusicPlayer.onNext(())
+            finalY == minPlayerViewHeight ?
+                viewModel.shrinkMusicPlayer.onNext(()) : viewModel.enlargeMusicPlayer.onNext(())
             playerViewHeight.constant = finalY
             playerView.superview?.layoutIfNeeded()
-            oldPlayerViewOffsetY = offset.y
         case .ended:
-            let distanceFromMax = abs(maxPlayerViewHeight - finalY)
-            let distanceFromMin = abs(minPlayerViewHeight - finalY)
-            if distanceFromMax > distanceFromMin {
+            var finalY = beganPlayerViewHeight
+            if offset.y > 50 || velocity.y > 500 {
                 finalY = minPlayerViewHeight
-            } else {
+            } else if offset.y < -50 || velocity.y < -500 {
                 finalY = maxPlayerViewHeight
             }
             UIView.animate(withDuration: 0.4) { [weak self] in
@@ -207,7 +204,6 @@ extension EpisodeDetailViewController {
                 self.playerViewHeight.constant = finalY
                 self.playerView.superview?.layoutIfNeeded()
             }
-            oldPlayerViewOffsetY = 0
         default: break
         }
     }

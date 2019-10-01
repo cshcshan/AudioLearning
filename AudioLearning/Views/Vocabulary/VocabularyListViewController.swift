@@ -50,7 +50,11 @@ class VocabularyListViewController: BaseViewController {
         addItem.rx.tap
             .bind(to: viewModel.addVocabulary)
             .disposed(by: disposeBag)
-        navigationItem.rightBarButtonItems = [addItem]
+        let flashCardsItem = UIBarButtonItem(image: UIImage(named: "flashcards"), style: .plain, target: nil, action: nil)
+        flashCardsItem.rx.tap
+            .bind(to: viewModel.tapFlashCards)
+            .disposed(by: disposeBag)
+        navigationItem.rightBarButtonItems = [addItem, flashCardsItem]
         navigationItem.title = "Vocabulary"
     }
     

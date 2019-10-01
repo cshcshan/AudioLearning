@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Flash Cards View Controller-->
+        <scene sceneID="wmf-uW-F3I">
+            <objects>
+                <viewController storyboardIdentifier="FlashCardsViewController" id="msg-25-rKs" customClass="FlashCardsViewController" customModule="AudioLearning" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kkX-yd-UoA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="LDh-2K-RPt">
+                                <rect key="frame" x="0.0" y="241" width="414" height="414"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="LDh-2K-RPt" secondAttribute="height" multiplier="1:1" id="7ol-Bh-Heo"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="E8Y-l8-tee" customClass="FlashCardsFlowLayout" customModule="AudioLearning" customModuleProvider="target">
+                                    <size key="itemSize" width="316" height="414"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FlashCardCell" id="S2l-dB-zQ6" customClass="FlashCardCell" customModule="AudioLearning" customModuleProvider="target">
+                                        <rect key="frame" x="49" y="0.0" width="316" height="414"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="316" height="414"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z0I-Lt-GMg">
+                                                    <rect key="frame" x="10" y="10" width="296" height="394"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="24"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="z0I-Lt-GMg" firstAttribute="leading" secondItem="S2l-dB-zQ6" secondAttribute="leading" constant="10" id="TU9-bN-UOE"/>
+                                            <constraint firstItem="z0I-Lt-GMg" firstAttribute="centerY" secondItem="S2l-dB-zQ6" secondAttribute="centerY" id="atk-qS-n4f"/>
+                                            <constraint firstItem="z0I-Lt-GMg" firstAttribute="top" secondItem="S2l-dB-zQ6" secondAttribute="top" constant="10" id="dWj-gL-uq5"/>
+                                            <constraint firstAttribute="trailing" secondItem="z0I-Lt-GMg" secondAttribute="trailing" constant="10" id="jc8-RT-2lb"/>
+                                            <constraint firstAttribute="bottom" secondItem="z0I-Lt-GMg" secondAttribute="bottom" constant="10" id="pMK-Xc-iuH"/>
+                                            <constraint firstItem="z0I-Lt-GMg" firstAttribute="centerX" secondItem="S2l-dB-zQ6" secondAttribute="centerX" id="r8o-3k-g4c"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="label" destination="z0I-Lt-GMg" id="srT-zH-R71"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="LDh-2K-RPt" firstAttribute="centerY" secondItem="kkX-yd-UoA" secondAttribute="centerY" id="T6s-iD-p1K"/>
+                            <constraint firstItem="LDh-2K-RPt" firstAttribute="centerX" secondItem="kkX-yd-UoA" secondAttribute="centerX" id="ZEO-xi-WyI"/>
+                            <constraint firstItem="LDh-2K-RPt" firstAttribute="width" secondItem="kkX-yd-UoA" secondAttribute="width" id="tZ6-4R-89R"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="HuJ-hP-4Si"/>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="LDh-2K-RPt" id="O0m-fe-XNy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iue-cG-SKk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-143.47826086956522" y="145.98214285714286"/>
+        </scene>
+    </scenes>
+</document>

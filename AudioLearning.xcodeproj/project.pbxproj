@@ -55,6 +55,13 @@
 		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
 		33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* ExtensionDate.swift */; };
 		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
+		33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641D92340954200A97F9E /* FlashCardsViewModel.swift */; };
+		33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */; };
+		33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E023409AB500A97F9E /* FlashCardsViewController.swift */; };
+		33D641E323409ADA00A97F9E /* FlashCards.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D641E223409ADA00A97F9E /* FlashCards.storyboard */; };
+		33D641E523409B2000A97F9E /* FlashCardsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E423409B2000A97F9E /* FlashCardsCoordinator.swift */; };
+		33D641E72340A10E00A97F9E /* FlashCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E62340A10E00A97F9E /* FlashCardCell.swift */; };
+		33D641E92340A15C00A97F9E /* FlashCardsFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E82340A15C00A97F9E /* FlashCardsFlowLayout.swift */; };
 		33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07472328806D0030EBBA /* AppCoordinator.swift */; };
 		33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074B232886620030EBBA /* StoryboardGettable.swift */; };
 		33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */; };
@@ -151,6 +158,13 @@
 		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
 		33892AA8231F6AA500340C17 /* ExtensionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDate.swift; sourceTree = "<group>"; };
 		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
+		33D641D92340954200A97F9E /* FlashCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModel.swift; sourceTree = "<group>"; };
+		33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModelTests.swift; sourceTree = "<group>"; };
+		33D641E023409AB500A97F9E /* FlashCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewController.swift; sourceTree = "<group>"; };
+		33D641E223409ADA00A97F9E /* FlashCards.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FlashCards.storyboard; sourceTree = "<group>"; };
+		33D641E423409B2000A97F9E /* FlashCardsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsCoordinator.swift; sourceTree = "<group>"; };
+		33D641E62340A10E00A97F9E /* FlashCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardCell.swift; sourceTree = "<group>"; };
+		33D641E82340A15C00A97F9E /* FlashCardsFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsFlowLayout.swift; sourceTree = "<group>"; };
 		33DB07472328806D0030EBBA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		33DB074B232886620030EBBA /* StoryboardGettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardGettable.swift; sourceTree = "<group>"; };
 		33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCoordinator.swift; sourceTree = "<group>"; };
@@ -367,6 +381,7 @@
 				33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */,
 				3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */,
 				330657522338CC1E00381CC6 /* VocabularyDetailViewModel.swift */,
+				33D641D92340954200A97F9E /* FlashCardsViewModel.swift */,
 				33DB0798232A0E4A0030EBBA /* MusicPlayerViewModel.swift */,
 			);
 			path = ViewModels;
@@ -397,6 +412,7 @@
 				33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */,
 				3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */,
 				330657542338CF6000381CC6 /* VocabularyDetailViewModelTests.swift */,
+				33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */,
 				33DB075C2329D0150030EBBA /* MusicPlayerViewModelTests.swift */,
 			);
 			path = ViewModels;
@@ -429,10 +445,23 @@
 				332C155923174CF9003C78EA /* LaunchScreen.storyboard */,
 				330657562339CEFD00381CC6 /* Episode */,
 				330657572339CF1400381CC6 /* Vocabulary */,
+				33D641DF23409A8C00A97F9E /* FlashCards */,
 				33DB07542329CEB00030EBBA /* MusicPlayer */,
 				334644FF233251270040407E /* Components */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		33D641DF23409A8C00A97F9E /* FlashCards */ = {
+			isa = PBXGroup;
+			children = (
+				33D641E223409ADA00A97F9E /* FlashCards.storyboard */,
+				33D641E423409B2000A97F9E /* FlashCardsCoordinator.swift */,
+				33D641E023409AB500A97F9E /* FlashCardsViewController.swift */,
+				33D641E62340A10E00A97F9E /* FlashCardCell.swift */,
+				33D641E82340A15C00A97F9E /* FlashCardsFlowLayout.swift */,
+			);
+			path = FlashCards;
 			sourceTree = "<group>";
 		};
 		33DB0746232880500030EBBA /* App */ = {
@@ -622,6 +651,7 @@
 				330657592339CF2500381CC6 /* Vocabulary.storyboard in Resources */,
 				332C155823174CF9003C78EA /* Assets.xcassets in Resources */,
 				33892AA2231E324800340C17 /* Episode.storyboard in Resources */,
+				33D641E323409ADA00A97F9E /* FlashCards.storyboard in Resources */,
 				33DB07562329CEC40030EBBA /* MusicPlayer.storyboard in Resources */,
 				33065785233B207E00381CC6 /* Color.xcassets in Resources */,
 			);
@@ -822,16 +852,20 @@
 				3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */,
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,
 				330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */,
+				33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
 				33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */,
 				3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */,
+				33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */,
 				3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */,
 				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
+				33D641E523409B2000A97F9E /* FlashCardsCoordinator.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */,
 				33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */,
 				33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */,
 				334645012332514D0040407E /* BufferingSlider.swift in Sources */,
+				33D641E72340A10E00A97F9E /* FlashCardCell.swift in Sources */,
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,
 				33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */,
 				332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */,
@@ -840,6 +874,7 @@
 				33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */,
 				3306575F2339D03700381CC6 /* VocabularyCoordinator.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
+				33D641E92340A15C00A97F9E /* FlashCardsFlowLayout.swift in Sources */,
 				33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
@@ -855,6 +890,7 @@
 				33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */,
 				332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */,
 				33E37821231CB61300C6671B /* EpisodeListViewModelTests.swift in Sources */,
+				33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */,
 				3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */,
 				33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */,
 				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,

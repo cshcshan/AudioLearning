@@ -45,6 +45,13 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
         
+        viewModel.showFlashCards
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.showFlashCards()
+            })
+            .disposed(by: disposeBag)
+        
         // ViewController
         let viewController = VocabularyListViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyListViewController")
         viewController.viewModel = viewModel
@@ -83,5 +90,10 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
         viewController.viewModel = viewModel
         
         return viewController
+    }
+    
+    private func showFlashCards() {
+        let flashCardsCoordinator = FlashCardsCoordinator(navigationController: navigationController)
+        _ = coordinate(to: flashCardsCoordinator)
     }
 }

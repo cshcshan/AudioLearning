@@ -52,7 +52,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
-                self.showVocabulary(on: viewController, episode: nil)
+                self.showVocabulary(episode: nil)
             })
             .disposed(by: disposeBag)
     }
@@ -107,7 +107,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
                 guard let `self` = self else { return }
-                self.showVocabulary(on: viewController, episode: episodeModel.episode)
+                self.showVocabulary(episode: episodeModel.episode)
             })
             .disposed(by: disposeBag)
         
@@ -149,7 +149,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         return viewController
     }
     
-    private func showVocabulary(on rootViewController: UIViewController, episode: String?) {
+    private func showVocabulary(episode: String?) {
         let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController, episode: episode)
         _ = coordinate(to: vocabularyCoordinator)
     }

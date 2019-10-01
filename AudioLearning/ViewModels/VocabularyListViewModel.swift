@@ -21,11 +21,13 @@ class VocabularyListViewModel {
     private(set) var selectVocabulary: AnyObserver<VocabularyRealmModel>!
     private(set) var addVocabulary: AnyObserver<Void>!
     private(set) var deleteVocabulary: AnyObserver<VocabularyRealmModel>!
+    private(set) var tapFlashCards: AnyObserver<Void>!
     
     // Outputs
     private(set) var vocabularies: Observable<[VocabularyRealmModel]>!
     private(set) var showVocabularyDetail: Observable<VocabularyRealmModel>!
     private(set) var showAddVocabularyDetail: Observable<Void>!
+    private(set) var showFlashCards: Observable<Void>!
     
     private var episode: String?
     
@@ -34,6 +36,7 @@ class VocabularyListViewModel {
     private let selectVocabularySubject = PublishSubject<VocabularyRealmModel>()
     private let addVocabularySubject = PublishSubject<Void>()
     private let deleteVocabularySubject = PublishSubject<VocabularyRealmModel>()
+    private let tapFlashCardsSubject = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
@@ -45,6 +48,8 @@ class VocabularyListViewModel {
         addVocabulary = addVocabularySubject.asObserver()
         showAddVocabularyDetail = addVocabularySubject.asObservable()
         deleteVocabulary = deleteVocabularySubject.asObserver()
+        tapFlashCards = tapFlashCardsSubject.asObserver()
+        showFlashCards = tapFlashCardsSubject.asObservable()
         
         Observable.of(showVocabularyDetail.map({ $0 as AnyObject }),
                       showAddVocabularyDetail.map({ $0 as AnyObject }))

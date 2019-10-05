@@ -185,7 +185,7 @@ class MusicPlayerViewModel {
     }
     
     private func convertTime(seconds: Double) -> String {
-        guard seconds != Double.nan else { return "" }
+        guard !(seconds.isNaN || seconds.isInfinite) else { return "" }
         let minute = Int(seconds / 60)
         let second = Int(seconds.truncatingRemainder(dividingBy: 60))
         let minuteStr = String(format: "%02d", minute)

@@ -91,8 +91,8 @@ class VocabularyListViewModel {
         deleteVocabularySubject
             .subscribe(onNext: { [weak self] (vocabularyRealmModel) in
                 guard let `self` = self else { return }
-                guard let word = vocabularyRealmModel.word else { return }
-                realmService.delete(predicate: NSPredicate(format: "word == %@", word))
+                guard let id = vocabularyRealmModel.id else { return }
+                realmService.delete(predicate: NSPredicate(format: "id == %@", id))
                     .subscribe(onNext: { (success) in
                         deleteSuccessSubject.onNext(success)
                     })

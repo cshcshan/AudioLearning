@@ -33,7 +33,12 @@ class FlashCardsViewController: BaseViewController {
     }
     
     private func setupUI() {
+        setupNavigationBar()
         addPanToView()
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.title = "Flash Cards"
     }
     
     private func setupBindings() {

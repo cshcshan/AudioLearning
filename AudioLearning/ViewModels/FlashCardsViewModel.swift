@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class FlashCardsViewModel {
+class FlashCardsViewModel: BaseViewModel {
     
     private(set) var wordSideArray: [Bool] = []
     
@@ -26,10 +26,10 @@ class FlashCardsViewModel {
     private let isWordSideSubject = PublishSubject<Bool>()
     
     private var realmService: RealmService<VocabularyRealmModel>
-    private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
         self.realmService = realmService
+        super.init()
         
         load = loadSubject.asObserver()
         flip = flipSubject.asObserver()

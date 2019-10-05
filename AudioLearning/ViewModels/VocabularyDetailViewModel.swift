@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class VocabularyDetailViewModel {
+class VocabularyDetailViewModel: BaseViewModel {
     
     // Inputs
     private(set) var load: AnyObserver<VocabularyRealmModel>!
@@ -37,10 +37,10 @@ class VocabularyDetailViewModel {
     private let realmService: RealmService<VocabularyRealmModel>
     private var model: VocabularyRealmModel?
     private var episode: String?
-    private let disposeBag = DisposeBag()
     
     init(realmService: RealmService<VocabularyRealmModel>) {
         self.realmService = realmService
+        super.init()
         
         load = loadSubject.asObserver()
         add = addSubject.asObserver()

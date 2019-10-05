@@ -27,19 +27,31 @@ class MusicPlayerViewController: UIViewController, StoryboardGettable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNotification()
         setupUIColor()
         setupUI()
         setupUI(isReady: false)
         setupBindings()
     }
     
+    private func setupNotification() {
+        NotificationCenter.default.rx
+            .notification(.changeAppearance)
+            .takeUntil(self.rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.setupUIColor()
+            })
+            .disposed(by: disposeBag)
+    }
+    
     private func setupUIColor() {
         let backgroundColor = Appearance.textColor
         let foreColor = Appearance.backgroundColor
         view.backgroundColor = backgroundColor
-        let forwardImage = appearanceMode == .dark ?
+        let forwardImage = Appearance.mode == .dark ?
             UIImage(named: "forward-10") : UIImage(named: "forward-10-white")
-        let rewindImage = appearanceMode == .dark ?
+        let rewindImage = Appearance.mode == .dark ?
             UIImage(named: "rewind-10") : UIImage(named: "rewind-10-white")
         forwardButton.setImage(forwardImage, for: UIControl.State())
         rewindButton.setImage(rewindImage, for: UIControl.State())

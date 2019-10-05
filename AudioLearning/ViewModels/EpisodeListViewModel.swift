@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class EpisodeListViewModel {
+class EpisodeListViewModel: BaseViewModel {
     
     // Input
     private(set) var initalLoad: AnyObserver<Void>!
@@ -25,9 +25,6 @@ class EpisodeListViewModel {
     private(set) var showEpisodeDetail: Observable<EpisodeModel>!
     private(set) var showVocabulary: Observable<Void>!
     
-    private let apiService: APIServiceProtocol!
-    private let realmService: RealmService<EpisodeRealmModel>!
-    
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
@@ -35,11 +32,13 @@ class EpisodeListViewModel {
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
     
-    private let disposeBag = DisposeBag()
+    private let apiService: APIServiceProtocol!
+    private let realmService: RealmService<EpisodeRealmModel>!
     
     init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeRealmModel>) {
         self.apiService = apiService
         self.realmService = realmService
+        super.init()
         
         initalLoad = initalLoadSubject.asObserver()
         reload = reloadSubject.asObserver()

@@ -28,6 +28,7 @@ class VocabularyCell: BaseTableViewCell {
     }
     
     override func setupUIColor() {
+        super.setupUIColor()
         backgroundColor = Appearance.backgroundColor
         wordLabel.backgroundColor = Appearance.backgroundColor
         wordLabel.textColor = Appearance.textColor

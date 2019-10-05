@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class VocabularyListViewModel {
+class VocabularyListViewModel: BaseViewModel {
     
     // Inputs and Outputs
     private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
@@ -29,15 +29,14 @@ class VocabularyListViewModel {
     private(set) var showAddVocabularyDetail: Observable<Void>!
     private(set) var showFlashCards: Observable<Void>!
     
-    private var episode: String?
-    
     private let setEpisodeSubject = PublishSubject<String?>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectVocabularySubject = PublishSubject<VocabularyRealmModel>()
     private let addVocabularySubject = PublishSubject<Void>()
     private let deleteVocabularySubject = PublishSubject<VocabularyRealmModel>()
     private let tapFlashCardsSubject = PublishSubject<Void>()
-    private let disposeBag = DisposeBag()
+    
+    private var episode: String?
     
     init(realmService: RealmService<VocabularyRealmModel>) {
         setEpisode = setEpisodeSubject.asObserver()
@@ -50,6 +49,7 @@ class VocabularyListViewModel {
         deleteVocabulary = deleteVocabularySubject.asObserver()
         tapFlashCards = tapFlashCardsSubject.asObserver()
         showFlashCards = tapFlashCardsSubject.asObservable()
+        super.init()
         
         Observable.of(showVocabularyDetail.map({ $0 as AnyObject }),
                       showAddVocabularyDetail.map({ $0 as AnyObject }))

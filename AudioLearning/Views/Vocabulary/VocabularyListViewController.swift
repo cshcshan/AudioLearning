@@ -32,6 +32,7 @@ class VocabularyListViewController: BaseViewController {
     }
     
     override func setupUIColor() {
+        super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
         tableView.backgroundColor = Appearance.backgroundColor
         maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
@@ -47,6 +48,8 @@ class VocabularyListViewController: BaseViewController {
         vocabularyDetailView.frame = vocabularyDetailContainerView.bounds
         vocabularyDetailContainerView.addSubview(vocabularyDetailView)
         vocabularyDetailView.layer.cornerRadius = 10
+        // themeButton
+        addThemeButton(viewModel, to: tableView)
     }
     
     private func setupNavigationBar() {

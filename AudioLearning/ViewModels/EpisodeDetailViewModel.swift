@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class EpisodeDetailViewModel {
+class EpisodeDetailViewModel: BaseViewModel {
     
     // Inputs and Outputs
     private(set) var shrinkMusicPlayer = PublishSubject<Void>()
@@ -22,7 +22,7 @@ class EpisodeDetailViewModel {
     private(set) var addVocabulary: AnyObserver<String>!
     
     // Output
-    private(set) var title: String
+    private(set) var title: String = ""
     private(set) var scriptHtml = BehaviorSubject<String>(value: "")
     private(set) var audioLink: Observable<String>!
     private(set) var alert: Observable<AlertModel>!
@@ -30,22 +30,21 @@ class EpisodeDetailViewModel {
     private(set) var showVocabulary: Observable<Void>!
     private(set) var showAddVocabularyDetail: Observable<String>!
     
-    private let apiService: APIServiceProtocol!
-    private let realmService: RealmService<EpisodeDetailRealmModel>!
-    private let episodeModel: EpisodeModel
-    
     private let loadSubject = PublishSubject<Void>()
     private let tapVocabularySubject = PublishSubject<Void>()
     private let addVocabularySubject = PublishSubject<String>()
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
     
-    private let disposeBag = DisposeBag()
+    private let apiService: APIServiceProtocol!
+    private let realmService: RealmService<EpisodeDetailRealmModel>!
+    private let episodeModel: EpisodeModel
     
     init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeDetailRealmModel>, episodeModel: EpisodeModel) {
         self.apiService = apiService
         self.realmService = realmService
         self.episodeModel = episodeModel
+        super.init()
         
         load = loadSubject.asObserver()
         tapVocabulary = tapVocabularySubject.asObserver()

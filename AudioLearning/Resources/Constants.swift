@@ -8,24 +8,40 @@
 
 import UIKit
 
-enum AppearanceMode {
-    case dark
+enum AppearanceModeType: Int {
+    case dark = 0
     case light
 }
 
 struct Appearance {
-    static let backgroundColor = appearanceMode == .dark ? Dark.backgroundColor : Light.backgroundColor
-    static let textColor = appearanceMode == .dark ? Dark.textColor : Light.textColor
+    private static var _mode: AppearanceModeType!
+    static var mode: AppearanceModeType {
+        get {
+            if _mode == nil {
+                _mode = UserDefaultManager.shared.appearanceMode
+            }
+            return _mode
+        }
+        set {
+            _mode = newValue
+            UserDefaultManager.shared.appearanceMode = newValue
+        }
+    }
+    
+    static var backgroundColor: UIColor {
+        return mode == .dark ? Dark.backgroundColor : Light.backgroundColor
+    }
+    static var textColor: UIColor {
+        return mode == .dark ? Dark.textColor : Light.textColor
+    }
     
     private struct Dark {
         static let backgroundColor = UIColor(red: 22/255.0, green: 24/255.0, blue: 35/255.0, alpha: 1)
         static let textColor = UIColor.white
     }
     
-    private  struct Light {
+    private struct Light {
         static let backgroundColor = UIColor.white
         static let textColor = UIColor(red: 22/255.0, green: 24/255.0, blue: 35/255.0, alpha: 1)
     }
 }
-
-let appearanceMode = AppearanceMode.dark

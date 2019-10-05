@@ -34,13 +34,16 @@ class VocabularyDetailViewController: BaseViewController {
     }
     
     override func setupUIColor() {
+        super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
         wordTextField.backgroundColor = Appearance.backgroundColor
         wordTextField.tintColor = Appearance.textColor
         wordTextField.textColor = Appearance.textColor
+        wordTextField.layer.borderColor = Appearance.textColor.cgColor
         noteTextView.backgroundColor = Appearance.backgroundColor
         noteTextView.tintColor = Appearance.textColor
         noteTextView.textColor = Appearance.textColor
+        noteTextView.layer.borderColor = Appearance.textColor.cgColor
         saveButton.backgroundColor = Appearance.backgroundColor
         saveButton.setTitleColor(Appearance.textColor, for: UIControl.State())
         cancelButton.backgroundColor = Appearance.backgroundColor
@@ -51,10 +54,8 @@ class VocabularyDetailViewController: BaseViewController {
         wordTextField.attributedPlaceholder = NSAttributedString(string: "Word",
                                                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray.withAlphaComponent(0.4)])
         wordTextField.layer.cornerRadius = 3
-        wordTextField.layer.borderColor = Appearance.textColor.cgColor
         wordTextField.layer.borderWidth = 1
         noteTextView.layer.cornerRadius = 3
-        noteTextView.layer.borderColor = Appearance.textColor.cgColor
         noteTextView.layer.borderWidth = 1
         noteTextView.contentInset = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
     }

@@ -41,10 +41,12 @@ class EpisodeDetailViewController: BaseViewController {
     }
     
     override func setupUIColor() {
+        super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
         scrollView.backgroundColor = Appearance.backgroundColor
         htmlTextView.backgroundColor = Appearance.backgroundColor
         maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
+        refreshControl.tintColor = Appearance.textColor
     }
     
     private func setupUI() {
@@ -74,15 +76,6 @@ class EpisodeDetailViewController: BaseViewController {
         vocabularyDetailView.layer.cornerRadius = 10
     }
     
-    private func setupPlayerViewShadow() {
-        playerView.layer.masksToBounds = false
-        playerView.layer.shadowColor = Appearance.textColor.cgColor
-        playerView.layer.shadowOpacity = 0.8
-        playerView.layer.shadowOffset = CGSize(width: -2, height: -5)
-        playerView.layer.shadowRadius = 5
-        playerView.layer.shadowPath = UIBezierPath(rect: playerView.bounds).cgPath
-    }
-    
     private func setupNavigationBar() {
         let image = UIImage(named: "dictionary-filled")
         let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
@@ -90,6 +83,15 @@ class EpisodeDetailViewController: BaseViewController {
             .bind(to: viewModel.tapVocabulary)
             .disposed(by: disposeBag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
+    }
+    
+    private func setupPlayerViewShadow() {
+        playerView.layer.masksToBounds = false
+        playerView.layer.shadowColor = Appearance.textColor.cgColor
+        playerView.layer.shadowOpacity = 0.8
+        playerView.layer.shadowOffset = CGSize(width: -2, height: -5)
+        playerView.layer.shadowRadius = 5
+        playerView.layer.shadowPath = UIBezierPath(rect: playerView.bounds).cgPath
     }
     
     private func setupBindings() {

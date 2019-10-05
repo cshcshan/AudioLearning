@@ -41,6 +41,7 @@ class EpisodeCell: BaseTableViewCell {
     }
     
     override func setupUIColor() {
+        super.setupUIColor()
         backgroundColor = Appearance.backgroundColor
         titleLabel.backgroundColor = Appearance.backgroundColor
         titleLabel.textColor = Appearance.textColor

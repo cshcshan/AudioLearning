@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class FlashCardCell: UICollectionViewCell {
     
@@ -19,10 +20,23 @@ class FlashCardCell: UICollectionViewCell {
     }
     
     private var isWordSide = true
+    private let disposeBag = DisposeBag()
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupNotification()
         setupUI()
+    }
+    
+    private func setupNotification() {
+        NotificationCenter.default.rx
+            .notification(.changeAppearance)
+            .takeUntil(self.rx.deallocated)
+            .subscribe(onNext: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.flip(self.isWordSide)
+            })
+            .disposed(by: disposeBag)
     }
     
     func flip(_ isWordSide: Bool) {
@@ -42,13 +56,16 @@ class FlashCardCell: UICollectionViewCell {
         // round-corner
         contentView.layer.cornerRadius = cornerRadius
         contentView.layer.masksToBounds = true
+        
+        contentView.layer.borderColor = UIColor.white.withAlphaComponent(0.8).cgColor
+        contentView.layer.borderWidth = 1
 
         // shadow
         self.layer.masksToBounds = false
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.8
         self.layer.shadowOffset = CGSize(width: 3, height: 3)
-        self.layer.shadowRadius = 5
+        self.layer.shadowRadius = 10
         self.layer.shadowPath = UIBezierPath(roundedRect: roundedRect, cornerRadius: cornerRadius).cgPath
     }
     

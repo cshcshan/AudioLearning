@@ -55,6 +55,13 @@
 		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
 		33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* ExtensionDate.swift */; };
 		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
+		33B1AF2323471A54007B7E8E /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2223471A54007B7E8E /* Page.swift */; };
+		33B1AF2523471D93007B7E8E /* EpisodeListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */; };
+		33B1AF2723471FF2007B7E8E /* EpisodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */; };
+		33B1AF29234720C6007B7E8E /* EpisodeDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF28234720C6007B7E8E /* EpisodeDetailPage.swift */; };
+		33B1AF2B23472503007B7E8E /* MusicPlayerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */; };
+		33D406492347487600B1AE57 /* VocabularyListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406482347487600B1AE57 /* VocabularyListPage.swift */; };
+		33D4064B234748BE00B1AE57 /* VocabularyDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */; };
 		33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641D92340954200A97F9E /* FlashCardsViewModel.swift */; };
 		33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */; };
 		33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E023409AB500A97F9E /* FlashCardsViewController.swift */; };
@@ -158,6 +165,13 @@
 		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
 		33892AA8231F6AA500340C17 /* ExtensionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDate.swift; sourceTree = "<group>"; };
 		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
+		33B1AF2223471A54007B7E8E /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListPage.swift; sourceTree = "<group>"; };
+		33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeUITests.swift; sourceTree = "<group>"; };
+		33B1AF28234720C6007B7E8E /* EpisodeDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailPage.swift; sourceTree = "<group>"; };
+		33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerPage.swift; sourceTree = "<group>"; };
+		33D406482347487600B1AE57 /* VocabularyListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListPage.swift; sourceTree = "<group>"; };
+		33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyDetailPage.swift; sourceTree = "<group>"; };
 		33D641D92340954200A97F9E /* FlashCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModel.swift; sourceTree = "<group>"; };
 		33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModelTests.swift; sourceTree = "<group>"; };
 		33D641E023409AB500A97F9E /* FlashCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewController.swift; sourceTree = "<group>"; };
@@ -314,6 +328,8 @@
 			isa = PBXGroup;
 			children = (
 				332C157023174CF9003C78EA /* AudioLearningUITests.swift */,
+				33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */,
+				33D4064C23474B1D00B1AE57 /* Pages */,
 				332C157223174CF9003C78EA /* Info.plist */,
 			);
 			path = AudioLearningUITests;
@@ -450,6 +466,19 @@
 				334644FF233251270040407E /* Components */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		33D4064C23474B1D00B1AE57 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				33B1AF2223471A54007B7E8E /* Page.swift */,
+				33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */,
+				33B1AF28234720C6007B7E8E /* EpisodeDetailPage.swift */,
+				33D406482347487600B1AE57 /* VocabularyListPage.swift */,
+				33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */,
+				33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */,
+			);
+			path = Pages;
 			sourceTree = "<group>";
 		};
 		33D641DF23409A8C00A97F9E /* FlashCards */ = {
@@ -910,7 +939,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33D406492347487600B1AE57 /* VocabularyListPage.swift in Sources */,
+				33B1AF2323471A54007B7E8E /* Page.swift in Sources */,
+				33B1AF29234720C6007B7E8E /* EpisodeDetailPage.swift in Sources */,
+				33B1AF2723471FF2007B7E8E /* EpisodeUITests.swift in Sources */,
+				33B1AF2523471D93007B7E8E /* EpisodeListPage.swift in Sources */,
+				33D4064B234748BE00B1AE57 /* VocabularyDetailPage.swift in Sources */,
 				332C157123174CF9003C78EA /* AudioLearningUITests.swift in Sources */,
+				33B1AF2B23472503007B7E8E /* MusicPlayerPage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

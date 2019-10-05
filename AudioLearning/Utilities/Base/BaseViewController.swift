@@ -10,8 +10,13 @@ import UIKit
 
 class BaseViewController: UIViewController, StoryboardGettable {
     
+    var isUITesting: Bool {
+        return ProcessInfo.processInfo.arguments.contains("-UITesting")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUIID()
         setupUIColor()
         if let navigationBar = navigationController?.navigationBar {
             navigationBar.backgroundColor = appearanceMode == .dark ? UIColor.black : UIColor.white
@@ -23,6 +28,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
         }
     }
     
+    func setupUIID() {}
     func setupUIColor() {}
     
     func showConfirmAlert(title: String?, message: String?,

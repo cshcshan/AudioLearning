@@ -27,6 +27,10 @@ class VocabularyListViewController: BaseViewController {
         setupBindings()
     }
     
+    override func setupUIID() {
+        tableView.accessibilityIdentifier = "TableView"
+    }
+    
     override func setupUIColor() {
         view.backgroundColor = Appearance.backgroundColor
         tableView.backgroundColor = Appearance.backgroundColor
@@ -47,6 +51,7 @@ class VocabularyListViewController: BaseViewController {
     
     private func setupNavigationBar() {
         let addItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+        addItem.accessibilityIdentifier = "Add"
         addItem.rx.tap
             .bind(to: viewModel.addVocabulary)
             .disposed(by: disposeBag)

@@ -26,6 +26,13 @@ class VocabularyDetailViewController: BaseViewController {
         setupBindings()
     }
     
+    override func setupUIID() {
+        wordTextField.accessibilityIdentifier = "Word"
+        noteTextView.accessibilityIdentifier = "Note"
+        saveButton.accessibilityIdentifier = "Save"
+        cancelButton.accessibilityIdentifier = "Cancel"
+    }
+    
     override func setupUIColor() {
         view.backgroundColor = Appearance.backgroundColor
         wordTextField.backgroundColor = Appearance.backgroundColor

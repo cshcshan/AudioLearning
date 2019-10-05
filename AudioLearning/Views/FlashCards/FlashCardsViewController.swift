@@ -43,8 +43,10 @@ class FlashCardsViewController: BaseViewController {
     
     private func setupBindings() {
         viewModel.vocabularies
-            .bind(to: collectionView.rx.items(cellIdentifier: "FlashCardCell", cellType: FlashCardCell.self), curriedArgument: { (_, model, item) in
+            .bind(to: collectionView.rx.items(cellIdentifier: "FlashCardCell", cellType: FlashCardCell.self), curriedArgument: { [weak self] (row, model, item) in
+                guard let `self` = self else { return }
                 item.vocabularyRealmModel = model
+                item.flip(self.viewModel.wordSideArray[row])
             })
             .disposed(by: disposeBag)
         
@@ -64,7 +66,7 @@ class FlashCardsViewController: BaseViewController {
             .subscribe(onNext: { [weak self] (isWordSide) in
                 guard let `self` = self else { return }
                 guard let index = self.currentIndex, let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? FlashCardCell else { return }
-                cell.flip(isWordSide: isWordSide)
+                cell.flip(isWordSide)
             })
             .disposed(by: disposeBag)
         
@@ -115,8 +117,9 @@ extension FlashCardsViewController {
     
     private func flipItem(state: UIGestureRecognizer.State, offset: CGPoint, velocity: CGPoint) {
         guard state == .ended else { return }
-        if offset.y > 50 || velocity.y > 500 || offset.y < -50 || velocity.y < -500 {
-            viewModel.flip.onNext(())
+        if offset.y > 100 || velocity.y > 500 || offset.y < -100 || velocity.y < -500 {
+            guard let index = currentIndex else { return }
+            viewModel.flip.onNext(index)
         }
     }
 }

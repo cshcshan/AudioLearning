@@ -57,15 +57,19 @@ class FlashCardsViewModelTests: XCTestCase {
         sut.isWordSide
             .bind(to: isWordSide)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, ()),
-                                        .next(20, ())])
+        scheduler.createColdObservable([.next(10, 0),
+                                        .next(20, 1),
+                                        .next(30, 0),
+                                        .next(40, 1)])
             .bind(to: sut.flip)
             .disposed(by: disposeBag)
+        sut.load.onNext(())
         scheduler.start()
-        XCTAssertEqual(isWordSide.events.count, 3)
-        XCTAssertEqual(isWordSide.events, [.next(0, true),
-                                           .next(10, false),
-                                           .next(20, true)])
+        XCTAssertEqual(isWordSide.events.count, 4)
+        XCTAssertEqual(isWordSide.events, [.next(10, false),
+                                           .next(20, false),
+                                           .next(30, true),
+                                           .next(40, true)])
     }
 }
 

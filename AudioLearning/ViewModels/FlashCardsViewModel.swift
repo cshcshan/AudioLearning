@@ -11,17 +11,19 @@ import RxCocoa
 
 class FlashCardsViewModel {
     
+    private(set) var wordSideArray: [Bool] = []
+    
     // Inputs
     private(set) var load: AnyObserver<Void>!
-    private(set) var flip: AnyObserver<Void>!
+    private(set) var flip: AnyObserver<Int>! // index
     
     // Outputs
     private(set) var vocabularies: Observable<[VocabularyRealmModel]>!
-    private(set) var isWordSide = BehaviorSubject<Bool>(value: true)
+    private(set) var isWordSide: Observable<Bool>!
     
     private let loadSubject = PublishSubject<Void>()
-    private let flipSubject = PublishSubject<Void>()
-    private let vocabulariesSubject = PublishSubject<Void>()
+    private let flipSubject = PublishSubject<Int>()
+    private let isWordSideSubject = PublishSubject<Bool>()
     
     private var realmService: RealmService<VocabularyRealmModel>
     private let disposeBag = DisposeBag()
@@ -31,7 +33,14 @@ class FlashCardsViewModel {
         
         load = loadSubject.asObserver()
         flip = flipSubject.asObserver()
+        isWordSide = isWordSideSubject.asObserver()
         vocabularies = realmService.allObjects
+        realmService.allObjects
+            .subscribe(onNext: { [weak self] (vocabularyRealmModels) in
+                guard let `self` = self else { return }
+                self.wordSideArray = [Bool](repeating: true, count: vocabularyRealmModels.count)
+            })
+            .disposed(by: disposeBag)
         
         loadSubject
             .subscribe(onNext: { (_) in
@@ -40,10 +49,11 @@ class FlashCardsViewModel {
             .disposed(by: disposeBag)
         
         flipSubject
-            .scan(true) { (aggregateValue, _) in !aggregateValue }
-            .subscribe(onNext: { [weak self] (isWordSide) in
+            .subscribe(onNext: { [weak self] (index) in
                 guard let `self` = self else { return }
-                self.isWordSide.onNext(isWordSide)
+                let value = !self.wordSideArray[index]
+                self.wordSideArray[index] = value
+                self.isWordSideSubject.onNext(value)
             })
             .disposed(by: disposeBag)
     }

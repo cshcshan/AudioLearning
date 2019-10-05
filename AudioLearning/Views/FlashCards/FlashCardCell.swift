@@ -23,19 +23,13 @@ class FlashCardCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
-        setupUIColor()
     }
     
-    func flip(isWordSide: Bool) {
+    func flip(_ isWordSide: Bool) {
         self.isWordSide = isWordSide
         contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor).withAlphaComponent(0.8)
         label.textColor = isWordSide ? Appearance.textColor : Appearance.backgroundColor
         label.text = isWordSide ? vocabularyRealmModel?.word : vocabularyRealmModel?.note
-    }
-    
-    private func setupUIColor() {
-        contentView.backgroundColor = Appearance.backgroundColor.withAlphaComponent(0.8)
-        label.textColor = Appearance.textColor
     }
     
     private func setupUI() {

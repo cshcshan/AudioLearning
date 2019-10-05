@@ -13,8 +13,9 @@ class FlashCardsFlowLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
         let space: CGFloat = 20.0
-        let side = UIScreen.main.bounds.width - (space * 2)
-        itemSize = CGSize(width: side, height: side)
+        let width = UIScreen.main.bounds.width - (space * 2)
+        let height = width * 0.6 // 3:5
+        itemSize = CGSize(width: width, height: height)
         scrollDirection = .horizontal
         minimumLineSpacing = space
 //        sectionInset = UIEdgeInsets(top: 0, left: space, bottom: 0, right: space)

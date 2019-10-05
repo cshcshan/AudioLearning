@@ -34,9 +34,10 @@ class FlashCardCell: UICollectionViewCell {
     
     private func setupUI() {
         let space: CGFloat = 20.0
-        let side = UIScreen.main.bounds.width - (space * 2)
+        let width = UIScreen.main.bounds.width - (space * 2)
+        let height = width * 0.6 // 3:5
         let cornerRadius: CGFloat = 10.0
-        let roundedRect = CGRect(origin: .zero, size: CGSize(width: side, height: side))
+        let roundedRect = CGRect(origin: .zero, size: CGSize(width: width, height: height))
 
         // round-corner
         contentView.layer.cornerRadius = cornerRadius

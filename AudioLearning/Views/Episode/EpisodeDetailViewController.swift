@@ -44,7 +44,7 @@ class EpisodeDetailViewController: BaseViewController {
         view.backgroundColor = Appearance.backgroundColor
         scrollView.backgroundColor = Appearance.backgroundColor
         htmlTextView.backgroundColor = Appearance.backgroundColor
-        maskView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
     }
     
     private func setupUI() {

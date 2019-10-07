@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Lottie
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,14 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
         print(NSHomeDirectory())
         setupRealm()
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        appCoordinator = AppCoordinator(window: window!)
-        _ = appCoordinator.start()
-        
+        let startCoordinator: (() -> Void) = { [weak self] in
+            guard let `self` = self else { return }
+            self.appCoordinator = AppCoordinator(window: self.window!)
+            _ = self.appCoordinator.start()
+        }
+        setupLaunchScreen(startCoordinator)
         return true
     }
 
@@ -60,5 +63,37 @@ extension AppDelegate {
         // TODO: updating Realm version
         configuration.schemaVersion = 0
         Realm.Configuration.defaultConfiguration = configuration
+    }
+}
+
+// MARK: - LaunchScreen
+
+extension AppDelegate {
+    
+    private func setupLaunchScreen(_ startCoordinator: @escaping (() -> Void)) {
+        guard let window = self.window else { return startCoordinator() }
+        guard let launchScreenVC = UIStoryboard(name: "LaunchScreen", bundle: .main).instantiateInitialViewController() else { return startCoordinator() }
+        guard let launchScreenView = launchScreenVC.view else { return startCoordinator() }
+        let animationView = AnimationView(filePath: Bundle.main.path(forResource: "around-the-world",
+                                                                     ofType: "json")!)
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        launchScreenView.addSubview(animationView)
+        launchScreenView.backgroundColor = Appearance.backgroundColor
+        let views = ["subview": animationView]
+        let horizontal = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|",
+                                                        options: [], metrics: nil, views: views)
+        let vertical = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|",
+                                                      options: [], metrics: nil, views: views)
+        launchScreenView.addConstraints(horizontal + vertical)
+        UIView.animate(withDuration: 3, animations: {
+            launchScreenView.alpha = 0
+        })
+        animationView.play()
+        
+        window.rootViewController = launchScreenVC
+        window.makeKeyAndVisible()
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (_) in
+            startCoordinator()
+        })
     }
 }

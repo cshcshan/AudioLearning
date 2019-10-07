@@ -66,6 +66,7 @@
 		33D406572348B11D00B1AE57 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406562348B11D00B1AE57 /* BaseViewModel.swift */; };
 		33D406592348BAD300B1AE57 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406582348BAD300B1AE57 /* UserDefaultManager.swift */; };
 		33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */; };
+		33D4068C234B37F800B1AE57 /* around-the-world.json in Resources */ = {isa = PBXBuildFile; fileRef = 33D4068B234B37F800B1AE57 /* around-the-world.json */; };
 		33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641D92340954200A97F9E /* FlashCardsViewModel.swift */; };
 		33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */; };
 		33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E023409AB500A97F9E /* FlashCardsViewController.swift */; };
@@ -180,6 +181,7 @@
 		33D406562348B11D00B1AE57 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		33D406582348BAD300B1AE57 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUITableView.swift; sourceTree = "<group>"; };
+		33D4068B234B37F800B1AE57 /* around-the-world.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "around-the-world.json"; sourceTree = "<group>"; };
 		33D641D92340954200A97F9E /* FlashCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModel.swift; sourceTree = "<group>"; };
 		33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModelTests.swift; sourceTree = "<group>"; };
 		33D641E023409AB500A97F9E /* FlashCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewController.swift; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 			children = (
 				3306578E233B406000381CC6 /* Demo */,
 				33065786233B23DD00381CC6 /* Constants.swift */,
+				33D4068B234B37F800B1AE57 /* around-the-world.json */,
 				332C155723174CF9003C78EA /* Assets.xcassets */,
 				33065784233B207D00381CC6 /* Color.xcassets */,
 			);
@@ -689,6 +692,7 @@
 				334644BE2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 in Resources */,
 				332C158B2317878C003C78EA /* 6-minute-english.html in Resources */,
 				332C155B23174CF9003C78EA /* LaunchScreen.storyboard in Resources */,
+				33D4068C234B37F800B1AE57 /* around-the-world.json in Resources */,
 				330657592339CF2500381CC6 /* Vocabulary.storyboard in Resources */,
 				332C155823174CF9003C78EA /* Assets.xcassets in Resources */,
 				33892AA2231E324800340C17 /* Episode.storyboard in Resources */,

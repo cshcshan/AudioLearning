@@ -4,7 +4,7 @@ import RxCocoa
 let disposeBag = DisposeBag()
 
 print("\nI: --- do, afterNext")
-let i = Observable.of("A", "B", "C")
+Observable.of("A", "B", "C")
     .do(onNext: { (str) in
         print("do - onNext: \(str)")
     }, afterNext: { (str) in

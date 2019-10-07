@@ -16,8 +16,16 @@ class EpisodeListViewController: BaseViewController {
     private let refreshControl = UIRefreshControl()
     
     var viewModel: EpisodeListViewModel!
-    private let disposeBag = DisposeBag()
-
+    
+    private var showEmptyView: ((UITableView) -> Void) = { tableView in
+        tableView.showEmptyView(Appearance.backgroundColor,
+                                title: ("No episodes of 6 Minute English", Appearance.textColor),
+                                message: ("Wait to download episode list from server.", Appearance.textColor.withAlphaComponent(0.6)))
+    }
+    private var hideEmptyView: ((UITableView) -> Void) = { tableView in
+        tableView.hideEmptyView(nil, separatorStyle: .singleLine)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -28,6 +36,7 @@ class EpisodeListViewController: BaseViewController {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
         tableView.backgroundColor = Appearance.backgroundColor
+        if tableView.backgroundView != nil { showEmptyView(tableView) }
         refreshControl.tintColor = Appearance.textColor
     }
     
@@ -43,6 +52,7 @@ class EpisodeListViewController: BaseViewController {
         // tableView
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80
+        showEmptyView(tableView)
         // themeButton
         addThemeButton(viewModel, to: tableView)
     }
@@ -62,8 +72,13 @@ class EpisodeListViewController: BaseViewController {
         // ViewModel's output to the ViewController
         viewModel.episodes
             .observeOn(MainScheduler.instance)
-            .do(onNext: { [weak self] (_) in
+            .do(onNext: { [weak self] (episodes) in
                 guard let `self` = self else { return }
+                if episodes.count == 0 {
+                    self.showEmptyView(self.tableView)
+                } else {
+                    self.hideEmptyView(self.tableView)
+                }
                 self.refreshControl.endRefreshing()
             })
             .bind(to: tableView.rx.items(cellIdentifier: "EpisodeCell", cellType: EpisodeCell.self),

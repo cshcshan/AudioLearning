@@ -3,6 +3,38 @@ import RxCocoa
 
 let disposeBag = DisposeBag()
 
+print("\nI: --- do, afterNext")
+let i = Observable.of("A", "B", "C")
+    .do(onNext: { (str) in
+        print("do - onNext: \(str)")
+    }, afterNext: { (str) in
+        print("do - afterNext: \(str)")
+    }, onError: { (error) in
+        print("do - onError: \(error)")
+    }, afterError: { (error) in
+        print("do - afterError: \(error)")
+    }, onCompleted: {
+        print("do - onCompleted")
+    }, afterCompleted: {
+        print("do - afterCompleted")
+    }, onSubscribe: {
+        print("do - onSubscribe")
+    }, onSubscribed: {
+        print("do - onSubscribed")
+    }, onDispose: {
+        print("do - onDispose")
+    })
+    .subscribe(onNext: { (str) in
+        print("subscribe - onNext: \(str)")
+    }, onError: { (error) in
+        print("subscribe - onError: \(error)")
+    }, onCompleted: {
+        print("subscribe - onCompleted")
+    }, onDisposed: {
+        print("subscribe - onDispose")
+    })
+    .disposed(by: disposeBag)
+
 print("\nH: --- two observers, one observables")
 
 let h1 = AnyObserver<String> { (event) in

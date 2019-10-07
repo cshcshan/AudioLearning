@@ -19,7 +19,6 @@ class FlashCardsViewController: BaseViewController {
     private var currentIndex: Int?
     private var beganContentOffset: CGPoint = .zero
     private var startAngle: CGFloat = 0
-    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()

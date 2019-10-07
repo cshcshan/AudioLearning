@@ -65,6 +65,7 @@
 		33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */; };
 		33D406572348B11D00B1AE57 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406562348B11D00B1AE57 /* BaseViewModel.swift */; };
 		33D406592348BAD300B1AE57 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406582348BAD300B1AE57 /* UserDefaultManager.swift */; };
+		33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */; };
 		33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641D92340954200A97F9E /* FlashCardsViewModel.swift */; };
 		33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */; };
 		33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641E023409AB500A97F9E /* FlashCardsViewController.swift */; };
@@ -178,6 +179,7 @@
 		33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionNotification.swift; sourceTree = "<group>"; };
 		33D406562348B11D00B1AE57 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		33D406582348BAD300B1AE57 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+		33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUITableView.swift; sourceTree = "<group>"; };
 		33D641D92340954200A97F9E /* FlashCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModel.swift; sourceTree = "<group>"; };
 		33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModelTests.swift; sourceTree = "<group>"; };
 		33D641E023409AB500A97F9E /* FlashCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewController.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */,
 				332C15942317A7C1003C78EA /* ExtensionString.swift */,
 				33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */,
+				33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -909,6 +912,7 @@
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,
 				33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */,
 				332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */,
+				33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */,
 				3306575D2339CFE800381CC6 /* VocabularyDetailViewController.swift in Sources */,
 				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,
 				33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */,

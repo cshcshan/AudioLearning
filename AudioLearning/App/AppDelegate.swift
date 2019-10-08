@@ -74,17 +74,20 @@ extension AppDelegate {
         guard let window = self.window else { return startCoordinator() }
         guard let launchScreenVC = UIStoryboard(name: "LaunchScreen", bundle: .main).instantiateInitialViewController() else { return startCoordinator() }
         guard let launchScreenView = launchScreenVC.view else { return startCoordinator() }
+        
         let animationView = AnimationView(filePath: Bundle.main.path(forResource: "around-the-world",
                                                                      ofType: "json")!)
         animationView.translatesAutoresizingMaskIntoConstraints = false
         launchScreenView.addSubview(animationView)
         launchScreenView.backgroundColor = Appearance.backgroundColor
+        
         let views = ["subview": animationView]
         let horizontal = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|",
                                                         options: [], metrics: nil, views: views)
         let vertical = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|",
                                                       options: [], metrics: nil, views: views)
         launchScreenView.addConstraints(horizontal + vertical)
+        
         UIView.animate(withDuration: 3, animations: {
             launchScreenView.alpha = 0
         })

@@ -17,11 +17,17 @@ class BaseViewController: UIViewController, StoryboardGettable {
         return ProcessInfo.processInfo.arguments.contains("-UITesting")
     }
     
+    private let tagOfThemeButton = 201
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNotification()
         setupUIID()
         setupUIColor()
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return false
     }
     
     private func setupNotification() {
@@ -39,27 +45,38 @@ class BaseViewController: UIViewController, StoryboardGettable {
     
     func setupUIColor() {
         if let navigationBar = navigationController?.navigationBar {
-            navigationBar.backgroundColor = Appearance.mode == .dark ? UIColor.black : UIColor.white
+//            navigationBar.backgroundColor = Appearance.mode == .dark ? UIColor.black : UIColor.white
             navigationBar.barTintColor = Appearance.mode == .dark ? UIColor.black : UIColor.white
             navigationBar.tintColor = Appearance.textColor
+            navigationBar.barStyle = Appearance.mode == .dark ? .black : .default
             navigationBar.isTranslucent = false
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Appearance.textColor,
                                                  NSAttributedString.Key.font: UIFont(name: "AvenirNext-DemiBold", size: 20.0)!]
         }
+        if let themeButton = view.viewWithTag(tagOfThemeButton) {
+            themeButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
+        }
     }
 
     func addThemeButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U) {
+        let side: CGFloat = 50
         let themeButton = UIButton(type: .custom)
+        themeButton.tag = tagOfThemeButton
         themeButton.setImage(UIImage(named: "theme"), for: UIControl.State())
+        themeButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
+        themeButton.layer.cornerRadius = side / 2
+        themeButton.layer.masksToBounds = false
+        themeButton.clipsToBounds = true
         themeButton.rx.tap
             .bind(to: viewModel.tapTheme)
             .disposed(by: disposeBag)
         themeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(themeButton)
-        let right = NSLayoutConstraint(item: themeButton, attribute: .right, relatedBy: .equal, toItem: item, attribute: .right, multiplier: 1, constant: -20)
-        let bottom = NSLayoutConstraint(item: themeButton, attribute: .bottom, relatedBy: .equal, toItem: item, attribute: .bottom, multiplier: 1, constant: -20)
-        let width = NSLayoutConstraint(item: themeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 35)
-        let height = NSLayoutConstraint(item: themeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 35)
+        let right = NSLayoutConstraint(item: themeButton, attribute: .right, relatedBy: .equal, toItem: item, attribute: .right, multiplier: 1, constant: -10)
+        let bottom = NSLayoutConstraint(item: themeButton, attribute: .bottom, relatedBy: .equal, toItem: item, attribute: .bottom, multiplier: 1, constant: -10)
+        let width = NSLayoutConstraint(item: themeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: side)
+        let height = NSLayoutConstraint(item: themeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: side)
+        themeButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         view.addConstraints([right, bottom, width, height])
     }
     

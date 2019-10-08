@@ -89,11 +89,13 @@ extension FlashCardsViewController {
         let velocity = recognizer.velocity(in: view)
         let state = recognizer.state
         
-        changeVisibleItem(state: state, offset: offset, velocity: velocity)
-        flipItem(state: state, offset: offset, velocity: velocity)
+        changeVisibleItem(state: state, offset: offset, velocity: velocity, endedHandler: { [weak self] in
+            guard let `self` = self else { return }
+            self.flipItem(state: state, offset: offset, velocity: velocity)
+        })
     }
     
-    private func changeVisibleItem(state: UIGestureRecognizer.State, offset: CGPoint, velocity: CGPoint) {
+    private func changeVisibleItem(state: UIGestureRecognizer.State, offset: CGPoint, velocity: CGPoint, endedHandler: (() -> Void)) {
         switch state {
         case .began:
             beganContentOffset = collectionView.contentOffset
@@ -105,6 +107,9 @@ extension FlashCardsViewController {
                 index -= 1
             } else if offset.x < -50 || velocity.x < -500 {
                 index += 1
+            }
+            if currentIndex == index {
+                endedHandler()
             }
             if index < 0 { index = 0 }
             if index >= modelCount { index = modelCount - 1 }

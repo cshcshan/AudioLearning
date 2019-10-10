@@ -17,7 +17,6 @@
 		330657612339E43600381CC6 /* VocabularyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657602339E43600381CC6 /* VocabularyCell.swift */; };
 		330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657622339ED5500381CC6 /* VocabularySaveModel.swift */; };
 		330657652339EE9900381CC6 /* VocabularySaveModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */; };
-		33065785233B207E00381CC6 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33065784233B207D00381CC6 /* Color.xcassets */; };
 		33065787233B23DD00381CC6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065786233B23DD00381CC6 /* Constants.swift */; };
 		33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */; };
 		3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */; };
@@ -125,7 +124,6 @@
 		330657602339E43600381CC6 /* VocabularyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyCell.swift; sourceTree = "<group>"; };
 		330657622339ED5500381CC6 /* VocabularySaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModel.swift; sourceTree = "<group>"; };
 		330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModelTests.swift; sourceTree = "<group>"; };
-		33065784233B207D00381CC6 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		33065786233B23DD00381CC6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIColor.swift; sourceTree = "<group>"; };
 		3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
@@ -365,7 +363,6 @@
 				33065786233B23DD00381CC6 /* Constants.swift */,
 				33D4068B234B37F800B1AE57 /* around-the-world.json */,
 				332C155723174CF9003C78EA /* Assets.xcassets */,
-				33065784233B207D00381CC6 /* Color.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -698,7 +695,6 @@
 				33892AA2231E324800340C17 /* Episode.storyboard in Resources */,
 				33D641E323409ADA00A97F9E /* FlashCards.storyboard in Resources */,
 				33DB07562329CEC40030EBBA /* MusicPlayer.storyboard in Resources */,
-				33065785233B207E00381CC6 /* Color.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

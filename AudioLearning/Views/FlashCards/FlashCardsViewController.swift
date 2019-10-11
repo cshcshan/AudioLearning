@@ -28,8 +28,8 @@ class FlashCardsViewController: BaseViewController {
     
     override func setupUIColor() {
         super.setupUIColor()
-        view.backgroundColor = Appearance.backgroundColor
-        collectionView.backgroundColor = Appearance.textColor
+        view.backgroundColor = Appearance.secondaryBgColor
+        collectionView.backgroundColor = Appearance.secondaryBgColor
     }
     
     private func setupUI() {

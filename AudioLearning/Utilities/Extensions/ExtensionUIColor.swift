@@ -9,6 +9,7 @@
 import UIKit
 
 // swiftlint:disable identifier_name
+// swiftlint:disable large_tuple
 extension UIColor {
     
     var hexString: String {
@@ -43,5 +44,18 @@ extension UIColor {
         
         self.init(red: red, green: green, blue: blue, alpha: 1)
     }
+    
+    convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
+        self.init(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: a)
+    }
+    
+    convenience init(rgb: (CGFloat, CGFloat, CGFloat)) {
+        self.init(red: rgb.0/255.0, green: rgb.1/255.0, blue: rgb.2/255.0, alpha: 1)
+    }
+    
+    convenience init(rgba: (CGFloat, CGFloat, CGFloat, CGFloat)) {
+        self.init(red: rgba.0/255.0, green: rgba.1/255.0, blue: rgba.2/255.0, alpha: rgba.3)
+    }
 }
 // swiftlint:enable identifier_name
+// swiftlint:enable large_tuple

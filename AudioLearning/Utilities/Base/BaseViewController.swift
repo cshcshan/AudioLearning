@@ -72,7 +72,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
             .disposed(by: disposeBag)
         themeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(themeButton)
-        let right = NSLayoutConstraint(item: themeButton, attribute: .right, relatedBy: .equal, toItem: item, attribute: .right, multiplier: 1, constant: -10)
+        let right = NSLayoutConstraint(item: themeButton, attribute: .right, relatedBy: .equal, toItem: item, attribute: .right, multiplier: 1, constant: -20)
         let bottom = NSLayoutConstraint(item: themeButton, attribute: .bottom, relatedBy: .equal, toItem: item, attribute: .bottom, multiplier: 1, constant: -10)
         let width = NSLayoutConstraint(item: themeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: side)
         let height = NSLayoutConstraint(item: themeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: side)

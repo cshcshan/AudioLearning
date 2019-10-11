@@ -41,7 +41,7 @@ class FlashCardCell: UICollectionViewCell {
     
     func flip(_ isWordSide: Bool) {
         self.isWordSide = isWordSide
-        contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor)//.withAlphaComponent(0.8)
+        contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor)
         label.textColor = isWordSide ? Appearance.textColor : Appearance.backgroundColor
         label.text = isWordSide ? vocabularyRealmModel?.word : vocabularyRealmModel?.note
     }
@@ -59,10 +59,10 @@ class FlashCardCell: UICollectionViewCell {
 
         // shadow
         self.layer.masksToBounds = false
-        self.layer.shadowColor = Appearance.backgroundColor.cgColor
-        self.layer.shadowOpacity = 0.8
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.6
         self.layer.shadowOffset = CGSize(width: -3, height: 3)
-        self.layer.shadowRadius = height / 2
+        self.layer.shadowRadius = 10
         self.layer.shadowPath = UIBezierPath(roundedRect: roundedRect, cornerRadius: cornerRadius).cgPath
     }
     

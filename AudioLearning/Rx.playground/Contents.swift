@@ -3,8 +3,25 @@ import RxCocoa
 
 let disposeBag = DisposeBag()
 
+print("\nJ: --- duplicate subscription")
+
+let j = PublishSubject<Void>()
+
+j.subscribe(onNext: { (_) in
+    print("next 1")
+}).disposed(by: disposeBag)
+
+j.subscribe(onNext: { (_) in
+    print("next 2")
+}).disposed(by: disposeBag)
+
+j.onNext(())
+
 print("\nI: --- do, afterNext")
-Observable.of("A", "B", "C")
+Observable.of("AAA", "BBB", "CCC")
+    .flatMapLatest({ (str) -> Observable<String> in
+        return .just("\(str)Test")
+    })
     .do(onNext: { (str) in
         print("do - onNext: \(str)")
     }, afterNext: { (str) in

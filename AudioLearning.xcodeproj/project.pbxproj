@@ -46,6 +46,7 @@
 		3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF42334F1A90031B9C1 /* RealmService.swift */; };
 		3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */; };
 		3353ABFA233725FC0031B9C1 /* EpisodeDetailRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */; };
+		3371E42F234F570B00B905B3 /* ExtensionUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3371E42E234F570B00B905B3 /* ExtensionUIView.swift */; };
 		33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */; };
 		33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */; };
 		33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9F231E323000340C17 /* EpisodeListViewController.swift */; };
@@ -159,6 +160,7 @@
 		3353ABF42334F1A90031B9C1 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmServiceTests.swift; sourceTree = "<group>"; };
 		3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailRealmModel.swift; sourceTree = "<group>"; };
+		3371E42E234F570B00B905B3 /* ExtensionUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIView.swift; sourceTree = "<group>"; };
 		33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModelTests.swift; sourceTree = "<group>"; };
 		33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModel.swift; sourceTree = "<group>"; };
 		33892A9F231E323000340C17 /* EpisodeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewController.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				332C15942317A7C1003C78EA /* ExtensionString.swift */,
 				33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */,
 				33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */,
+				3371E42E234F570B00B905B3 /* ExtensionUIView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 			files = (
 				334644B7232F6AC80040407E /* HCAudioPlayer.swift in Sources */,
 				33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */,
+				3371E42F234F570B00B905B3 /* ExtensionUIView.swift in Sources */,
 				33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */,
 				33E3780B231A605D00C6671B /* APIService.swift in Sources */,
 				332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */,

@@ -35,7 +35,8 @@ class EpisodeListViewController: BaseViewController {
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
-        tableView.backgroundColor = Appearance.backgroundColor
+        tableView.backgroundColor = Appearance.secondaryBgColor
+        tableView.separatorColor = tableView.backgroundColor
         if tableView.backgroundView != nil { showEmptyView(tableView) }
         refreshControl.tintColor = Appearance.textColor
     }
@@ -51,7 +52,8 @@ class EpisodeListViewController: BaseViewController {
         }
         // tableView
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 80
+        tableView.estimatedRowHeight = 165
+        tableView.separatorStyle = .none
         showEmptyView(tableView)
         // themeButton
         addThemeButton(viewModel, to: tableView)

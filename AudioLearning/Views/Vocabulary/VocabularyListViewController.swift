@@ -43,7 +43,8 @@ class VocabularyListViewController: BaseViewController {
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
-        tableView.backgroundColor = Appearance.backgroundColor
+        tableView.backgroundColor = Appearance.secondaryBgColor
+        tableView.separatorColor = tableView.backgroundColor
         if tableView.backgroundView != nil { showEmptyView(tableView) }
         maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
     }
@@ -53,6 +54,7 @@ class VocabularyListViewController: BaseViewController {
         setupNavigationBar(0)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
+        tableView.separatorStyle = .none
         showEmptyView(tableView)
         // vocabularyDetailView
         vocabularyDetailContainerView.backgroundColor = .clear
@@ -124,9 +126,29 @@ class VocabularyListViewController: BaseViewController {
                     self.hideEmptyView(self.tableView)
                 }
             })
-            .bind(to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self), curriedArgument: { (_, model, cell) in
+            .bind(to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self), curriedArgument: { [weak self] (_, model, cell) in
+                guard let `self` = self else { return }
                 cell.selectionStyle = .none
                 cell.vocabularyRealmModel = model
+                cell.longPressSubject
+                    .subscribe(onNext: { (_) in
+                        cell.startWiggleAnimation.onNext(())
+                    })
+                    .disposed(by: self.disposeBag)
+                Observable.of(self.addItem.rx.tap.map({ $0 as AnyObject }),
+                              self.tableView.rx.itemSelected.map({ $0 as AnyObject }))
+                    .merge()
+                    .subscribe(onNext: { (_) in
+                        cell.stopWiggleAnimation.onNext(())
+                    })
+                    .disposed(by: self.disposeBag)
+                cell.deleteVocabulary
+                    .subscribe(onNext: { (vocabularyRealmModel) in
+                        guard !vocabularyRealmModel.isInvalidated else { return }
+                        cell.stopWiggleAnimation.onNext(())
+                        self.viewModel.deleteVocabulary.onNext(vocabularyRealmModel)
+                    })
+                    .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
         
@@ -135,9 +157,10 @@ class VocabularyListViewController: BaseViewController {
             .bind(to: viewModel.selectVocabulary)
             .disposed(by: disposeBag)
         
-        tableView.rx.modelDeleted(VocabularyRealmModel.self)
-            .bind(to: viewModel.deleteVocabulary)
-            .disposed(by: disposeBag)
+//        tableView.rx
+//            .modelDeleted(VocabularyRealmModel.self)
+//            .bind(to: viewModel.deleteVocabulary)
+//            .disposed(by: disposeBag)
         
         viewModel.reload.onNext(())
     }

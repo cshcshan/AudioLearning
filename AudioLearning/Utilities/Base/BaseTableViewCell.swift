@@ -17,6 +17,7 @@ class BaseTableViewCell: UITableViewCell {
         super.awakeFromNib()
         setupNotification()
         setupUIColor()
+        setupUI()
     }
     
     private func setupNotification() {
@@ -31,4 +32,5 @@ class BaseTableViewCell: UITableViewCell {
     }
     
     func setupUIColor() {}
+    func setupUI() {}
 }

@@ -129,6 +129,19 @@ class VocabularyListViewModelTests: XCTestCase {
         scheduler.start()
         XCTAssertEqual(showAddVocabularyDetail.events.count, 2)
     }
+    
+    func testShowFlashCards() {
+        let showFlashCards = scheduler.createObserver(Void.self)
+        sut.showFlashCards
+            .bind(to: showFlashCards)
+            .disposed(by: disposeBag)
+        scheduler.createColdObservable([.next(10, ()),
+                                        .next(20, ())])
+            .bind(to: sut.tapFlashCards)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(showFlashCards.events.count, 2)
+    }
 }
 
 extension VocabularyListViewModelTests {

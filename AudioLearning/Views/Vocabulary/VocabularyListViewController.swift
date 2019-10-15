@@ -62,7 +62,7 @@ class VocabularyListViewController: BaseViewController {
         vocabularyDetailContainerView.addSubview(vocabularyDetailView)
         vocabularyDetailView.layer.cornerRadius = 10
         // themeButton
-        addThemeButton(viewModel, to: tableView)
+        showThemeButton(viewModel, to: tableView)
     }
     
     private func setupNavigationBar(_ vocabulariesCount: Int) {

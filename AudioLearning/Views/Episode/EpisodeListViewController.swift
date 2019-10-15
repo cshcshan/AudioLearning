@@ -32,6 +32,25 @@ class EpisodeListViewController: BaseViewController {
         setupBindings()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animatePlayingButton()
+    }
+        
+    override func setupNotification() {
+        super.setupNotification()
+        NotificationCenter.default.rx
+            .notification(.isPlaying)
+            .takeUntil(self.rx.deallocated)
+            .subscribe(onNext: { [weak self] (notification) in
+                guard let `self` = self else { return }
+                guard let userInfo = notification.userInfo else { return }
+                guard let isPlaying = userInfo["isPlaying"] as? Bool else { return }
+                self.showPlayingButton(self.viewModel, to: self.tableView, isShow: isPlaying)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
@@ -56,7 +75,7 @@ class EpisodeListViewController: BaseViewController {
         tableView.separatorStyle = .none
         showEmptyView(tableView)
         // themeButton
-        addThemeButton(viewModel, to: tableView)
+        showThemeButton(viewModel, to: tableView)
     }
     
     private func setupNavigationBar() {

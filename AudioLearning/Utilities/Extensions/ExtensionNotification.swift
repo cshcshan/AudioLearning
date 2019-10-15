@@ -10,4 +10,5 @@ import Foundation
 
 extension Notification.Name {
     static let changeAppearance = Notification.Name("changeAppearance")
+    static let isPlaying = Notification.Name("isPlaying")
 }

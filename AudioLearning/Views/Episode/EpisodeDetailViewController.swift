@@ -86,8 +86,8 @@ class EpisodeDetailViewController: BaseViewController {
     
     private func setupPlayerViewShadow() {
         playerView.layer.masksToBounds = false
-        playerView.layer.shadowColor = Appearance.textColor.cgColor
-        playerView.layer.shadowOpacity = 0.8
+        playerView.layer.shadowColor = UIColor.black.cgColor
+        playerView.layer.shadowOpacity = 0.4
         playerView.layer.shadowOffset = CGSize(width: -2, height: -5)
         playerView.layer.shadowRadius = 5
         playerView.layer.shadowPath = UIBezierPath(rect: playerView.bounds).cgPath

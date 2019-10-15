@@ -18,6 +18,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
     }
     
     private let tagOfThemeButton = 201
+    private let tagOfPlayingButton = 202
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +31,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
         return false
     }
     
-    private func setupNotification() {
+    func setupNotification() {
         NotificationCenter.default.rx
             .notification(.changeAppearance)
             .takeUntil(self.rx.deallocated)
@@ -58,25 +59,73 @@ class BaseViewController: UIViewController, StoryboardGettable {
         }
     }
 
-    func addThemeButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U) {
+    func showThemeButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U) {
+        guard view.viewWithTag(tagOfThemeButton) == nil else { return }
         let side: CGFloat = 50
         let themeButton = UIButton(type: .custom)
         themeButton.tag = tagOfThemeButton
         themeButton.setImage(UIImage(named: "theme"), for: UIControl.State())
         themeButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
-        themeButton.layer.cornerRadius = side / 2
-        themeButton.layer.masksToBounds = false
-        themeButton.clipsToBounds = true
+        themeButton.circle(side / 2)
+        themeButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         themeButton.rx.tap
             .bind(to: viewModel.tapTheme)
             .disposed(by: disposeBag)
         themeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(themeButton)
-        let right = NSLayoutConstraint(item: themeButton, attribute: .right, relatedBy: .equal, toItem: item, attribute: .right, multiplier: 1, constant: -20)
-        let bottom = NSLayoutConstraint(item: themeButton, attribute: .bottom, relatedBy: .equal, toItem: item, attribute: .bottom, multiplier: 1, constant: -10)
-        let width = NSLayoutConstraint(item: themeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: side)
-        let height = NSLayoutConstraint(item: themeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: side)
-        themeButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        setupConstraintsOnBottomRight(on: themeButton, to: item,
+                                      constraints: (right: -20, bottom: -10),
+                                      size: (width: side, height: side))
+    }
+    
+    func showPlayingButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U, isShow: Bool) {
+        let button = view.viewWithTag(tagOfPlayingButton)
+        if isShow {
+            guard button == nil else {
+                button!.addPulseAnimation()
+                button!.isHidden = false
+                return
+            }
+            let side: CGFloat = 50
+            let playingButton = UIButton(type: .custom)
+            playingButton.tag = tagOfPlayingButton
+            playingButton.setImage(UIImage(named: "wave"), for: UIControl.State())
+            playingButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
+            playingButton.circle(side / 2)
+            playingButton.addPulseAnimation()
+            playingButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            playingButton.rx.tap
+                .bind(to: viewModel.tapPlaying)
+                .disposed(by: disposeBag)
+            playingButton.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(playingButton)
+            setupConstraintsOnBottomRight(on: playingButton, to: item,
+                                          constraints: (right: -20, bottom: -70),
+                                          size: (width: side, height: side))
+        } else {
+            guard let playingButton = button else { return }
+            playingButton.removePulseAnimation()
+            playingButton.isHidden = true
+        }
+    }
+    
+    func animatePlayingButton() {
+        guard let playingButton = view.viewWithTag(tagOfPlayingButton), playingButton.isHidden == false else { return }
+        playingButton.removePulseAnimation()
+        playingButton.addPulseAnimation()
+    }
+    
+    private func setupConstraintsOnBottomRight(on subview: UIView, to item: UIView,
+                                               constraints: (right: CGFloat, bottom: CGFloat),
+                                               size: (width: CGFloat, height: CGFloat)) {
+        let right = NSLayoutConstraint(item: subview, attribute: .right, relatedBy: .equal, toItem: item,
+                                       attribute: .right, multiplier: 1, constant: constraints.right)
+        let bottom = NSLayoutConstraint(item: subview, attribute: .bottom, relatedBy: .equal, toItem: item,
+                                        attribute: .bottom, multiplier: 1, constant: constraints.bottom)
+        let width = NSLayoutConstraint(item: subview, attribute: .width, relatedBy: .equal, toItem: nil,
+                                       attribute: .notAnAttribute, multiplier: 1, constant: size.width)
+        let height = NSLayoutConstraint(item: subview, attribute: .height, relatedBy: .equal, toItem: nil,
+                                        attribute: .notAnAttribute, multiplier: 1, constant: size.height)
         view.addConstraints([right, bottom, width, height])
     }
     

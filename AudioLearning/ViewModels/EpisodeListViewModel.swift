@@ -57,12 +57,7 @@ class EpisodeListViewModel: BaseViewModel {
             .flatMapLatest({ (episodeRealmModels) -> Observable<[EpisodeModel]> in
                 var episodeModels = [EpisodeModel]()
                 for episodeRealmModel in episodeRealmModels {
-                    let episodeModel = EpisodeModel(episode: episodeRealmModel.episode,
-                                                    title: episodeRealmModel.title,
-                                                    desc: episodeRealmModel.desc,
-                                                    date: episodeRealmModel.date,
-                                                    imagePath: episodeRealmModel.imagePath,
-                                                    path: episodeRealmModel.path)
+                    let episodeModel = EpisodeModel(from: episodeRealmModel)
                     episodeModels.append(episodeModel)
                 }
                 return .just(episodeModels)

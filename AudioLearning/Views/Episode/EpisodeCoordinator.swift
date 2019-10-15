@@ -13,6 +13,8 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
     
     private let window: UIWindow
     private var navigationController: UINavigationController!
+    private var episodeDetailViewController: EpisodeDetailViewController?
+    private var musicPlayerVC: MusicPlayerViewController?
     
     required init(window: UIWindow) {
         self.window = window
@@ -44,6 +46,14 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
         
+        // after pressing playingButton, display the episode detail which is playing audio
+        viewModel.showEpisodeDetailFromPlaying
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.showEpisodeDetailFromPlaying()
+            })
+            .disposed(by: disposeBag)
+        
         // ViewController
         let viewController = EpisodeListViewController.initialize(from: "Episode", storyboardID: "EpisodeList")
         viewController.viewModel = viewModel
@@ -65,7 +75,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
                                                episodeModel: episodeModel)
         
         // Music and Vocabulary Detail
-        let musicPlayerVC = newMusicPlayerVC()
+        let musicPlayerVC = newOrGetMusicPlayerVC()
         let vocabularyDetailVC = newVocabularyDetailVC(episodeDetailViewModel: viewModel)
         
         viewModel.audioLink
@@ -120,15 +130,24 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             })
             .disposed(by: disposeBag)
         
+        episodeDetailViewController = viewController
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    private func newMusicPlayerVC() -> MusicPlayerViewController {
+    private func newOrGetMusicPlayerVC() -> MusicPlayerViewController {
+        if let musicPlayerVC = musicPlayerVC {
+            musicPlayerVC.viewModel.reset.onNext(())
+            musicPlayerVC.view.removeFromSuperview()
+            musicPlayerVC.removeFromParent()
+            return musicPlayerVC
+        }
+        
         let player = HCAudioPlayer()
         let musicPlayerViewModel = MusicPlayerViewModel(player: player)
         let viewController = MusicPlayerViewController.initialize(from: "MusicPlayer",
                                                                   storyboardID: "MusicPlayerViewController")
         viewController.viewModel = musicPlayerViewModel
+        musicPlayerVC = viewController
         return viewController
     }
     
@@ -152,5 +171,10 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
     private func showVocabulary(episode: String?) {
         let vocabularyCoordinator = VocabularyCoordinator(navigationController: navigationController, episode: episode)
         _ = coordinate(to: vocabularyCoordinator)
+    }
+    
+    private func showEpisodeDetailFromPlaying() {
+        guard let viewController = episodeDetailViewController else { return }
+        navigationController.pushViewController(viewController, animated: true)
     }
 }

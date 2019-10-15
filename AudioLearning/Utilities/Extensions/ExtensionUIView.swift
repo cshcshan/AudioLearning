@@ -24,4 +24,22 @@ extension UIView {
     func removeWiggleAnimation() {
         layer.removeAnimation(forKey: "wiggle")
     }
+    
+    func addPulseAnimation() {
+        guard layer.animation(forKey: "pulse") == nil else { return }
+        let pulseAnimation = CASpringAnimation(keyPath: "transform.scale")
+        pulseAnimation.mass = 10 // 值越大，動畫時間越長
+        pulseAnimation.stiffness = 50 // 彈簧鋼度係數 0~100
+        pulseAnimation.damping = 10.0 // 反彈次數
+        pulseAnimation.initialVelocity = 0.5 // 初始速度
+        pulseAnimation.autoreverses = true
+        pulseAnimation.repeatDuration = Double.infinity
+        pulseAnimation.fromValue = 0.8
+        pulseAnimation.toValue = 1.5
+        layer.add(pulseAnimation, forKey: "pulse")
+    }
+    
+    func removePulseAnimation() {
+        layer.removeAnimation(forKey: "pulse")
+    }
 }

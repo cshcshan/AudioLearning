@@ -55,6 +55,8 @@
 		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
 		33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* ExtensionDate.swift */; };
 		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
+		33A208342355C332008CBFB3 /* ExtensionUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208332355C332008CBFB3 /* ExtensionUIButton.swift */; };
+		33A208362355C81D008CBFB3 /* BaseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */; };
 		33B1AF2323471A54007B7E8E /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2223471A54007B7E8E /* Page.swift */; };
 		33B1AF2523471D93007B7E8E /* EpisodeListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */; };
 		33B1AF2723471FF2007B7E8E /* EpisodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */; };
@@ -170,6 +172,9 @@
 		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
 		33892AA8231F6AA500340C17 /* ExtensionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDate.swift; sourceTree = "<group>"; };
 		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
+		33A208322355B727008CBFB3 /* Animations.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Animations.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		33A208332355C332008CBFB3 /* ExtensionUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIButton.swift; sourceTree = "<group>"; };
+		33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModelTests.swift; sourceTree = "<group>"; };
 		33B1AF2223471A54007B7E8E /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListPage.swift; sourceTree = "<group>"; };
 		33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeUITests.swift; sourceTree = "<group>"; };
@@ -316,6 +321,7 @@
 				332C155C23174CF9003C78EA /* Info.plist */,
 				33E3781D231CB24400C6671B /* Rx.playground */,
 				33892AA5231E935400340C17 /* ClosureDemo.playground */,
+				33A208322355B727008CBFB3 /* Animations.playground */,
 			);
 			path = AudioLearning;
 			sourceTree = "<group>";
@@ -389,6 +395,7 @@
 				33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */,
 				33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */,
 				332C15942317A7C1003C78EA /* ExtensionString.swift */,
+				33A208332355C332008CBFB3 /* ExtensionUIButton.swift */,
 				33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */,
 				33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */,
 				3371E42E234F570B00B905B3 /* ExtensionUIView.swift */,
@@ -438,6 +445,7 @@
 		33892A99231E0BAB00340C17 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */,
 				33E37820231CB61300C6671B /* EpisodeListViewModelTests.swift */,
 				33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */,
 				3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */,
@@ -881,6 +889,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				334644B7232F6AC80040407E /* HCAudioPlayer.swift in Sources */,
+				33A208342355C332008CBFB3 /* ExtensionUIButton.swift in Sources */,
 				33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */,
 				3371E42F234F570B00B905B3 /* ExtensionUIView.swift in Sources */,
 				33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */,
@@ -942,6 +951,7 @@
 				33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */,
 				3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */,
 				33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */,
+				33A208362355C81D008CBFB3 /* BaseViewModelTests.swift in Sources */,
 				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
 				33DB075D2329D0150030EBBA /* MusicPlayerViewModelTests.swift in Sources */,
 				330657552338CF6000381CC6 /* VocabularyDetailViewModelTests.swift in Sources */,

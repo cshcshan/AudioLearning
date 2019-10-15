@@ -22,6 +22,7 @@ class MusicPlayerViewModel {
     private(set) var changeAudioPosition: AnyObserver<Float>!
     private(set) var changeSpeedSegmentedControlAlpha: AnyObserver<CGFloat>!
     private(set) var changeSliderAlpha: AnyObserver<CGFloat>!
+    private(set) var reset: AnyObserver<Void>!
     
     // Outputs
     private(set) var readyToPlay: Driver<Void>!
@@ -56,7 +57,9 @@ class MusicPlayerViewModel {
             .merge()
             .scan(false, accumulator: { [weak self] (aggregateValue, newValue) -> Bool in
                 guard let `self` = self else { return false }
-                return self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
+                let playing = self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
+                NotificationCenter.default.post(name: .isPlaying, object: nil, userInfo: ["isPlaying": playing])
+                return playing
             })
             .startWith(false)
             .asDriver(onErrorJustReturn: false)
@@ -108,6 +111,15 @@ class MusicPlayerViewModel {
         let changeSliderAlphaSubject = PublishSubject<CGFloat>()
         changeSliderAlpha = changeSliderAlphaSubject.asObserver()
         sliderAlpha = changeSliderAlphaSubject.asDriver(onErrorJustReturn: 1)
+        
+        let resetSubject = PublishSubject<Void>()
+        reset = resetSubject.asObserver()
+        resetSubject
+            .subscribe(onNext: { [weak self] (_) in
+                guard let `self` = self else { return }
+                self.player.pause.onNext(())
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setupOutputs() {
@@ -149,12 +161,14 @@ class MusicPlayerViewModel {
     
     private func updateIsPlayingStatus(aggregateValue: Bool, newValue: AnyObject) -> Bool {
         if let status = newValue as? HCAudioPlayer.Status {
+            // player.status
             if status == .finish {
                 return false
             } else {
                 return aggregateValue
             }
         } else if let url = newValue as? URL {
+            // settingNewAudioSubject
             guard self.url != url else {
                 // if self.url == url, then isPlaying will not be affected
                 return aggregateValue

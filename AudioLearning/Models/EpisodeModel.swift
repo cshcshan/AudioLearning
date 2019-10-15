@@ -24,6 +24,15 @@ struct EpisodeModel {
         self.imagePath = imagePath
         self.path = path
     }
+    
+    init(from episodeRealmModel: EpisodeRealmModel?) {
+        self.episode = episodeRealmModel?.episode
+        self.title = episodeRealmModel?.title
+        self.desc = episodeRealmModel?.desc
+        self.date = episodeRealmModel?.date
+        self.imagePath = episodeRealmModel?.imagePath
+        self.path = episodeRealmModel?.path
+    }
 }
 
 extension EpisodeModel: Equatable {}

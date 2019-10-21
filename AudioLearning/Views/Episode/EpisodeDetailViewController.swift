@@ -66,6 +66,7 @@ class EpisodeDetailViewController: BaseViewController {
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = false
         setupNavigationBar()
+        addTapToMaskView()
         // playerView
         setupPlayerViewShadow()
         musicPlayerView.frame = playerView.bounds
@@ -190,6 +191,20 @@ class EpisodeDetailViewController: BaseViewController {
     
     private func getNormalImage() -> UIImage? {
         return Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
+    }
+}
+
+// MARK: - Tap Mask View
+
+extension EpisodeDetailViewController {
+    
+    private func addTapToMaskView() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapView))
+        maskView.addGestureRecognizer(tap)
+    }
+    
+    @objc func handleTapView(_ recognizer: UITapGestureRecognizer) {
+        viewModel.hideVocabularyDetailView.onNext(true)
     }
 }
 

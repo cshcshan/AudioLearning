@@ -106,8 +106,6 @@ extension BaseViewController: UINavigationControllerDelegate {
     }
 }
 
-// MARK: - Pan View
-
 extension BaseViewController {
 
     func showThemeButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U) {

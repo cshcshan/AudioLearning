@@ -56,6 +56,7 @@ class VocabularyListViewController: BaseViewController {
         tableView.estimatedRowHeight = 60
         tableView.separatorStyle = .none
         showEmptyView(tableView)
+        addTapToMaskView()
         // vocabularyDetailView
         vocabularyDetailContainerView.backgroundColor = .clear
         vocabularyDetailView.frame = vocabularyDetailContainerView.bounds
@@ -163,5 +164,19 @@ class VocabularyListViewController: BaseViewController {
 //            .disposed(by: disposeBag)
         
         viewModel.reload.onNext(())
+    }
+}
+
+// MARK: - Tap Mask View
+
+extension VocabularyListViewController {
+    
+    private func addTapToMaskView() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapView))
+        maskView.addGestureRecognizer(tap)
+    }
+    
+    @objc func handleTapView(_ recognizer: UITapGestureRecognizer) {
+        viewModel.hideVocabularyDetailView.onNext(true)
     }
 }

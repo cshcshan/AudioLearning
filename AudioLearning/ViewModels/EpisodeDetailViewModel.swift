@@ -23,6 +23,7 @@ class EpisodeDetailViewModel: BaseViewModel {
     
     // Output
     private(set) var title: String = ""
+    private(set) var image = BehaviorSubject<UIImage?>(value: nil)
     private(set) var scriptHtml = BehaviorSubject<String>(value: "")
     private(set) var audioLink: Observable<String>!
     private(set) var alert: Observable<AlertModel>!
@@ -45,6 +46,15 @@ class EpisodeDetailViewModel: BaseViewModel {
         self.realmService = realmService
         self.episodeModel = episodeModel
         super.init()
+        
+        if let imagePath = episodeModel.imagePath {
+            apiService.getImage(path: imagePath) { [weak self] (image) in
+                guard let `self` = self else { return }
+                self.image.onNext(image)
+            }
+        } else {
+            image.onNext(nil)
+        }
         
         load = loadSubject.asObserver()
         tapVocabulary = tapVocabularySubject.asObserver()

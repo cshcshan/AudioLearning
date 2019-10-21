@@ -103,10 +103,18 @@ class EpisodeListViewController: BaseViewController {
                 self.refreshControl.endRefreshing()
             })
             .bind(to: tableView.rx.items(cellIdentifier: "EpisodeCell", cellType: EpisodeCell.self),
-                  curriedArgument: { (row, model, cell) in
+                  curriedArgument: { [weak self] (row, model, cell) in
+                    guard let `self` = self else { return }
                     cell.accessibilityIdentifier = "EpisodeCell_\(row)"
                     cell.selectionStyle = .none
-                    cell.episodeModel = model
+                    self.viewModel.returnCellViewModel
+                        .take(1)
+                        .subscribe(onNext: { (episodeCellViewModel) in
+                            cell.viewModel = episodeCellViewModel
+                            cell.viewModel?.load.onNext(model)
+                        })
+                        .disposed(by: self.disposeBag)
+                    self.viewModel.getCellViewModel.onNext(row)
             })
             .disposed(by: disposeBag)
         

@@ -16,6 +16,7 @@ class EpisodeListViewModel: BaseViewModel {
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectEpisode: AnyObserver<EpisodeModel>!
+    private(set) var getCellViewModel: AnyObserver<Int>!
     private(set) var tapVocabulary: AnyObserver<Void>!
     
     // Output
@@ -23,17 +24,20 @@ class EpisodeListViewModel: BaseViewModel {
     private(set) var alert: Observable<AlertModel>!
     private(set) var refreshing: Observable<Bool>!
     private(set) var showEpisodeDetail: Observable<EpisodeModel>!
+    private(set) var returnCellViewModel: Observable<EpisodeCellViewModel>!
     private(set) var showVocabulary: Observable<Void>!
     
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
+    private let getCellViewModelSubject = PublishSubject<Int>()
     private let tapVocabularySubject = PublishSubject<Void>()
     private let alertSubject = PublishSubject<AlertModel>()
     private let refreshingSubject = PublishSubject<Bool>()
     
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeRealmModel>!
+    private var cellViewModels: [EpisodeCellViewModel?]!
     
     init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeRealmModel>) {
         self.apiService = apiService
@@ -44,6 +48,7 @@ class EpisodeListViewModel: BaseViewModel {
         reload = reloadSubject.asObserver()
         selectEpisode = selectEpisodeSubject.asObserver()
         showEpisodeDetail = selectEpisodeSubject.asObservable()
+        getCellViewModel = getCellViewModelSubject.asObserver()
         tapVocabulary = tapVocabularySubject.asObserver()
         showVocabulary = tapVocabularySubject.asObservable()
         alert = alertSubject.asObservable()
@@ -54,12 +59,14 @@ class EpisodeListViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         episodes = realmService.allObjects
-            .flatMapLatest({ (episodeRealmModels) -> Observable<[EpisodeModel]> in
+            .flatMapLatest({ [weak self] (episodeRealmModels) -> Observable<[EpisodeModel]> in
+                guard let `self` = self else { return .empty() }
                 var episodeModels = [EpisodeModel]()
                 for episodeRealmModel in episodeRealmModels {
                     let episodeModel = EpisodeModel(from: episodeRealmModel)
                     episodeModels.append(episodeModel)
                 }
+                self.cellViewModels = [EpisodeCellViewModel?](repeating: nil, count: episodeModels.count)
                 return .just(episodeModels)
             })
         
@@ -77,6 +84,17 @@ class EpisodeListViewModel: BaseViewModel {
                 apiService.loadEpisodes.onNext(())
             })
             .disposed(by: disposeBag)
+        
+        returnCellViewModel = getCellViewModelSubject
+            .flatMapLatest({ [weak self] (index) -> Observable<EpisodeCellViewModel> in
+                guard let `self` = self else { return .empty() }
+                var cellViewModel = self.cellViewModels[index]
+                if cellViewModel == nil {
+                    cellViewModel = EpisodeCellViewModel(apiService: apiService)
+                }
+                self.cellViewModels[index] = cellViewModel
+                return .just(cellViewModel!)
+            })
     }
     
     private func reloadDataFromServer() -> Observable<Void> {

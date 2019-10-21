@@ -62,6 +62,8 @@
 		33B1AF2723471FF2007B7E8E /* EpisodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */; };
 		33B1AF29234720C6007B7E8E /* EpisodeDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF28234720C6007B7E8E /* EpisodeDetailPage.swift */; };
 		33B1AF2B23472503007B7E8E /* MusicPlayerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */; };
+		33D30032235D4FCF000A318F /* EpisodeCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D30031235D4FCF000A318F /* EpisodeCellViewModel.swift */; };
+		33D30036235D56E4000A318F /* EpisodeCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D30035235D56E4000A318F /* EpisodeCellViewModelTests.swift */; };
 		33D406492347487600B1AE57 /* VocabularyListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406482347487600B1AE57 /* VocabularyListPage.swift */; };
 		33D4064B234748BE00B1AE57 /* VocabularyDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */; };
 		33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */; };
@@ -180,6 +182,8 @@
 		33B1AF2623471FF2007B7E8E /* EpisodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeUITests.swift; sourceTree = "<group>"; };
 		33B1AF28234720C6007B7E8E /* EpisodeDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailPage.swift; sourceTree = "<group>"; };
 		33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerPage.swift; sourceTree = "<group>"; };
+		33D30031235D4FCF000A318F /* EpisodeCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCellViewModel.swift; sourceTree = "<group>"; };
+		33D30035235D56E4000A318F /* EpisodeCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCellViewModelTests.swift; sourceTree = "<group>"; };
 		33D406482347487600B1AE57 /* VocabularyListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListPage.swift; sourceTree = "<group>"; };
 		33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyDetailPage.swift; sourceTree = "<group>"; };
 		33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionNotification.swift; sourceTree = "<group>"; };
@@ -415,6 +419,7 @@
 			isa = PBXGroup;
 			children = (
 				33E3781E231CB5EE00C6671B /* EpisodeListViewModel.swift */,
+				33D30031235D4FCF000A318F /* EpisodeCellViewModel.swift */,
 				33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */,
 				3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */,
 				330657522338CC1E00381CC6 /* VocabularyDetailViewModel.swift */,
@@ -447,6 +452,7 @@
 			children = (
 				33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */,
 				33E37820231CB61300C6671B /* EpisodeListViewModelTests.swift */,
+				33D30035235D56E4000A318F /* EpisodeCellViewModelTests.swift */,
 				33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */,
 				3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */,
 				330657542338CF6000381CC6 /* VocabularyDetailViewModelTests.swift */,
@@ -912,6 +918,7 @@
 				33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */,
 				3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */,
 				33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */,
+				33D30032235D4FCF000A318F /* EpisodeCellViewModel.swift in Sources */,
 				33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */,
 				3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */,
 				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
@@ -961,6 +968,7 @@
 				332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */,
 				334644C32330E4F90040407E /* MockHCAudioPlayer.swift in Sources */,
 				33E37827231D01AC00C6671B /* AlertModelTests.swift in Sources */,
+				33D30036235D56E4000A318F /* EpisodeCellViewModelTests.swift in Sources */,
 				3348C7662338C20A00CAC170 /* VocabularyListViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

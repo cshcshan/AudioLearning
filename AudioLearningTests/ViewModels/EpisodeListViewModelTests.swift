@@ -151,6 +151,35 @@ class EpisodeListViewModelTests: XCTestCase {
         XCTAssertEqual(showVocabulary.events.count, 2)
     }
     
+    func testGetCellViewModel() {
+        let bundle = Bundle(for: type(of: self))
+        let urlString = bundle.path(forResource: "6-minute-english", ofType: "html")!
+        let url = URL(fileURLWithPath: urlString)
+        let html = try! String(contentsOf: url)
+        let episodesModels = ParseSixMinutesHelper().parseHtmlToEpisodeModels(by: html, urlString: urlString)
+        apiService.episodesReturnValue = .just(episodesModels)
+        
+        sut.episodes
+            .subscribe()
+            .disposed(by: disposeBag)
+        scheduler
+            .createColdObservable([.next(10, ())])
+            .bind(to: sut.reload)
+            .disposed(by: disposeBag)
+        
+        let returnCellViewModel = scheduler.createObserver(EpisodeCellViewModel.self)
+        sut.returnCellViewModel
+            .bind(to: returnCellViewModel)
+            .disposed(by: disposeBag)
+        scheduler
+            .createColdObservable([.next(200, 1),
+                                   .next(300, 2)])
+            .bind(to: sut.getCellViewModel)
+            .disposed(by: disposeBag)
+        scheduler.start()
+        XCTAssertEqual(returnCellViewModel.events.count, 2)
+    }
+    
     func testInit_WithError() {
         let error = NSError(domain: "unit test", code: 2, userInfo: nil)
         let expectingModel = AlertModel(title: "Get Episode List Error",

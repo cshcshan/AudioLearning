@@ -13,6 +13,7 @@ import RxCocoa
 class EpisodeDetailViewController: BaseViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var htmlTextView: UITextView!
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var playerViewHeight: NSLayoutConstraint!
@@ -20,6 +21,9 @@ class EpisodeDetailViewController: BaseViewController {
     @IBOutlet weak var vocabularyDetailContainerView: UIView!
     private let refreshControl = UIRefreshControl()
     private var item: UIMenuItem!
+    
+    private let darkBgTempImage = UIImage(named: "temp_pic-white")
+    private let lightBgTempImage = UIImage(named: "temp_pic")
     
     var viewModel: EpisodeDetailViewModel!
     var musicPlayerView: UIView!
@@ -46,6 +50,9 @@ class EpisodeDetailViewController: BaseViewController {
         htmlTextView.backgroundColor = Appearance.backgroundColor
         maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
         refreshControl.tintColor = Appearance.textColor
+        if photoImageView.image == darkBgTempImage || photoImageView.image == lightBgTempImage {
+            photoImageView.image = getNormalImage()
+        }
     }
     
     private func setupUI() {
@@ -61,13 +68,13 @@ class EpisodeDetailViewController: BaseViewController {
         // refreshControl
         if !isUITesting {
             refreshControl.tintColor = Appearance.textColor
-            scrollView.isScrollEnabled = false
+            scrollView.isScrollEnabled = true
             scrollView.addSubview(refreshControl)
             scrollView.contentOffset = CGPoint(x: 0, y: -refreshControl.frame.height) // for changing refreshControl's tintColor
         }
         // htmlTextView
         htmlTextView.isEditable = false
-        htmlTextView.isScrollEnabled = true
+        htmlTextView.isScrollEnabled = false
         // vocabularyDetailView
         vocabularyDetailContainerView.backgroundColor = .clear
         vocabularyDetailContainerView.frame = vocabularyDetailView.bounds
@@ -101,6 +108,18 @@ class EpisodeDetailViewController: BaseViewController {
         }
         
         navigationItem.title = viewModel.title
+        
+        viewModel.image
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (image) in
+                guard let `self` = self else { return }
+                if image == nil {
+                    self.photoImageView.image = self.getNormalImage()
+                } else {
+                    self.photoImageView.image = image
+                }
+            })
+            .disposed(by: disposeBag)
         
         viewModel.scriptHtml
             .observeOn(MainScheduler.instance)
@@ -159,6 +178,10 @@ class EpisodeDetailViewController: BaseViewController {
         
         playerViewHeight.constant == minPlayerViewHeight ?
             viewModel.shrinkMusicPlayer.onNext(()) : viewModel.enlargeMusicPlayer.onNext(())
+    }
+    
+    private func getNormalImage() -> UIImage? {
+        return Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
     }
 }
 

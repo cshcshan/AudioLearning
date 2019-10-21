@@ -12,10 +12,8 @@ import RxSwift
 
 class MockAPIService: APIServiceProtocol {
     
-    private(set) var loadImage: AnyObserver<String>!
     private(set) var loadEpisodes: AnyObserver<Void>!
     private(set) var loadEpisodeDetail: AnyObserver<EpisodeModel>!
-    private(set) var image: Observable<UIImage?>!
     private(set) var episodes: Observable<[EpisodeRealmModel]>!
     private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
     
@@ -24,18 +22,11 @@ class MockAPIService: APIServiceProtocol {
     private(set) var episodeDetailPath: String?
     
     init() {
-        let loadImageSubject = PublishSubject<String>()
-        loadImage = loadImageSubject.asObserver()
-        
         let loadEpisodesSubject = PublishSubject<Void>()
         loadEpisodes = loadEpisodesSubject.asObserver()
         
         let loadEpisodeDetailSubject = PublishSubject<EpisodeModel>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
-        
-        image = loadImageSubject.flatMapLatest({ (_) -> Observable<UIImage?> in
-            return .just(nil)
-        })
         
         episodes = loadEpisodesSubject
             .flatMapLatest({ [weak self] (_) -> Observable<[EpisodeRealmModel]> in
@@ -50,5 +41,9 @@ class MockAPIService: APIServiceProtocol {
                 self.episodeDetailPath = episode
                 return self.episodeDetailReturnValue
             })
+    }
+    
+    func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void) {
+        completionHandler(nil)
     }
 }

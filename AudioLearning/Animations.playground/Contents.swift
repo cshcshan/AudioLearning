@@ -21,7 +21,7 @@ extension UIView {
     }
 }
 
-class MyViewController : UIViewController {
+class MyViewController: UIViewController {
     override func loadView() {
         let view = UIView()
         view.backgroundColor = .black

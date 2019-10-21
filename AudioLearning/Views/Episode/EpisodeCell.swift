@@ -15,6 +15,7 @@ class EpisodeCell: BaseTableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var descLabel: UILabel!
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     @IBOutlet var photoImageView: UIImageView! // remove weak mark because instance will be immediately deallocated because property is 'weak'
     // remove weak mark because instance will be immediately deallocated because property is 'weak'
     @IBOutlet var photoImageViewLeft: NSLayoutConstraint!
@@ -30,15 +31,15 @@ class EpisodeCell: BaseTableViewCell {
     private let selectedSubject = PublishSubject<Bool>()
     private let disposeBag = DisposeBag()
     
-    var episodeModel: EpisodeModel? {
+    var viewModel: EpisodeCellViewModel? {
         didSet {
-            bindUI()
+            setupBindings()
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupBindings()
+        setupColorBindings()
     }
     
     override func layoutSubviews() {
@@ -56,7 +57,6 @@ class EpisodeCell: BaseTableViewCell {
     override func setupUIColor() {
         super.setupUIColor()
         highlightedSubject.onNext(false)
-        
     }
     
     override func setupUI() {
@@ -65,7 +65,7 @@ class EpisodeCell: BaseTableViewCell {
         containerView.layer.masksToBounds = true
     }
     
-    private func setupBindings() {
+    private func setupColorBindings() {
         Observable.of(highlightedSubject, selectedSubject)
             .merge()
             .subscribe(onNext: { [weak self] (isHighlighted) in
@@ -78,18 +78,56 @@ class EpisodeCell: BaseTableViewCell {
                 self.dateLabel.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
                 self.descLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
                 self.descLabel.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
-                self.photoImageView.image = isHighlighted ?
-                    (Appearance.mode == .dark ? self.lightBgTempImage : self.darkBgTempImage) :
-                    (Appearance.mode == .dark ? self.darkBgTempImage : self.lightBgTempImage)
+                if self.photoImageView.image == self.darkBgTempImage || self.photoImageView.image == self.lightBgTempImage {
+                    self.photoImageView.image = isHighlighted ? self.getHighlightedImage() : self.getNormalImage()
+                }
+                self.indicatorView.style = Appearance.mode == .dark ? .white : .gray
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindUI() {
-        titleLabel?.text = episodeModel?.title
-        dateLabel?.text = episodeModel?.date?.toString(dateFormat: "yyyy/M/d")
-        descLabel?.text = episodeModel?.desc
-        hidePhotoImageView(titleLabel.text!.count % 2 == 0)
+    private func setupBindings() {
+        viewModel?.title
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        viewModel?.date
+            .bind(to: dateLabel.rx.text)
+            .disposed(by: disposeBag)
+        viewModel?.desc
+            .bind(to: descLabel.rx.text)
+            .disposed(by: disposeBag)
+        viewModel?.image
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (image) in
+                guard let `self` = self else { return }
+                if image == nil {
+                    self.photoImageView.image = self.getNormalImage()
+                } else {
+                    self.photoImageView.image = image
+                }
+            })
+            .disposed(by: disposeBag)
+        viewModel?.imageRefreshing
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (isRefreshing) in
+                guard let `self` = self else { return }
+                if isRefreshing {
+                    self.indicatorView.isHidden = false
+                    self.indicatorView.startAnimating()
+                } else {
+                    self.indicatorView.stopAnimating()
+                    self.indicatorView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func getNormalImage() -> UIImage? {
+        return Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
+    }
+    
+    private func getHighlightedImage() -> UIImage? {
+        return Appearance.mode == .dark ? lightBgTempImage : darkBgTempImage
     }
     
     private func hidePhotoImageView(_ isHidden: Bool) {

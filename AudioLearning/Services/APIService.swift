@@ -12,14 +12,14 @@ import RxCocoa
 
 protocol APIServiceProtocol {
     // Inputs
-    var loadImage: AnyObserver<String>! { get }
     var loadEpisodes: AnyObserver<Void>! { get }
     var loadEpisodeDetail: AnyObserver<EpisodeModel>! { get }
     
     // Outputs
-    var image: Observable<UIImage?>! { get }
     var episodes: Observable<[EpisodeRealmModel]>! { get }
     var episodeDetail: Observable<EpisodeDetailRealmModel?>! { get }
+    
+    func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void)
 }
 
 class APIService: APIServiceProtocol {
@@ -33,17 +33,17 @@ class APIService: APIServiceProtocol {
     }
     
     // Inputs
-    private(set) var loadImage: AnyObserver<String>!
     private(set) var loadEpisodes: AnyObserver<Void>!
     private(set) var loadEpisodeDetail: AnyObserver<EpisodeModel>!
     
     // Outputs
-    private(set) var image: Observable<UIImage?>!
     private(set) var episodes: Observable<[EpisodeRealmModel]>!
     private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
     
     private var urlSession: URLSession
     private var parseSMHelper: ParseSixMinutesHelper
+    
+    private let disposeBag = DisposeBag()
     
     init(urlSession: URLSession = URLSession.shared, parseSMHelper: ParseSixMinutesHelper) {
         let configuration = urlSession.configuration
@@ -55,31 +55,11 @@ class APIService: APIServiceProtocol {
     }
     
     private func setupBindings() {
-        let loadImageSubject = PublishSubject<String>()
-        loadImage = loadImageSubject.asObserver()
-        
         let loadEpisodesSubject = PublishSubject<Void>()
         loadEpisodes = loadEpisodesSubject.asObserver()
         
         let loadEpisodeDetailSubject = PublishSubject<EpisodeModel>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
-        
-        self.image = loadImageSubject
-            .flatMap({ [weak self] (path) -> Observable<UIImage?> in
-                guard let `self` = self else { return .empty() }
-                guard let url = URL(string: path) else {
-                    return .error(Errors.urlIsNull)
-                }
-                let request = URLRequest(url: url)
-                return self.urlSession.rx
-                    .response(request: request)
-                    .map({ (response: HTTPURLResponse, data: Data) -> UIImage? in
-                        guard 200..<300 ~= response.statusCode else {
-                            throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
-                        }
-                        return UIImage(data: data)
-                    })
-            })
         
         self.episodes = loadEpisodesSubject
             .flatMapLatest({ [weak self] (_) -> Observable<[EpisodeRealmModel]> in
@@ -129,5 +109,19 @@ class APIService: APIServiceProtocol {
                         return episodeDetailModel
                     })
             })
+    }
+    
+    func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: path) else { return completionHandler(nil) }
+        let request = URLRequest(url: url)
+        self.urlSession.rx
+            .response(request: request)
+            .subscribe(onNext: { (response, data) in
+                guard 200..<300 ~= response.statusCode else {
+                    return completionHandler(nil)
+                }
+                completionHandler(UIImage(data: data))
+            })
+            .disposed(by: disposeBag)
     }
 }

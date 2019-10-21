@@ -241,6 +241,7 @@
                         <viewLayoutGuide key="safeArea" id="NRA-aO-tp4"/>
                     </view>
                     <connections>
+                        <outlet property="contentView" destination="u6a-0M-uHl" id="64x-Z4-BRL"/>
                         <outlet property="htmlTextView" destination="CZR-nE-psP" id="0BO-1V-Fc9"/>
                         <outlet property="maskView" destination="V14-0A-Nc3" id="vgD-O8-Vnm"/>
                         <outlet property="photoImageView" destination="Qe7-EU-hfA" id="q8l-wS-HWo"/>

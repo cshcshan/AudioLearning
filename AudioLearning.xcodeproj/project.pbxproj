@@ -64,6 +64,7 @@
 		33B1AF2B23472503007B7E8E /* MusicPlayerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */; };
 		33D30032235D4FCF000A318F /* EpisodeCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D30031235D4FCF000A318F /* EpisodeCellViewModel.swift */; };
 		33D30036235D56E4000A318F /* EpisodeCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D30035235D56E4000A318F /* EpisodeCellViewModelTests.swift */; };
+		33D30038235D83FF000A318F /* EpisodeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D30037235D83FF000A318F /* EpisodeAnimator.swift */; };
 		33D406492347487600B1AE57 /* VocabularyListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406482347487600B1AE57 /* VocabularyListPage.swift */; };
 		33D4064B234748BE00B1AE57 /* VocabularyDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */; };
 		33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */; };
@@ -184,6 +185,7 @@
 		33B1AF2A23472503007B7E8E /* MusicPlayerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerPage.swift; sourceTree = "<group>"; };
 		33D30031235D4FCF000A318F /* EpisodeCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCellViewModel.swift; sourceTree = "<group>"; };
 		33D30035235D56E4000A318F /* EpisodeCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCellViewModelTests.swift; sourceTree = "<group>"; };
+		33D30037235D83FF000A318F /* EpisodeAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeAnimator.swift; sourceTree = "<group>"; };
 		33D406482347487600B1AE57 /* VocabularyListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListPage.swift; sourceTree = "<group>"; };
 		33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyDetailPage.swift; sourceTree = "<group>"; };
 		33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionNotification.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				33892A9F231E323000340C17 /* EpisodeListViewController.swift */,
 				33892AA6231F65D800340C17 /* EpisodeCell.swift */,
 				33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */,
+				33D30037235D83FF000A318F /* EpisodeAnimator.swift */,
 			);
 			path = Episode;
 			sourceTree = "<group>";
@@ -914,6 +917,7 @@
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,
 				330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */,
 				33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */,
+				33D30038235D83FF000A318F /* EpisodeAnimator.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
 				33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */,
 				3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */,

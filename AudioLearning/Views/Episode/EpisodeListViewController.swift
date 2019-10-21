@@ -16,6 +16,9 @@ class EpisodeListViewController: BaseViewController {
     private let refreshControl = UIRefreshControl()
     
     var viewModel: EpisodeListViewModel!
+    var selectedCell: EpisodeCell?
+    
+    private let animator = EpisodePushAnimator()
     
     private var showEmptyView: ((UITableView) -> Void) = { tableView in
         tableView.showEmptyView(Appearance.backgroundColor,
@@ -28,12 +31,14 @@ class EpisodeListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.delegate = self
         setupUI()
         setupBindings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.delegate = self
         animatePlayingButton()
     }
         
@@ -142,12 +147,31 @@ class EpisodeListViewController: BaseViewController {
                 .disposed(by: disposeBag)
         }
         
+        viewModel.getSelectEpisodeCell
+            .subscribe(onNext: { [weak self] (indexPath) in
+                guard let `self` = self else { return }
+                self.selectedCell = self.tableView.cellForRow(at: indexPath) as? EpisodeCell
+            })
+            .disposed(by: disposeBag)
+        
         tableView.rx
             .modelSelected(EpisodeModel.self)
             .bind(to: viewModel.selectEpisode)
             .disposed(by: disposeBag)
         
+        tableView.rx
+            .itemSelected
+            .bind(to: viewModel.selectIndexPath)
+            .disposed(by: disposeBag)
+        
         // ViewController's UI actions to ViewModel
         viewModel.initalLoad.onNext(())
+    }
+}
+
+extension EpisodeListViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return animator
     }
 }

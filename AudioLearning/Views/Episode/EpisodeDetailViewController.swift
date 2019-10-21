@@ -13,6 +13,7 @@ import RxCocoa
 class EpisodeDetailViewController: BaseViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var htmlTextView: UITextView!
     @IBOutlet weak var playerView: UIView!
@@ -31,12 +32,20 @@ class EpisodeDetailViewController: BaseViewController {
     private var beganPlayerViewHeight: CGFloat = .zero
     private let maxPlayerViewHeight: CGFloat = 195.5
     private let minPlayerViewHeight: CGFloat = 76
+    
+    private let animator = EpisodePopAnimator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.delegate = self
         setupUI()
         setupBindings()
         enableMenuItem()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.delegate = self
     }
     
     override func setupUIID() {
@@ -47,6 +56,8 @@ class EpisodeDetailViewController: BaseViewController {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
         scrollView.backgroundColor = Appearance.backgroundColor
+        contentView.backgroundColor = Appearance.backgroundColor
+        photoImageView.backgroundColor = Appearance.backgroundColor
         htmlTextView.backgroundColor = Appearance.backgroundColor
         maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
         refreshControl.tintColor = Appearance.textColor
@@ -238,6 +249,13 @@ extension EpisodeDetailViewController {
             }
         default: break
         }
+    }
+}
+
+extension EpisodeDetailViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return animator
     }
 }
 

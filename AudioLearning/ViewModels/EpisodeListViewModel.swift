@@ -16,6 +16,7 @@ class EpisodeListViewModel: BaseViewModel {
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectEpisode: AnyObserver<EpisodeModel>!
+    private(set) var selectIndexPath: AnyObserver<IndexPath>!
     private(set) var getCellViewModel: AnyObserver<Int>!
     private(set) var tapVocabulary: AnyObserver<Void>!
     
@@ -24,12 +25,14 @@ class EpisodeListViewModel: BaseViewModel {
     private(set) var alert: Observable<AlertModel>!
     private(set) var refreshing: Observable<Bool>!
     private(set) var showEpisodeDetail: Observable<EpisodeModel>!
+    private(set) var getSelectEpisodeCell: Observable<IndexPath>!
     private(set) var returnCellViewModel: Observable<EpisodeCellViewModel>!
     private(set) var showVocabulary: Observable<Void>!
     
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
+    private let selectIndexPathSubject = PublishSubject<IndexPath>()
     private let getCellViewModelSubject = PublishSubject<Int>()
     private let tapVocabularySubject = PublishSubject<Void>()
     private let alertSubject = PublishSubject<AlertModel>()
@@ -47,6 +50,8 @@ class EpisodeListViewModel: BaseViewModel {
         initalLoad = initalLoadSubject.asObserver()
         reload = reloadSubject.asObserver()
         selectEpisode = selectEpisodeSubject.asObserver()
+        selectIndexPath = selectIndexPathSubject.asObserver()
+        getSelectEpisodeCell = selectIndexPathSubject.asObservable()
         showEpisodeDetail = selectEpisodeSubject.asObservable()
         getCellViewModel = getCellViewModelSubject.asObserver()
         tapVocabulary = tapVocabularySubject.asObserver()

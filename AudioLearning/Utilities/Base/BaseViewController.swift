@@ -17,14 +17,26 @@ class BaseViewController: UIViewController, StoryboardGettable {
         return ProcessInfo.processInfo.arguments.contains("-UITesting")
     }
     
+    private var interactionController: UIPercentDrivenInteractiveTransition?
+    
     private let tagOfThemeButton = 201
     private let tagOfPlayingButton = 202
     
+    private var slidePushAnimator: SlidePushAnimator!
+    private var slidePopAnimator: SlidePopAnimator!
+    private var episodePushAnimator: EpisodePushAnimator!
+    private var episodePopAnimator: EpisodePopAnimator!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 11, *) {
+        } else {
+            extendedLayoutIncludesOpaqueBars = true
+        }
         setupNotification()
         setupUIID()
         setupUIColor()
+        addScreenPanToView()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -58,6 +70,45 @@ class BaseViewController: UIViewController, StoryboardGettable {
             themeButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
         }
     }
+}
+
+extension BaseViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if fromVC is EpisodeListViewController && toVC is EpisodeDetailViewController {
+            if episodePushAnimator == nil {
+                episodePushAnimator = EpisodePushAnimator()
+            }
+            return episodePushAnimator
+        } else if fromVC is EpisodeDetailViewController && toVC is EpisodeListViewController {
+            if episodePopAnimator == nil {
+                episodePopAnimator = EpisodePopAnimator()
+            }
+            return episodePopAnimator
+        }
+        switch operation {
+        case .push:
+            if slidePushAnimator == nil {
+               slidePushAnimator = SlidePushAnimator()
+            }
+            return slidePushAnimator
+        case .pop:
+            if slidePopAnimator == nil {
+                slidePopAnimator = SlidePopAnimator()
+            }
+            return slidePopAnimator
+        default: return nil
+        }
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactionController
+    }
+}
+
+// MARK: - Pan View
+
+extension BaseViewController {
 
     func showThemeButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U) {
         guard view.viewWithTag(tagOfThemeButton) == nil else { return }
@@ -79,33 +130,39 @@ class BaseViewController: UIViewController, StoryboardGettable {
     }
     
     func showPlayingButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U, isShow: Bool) {
-        let button = view.viewWithTag(tagOfPlayingButton)
-        if isShow {
-            guard button == nil else {
-                button!.addPulseAnimation()
-                button!.isHidden = false
-                return
+        let execute = { [weak self] in
+            guard let `self` = self else { return }
+            let button = self.view.viewWithTag(self.tagOfPlayingButton)
+            if isShow {
+                guard button == nil else {
+                    button!.addPulseAnimation()
+                    button!.isHidden = false
+                    return
+                }
+                let side: CGFloat = 50
+                let playingButton = UIButton(type: .custom)
+                playingButton.tag = self.tagOfPlayingButton
+                playingButton.setImage(UIImage(named: "wave"), for: UIControl.State())
+                playingButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
+                playingButton.circle(side / 2)
+                playingButton.addPulseAnimation()
+                playingButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                playingButton.rx.tap
+                    .bind(to: viewModel.tapPlaying)
+                    .disposed(by: self.disposeBag)
+                playingButton.translatesAutoresizingMaskIntoConstraints = false
+                self.view.addSubview(playingButton)
+                self.setupConstraintsOnBottomRight(on: playingButton, to: item,
+                                                   constraints: (right: -20, bottom: -70),
+                                                   size: (width: side, height: side))
+            } else {
+                guard let playingButton = button else { return }
+                playingButton.removePulseAnimation()
+                playingButton.isHidden = true
             }
-            let side: CGFloat = 50
-            let playingButton = UIButton(type: .custom)
-            playingButton.tag = tagOfPlayingButton
-            playingButton.setImage(UIImage(named: "wave"), for: UIControl.State())
-            playingButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
-            playingButton.circle(side / 2)
-            playingButton.addPulseAnimation()
-            playingButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-            playingButton.rx.tap
-                .bind(to: viewModel.tapPlaying)
-                .disposed(by: disposeBag)
-            playingButton.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(playingButton)
-            setupConstraintsOnBottomRight(on: playingButton, to: item,
-                                          constraints: (right: -20, bottom: -70),
-                                          size: (width: side, height: side))
-        } else {
-            guard let playingButton = button else { return }
-            playingButton.removePulseAnimation()
-            playingButton.isHidden = true
+        }
+        DispatchQueue.main.async {
+            execute()
         }
     }
     
@@ -136,5 +193,46 @@ class BaseViewController: UIViewController, StoryboardGettable {
         let action = UIAlertAction(title: "OK", style: .default, handler: confirmHandler)
         alert.addAction(action)
         present(alert, animated: true, completion: completionHandler)
+    }
+}
+
+// MARK: - Pan View
+
+extension BaseViewController {
+    
+    private func addScreenPanToView() {
+        if self == navigationController?.viewControllers.first {
+        } else {
+            let pan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleScreenPanView))
+            pan.edges = .left
+            view.addGestureRecognizer(pan)
+        }
+    }
+    
+    @objc func handleScreenPanView(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        guard let view = recognizer.view else { return }
+        let offsetX = recognizer.translation(in: view).x
+        let percent = abs(offsetX) / view.frame.width
+        
+        switch recognizer.state {
+        case .began:
+            interactionController = UIPercentDrivenInteractiveTransition()
+            if offsetX > 0 {
+                navigationController?.popViewController(animated: true)
+            }
+        case .changed:
+            interactionController?.update(percent)
+        case .possible: break
+        case .failed, .cancelled:
+            interactionController?.cancel()
+        case .ended:
+            if percent > 0.5 {
+                interactionController?.finish()
+            } else {
+                interactionController?.cancel()
+            }
+            interactionController = nil
+        default: break
+        }
     }
 }

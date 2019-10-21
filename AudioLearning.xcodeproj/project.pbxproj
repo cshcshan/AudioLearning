@@ -88,6 +88,7 @@
 		33DB07582329CEE00030EBBA /* MusicPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07572329CEE00030EBBA /* MusicPlayerViewController.swift */; };
 		33DB075D2329D0150030EBBA /* MusicPlayerViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB075C2329D0150030EBBA /* MusicPlayerViewModelTests.swift */; };
 		33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB0798232A0E4A0030EBBA /* MusicPlayerViewModel.swift */; };
+		33E2CAD9235DCAEA00226085 /* SlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E2CAD8235DCAEA00226085 /* SlideAnimator.swift */; };
 		33E3780B231A605D00C6671B /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780A231A605D00C6671B /* APIService.swift */; };
 		33E3780D231A66B300C6671B /* EnumError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3780C231A66B300C6671B /* EnumError.swift */; };
 		33E3781C231ABD1600C6671B /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3781B231ABD1600C6671B /* MockAPIService.swift */; };
@@ -209,6 +210,7 @@
 		33DB07572329CEE00030EBBA /* MusicPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewController.swift; sourceTree = "<group>"; };
 		33DB075C2329D0150030EBBA /* MusicPlayerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewModelTests.swift; sourceTree = "<group>"; };
 		33DB0798232A0E4A0030EBBA /* MusicPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewModel.swift; sourceTree = "<group>"; };
+		33E2CAD8235DCAEA00226085 /* SlideAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideAnimator.swift; sourceTree = "<group>"; };
 		33E3780A231A605D00C6671B /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		33E3780C231A66B300C6671B /* EnumError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumError.swift; sourceTree = "<group>"; };
 		33E3781B231ABD1600C6671B /* MockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
@@ -266,7 +268,6 @@
 				33892A9F231E323000340C17 /* EpisodeListViewController.swift */,
 				33892AA6231F65D800340C17 /* EpisodeCell.swift */,
 				33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */,
-				33D30037235D83FF000A318F /* EpisodeAnimator.swift */,
 			);
 			path = Episode;
 			sourceTree = "<group>";
@@ -490,6 +491,8 @@
 			isa = PBXGroup;
 			children = (
 				332C155923174CF9003C78EA /* LaunchScreen.storyboard */,
+				33E2CAD8235DCAEA00226085 /* SlideAnimator.swift */,
+				33D30037235D83FF000A318F /* EpisodeAnimator.swift */,
 				330657562339CEFD00381CC6 /* Episode */,
 				330657572339CF1400381CC6 /* Vocabulary */,
 				33D641DF23409A8C00A97F9E /* FlashCards */,
@@ -916,6 +919,7 @@
 				3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */,
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,
 				330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */,
+				33E2CAD9235DCAEA00226085 /* SlideAnimator.swift in Sources */,
 				33D641E123409AB500A97F9E /* FlashCardsViewController.swift in Sources */,
 				33D30038235D83FF000A318F /* EpisodeAnimator.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,

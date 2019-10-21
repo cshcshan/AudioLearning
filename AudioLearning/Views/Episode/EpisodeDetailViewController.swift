@@ -32,12 +32,9 @@ class EpisodeDetailViewController: BaseViewController {
     private var beganPlayerViewHeight: CGFloat = .zero
     private let maxPlayerViewHeight: CGFloat = 195.5
     private let minPlayerViewHeight: CGFloat = 76
-    
-    private let animator = EpisodePopAnimator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.delegate = self
         setupUI()
         setupBindings()
         enableMenuItem()
@@ -249,13 +246,6 @@ extension EpisodeDetailViewController {
             }
         default: break
         }
-    }
-}
-
-extension EpisodeDetailViewController: UINavigationControllerDelegate {
-    
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return animator
     }
 }
 

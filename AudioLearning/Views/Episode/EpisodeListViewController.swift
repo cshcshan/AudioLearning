@@ -18,8 +18,6 @@ class EpisodeListViewController: BaseViewController {
     var viewModel: EpisodeListViewModel!
     var selectedCell: EpisodeCell?
     
-    private let animator = EpisodePushAnimator()
-    
     private var showEmptyView: ((UITableView) -> Void) = { tableView in
         tableView.showEmptyView(Appearance.backgroundColor,
                                 title: ("No episodes of 6 Minute English", Appearance.textColor),
@@ -31,7 +29,6 @@ class EpisodeListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.delegate = self
         setupUI()
         setupBindings()
     }
@@ -166,12 +163,5 @@ class EpisodeListViewController: BaseViewController {
         
         // ViewController's UI actions to ViewModel
         viewModel.initalLoad.onNext(())
-    }
-}
-
-extension EpisodeListViewController: UINavigationControllerDelegate {
-    
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return animator
     }
 }

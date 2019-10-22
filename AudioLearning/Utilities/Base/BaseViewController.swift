@@ -39,6 +39,13 @@ class BaseViewController: UIViewController, StoryboardGettable {
         addScreenPanToView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if parent is UINavigationController {
+            navigationController?.delegate = self
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -71,6 +78,8 @@ class BaseViewController: UIViewController, StoryboardGettable {
         }
     }
 }
+
+// MARK: - UINavigationControllerDelegate
 
 extension BaseViewController: UINavigationControllerDelegate {
     
@@ -105,6 +114,8 @@ extension BaseViewController: UINavigationControllerDelegate {
         return interactionController
     }
 }
+
+// MARK: - Theme Buttons & Playing Button
 
 extension BaseViewController {
 

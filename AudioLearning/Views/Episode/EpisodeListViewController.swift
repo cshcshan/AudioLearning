@@ -35,7 +35,6 @@ class EpisodeListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.delegate = self
         animatePlayingButton()
     }
         

@@ -39,12 +39,7 @@ class EpisodeDetailViewController: BaseViewController {
         setupBindings()
         enableMenuItem()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.delegate = self
-    }
-    
+        
     override func setupUIID() {
         playerView.accessibilityIdentifier = "PlayerView"
     }

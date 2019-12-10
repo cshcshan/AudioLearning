@@ -8,19 +8,39 @@
 
 import UIKit
 
-protocol StoryboardGettable {
-    
+enum StoryboardName: String {
+    case episode = "Episode"
+    case musicPlayer = "MusicPlayer"
+    case vocabulary = "Vocabulary"
+    case flashCards = "FlashCards"
 }
+
+enum StoryboardID: String {
+    case none
+    case episodeList = "EpisodeList"
+    case episodeDetail = "EpisodeDetail"
+    case musicPlayerViewController = "MusicPlayerViewController"
+    case vocabularyListViewController = "VocabularyListViewController"
+    case vocabularyDetailViewController = "VocabularyDetailViewController"
+    case flashCardsViewController = "FlashCardsViewController"
+}
+
+protocol StoryboardGettable {}
 
 extension StoryboardGettable where Self: UIViewController {
     
-    // swiftlint:disable force_cast
-    static func initialize(from storyboardName: String, storyboardID: String? = nil) -> Self {
-        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
-        guard let id = storyboardID else {
-            return storyboard.instantiateInitialViewController() as! Self
+    static func initialize(from storyboardName: StoryboardName, storyboardID: StoryboardID = .none) -> Self {
+        let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: Bundle.main)
+        var viewController: Self?
+        if storyboardID == .none {
+            if let vc = storyboard.instantiateInitialViewController() as? Self {
+                viewController = vc
+            }
+        } else {
+            if let vc = storyboard.instantiateViewController(withIdentifier: storyboardID.rawValue) as? Self {
+                viewController = vc
+            }
         }
-        return storyboard.instantiateViewController(withIdentifier: id) as! Self
+        return viewController ?? Self()
     }
-    // swiftlint:enable force_cast
 }

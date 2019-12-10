@@ -53,7 +53,8 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let viewController = VocabularyListViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyListViewController")
+        let viewController = VocabularyListViewController.initialize(from: .vocabulary,
+                                                                     storyboardID: .vocabularyListViewController)
         viewController.viewModel = viewModel
         viewController.vocabularyDetailView = vocabularyDetailVC.view
         viewController.addChild(vocabularyDetailVC)
@@ -86,7 +87,8 @@ class VocabularyCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let viewController = VocabularyDetailViewController.initialize(from: "Vocabulary", storyboardID: "VocabularyDetailViewController")
+        let viewController = VocabularyDetailViewController.initialize(from: .vocabulary,
+                                                                       storyboardID: .vocabularyDetailViewController)
         viewController.viewModel = viewModel
         
         return viewController

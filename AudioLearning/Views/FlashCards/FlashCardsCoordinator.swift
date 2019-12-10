@@ -29,7 +29,8 @@ class FlashCardsCoordinator: BaseCoordinator<Void> {
         let viewModel = FlashCardsViewModel(realmService: realmService)
         
         // Vocabulary
-        let viewController = FlashCardsViewController.initialize(from: "FlashCards", storyboardID: "FlashCardsViewController")
+        let viewController = FlashCardsViewController.initialize(from: .flashCards,
+                                                                 storyboardID: .flashCardsViewController)
         viewController.viewModel = viewModel
         navigationController.pushViewController(viewController, animated: true)
     }

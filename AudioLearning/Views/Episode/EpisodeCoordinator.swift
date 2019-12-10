@@ -55,7 +55,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let viewController = EpisodeListViewController.initialize(from: "Episode", storyboardID: "EpisodeList")
+        let viewController = EpisodeListViewController.initialize(from: .episode, storyboardID: .episodeList)
         viewController.viewModel = viewModel
         navigationController = UINavigationController(rootViewController: viewController)
         
@@ -107,7 +107,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let viewController = EpisodeDetailViewController.initialize(from: "Episode", storyboardID: "EpisodeDetail")
+        let viewController = EpisodeDetailViewController.initialize(from: .episode, storyboardID: .episodeDetail)
         viewController.viewModel = viewModel
         viewController.musicPlayerView = musicPlayerVC.view
         viewController.vocabularyDetailView = vocabularyDetailVC.view
@@ -144,8 +144,8 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
         
         let player = HCAudioPlayer()
         let musicPlayerViewModel = MusicPlayerViewModel(player: player)
-        let viewController = MusicPlayerViewController.initialize(from: "MusicPlayer",
-                                                                  storyboardID: "MusicPlayerViewController")
+        let viewController = MusicPlayerViewController.initialize(from: .musicPlayer,
+                                                                  storyboardID: .musicPlayerViewController)
         viewController.viewModel = musicPlayerViewModel
         musicPlayerVC = viewController
         return viewController
@@ -161,8 +161,8 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: disposeBag)
         
         // ViewController
-        let viewController = VocabularyDetailViewController.initialize(from: "Vocabulary",
-                                                                       storyboardID: "VocabularyDetailViewController")
+        let viewController = VocabularyDetailViewController.initialize(from: .vocabulary,
+                                                                       storyboardID: .vocabularyDetailViewController)
         viewController.viewModel = viewModel
         
         return viewController

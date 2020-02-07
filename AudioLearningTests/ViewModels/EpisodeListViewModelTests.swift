@@ -167,9 +167,9 @@ class EpisodeListViewModelTests: XCTestCase {
             .bind(to: sut.reload)
             .disposed(by: disposeBag)
         
-        let returnCellViewModel = scheduler.createObserver(EpisodeCellViewModel.self)
-        sut.returnCellViewModel
-            .bind(to: returnCellViewModel)
+        let setCellViewModel = scheduler.createObserver(EpisodeCellViewModel.self)
+        sut.setCellViewModel
+            .bind(to: setCellViewModel)
             .disposed(by: disposeBag)
         scheduler
             .createColdObservable([.next(200, 1),
@@ -177,7 +177,7 @@ class EpisodeListViewModelTests: XCTestCase {
             .bind(to: sut.getCellViewModel)
             .disposed(by: disposeBag)
         scheduler.start()
-        XCTAssertEqual(returnCellViewModel.events.count, 2)
+        XCTAssertEqual(setCellViewModel.events.count, 2)
     }
     
     func testInit_WithError() {

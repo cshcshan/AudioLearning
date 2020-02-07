@@ -108,7 +108,7 @@ class EpisodeListViewController: BaseViewController {
                     guard let `self` = self else { return }
                     cell.accessibilityIdentifier = "EpisodeCell_\(row)"
                     cell.selectionStyle = .none
-                    self.viewModel.returnCellViewModel
+                    self.viewModel.setCellViewModel
                         .take(1)
                         .subscribe(onNext: { (episodeCellViewModel) in
                             cell.viewModel = episodeCellViewModel

@@ -26,7 +26,7 @@ class EpisodeListViewModel: BaseViewModel {
     private(set) var refreshing: Observable<Bool>!
     private(set) var showEpisodeDetail: Observable<EpisodeModel>!
     private(set) var getSelectEpisodeCell: Observable<IndexPath>!
-    private(set) var returnCellViewModel: Observable<EpisodeCellViewModel>!
+    private(set) var setCellViewModel: Observable<EpisodeCellViewModel>!
     private(set) var showVocabulary: Observable<Void>!
     
     private let initalLoadSubject = PublishSubject<Void>()
@@ -90,7 +90,7 @@ class EpisodeListViewModel: BaseViewModel {
             })
             .disposed(by: disposeBag)
         
-        returnCellViewModel = getCellViewModelSubject
+        setCellViewModel = getCellViewModelSubject
             .flatMapLatest({ [weak self] (index) -> Observable<EpisodeCellViewModel> in
                 guard let `self` = self else { return .empty() }
                 var cellViewModel = self.cellViewModels[index]

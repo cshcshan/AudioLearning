@@ -30,6 +30,11 @@ class EpisodeCell: BaseTableViewCell {
     private let highlightedSubject = PublishSubject<Bool>()
     private let selectedSubject = PublishSubject<Bool>()
     private let disposeBag = DisposeBag()
+    private var titleDisposable: Disposable?
+    private var dateDisposable: Disposable?
+    private var descDisposable: Disposable?
+    private var imageDisposable: Disposable?
+    private var imageRefreshingDisposable: Disposable?
     
     var viewModel: EpisodeCellViewModel? {
         didSet {
@@ -87,16 +92,16 @@ class EpisodeCell: BaseTableViewCell {
     }
     
     private func setupBindings() {
-        viewModel?.title
-            .bind(to: titleLabel.rx.text)
-            .disposed(by: disposeBag)
-        viewModel?.date
-            .bind(to: dateLabel.rx.text)
-            .disposed(by: disposeBag)
-        viewModel?.desc
-            .bind(to: descLabel.rx.text)
-            .disposed(by: disposeBag)
-        viewModel?.image
+        titleDisposable?.dispose()
+        dateDisposable?.dispose()
+        descDisposable?.dispose()
+        imageDisposable?.dispose()
+        imageRefreshingDisposable?.dispose()
+
+        titleDisposable = viewModel?.title.bind(to: titleLabel.rx.text)
+        dateDisposable = viewModel?.date.bind(to: dateLabel.rx.text)
+        descDisposable = viewModel?.desc.bind(to: descLabel.rx.text)
+        imageDisposable = viewModel?.image
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (image) in
                 guard let `self` = self else { return }
@@ -106,8 +111,7 @@ class EpisodeCell: BaseTableViewCell {
                     self.photoImageView.image = image
                 }
             })
-            .disposed(by: disposeBag)
-        viewModel?.imageRefreshing
+        imageRefreshingDisposable = viewModel?.imageRefreshing
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (isRefreshing) in
                 guard let `self` = self else { return }
@@ -119,7 +123,6 @@ class EpisodeCell: BaseTableViewCell {
                     self.indicatorView.isHidden = true
                 }
             })
-            .disposed(by: disposeBag)
     }
     
     private func getNormalImage() -> UIImage? {

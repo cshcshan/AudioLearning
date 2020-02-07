@@ -45,8 +45,10 @@ class VocabularyDetailViewController: BaseViewController {
         noteTextView.layer.borderColor = Appearance.textColor.cgColor
         saveButton.backgroundColor = Appearance.backgroundColor
         saveButton.setTitleColor(Appearance.textColor, for: UIControl.State())
+        saveButton.layer.borderColor = Appearance.textColor.cgColor
         cancelButton.backgroundColor = Appearance.backgroundColor
         cancelButton.setTitleColor(Appearance.textColor, for: UIControl.State())
+        cancelButton.layer.borderColor = Appearance.textColor.cgColor
     }
     
     private func setupUI() {
@@ -57,6 +59,10 @@ class VocabularyDetailViewController: BaseViewController {
         noteTextView.layer.cornerRadius = 3
         noteTextView.layer.borderWidth = 1
         noteTextView.contentInset = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
+        saveButton.layer.cornerRadius = 3
+        saveButton.layer.borderWidth = 1
+        cancelButton.layer.cornerRadius = 3
+        cancelButton.layer.borderWidth = 1
     }
     
     private func setupBindings() {

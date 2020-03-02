@@ -3,6 +3,75 @@ import RxCocoa
 
 let disposeBag = DisposeBag()
 
+print("\nM: --- scan and reduce")
+
+print("------ scan")
+Observable.of(10, 100, 1000)
+    .scan(1) { aggregateValue, newValue in
+        aggregateValue + newValue
+    }
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+
+print("------ reduce")
+Observable.of(10, 100, 1000)
+    .reduce(1, accumulator: +)
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+
+print("\nL: --- subscribeOn")
+
+func currentQueueName() -> String? {
+    let name = __dispatch_queue_get_label(nil)
+    return String(cString: name, encoding: .utf8)
+}
+
+Observable<Int>
+    .create { observer in
+        observer.onNext(1)
+        sleep(1)
+        observer.onNext(2)
+        return Disposables.create()
+    }
+    .map { value -> Int in
+        print("\n\n 😀 Queue A: \(currentQueueName() ?? "queue")")
+        return value * 2
+    }
+    .subscribeOn(SerialDispatchQueueScheduler(qos: .background))
+    .map { value -> Int in
+        print(" 😀 Queue B: \(currentQueueName() ?? "queue")")
+        return value * 3
+    }
+    .observeOn(MainScheduler.instance)
+    .subscribe(onNext: { element in
+        print(" 😀 Queue C: \(element) \(currentQueueName() ?? "queue")")
+    })
+    .disposed(by: disposeBag)
+
+print("\nK: --- observeOn")
+
+Observable<Int>
+    .create { observer in
+        observer.onNext(1)
+        sleep(1)
+        observer.onNext(2)
+        return Disposables.create()
+    }
+    .map { value -> Int in
+        print("\n\n 😀 Queue A: \(currentQueueName() ?? "queue")")
+        return value * 2
+    }
+    .observeOn(SerialDispatchQueueScheduler(qos: .background))
+    .map { value -> Int in
+        print(" 😀 Queue B: \(currentQueueName() ?? "queue")")
+        return value * 3
+    }
+    .observeOn(MainScheduler.instance)
+    .subscribe(onNext: { element in
+        print(" 😀 Queue C: \(element) \(currentQueueName() ?? "queue")")
+    })
+    .disposed(by: disposeBag)
+
 print("\nJ: --- duplicate subscription")
 
 let j = PublishSubject<Void>()

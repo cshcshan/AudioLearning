@@ -175,6 +175,7 @@ class EpisodeCoordinator: BaseCoordinator<Void> {
     
     private func showEpisodeDetailFromPlaying() {
         guard let viewController = episodeDetailViewController else { return }
+        // FIXME: The detail view is incorrect with the audio
         navigationController.pushViewController(viewController, animated: true)
     }
 }

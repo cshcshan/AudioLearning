@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class MusicPlayerViewController: UIViewController, StoryboardGettable {
+final class MusicPlayerViewController: UIViewController, StoryboardGettable {
     
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var forwardButton: UIButton!

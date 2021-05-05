@@ -28,7 +28,7 @@ enum HtmlQuery: String {
     case smUl = "ul"
 }
 
-class ParseSixMinutesHelper: ParseHelperProtocol {
+final class ParseSixMinutesHelper: ParseHelperProtocol {
     
     func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel] {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return [] }

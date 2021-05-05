@@ -36,7 +36,7 @@ protocol HCAudioPlayerProtocol {
     var loadingBufferPercent: Observable<Double>! { get }
 }
 
-class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
+final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
     
     enum Status: Int {
         case unknown

@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class EpisodeCoordinator: BaseCoordinator<Void> {
+final class EpisodeCoordinator: BaseCoordinator<Void> {
     
     private let window: UIWindow
     private var navigationController: UINavigationController!

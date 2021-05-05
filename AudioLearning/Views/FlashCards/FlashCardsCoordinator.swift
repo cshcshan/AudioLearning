@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FlashCardsCoordinator: BaseCoordinator<Void> {
+final class FlashCardsCoordinator: BaseCoordinator<Void> {
     
     private var navigationController: UINavigationController!
     

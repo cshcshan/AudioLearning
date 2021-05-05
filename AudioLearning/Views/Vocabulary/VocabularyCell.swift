@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class VocabularyCell: BaseTableViewCell {
+final class VocabularyCell: BaseTableViewCell {
     
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var wordLabel: UILabel!

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EpisodePushAnimator: SlidePushAnimator {
+final class EpisodePushAnimator: SlidePushAnimator {
     
     override init() {
         super.init()
@@ -73,7 +73,7 @@ class EpisodePushAnimator: SlidePushAnimator {
     }
 }
 
-class EpisodePopAnimator: SlidePopAnimator {
+final class EpisodePopAnimator: SlidePopAnimator {
     
     override init() {
         super.init()

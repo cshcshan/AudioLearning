@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class AppCoordinator: BaseCoordinator<Void> {
+final class AppCoordinator: BaseCoordinator<Void> {
 
     private let window: UIWindow
 

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FlashCardsFlowLayout: UICollectionViewFlowLayout {
+final class FlashCardsFlowLayout: UICollectionViewFlowLayout {
     
     override func prepare() {
         super.prepare()

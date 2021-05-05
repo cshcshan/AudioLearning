@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class VocabularyDetailViewModel: BaseViewModel {
+final class VocabularyDetailViewModel: BaseViewModel {
     
     // Inputs
     private(set) var load: AnyObserver<VocabularyRealmModel>!

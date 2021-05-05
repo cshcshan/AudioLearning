@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class VocabularyListViewModel: BaseViewModel {
+final class VocabularyListViewModel: BaseViewModel {
     
     // Inputs and Outputs
     private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)

@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class EpisodeListViewModel: BaseViewModel {
+final class EpisodeListViewModel: BaseViewModel {
     
     // Input
     private(set) var initalLoad: AnyObserver<Void>!

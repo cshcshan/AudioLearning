@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 @objcMembers
-class EpisodeDetailRealmModel: Object {
+final class EpisodeDetailRealmModel: Object {
     dynamic var episode: String?
     dynamic var path: String?
     dynamic var scriptHtml: String?

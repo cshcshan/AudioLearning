@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 @objcMembers
-class VocabularyRealmModel: Object {
+final class VocabularyRealmModel: Object {
     dynamic var id: String?
     dynamic var episode: String?
     dynamic var word: String?

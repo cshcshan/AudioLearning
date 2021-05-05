@@ -16,7 +16,7 @@ protocol UserDefaultsManagerProtocol {
     var appearanceMode: AppearanceModeType { get set }
 }
 
-class UserDefaultManager: UserDefaultsManagerProtocol {
+final class UserDefaultManager: UserDefaultsManagerProtocol {
     
     static let shared: UserDefaultManager = UserDefaultManager()
     

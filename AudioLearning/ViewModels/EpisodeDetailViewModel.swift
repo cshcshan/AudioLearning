@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class EpisodeDetailViewModel: BaseViewModel {
+final class EpisodeDetailViewModel: BaseViewModel {
     
     // Inputs and Outputs
     private(set) var shrinkMusicPlayer = PublishSubject<Void>()

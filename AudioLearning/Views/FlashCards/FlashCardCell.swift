@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class FlashCardCell: UICollectionViewCell {
+final class FlashCardCell: UICollectionViewCell {
     
     @IBOutlet weak var label: UILabel!
     

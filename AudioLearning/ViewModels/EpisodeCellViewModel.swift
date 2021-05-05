@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-class EpisodeCellViewModel: BaseViewModel {
+final class EpisodeCellViewModel: BaseViewModel {
     
     // Inputs
     private(set) var load: AnyObserver<EpisodeModel?>!

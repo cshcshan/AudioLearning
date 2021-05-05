@@ -22,7 +22,7 @@ protocol APIServiceProtocol {
     func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void)
 }
 
-class APIService: APIServiceProtocol {
+final class APIService: APIServiceProtocol {
     enum URLPath: String {
         case domain = "http://www.bbc.co.uk"
         case episodeList = "http://www.bbc.co.uk/learningenglish/english/features/6-minute-english"

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class VocabularyListViewController: BaseViewController {
+final class VocabularyListViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var maskView: UIView!

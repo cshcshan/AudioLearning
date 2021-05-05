@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class EpisodeCell: BaseTableViewCell {
+final class EpisodeCell: BaseTableViewCell {
     
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var titleLabel: UILabel!

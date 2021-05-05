@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class EpisodeListViewController: BaseViewController {
+final class EpisodeListViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     private let refreshControl = UIRefreshControl()

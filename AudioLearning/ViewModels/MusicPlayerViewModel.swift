@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class MusicPlayerViewModel {
+final class MusicPlayerViewModel {
     
     // Inputs
     private(set) var tappedPlayPause: AnyObserver<Void>!

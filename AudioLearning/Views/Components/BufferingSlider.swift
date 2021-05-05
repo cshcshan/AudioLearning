@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BufferingSlider: UISlider {
+final class BufferingSlider: UISlider {
     
     let bufferProgressView = UIProgressView(progressViewStyle: .default)
     

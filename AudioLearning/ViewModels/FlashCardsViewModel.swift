@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class FlashCardsViewModel: BaseViewModel {
+final class FlashCardsViewModel: BaseViewModel {
     
     private(set) var wordSideArray: [Bool] = []
     

@@ -9,7 +9,7 @@
 import RealmSwift
 import RxSwift
 
-class RealmService<T: Object> {
+final class RealmService<T: Object> {
     
     // Inputs
     private(set) var loadAll = PublishSubject<[String: Bool]?>()

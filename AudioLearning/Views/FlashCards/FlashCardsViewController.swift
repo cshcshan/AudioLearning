@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FlashCardsViewController: BaseViewController {
+final class FlashCardsViewController: BaseViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     

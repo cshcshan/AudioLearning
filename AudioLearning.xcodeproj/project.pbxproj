@@ -1183,7 +1183,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QL662FZ3MK;
@@ -1205,7 +1205,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 06D7494178AFAD9D8428A4DF /* Pods-AudioLearningTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QL662FZ3MK;
@@ -1227,7 +1227,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2579CE3CD69FBFFEFEB7B46 /* Pods-AudioLearning-AudioLearningUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QL662FZ3MK;
 				INFOPLIST_FILE = AudioLearningUITests/Info.plist;
@@ -1248,7 +1248,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QL662FZ3MK;
 				INFOPLIST_FILE = AudioLearningUITests/Info.plist;

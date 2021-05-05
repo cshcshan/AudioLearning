@@ -71,32 +71,36 @@ extension AppDelegate {
 extension AppDelegate {
     
     private func setupLaunchScreen(_ startCoordinator: @escaping (() -> Void)) {
-        guard let window = self.window else { return startCoordinator() }
-        guard let launchScreenVC = UIStoryboard(name: "LaunchScreen", bundle: .main).instantiateInitialViewController() else { return startCoordinator() }
-        guard let launchScreenView = launchScreenVC.view else { return startCoordinator() }
-        
-        let animationView = AnimationView(filePath: Bundle.main.path(forResource: "around-the-world",
-                                                                     ofType: "json")!)
+        guard let launchScreenVC = UIStoryboard(name: "LaunchScreen", bundle: .main).instantiateInitialViewController(),
+              let launchScreenView = launchScreenVC.view,
+              let window = self.window
+        else { return startCoordinator() }
+
+        guard let filePath = Bundle.main.path(forResource: "around-the-world", ofType: "json") else {
+            return assertionFailure("Lottie file around-the-world does not exist")
+        }
+
+        let animationView = AnimationView(filePath: filePath)
         animationView.translatesAutoresizingMaskIntoConstraints = false
         launchScreenView.addSubview(animationView)
         launchScreenView.backgroundColor = Appearance.backgroundColor
         
         let views = ["subview": animationView]
-        let horizontal = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|",
-                                                        options: [], metrics: nil, views: views)
-        let vertical = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|",
-                                                      options: [], metrics: nil, views: views)
+        let horizontal = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|-0-[subview]-0-|", options: [], metrics: nil, views: views)
+        let vertical = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-0-[subview]-0-|", options: [], metrics: nil, views: views)
         launchScreenView.addConstraints(horizontal + vertical)
-        
-        UIView.animate(withDuration: 3, animations: {
+
+        UIView.animate(withDuration: 3) {
             launchScreenView.alpha = 0
-        })
+        }
         animationView.play()
         
         window.rootViewController = launchScreenVC
         window.makeKeyAndVisible()
-        Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (_) in
+        Timer.scheduledTimer(withTimeInterval: 4, repeats: false) { _ in
             startCoordinator()
-        })
+        }
     }
 }

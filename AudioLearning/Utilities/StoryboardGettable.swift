@@ -16,7 +16,6 @@ enum StoryboardName: String {
 }
 
 enum StoryboardID: String {
-    case none
     case episodeList = "EpisodeList"
     case episodeDetail = "EpisodeDetail"
     case musicPlayerViewController = "MusicPlayerViewController"
@@ -29,15 +28,15 @@ protocol StoryboardGettable {}
 
 extension StoryboardGettable where Self: UIViewController {
     
-    static func initialize(from storyboardName: StoryboardName, storyboardID: StoryboardID = .none) -> Self {
+    static func initialize(from storyboardName: StoryboardName, storyboardID: StoryboardID? = nil) -> Self {
         let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: Bundle.main)
         var viewController: Self?
-        if storyboardID == .none {
-            if let vc = storyboard.instantiateInitialViewController() as? Self {
+        if let storyboardID = storyboardID {
+            if let vc = storyboard.instantiateViewController(withIdentifier: storyboardID.rawValue) as? Self {
                 viewController = vc
             }
         } else {
-            if let vc = storyboard.instantiateViewController(withIdentifier: storyboardID.rawValue) as? Self {
+            if let vc = storyboard.instantiateInitialViewController() as? Self {
                 viewController = vc
             }
         }

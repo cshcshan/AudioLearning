@@ -55,13 +55,13 @@ final class EpisodePushAnimator: SlidePushAnimator {
             }
         }
         
-        animating = { transitionContext in
+        animating = { _ in
             if let img = transitionImgView {
                 img.transform = imgViewTransform
             }
         }
         
-        completeAnimate = { transitionContext in
+        completeAnimate = { _ in
             transitionImgView?.removeFromSuperview()
             if let fromImgView = fromImageView {
                 fromImgView.alpha = 1
@@ -120,13 +120,13 @@ final class EpisodePopAnimator: SlidePopAnimator {
             }
         }
         
-        animating = { transitionContext in
+        animating = { _ in
             if let img = transitionImgView {
                 img.transform = imgViewTransform
             }
         }
         
-        completeAnimate = { transitionContext in
+        completeAnimate = { _ in
             transitionImgView?.removeFromSuperview()
             if let fromImgView = fromImageView {
                 fromImgView.alpha = 1

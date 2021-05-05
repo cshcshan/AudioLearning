@@ -30,16 +30,13 @@ extension StoryboardGettable where Self: UIViewController {
     
     static func initialize(from storyboardName: StoryboardName, storyboardID: StoryboardID? = nil) -> Self {
         let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: Bundle.main)
-        var viewController: Self?
+        let viewController: UIViewController?
         if let storyboardID = storyboardID {
-            if let vc = storyboard.instantiateViewController(withIdentifier: storyboardID.rawValue) as? Self {
-                viewController = vc
-            }
+            viewController = storyboard.instantiateViewController(withIdentifier: storyboardID.rawValue)
         } else {
-            if let vc = storyboard.instantiateInitialViewController() as? Self {
-                viewController = vc
-            }
+            viewController = storyboard.instantiateInitialViewController()
         }
-        return viewController ?? Self()
+
+        return viewController as? Self ?? Self()
     }
 }

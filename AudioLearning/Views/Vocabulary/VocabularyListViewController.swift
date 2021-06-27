@@ -50,7 +50,7 @@ final class VocabularyListViewController: BaseViewController {
     }
     
     private func setupUI() {
-        automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInsetAdjustmentBehavior = .never
         setupNavigationBar(0)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60

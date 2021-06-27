@@ -62,7 +62,7 @@ final class EpisodeListViewController: BaseViewController {
     }
     
     private func setupUI() {
-        automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInsetAdjustmentBehavior = .never
         setupNavigationBar()
         // refreshControl
         if !isUITesting {

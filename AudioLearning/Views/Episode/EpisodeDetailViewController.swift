@@ -59,7 +59,7 @@ final class EpisodeDetailViewController: BaseViewController {
     }
     
     private func setupUI() {
-        automaticallyAdjustsScrollViewInsets = false
+        scrollView.contentInsetAdjustmentBehavior = .never
         setupNavigationBar()
         addTapToMaskView()
         // playerView

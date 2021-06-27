@@ -65,7 +65,7 @@ final class VocabularyCell: BaseTableViewCell {
         Observable.of(highlightedSubject)
             .merge()
             .subscribe(onNext: { [weak self] (isHighlighted) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.backgroundColor = Appearance.secondaryBgColor
                 self.containerView.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
                 self.wordLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
@@ -79,7 +79,7 @@ final class VocabularyCell: BaseTableViewCell {
         
         deleteButton.rx.tap
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 guard let model = self.vocabularyRealmModel else { return }
                 self.deleteVocabulary.onNext(model)
             })
@@ -87,7 +87,7 @@ final class VocabularyCell: BaseTableViewCell {
         
         startWiggleAnimation
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.deleteButton.isHidden = false
                 self.addWiggleAnimation()
             })
@@ -95,7 +95,7 @@ final class VocabularyCell: BaseTableViewCell {
         
         stopWiggleAnimation
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.deleteButton.isHidden = true
                 self.removeWiggleAnimation()
             })

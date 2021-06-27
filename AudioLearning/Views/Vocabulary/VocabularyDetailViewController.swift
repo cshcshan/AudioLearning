@@ -74,7 +74,7 @@ final class VocabularyDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         saveButton.rx.tap
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 let model = VocabularySaveModel(word: self.wordTextField.text,
                                                 note: self.noteTextView.text)
                 self.viewModel.save.onNext(model)

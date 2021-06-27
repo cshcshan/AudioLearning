@@ -30,7 +30,7 @@ final class RealmService<T: Object> {
         
         loadAll
             .subscribe(onNext: { [weak self] (sortedByAsc) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.allObjectsSubject.onNext(self.loadAll(sortedByAsc: sortedByAsc))
             })
             .disposed(by: disposeBag)

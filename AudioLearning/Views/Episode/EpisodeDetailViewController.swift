@@ -116,7 +116,7 @@ final class EpisodeDetailViewController: BaseViewController {
         viewModel.image
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (image) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 if image == nil {
                     self.photoImageView.image = self.getNormalImage()
                 } else {
@@ -128,7 +128,7 @@ final class EpisodeDetailViewController: BaseViewController {
         viewModel.scriptHtml
             .observeOn(MainScheduler.instance)
             .map({ [weak self] (html) -> NSAttributedString in
-                guard let `self` = self else { return NSAttributedString() }
+                guard let self = self else { return NSAttributedString() }
                 let fontName = self.htmlTextView.font!.fontName
                 let fontSize = self.htmlTextView.font!.pointSize
                 return html.convertHtml(backgroundColor: Appearance.backgroundColor,
@@ -137,7 +137,7 @@ final class EpisodeDetailViewController: BaseViewController {
                                         fontSize: fontSize)
             })
             .do(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.refreshControl.endRefreshing()
             })
             .bind(to: htmlTextView.rx.attributedText)
@@ -146,7 +146,7 @@ final class EpisodeDetailViewController: BaseViewController {
         viewModel.alert
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (alert) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showConfirmAlert(title: alert.title,
                                       message: alert.message,
                                       confirmHandler: nil,
@@ -161,7 +161,7 @@ final class EpisodeDetailViewController: BaseViewController {
         viewModel.hideVocabularyDetailView
             .filter({ $0 == true })
             .flatMap({ [weak self] (_) -> Observable<TimeInterval> in
-                guard let `self` = self else { return .just(TimeInterval(0)) }
+                guard let self = self else { return .just(TimeInterval(0)) }
                 self.enableMenuItem()
                 return .just(TimeInterval(0.4))
             })
@@ -171,7 +171,7 @@ final class EpisodeDetailViewController: BaseViewController {
         viewModel.hideVocabularyDetailView
             .filter({ $0 == false })
             .flatMap({ [weak self] (_) -> Observable<TimeInterval> in
-                guard let `self` = self else { return .just(TimeInterval(0)) }
+                guard let self = self else { return .just(TimeInterval(0)) }
                 self.disableMenuItem()
                 return .just(TimeInterval(0.4))
             })
@@ -214,7 +214,7 @@ extension EpisodeDetailViewController {
         playerViewHeight.constant = minPlayerViewHeight
         playerView.superview?.setNeedsLayout()
         UIView.animate(withDuration: 0.8, animations: { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             self.playerView.superview?.layoutIfNeeded()
         })
     }
@@ -248,7 +248,7 @@ extension EpisodeDetailViewController {
                 finalY = maxPlayerViewHeight
             }
             UIView.animate(withDuration: 0.4) { [weak self] in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 finalY == self.minPlayerViewHeight ?
                     self.viewModel.shrinkMusicPlayer.onNext(()) : self.viewModel.enlargeMusicPlayer.onNext(())
                 self.playerViewHeight.constant = finalY

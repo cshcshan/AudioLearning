@@ -55,21 +55,21 @@ final class VocabularyListViewModel: BaseViewModel {
                       showAddVocabularyDetail.map({ $0 as AnyObject }))
             .merge()
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.hideVocabularyDetailView.onNext(false)
             })
             .disposed(by: disposeBag)
         
         setEpisodeSubject
             .subscribe(onNext: { [weak self] (episode) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.episode = episode
             })
             .disposed(by: disposeBag)
         
         reloadSubject
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 let sortedByAsc = ["updateDate": false]
                 if let episode = self.episode {
                     realmService.filter.onNext((NSPredicate(format: "episode == %@", episode), sortedByAsc))
@@ -82,7 +82,7 @@ final class VocabularyListViewModel: BaseViewModel {
         let deleteSuccessSubject = PublishSubject<Bool>()
         deleteSuccessSubject
             .subscribe(onNext: { [weak self] (success) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 guard success else { return }
                 self.reloadSubject.onNext(())
             })
@@ -90,7 +90,7 @@ final class VocabularyListViewModel: BaseViewModel {
         
         deleteVocabularySubject
             .subscribe(onNext: { [weak self] (vocabularyRealmModel) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 guard let id = vocabularyRealmModel.id else { return }
                 realmService.delete(predicate: NSPredicate(format: "id == %@", id))
                     .subscribe(onNext: { (success) in

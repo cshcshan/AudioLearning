@@ -23,7 +23,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         let startCoordinator: (() -> Void) = { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             self.appCoordinator = AppCoordinator(window: self.window!)
             _ = self.appCoordinator.start()
         }

@@ -56,7 +56,7 @@ final class MusicPlayerViewModel {
                                   player.status.map({ $0 as AnyObject }))
             .merge()
             .scan(false, accumulator: { [weak self] (aggregateValue, newValue) -> Bool in
-                guard let `self` = self else { return false }
+                guard let self = self else { return false }
                 let playing = self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
                 NotificationCenter.default.post(name: .isPlaying, object: nil, userInfo: ["isPlaying": playing])
                 return playing
@@ -116,7 +116,7 @@ final class MusicPlayerViewModel {
         reset = resetSubject.asObserver()
         resetSubject
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.player.pause.onNext(())
             })
             .disposed(by: disposeBag)
@@ -137,13 +137,13 @@ final class MusicPlayerViewModel {
         
         currentTime = player.currentSeconds
             .map({ [weak self] (seconds) -> String in
-                guard let `self` = self else { return "" }
+                guard let self = self else { return "" }
                 return self.convertTime(seconds: seconds)
             })
             .asDriver(onErrorJustReturn: "")
         totalTime = player.totalSeconds
             .map({ [weak self] (seconds) -> String in
-                guard let `self` = self else { return "" }
+                guard let self = self else { return "" }
                 return self.convertTime(seconds: seconds)
             })
             .asDriver(onErrorJustReturn: "")

@@ -65,7 +65,7 @@ final class EpisodeListViewModel: BaseViewModel {
         
         episodes = realmService.allObjects
             .flatMapLatest({ [weak self] (episodeRealmModels) -> Observable<[EpisodeModel]> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 var episodeModels = [EpisodeModel]()
                 for episodeRealmModel in episodeRealmModels {
                     let episodeModel = EpisodeModel(from: episodeRealmModel)
@@ -77,7 +77,7 @@ final class EpisodeListViewModel: BaseViewModel {
         
         initalLoadSubject
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.loadData()
                 self.refreshingSubject.onNext(true)
                 apiService.loadEpisodes.onNext(())
@@ -92,7 +92,7 @@ final class EpisodeListViewModel: BaseViewModel {
         
         setCellViewModel = getCellViewModelSubject
             .flatMapLatest({ [weak self] (index) -> Observable<EpisodeCellViewModel> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 var cellViewModel = self.cellViewModels[index]
                 if cellViewModel == nil {
                     cellViewModel = EpisodeCellViewModel(apiService: apiService)
@@ -105,14 +105,14 @@ final class EpisodeListViewModel: BaseViewModel {
     private func reloadDataFromServer() -> Observable<Void> {
         return apiService.episodes
             .flatMapLatest({ [weak self] (episodeRealmModels) -> Observable<Void> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 _ = self.realmService.add(objects: episodeRealmModels)
                 self.loadData()
                 self.refreshingSubject.onNext(false)
                 return .empty()
             })
             .catchError({ [weak self] (error) -> Observable<Void> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 self.refreshingSubject.onNext(false)
                 let alertModel = AlertModel(title: "Get Episode List Error",
                                             message: error.localizedDescription)

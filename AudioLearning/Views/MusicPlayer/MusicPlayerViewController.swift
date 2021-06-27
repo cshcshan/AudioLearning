@@ -39,7 +39,7 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
             .notification(.changeAppearance)
             .takeUntil(self.rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.setupUIColor()
             })
             .disposed(by: disposeBag)
@@ -109,14 +109,14 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
         
         viewModel.readyToPlay
             .drive(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.setupUI(isReady: true)
             })
             .disposed(by: disposeBag)
         
         viewModel.isPlaying
             .drive(onNext: { [weak self] (isPlaying) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.playButton.setImage(isPlaying ? self.pauseImage : self.playImage,
                                          for: UIControl.State())
             })

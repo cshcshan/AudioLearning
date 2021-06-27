@@ -44,7 +44,7 @@ final class FlashCardsViewController: BaseViewController {
     private func setupBindings() {
         viewModel.vocabularies
             .bind(to: collectionView.rx.items(cellIdentifier: "FlashCardCell", cellType: FlashCardCell.self), curriedArgument: { [weak self] (row, model, item) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 item.vocabularyRealmModel = model
                 item.flip(self.viewModel.wordSideArray[row])
             })
@@ -52,7 +52,7 @@ final class FlashCardsViewController: BaseViewController {
         
         viewModel.vocabularies
             .subscribe(onNext: { [weak self] (vocabularyRealmModels) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.modelCount = vocabularyRealmModels.count
                 if self.modelCount > 0 && self.currentIndex == nil {
                     self.currentIndex = 0
@@ -64,7 +64,7 @@ final class FlashCardsViewController: BaseViewController {
         
         viewModel.isWordSide
             .subscribe(onNext: { [weak self] (isWordSide) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 guard let index = self.currentIndex, let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? FlashCardCell else { return }
                 cell.flip(isWordSide)
             })
@@ -90,7 +90,7 @@ extension FlashCardsViewController {
         let state = recognizer.state
         
         changeVisibleItem(state: state, offset: offset, velocity: velocity, endedHandler: { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             self.flipItem(state: state, offset: offset, velocity: velocity)
         })
     }

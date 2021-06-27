@@ -61,7 +61,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
         
         loadSubject
             .subscribe(onNext: { [weak self] (vocabularyRealmModel) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.model = vocabularyRealmModel
                 self.word.onNext(vocabularyRealmModel.word ?? "")
                 self.note.onNext(vocabularyRealmModel.note ?? "")
@@ -70,7 +70,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
         
         addSubject
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.model = nil
                 self.word.onNext("")
                 self.note.onNext("")
@@ -79,7 +79,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
         
         addWithWordSubject
             .subscribe(onNext: { [weak self] (episode, word) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.model = nil
                 self.episode = episode
                 self.word.onNext(word)
@@ -95,7 +95,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
         
         saveSubject
             .subscribe(onNext: { [weak self] (saveModel) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 let alert = {
                     let alertModel = AlertModel(title: "Save word failed", message: "Word cannot be empty.")
                     self.alertSubject.onNext(alertModel)
@@ -116,7 +116,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
         
         cancelSubject
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.closeSubject.onNext(())
             })
             .disposed(by: disposeBag)

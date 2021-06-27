@@ -47,7 +47,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         
         viewModel.showFlashCards
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showFlashCards()
             })
             .disposed(by: disposeBag)

@@ -74,7 +74,7 @@ final class EpisodeCell: BaseTableViewCell {
         Observable.of(highlightedSubject, selectedSubject)
             .merge()
             .subscribe(onNext: { [weak self] (isHighlighted) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.backgroundColor = Appearance.secondaryBgColor
                 self.containerView.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
                 self.titleLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
@@ -104,7 +104,7 @@ final class EpisodeCell: BaseTableViewCell {
         imageDisposable = viewModel?.image
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (image) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 if image == nil {
                     self.photoImageView.image = self.getNormalImage()
                 } else {
@@ -114,7 +114,7 @@ final class EpisodeCell: BaseTableViewCell {
         imageRefreshingDisposable = viewModel?.imageRefreshing
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (isRefreshing) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 if isRefreshing {
                     self.indicatorView.isHidden = false
                     self.indicatorView.startAnimating()

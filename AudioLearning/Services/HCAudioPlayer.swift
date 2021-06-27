@@ -95,7 +95,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
         newAudio = newAudioSubject.asObserver()
         newAudioSubject
             .subscribe(onNext: { [weak self] (url) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.setupPlayer(AVPlayer(url: url))
             })
             .disposed(by: disposeBag)
@@ -193,7 +193,7 @@ extension HCAudioPlayer {
     private func addPlayerObservers() {
         guard let player = player else { return }
         player.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 1), queue: DispatchQueue.main) { [weak self] (time) in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             self.currentSecondsSubject.onNext(CMTimeGetSeconds(time))
         }
     }

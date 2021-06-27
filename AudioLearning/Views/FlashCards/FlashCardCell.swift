@@ -33,7 +33,7 @@ final class FlashCardCell: UICollectionViewCell {
             .notification(.changeAppearance)
             .takeUntil(self.rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.flip(self.isWordSide)
             })
             .disposed(by: disposeBag)

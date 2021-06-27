@@ -38,14 +38,14 @@ class SlidePushAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         
         toView.transform = offsetRight
         UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             fromView.transform = offsetLeft
             toView.transform = CGAffineTransform.identity
             if let animating = self.animating {
                 animating(transitionContext)
             }
         }, completion: { [weak self] _ in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             if let animate = self.completeAnimate {
                 animate(transitionContext)
             }
@@ -85,14 +85,14 @@ class SlidePopAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         
         toView.transform = offsetLeft
         UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             fromView.transform = offsetRight
             toView.transform = CGAffineTransform.identity
             if let animating = self.animating {
                 animating(transitionContext)
             }
         }, completion: { [weak self] _ in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             if let animate = self.completeAnimate {
                 animate(transitionContext)
             }

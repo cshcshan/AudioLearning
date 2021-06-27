@@ -49,7 +49,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
         
         if let imagePath = episodeModel.imagePath {
             apiService.getImage(path: imagePath) { [weak self] (image) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.image.onNext(image)
             }
         } else {
@@ -67,7 +67,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
         
         showAddVocabularyDetail
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.hideVocabularyDetailView.onNext(false)
             })
             .disposed(by: disposeBag)
@@ -78,7 +78,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
         
         let loadEpisodeDetailModels = realmService.filterObjects
             .flatMapLatest({ [weak self] (episodeDetailRealmModels) -> Observable<EpisodeDetailModel> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 guard let model = episodeDetailRealmModels.first else {
                     self.refreshingSubject.onNext(true)
                     apiService.loadEpisodeDetail.onNext(episodeModel)
@@ -100,7 +100,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
         Observable.of(loadEpisodeDetailModels, episodeDetailModels)
             .merge()
             .subscribe(onNext: { [weak self] (model) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.refreshingSubject.onNext(false)
                 self.scriptHtml.onNext(model.scriptHtml ?? "")
             })
@@ -114,7 +114,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
         
         loadSubject
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.loadData()
             })
             .disposed(by: disposeBag)
@@ -123,7 +123,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
     private func reloadDataFromServer() -> Observable<Void> {
         return apiService.episodeDetail
             .flatMapLatest({ [weak self] (episodeDetailRealmModel) -> Observable<Void> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 guard let episodeDetailRealmModel = episodeDetailRealmModel else { return .empty() }
                 _ = self.realmService.add(object: episodeDetailRealmModel)
                 self.loadData()
@@ -131,7 +131,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
                 return .empty()
             })
             .catchError({ [weak self] (error) -> Observable<Void> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 self.refreshingSubject.onNext(false)
                 let alertModel = AlertModel(title: "Load Episode Detail Error",
                                             message: error.localizedDescription)

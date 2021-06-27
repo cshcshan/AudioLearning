@@ -63,7 +63,7 @@ final class APIService: APIServiceProtocol {
         
         self.episodes = loadEpisodesSubject
             .flatMapLatest({ [weak self] (_) -> Observable<[EpisodeRealmModel]> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 guard let url = URLPath.episodeList.url else {
                     return .error(Errors.urlIsNull)
                 }
@@ -71,7 +71,7 @@ final class APIService: APIServiceProtocol {
                 return self.urlSession.rx
                     .response(request: request)
                     .map({ [weak self] (response: HTTPURLResponse, data: Data) -> [EpisodeRealmModel] in
-                        guard let `self` = self else { return [] }
+                        guard let self = self else { return [] }
                         guard 200..<300 ~= response.statusCode else {
                             throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
                         }
@@ -84,7 +84,7 @@ final class APIService: APIServiceProtocol {
         
         self.episodeDetail = loadEpisodeDetailSubject
             .flatMapLatest({ [weak self] (episodeModel) -> Observable<EpisodeDetailRealmModel?> in
-                guard let `self` = self else { return .empty() }
+                guard let self = self else { return .empty() }
                 guard let episode = episodeModel.episode, let path = episodeModel.path else {
                     return .error(Errors.pathIsNull)
                 }

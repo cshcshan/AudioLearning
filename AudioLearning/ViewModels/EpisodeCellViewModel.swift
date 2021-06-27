@@ -32,7 +32,7 @@ final class EpisodeCellViewModel: BaseViewModel {
         
         loadSubject
             .subscribe(onNext: { [weak self] (episodeModel) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 guard let episodeModel = episodeModel else {
                     self.title.onNext("")
                     self.date.onNext("")
@@ -49,7 +49,7 @@ final class EpisodeCellViewModel: BaseViewModel {
                 if let imagePath = episodeModel.imagePath {
                     self.imageRefreshing.onNext(true)
                     apiService.getImage(path: imagePath, completionHandler: { [weak self] (image) in
-                        guard let `self` = self else { return }
+                        guard let self = self else { return }
                         self.image.onNext(image)
                         self.imageRefreshing.onNext(false)
                     })

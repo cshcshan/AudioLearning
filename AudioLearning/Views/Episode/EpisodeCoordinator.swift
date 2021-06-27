@@ -41,7 +41,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
          */
         viewModel.showEpisodeDetail
             .subscribe(onNext: { [weak self] (episodeModel) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showEpisodeDetail(apiService: apiService, episodeModel: episodeModel)
             })
             .disposed(by: disposeBag)
@@ -49,7 +49,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         // after pressing playingButton, display the episode detail which is playing audio
         viewModel.showEpisodeDetailFromPlaying
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showEpisodeDetailFromPlaying()
             })
             .disposed(by: disposeBag)
@@ -61,7 +61,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showVocabulary(episode: nil)
             })
             .disposed(by: disposeBag)
@@ -116,7 +116,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] (_) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showVocabulary(episode: episodeModel.episode)
             })
             .disposed(by: disposeBag)

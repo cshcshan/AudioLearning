@@ -119,7 +119,7 @@ final class VocabularyListViewController: BaseViewController {
         
         viewModel.vocabularies
             .do(onNext: { [weak self] (vocabularies) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.setupNavigationBar(vocabularies.count)
                 if vocabularies.count == 0 {
                     self.showEmptyView(self.tableView)
@@ -128,7 +128,7 @@ final class VocabularyListViewController: BaseViewController {
                 }
             })
             .bind(to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self), curriedArgument: { [weak self] (_, model, cell) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 cell.selectionStyle = .none
                 cell.vocabularyRealmModel = model
                 cell.longPressSubject

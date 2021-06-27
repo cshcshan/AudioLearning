@@ -55,7 +55,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
             .notification(.changeAppearance)
             .takeUntil(self.rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.setupUIColor()
             })
             .disposed(by: disposeBag)
@@ -140,7 +140,7 @@ extension BaseViewController {
     
     func showPlayingButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U, isShow: Bool) {
         let execute = { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             let button = self.view.viewWithTag(self.tagOfPlayingButton)
             if isShow {
                 guard button == nil else {

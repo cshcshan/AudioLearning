@@ -44,7 +44,7 @@ final class EpisodeListViewController: BaseViewController {
             .notification(.isPlaying)
             .takeUntil(self.rx.deallocated)
             .subscribe(onNext: { [weak self] (notification) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 guard let userInfo = notification.userInfo else { return }
                 guard let isPlaying = userInfo["isPlaying"] as? Bool else { return }
                 self.showPlayingButton(self.viewModel, to: self.tableView, isShow: isPlaying)
@@ -95,7 +95,7 @@ final class EpisodeListViewController: BaseViewController {
         viewModel.episodes
             .observeOn(MainScheduler.instance)
             .do(onNext: { [weak self] (episodes) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 if episodes.count == 0 {
                     self.showEmptyView(self.tableView)
                 } else {
@@ -105,7 +105,7 @@ final class EpisodeListViewController: BaseViewController {
             })
             .bind(to: tableView.rx.items(cellIdentifier: "EpisodeCell", cellType: EpisodeCell.self),
                   curriedArgument: { [weak self] (row, model, cell) in
-                    guard let `self` = self else { return }
+                    guard let self = self else { return }
                     cell.accessibilityIdentifier = "EpisodeCell_\(row)"
                     cell.selectionStyle = .none
                     self.viewModel.setCellViewModel
@@ -128,7 +128,7 @@ final class EpisodeListViewController: BaseViewController {
         viewModel.alert
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (alert) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showConfirmAlert(title: alert.title,
                                       message: alert.message,
                                       confirmHandler: nil,
@@ -145,7 +145,7 @@ final class EpisodeListViewController: BaseViewController {
         
         viewModel.getSelectEpisodeCell
             .subscribe(onNext: { [weak self] (indexPath) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.selectedCell = self.tableView.cellForRow(at: indexPath) as? EpisodeCell
             })
             .disposed(by: disposeBag)

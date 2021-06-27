@@ -124,7 +124,7 @@ extension BaseViewController {
         let side: CGFloat = 50
         let themeButton = UIButton(type: .custom)
         themeButton.tag = tagOfThemeButton
-        themeButton.setImage(UIImage(named: "theme"), for: UIControl.State())
+        themeButton.setImage(UIImage(named: "theme"), for: .normal)
         themeButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
         themeButton.circle(side / 2)
         themeButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -151,7 +151,7 @@ extension BaseViewController {
                 let side: CGFloat = 50
                 let playingButton = UIButton(type: .custom)
                 playingButton.tag = self.tagOfPlayingButton
-                playingButton.setImage(UIImage(named: "wave"), for: UIControl.State())
+                playingButton.setImage(UIImage(named: "wave"), for: .normal)
                 playingButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
                 playingButton.circle(side / 2)
                 playingButton.addPulseAnimation()

@@ -44,10 +44,10 @@ final class VocabularyDetailViewController: BaseViewController {
         noteTextView.textColor = Appearance.textColor
         noteTextView.layer.borderColor = Appearance.textColor.cgColor
         saveButton.backgroundColor = Appearance.backgroundColor
-        saveButton.setTitleColor(Appearance.textColor, for: UIControl.State())
+        saveButton.setTitleColor(Appearance.textColor, for: .normal)
         saveButton.layer.borderColor = Appearance.textColor.cgColor
         cancelButton.backgroundColor = Appearance.backgroundColor
-        cancelButton.setTitleColor(Appearance.textColor, for: UIControl.State())
+        cancelButton.setTitleColor(Appearance.textColor, for: .normal)
         cancelButton.layer.borderColor = Appearance.textColor.cgColor
     }
     

@@ -73,7 +73,7 @@ final class VocabularyCell: BaseTableViewCell {
                 self.episodeLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
                 self.episodeLabel.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
                 self.deleteButton.setImage(Appearance.mode == .dark ?
-                    self.darkBgDeleteImage : self.lightBgDeleteImage, for: UIControl.State())
+                    self.darkBgDeleteImage : self.lightBgDeleteImage, for: .normal)
             })
             .disposed(by: disposeBag)
         

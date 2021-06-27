@@ -53,8 +53,8 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
             UIImage(named: "forward-10") : UIImage(named: "forward-10-white")
         let rewindImage = Appearance.mode == .dark ?
             UIImage(named: "rewind-10") : UIImage(named: "rewind-10-white")
-        forwardButton.setImage(forwardImage, for: UIControl.State())
-        rewindButton.setImage(rewindImage, for: UIControl.State())
+        forwardButton.setImage(forwardImage, for: .normal)
+        rewindButton.setImage(rewindImage, for: .normal)
         speedSegmentedControl.tintColor = foreColor
         progressTimerLabel.textColor = foreColor
         totalLengthLabel.textColor = foreColor
@@ -118,7 +118,7 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
             .drive(onNext: { [weak self] (isPlaying) in
                 guard let self = self else { return }
                 self.playButton.setImage(isPlaying ? self.pauseImage : self.playImage,
-                                         for: UIControl.State())
+                                         for: .normal)
             })
             .disposed(by: disposeBag)
         

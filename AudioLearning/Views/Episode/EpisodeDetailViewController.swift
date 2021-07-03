@@ -65,6 +65,7 @@ final class EpisodeDetailViewController: BaseViewController {
         // playerView
         setupPlayerViewShadow()
         musicPlayerView.frame = playerView.bounds
+        playerView.clipsToBounds = true
         playerView.addSubview(musicPlayerView)
         playerView.sendSubviewToBack(musicPlayerView)
         animatePlayerViewHeight()

@@ -30,8 +30,8 @@ final class EpisodeDetailViewController: BaseViewController {
     var musicPlayerView: UIView!
     var vocabularyDetailView: UIView!
     private var beganPlayerViewHeight: CGFloat = .zero
-    private let maxPlayerViewHeight: CGFloat = 195.5
-    private let minPlayerViewHeight: CGFloat = 76
+    private let maxPlayerViewHeight: CGFloat = 176.5 + 32 + 16
+    private let minPlayerViewHeight: CGFloat = 90
 
     override func viewDidLoad() {
         super.viewDidLoad()

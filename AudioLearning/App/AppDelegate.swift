@@ -9,12 +9,14 @@
 import UIKit
 import RealmSwift
 import Lottie
+import RxSwift
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var appCoordinator: AppCoordinator!
+    private let disposeBag = DisposeBag()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -25,7 +27,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let startCoordinator: (() -> Void) = { [weak self] in
             guard let self = self else { return }
             self.appCoordinator = AppCoordinator(window: self.window!)
-            _ = self.appCoordinator.start()
+            self.appCoordinator.start().subscribe().disposed(by: self.disposeBag)
         }
         setupLaunchScreen(startCoordinator)
         return true

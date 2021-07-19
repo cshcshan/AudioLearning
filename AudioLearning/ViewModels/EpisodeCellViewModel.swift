@@ -8,11 +8,17 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 final class EpisodeCellViewModel: BaseViewModel {
-    
-    // Inputs
-    private(set) var load: AnyObserver<EpisodeModel?>!
+
+    struct Inputs {
+        let load: AnyObserver<EpisodeModel>
+    }
+
+    // MARK: - Properties
+
+    let inputs: Inputs
     
     // Outputs
     private(set) var title = BehaviorSubject<String>(value: "")
@@ -21,40 +27,43 @@ final class EpisodeCellViewModel: BaseViewModel {
     private(set) var image = BehaviorSubject<UIImage?>(value: nil)
     private(set) var imageRefreshing = BehaviorSubject<Bool>(value: false)
     
-    private let loadSubject = PublishSubject<EpisodeModel?>()
+    private let load = PublishSubject<EpisodeModel>()
     
     private var apiService: APIServiceProtocol?
     
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
+        self.inputs = Inputs(load: load.asObserver())
         super.init()
-        load = loadSubject.asObserver()
-        
-        loadSubject
-            .subscribe(onNext: { [weak self] (episodeModel) in
-                guard let self = self else { return }
-                guard let episodeModel = episodeModel else {
-                    self.title.onNext("")
-                    self.date.onNext("")
-                    self.desc.onNext("")
-                    return
-                }
-                self.title.onNext(episodeModel.title ?? "")
-                if let dateVal = episodeModel.date, let dateValStr = dateVal.toString(dateFormat: "yyyy/M/d") {
-                    self.date.onNext(dateValStr)
-                } else {
-                    self.date.onNext("")
-                }
-                self.desc.onNext(episodeModel.desc ?? "")
-                if let imagePath = episodeModel.imagePath {
-                    self.imageRefreshing.onNext(true)
-                    apiService.getImage(path: imagePath, completionHandler: { [weak self] (image) in
-                        guard let self = self else { return }
-                        self.image.onNext(image)
-                        self.imageRefreshing.onNext(false)
-                    })
-                } else {
-                    self.image.onNext(nil)
+
+        load.map { $0.title ?? "" }.bind(to: title).disposed(by: disposeBag)
+        load.map { $0.desc ?? "" }.bind(to: desc).disposed(by: disposeBag)
+
+        load
+            .map {
+                guard let date = $0.date, let dateString = date.toString(dateFormat: "yyyy/M/d") else { return "" }
+                return dateString
+            }
+            .bind(to: date)
+            .disposed(by: disposeBag)
+
+        let imagePath = load
+            .map { episode -> String? in
+                guard let path = episode.imagePath else { return nil }
+                return path
+            }
+            .share()
+
+        imagePath.filter { $0 == nil }.map { _ in nil }.bind(to: image).disposed(by: disposeBag)
+        imagePath
+            .compactMap { $0 }
+            .do(onNext: { [weak self] _ in
+                self?.imageRefreshing.onNext(true)
+            })
+            .subscribe(with: self, onNext: { `self`, imagePath in
+                apiService.getImage(path: imagePath) { image in
+                    self.image.onNext(image)
+                    self.imageRefreshing.onNext(false)
                 }
             })
             .disposed(by: disposeBag)

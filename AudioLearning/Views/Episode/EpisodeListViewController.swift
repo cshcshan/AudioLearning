@@ -112,7 +112,7 @@ final class EpisodeListViewController: BaseViewController {
                         .take(1)
                         .subscribe(onNext: { (episodeCellViewModel) in
                             cell.viewModel = episodeCellViewModel
-                            cell.viewModel?.load.onNext(model)
+                            cell.viewModel?.inputs.load.onNext(model)
                         })
                         .disposed(by: self.disposeBag)
                     self.viewModel.getCellViewModel.onNext(row)

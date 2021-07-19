@@ -20,7 +20,7 @@ final class FlashCardsCoordinator: BaseCoordinator<Void> {
     
     override func start() -> Observable<Void> {
         self.showFlashCardList()
-        return .never()
+        return .empty()
     }
     
     private func showFlashCardList() {

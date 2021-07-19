@@ -21,7 +21,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
     
     override func start() -> Observable<Void> {
         self.showVocabularyList()
-        return .never()
+        return .empty()
     }
     
     private func showVocabularyList() {

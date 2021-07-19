@@ -24,7 +24,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         self.showEpisodeList()
         self.window.rootViewController = navigationController
         self.window.makeKeyAndVisible()
-        return .never()
+        return .empty()
     }
     
     private func showEpisodeList() {

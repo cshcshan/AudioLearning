@@ -29,22 +29,25 @@ final class EpisodeCell: BaseTableViewCell {
     
     private let highlightedSubject = PublishSubject<Bool>()
     private let selectedSubject = PublishSubject<Bool>()
-    private let disposeBag = DisposeBag()
-    private var titleDisposable: Disposable?
-    private var dateDisposable: Disposable?
-    private var descDisposable: Disposable?
-    private var imageDisposable: Disposable?
-    private var imageRefreshingDisposable: Disposable?
-    
+    private var disposeBag = DisposeBag()
+
     var viewModel: EpisodeCellViewModel? {
         didSet {
-            setupBindings()
+            bindViewModel()
         }
     }
+
+    // MARK: - View Lifecycle
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupColorBindings()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+        photoImageView.image = nil
     }
     
     override func layoutSubviews() {
@@ -90,41 +93,36 @@ final class EpisodeCell: BaseTableViewCell {
             })
             .disposed(by: disposeBag)
     }
-    
-    private func setupBindings() {
-        titleDisposable?.dispose()
-        dateDisposable?.dispose()
-        descDisposable?.dispose()
-        imageDisposable?.dispose()
-        imageRefreshingDisposable?.dispose()
 
-        titleDisposable = viewModel?.title.bind(to: titleLabel.rx.text)
-        dateDisposable = viewModel?.date.bind(to: dateLabel.rx.text)
-        descDisposable = viewModel?.desc.bind(to: descLabel.rx.text)
-        imageDisposable = viewModel?.image
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (image) in
-                guard let self = self else { return }
-                if image == nil {
-                    self.photoImageView.image = self.getNormalImage()
-                } else {
-                    self.photoImageView.image = image
+    // MARK: - Bind
+
+    private func bindViewModel() {
+        viewModel?.outputs.title.drive(titleLabel.rx.text).disposed(by: disposeBag)
+        viewModel?.outputs.date.drive(dateLabel.rx.text).disposed(by: disposeBag)
+        viewModel?.outputs.desc.drive(descLabel.rx.text).disposed(by: disposeBag)
+
+        viewModel?.outputs.image
+            .map { [weak self] image in image == nil ? self?.getNormalImage() : image }
+            .drive(photoImageView.rx.image).disposed(by: disposeBag)
+
+        viewModel?.outputs.imageRefreshing
+            .map { !$0 }
+            .do(
+                onNext: { [indicatorView] isRefreshing in
+                    if isRefreshing {
+                        indicatorView?.startAnimating()
+                    }
+                },
+                afterNext: { [indicatorView] isRefreshing in
+                    if !isRefreshing {
+                        indicatorView?.stopAnimating()
+                    }
                 }
-            })
-        imageRefreshingDisposable = viewModel?.imageRefreshing
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (isRefreshing) in
-                guard let self = self else { return }
-                if isRefreshing {
-                    self.indicatorView.isHidden = false
-                    self.indicatorView.startAnimating()
-                } else {
-                    self.indicatorView.stopAnimating()
-                    self.indicatorView.isHidden = true
-                }
-            })
+            )
+            .emit(to: indicatorView.rx.isHidden)
+            .disposed(by: disposeBag)
     }
-    
+
     private func getNormalImage() -> UIImage? {
         return Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
     }

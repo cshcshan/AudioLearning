@@ -16,34 +16,45 @@ final class EpisodeCellViewModel: BaseViewModel {
         let load: AnyObserver<EpisodeModel>
     }
 
+    struct Outputs {
+        let title: Driver<String?>
+        let date: Driver<String?>
+        let desc: Driver<String?>
+        let image: Driver<UIImage?>
+        let imageRefreshing: Signal<Bool>
+    }
+
     // MARK: - Properties
 
     let inputs: Inputs
-    
-    // Outputs
-    private(set) var title = BehaviorSubject<String>(value: "")
-    private(set) var date = BehaviorSubject<String>(value: "")
-    private(set) var desc = BehaviorSubject<String>(value: "")
-    private(set) var image = BehaviorSubject<UIImage?>(value: nil)
-    private(set) var imageRefreshing = BehaviorSubject<Bool>(value: false)
+    let outputs: Outputs
     
     private let load = PublishSubject<EpisodeModel>()
+
+    private let title = BehaviorRelay<String?>(value: nil)
+    private let date = BehaviorRelay<String?>(value: nil)
+    private let desc = BehaviorRelay<String?>(value: nil)
+    private let image = BehaviorRelay<UIImage?>(value: nil)
+    private let imageRefreshing = PublishRelay<Bool>()
     
     private var apiService: APIServiceProtocol?
     
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
         self.inputs = Inputs(load: load.asObserver())
+        self.outputs = Outputs(
+            title: title.asDriver(),
+            date: date.asDriver(),
+            desc: desc.asDriver(),
+            image: image.asDriver(),
+            imageRefreshing: imageRefreshing.asSignal())
+
         super.init()
 
-        load.map { $0.title ?? "" }.bind(to: title).disposed(by: disposeBag)
-        load.map { $0.desc ?? "" }.bind(to: desc).disposed(by: disposeBag)
+        load.map { $0.title }.bind(to: title).disposed(by: disposeBag)
+        load.map { $0.desc }.bind(to: desc).disposed(by: disposeBag)
 
-        load
-            .map {
-                guard let date = $0.date, let dateString = date.toString(dateFormat: "yyyy/M/d") else { return "" }
-                return dateString
-            }
+        load.map { $0.date?.toString(dateFormat: "yyyy/M/d") }
             .bind(to: date)
             .disposed(by: disposeBag)
 
@@ -58,12 +69,12 @@ final class EpisodeCellViewModel: BaseViewModel {
         imagePath
             .compactMap { $0 }
             .do(onNext: { [weak self] _ in
-                self?.imageRefreshing.onNext(true)
+                self?.imageRefreshing.accept(true)
             })
             .subscribe(with: self, onNext: { `self`, imagePath in
                 apiService.getImage(path: imagePath) { image in
-                    self.image.onNext(image)
-                    self.imageRefreshing.onNext(false)
+                    self.image.accept(image)
+                    self.imageRefreshing.accept(false)
                 }
             })
             .disposed(by: disposeBag)

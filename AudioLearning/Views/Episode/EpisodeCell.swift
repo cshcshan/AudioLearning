@@ -102,7 +102,7 @@ final class EpisodeCell: BaseTableViewCell {
         dateDisposable = viewModel?.date.bind(to: dateLabel.rx.text)
         descDisposable = viewModel?.desc.bind(to: descLabel.rx.text)
         imageDisposable = viewModel?.image
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (image) in
                 guard let self = self else { return }
                 if image == nil {
@@ -112,7 +112,7 @@ final class EpisodeCell: BaseTableViewCell {
                 }
             })
         imageRefreshingDisposable = viewModel?.imageRefreshing
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (isRefreshing) in
                 guard let self = self else { return }
                 if isRefreshing {

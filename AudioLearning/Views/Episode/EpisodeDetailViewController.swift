@@ -115,7 +115,7 @@ final class EpisodeDetailViewController: BaseViewController {
         navigationItem.title = viewModel.title
         
         viewModel.image
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (image) in
                 guard let self = self else { return }
                 if image == nil {
@@ -127,7 +127,7 @@ final class EpisodeDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         viewModel.scriptHtml
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .map({ [weak self] (html) -> NSAttributedString in
                 guard let self = self else { return NSAttributedString() }
                 let fontName = self.htmlTextView.font!.fontName
@@ -145,7 +145,7 @@ final class EpisodeDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         viewModel.alert
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (alert) in
                 guard let self = self else { return }
                 self.showConfirmAlert(title: alert.title,

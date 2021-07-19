@@ -130,7 +130,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
                 self.refreshingSubject.onNext(false)
                 return .empty()
             })
-            .catchError({ [weak self] (error) -> Observable<Void> in
+            .catch({ [weak self] (error) -> Observable<Void> in
                 guard let self = self else { return .empty() }
                 self.refreshingSubject.onNext(false)
                 let alertModel = AlertModel(title: "Load Episode Detail Error",

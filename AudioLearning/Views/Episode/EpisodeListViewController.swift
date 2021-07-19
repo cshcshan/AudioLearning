@@ -42,7 +42,7 @@ final class EpisodeListViewController: BaseViewController {
         super.setupNotification()
         NotificationCenter.default.rx
             .notification(.isPlaying)
-            .takeUntil(self.rx.deallocated)
+            .take(until: self.rx.deallocated)
             .subscribe(onNext: { [weak self] (notification) in
                 guard let self = self else { return }
                 guard let userInfo = notification.userInfo else { return }
@@ -93,7 +93,7 @@ final class EpisodeListViewController: BaseViewController {
     private func setupBindings() {
         // ViewModel's output to the ViewController
         viewModel.episodes
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .do(onNext: { [weak self] (episodes) in
                 guard let self = self else { return }
                 if episodes.count == 0 {
@@ -126,7 +126,7 @@ final class EpisodeListViewController: BaseViewController {
         }
         
         viewModel.alert
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (alert) in
                 guard let self = self else { return }
                 self.showConfirmAlert(title: alert.title,

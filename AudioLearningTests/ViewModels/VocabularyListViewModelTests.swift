@@ -99,14 +99,14 @@ class VocabularyListViewModelTests: XCTestCase {
     func testShowVocabularyDetail() {
         let model190815 = VocabularyRealm()
         model190815.id = "190815"
-        model190815.episode = "Episode 190815"
+        model190815.episodeID = "Episode 190815"
         model190815.word = "Apple"
         model190815.note = "蘋果🍎"
         model190815.updateDate = Date()
 
         let model190822 = VocabularyRealm()
         model190815.id = "190822"
-        model190822.episode = "Episode 190822"
+        model190822.episodeID = "Episode 190822"
         model190822.word = "Phone"
         model190822.note = "手機📱"
         model190822.updateDate = Date()
@@ -170,7 +170,7 @@ extension VocabularyListViewModelTests {
         for index in 1...10 {
             let model = VocabularyRealm()
             model.id = "\(index)"
-            model.episode = "Episode 19081\(index)"
+            model.episodeID = "Episode 19081\(index)"
             model.word = "Hello \(index)"
             model.note = "World \(index)"
             model.updateDate = Date()

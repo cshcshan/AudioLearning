@@ -90,7 +90,7 @@ extension FlashCardsViewModelTests {
         for index in 1...10 {
             let model = VocabularyRealm()
             model.id = "\(index)"
-            model.episode = "Episode 190815"
+            model.episodeID = "Episode 190815"
             model.word = "Hello \(index)"
             model.note = "World \(index)"
             model.updateDate = Date()

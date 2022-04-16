@@ -12,7 +12,7 @@ import RealmSwift
 @objcMembers
 final class VocabularyRealm: Object {
     dynamic var id: String?
-    dynamic var episode: String?
+    dynamic var episodeID: String?
     dynamic var word: String?
     dynamic var note: String?
     dynamic var updateDate: Date?

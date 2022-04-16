@@ -623,7 +623,7 @@ extension VocabularyDetailViewModelTests {
         for index in 1...10 {
             let model = VocabularyRealm()
             model.id = "\(index)"
-            model.episode = "Episode 190815"
+            model.episodeID = "Episode 190815"
             model.word = "Hello \(index)"
             model.note = "World \(index)"
             model.updateDate = Date()
@@ -634,13 +634,13 @@ extension VocabularyDetailViewModelTests {
 
     private func setupModels() {
         realmModel190815.id = "realmModel190815"
-        realmModel190815.episode = "Episode 190815"
+        realmModel190815.episodeID = "Episode 190815"
         realmModel190815.word = "Apple"
         realmModel190815.note = "蘋果🍎"
         realmModel190815.updateDate = Date()
 
         realmModel190822.id = "realmModel190815"
-        realmModel190822.episode = "Episode 190822"
+        realmModel190822.episodeID = "Episode 190822"
         realmModel190822.word = "Phone"
         realmModel190822.note = "手機📱"
         realmModel190822.updateDate = Date()

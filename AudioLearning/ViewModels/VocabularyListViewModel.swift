@@ -63,7 +63,7 @@ final class VocabularyListViewModel: BaseViewModel {
             .compactMap { episode in
                 guard let episode = episode else { return nil }
                 let sortedByAsc = ["updateDate": false]
-                return (NSPredicate(format: "episode == %@", episode), sortedByAsc)
+                return (NSPredicate(format: "episodeID == %@", episode), sortedByAsc)
             }
             .bind(to: realmService.filter)
             .disposed(by: bag)

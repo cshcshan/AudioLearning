@@ -108,7 +108,7 @@ final class VocabularyCell: BaseTableViewCell {
 
     private func bindUI() {
         wordLabel.text = vocabularyRealm?.word
-        episodeLabel.text = vocabularyRealm?.episode
+        episodeLabel.text = vocabularyRealm?.episodeID
     }
 
     private func addLongPressed() {

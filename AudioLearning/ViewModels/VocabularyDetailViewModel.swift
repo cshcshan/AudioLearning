@@ -36,7 +36,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
 
     private let realmService: RealmService<VocabularyRealm>
     private var model: VocabularyRealm?
-    private var episode: String?
+    private var episodeID: String?
 
     init(realmService: RealmService<VocabularyRealm>) {
         self.realmService = realmService
@@ -81,7 +81,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
             .subscribe(onNext: { [weak self] episode, word in
                 guard let self = self else { return }
                 self.model = nil
-                self.episode = episode
+                self.episodeID = episode
                 self.word.onNext(word)
                 self.note.onNext("")
                 var predicate = NSPredicate(format: "word == %@", word)
@@ -103,7 +103,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 guard let word = saveModel.word, !word.isEmpty else { return alert() }
                 let newModel = VocabularyRealm()
                 newModel.id = self.model == nil ? UUID().uuidString : self.model!.id
-                newModel.episode = self.episode
+                newModel.episodeID = self.episodeID
                 newModel.word = saveModel.word
                 newModel.note = saveModel.note
                 newModel.updateDate = Date()

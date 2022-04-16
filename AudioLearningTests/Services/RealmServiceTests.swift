@@ -15,7 +15,7 @@ import XCTest
 
 class RealmServiceTests: XCTestCase {
 
-    var sut: RealmService<EpisodeRealmModel>!
+    var sut: RealmService<EpisodeRealm>!
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
 
@@ -35,10 +35,10 @@ class RealmServiceTests: XCTestCase {
     }
 
     func testAddObjects() {
-        let objects = scheduler.createObserver([EpisodeRealmModel]?.self)
-        var models = [EpisodeRealmModel]()
+        let objects = scheduler.createObserver([EpisodeRealm]?.self)
+        var models = [EpisodeRealm]()
         for index in 21...30 {
-            let model = EpisodeRealmModel()
+            let model = EpisodeRealm()
             model.episode = String(index)
             model.title = "Hello \(index)"
             model.desc = "This is \(index) minutes english."
@@ -54,8 +54,8 @@ class RealmServiceTests: XCTestCase {
     }
 
     func testAddObject() {
-        let object = scheduler.createObserver(EpisodeRealmModel?.self)
-        let model = EpisodeRealmModel()
+        let object = scheduler.createObserver(EpisodeRealm?.self)
+        let model = EpisodeRealm()
         model.episode = "100"
         model.title = "Hello World"
         model.desc = "This is 100 minutes english."
@@ -87,10 +87,10 @@ class RealmServiceTests: XCTestCase {
 
         let filterExpectation = expectation(description: "Filter")
         sut.filterObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 filterExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels[0].title, "World 12")
-                XCTAssertEqual(episodeRealmModels[1].title, "World 20")
+                XCTAssertEqual(episodeRealms[0].title, "World 12")
+                XCTAssertEqual(episodeRealms[1].title, "World 20")
             })
             .disposed(by: disposeBag)
         sut.filter.onNext((predicate, ["episode": true]))
@@ -114,10 +114,10 @@ class RealmServiceTests: XCTestCase {
 
         let filterExpectation = expectation(description: "Filter")
         sut.filterObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 filterExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels[0].title, "Hello 12")
-                XCTAssertEqual(episodeRealmModels[1].title, "Hello 20")
+                XCTAssertEqual(episodeRealms[0].title, "Hello 12")
+                XCTAssertEqual(episodeRealms[1].title, "Hello 20")
             })
             .disposed(by: disposeBag)
         sut.filter.onNext((predicate, ["episode": true]))
@@ -137,9 +137,9 @@ class RealmServiceTests: XCTestCase {
 
         let loadAllExpectation = expectation(description: "Load All")
         sut.allObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels.count, 8)
+                XCTAssertEqual(episodeRealms.count, 8)
             })
             .disposed(by: disposeBag)
         sut.loadAll.onNext(nil)
@@ -158,9 +158,9 @@ class RealmServiceTests: XCTestCase {
 
         let loadAllExpectation = expectation(description: "Load All")
         sut.allObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels.count, 0)
+                XCTAssertEqual(episodeRealms.count, 0)
             })
             .disposed(by: disposeBag)
         sut.loadAll.onNext(nil)
@@ -173,9 +173,9 @@ class RealmServiceTests: XCTestCase {
     func testLoadAll() {
         let loadAllExpectation = expectation(description: "Load All")
         sut.allObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels.count, 10)
+                XCTAssertEqual(episodeRealms.count, 10)
             })
             .disposed(by: disposeBag)
         sut.loadAll.onNext(nil)
@@ -188,10 +188,10 @@ class RealmServiceTests: XCTestCase {
     func testLoadAll_EpisodeDescended() {
         let loadAllExpectation = expectation(description: "Load All")
         sut.allObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels[0].episode, "20")
-                XCTAssertEqual(episodeRealmModels[9].episode, "11")
+                XCTAssertEqual(episodeRealms[0].episode, "20")
+                XCTAssertEqual(episodeRealms[9].episode, "11")
             })
             .disposed(by: disposeBag)
         sut.loadAll.onNext(["episode": false])
@@ -205,10 +205,10 @@ class RealmServiceTests: XCTestCase {
         let filterExpectation = expectation(description: "Filter")
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
         sut.filterObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 filterExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels[0].episode, "12")
-                XCTAssertEqual(episodeRealmModels[1].episode, "20")
+                XCTAssertEqual(episodeRealms[0].episode, "12")
+                XCTAssertEqual(episodeRealms[1].episode, "20")
             })
             .disposed(by: disposeBag)
         sut.filter.onNext((predicate, nil))
@@ -222,10 +222,10 @@ class RealmServiceTests: XCTestCase {
         let filterExpectation = expectation(description: "Filter")
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
         sut.filterObjects
-            .subscribe(onNext: { episodeRealmModels in
+            .subscribe(onNext: { episodeRealms in
                 filterExpectation.fulfill()
-                XCTAssertEqual(episodeRealmModels[0].episode, "20")
-                XCTAssertEqual(episodeRealmModels[1].episode, "12")
+                XCTAssertEqual(episodeRealms[0].episode, "20")
+                XCTAssertEqual(episodeRealms[1].episode, "12")
             })
             .disposed(by: disposeBag)
         sut.filter.onNext((predicate, ["episode": false]))
@@ -243,9 +243,9 @@ extension RealmServiceTests {
     }
 
     private func initStub() {
-        var models = [EpisodeRealmModel]()
+        var models = [EpisodeRealm]()
         for index in 11...20 {
-            let model = EpisodeRealmModel()
+            let model = EpisodeRealm()
             model.episode = String(index)
             model.title = "Hello \(index)"
             model.desc = "This is \(index) minutes english."

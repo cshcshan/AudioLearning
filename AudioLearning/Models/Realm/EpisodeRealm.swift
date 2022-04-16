@@ -1,5 +1,5 @@
 //
-//  EpisodeRealmModel.swift
+//  EpisodeRealm.swift
 //  AudioLearning
 //
 //  Created by Han Chen on 2019/9/20.
@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 @objcMembers
-final class EpisodeRealmModel: Object {
+final class EpisodeRealm: Object {
     dynamic var episode: String?
     dynamic var title: String?
     dynamic var desc: String?

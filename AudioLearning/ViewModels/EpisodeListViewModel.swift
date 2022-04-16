@@ -39,10 +39,10 @@ final class EpisodeListViewModel: BaseViewModel {
     private let refreshingSubject = PublishSubject<Bool>()
 
     private let apiService: APIServiceProtocol!
-    private let realmService: RealmService<EpisodeRealmModel>!
+    private let realmService: RealmService<EpisodeRealm>!
     private var cellViewModels: [EpisodeCellViewModel?]!
 
-    init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeRealmModel>) {
+    init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeRealm>) {
         self.apiService = apiService
         self.realmService = realmService
         super.init()
@@ -64,11 +64,11 @@ final class EpisodeListViewModel: BaseViewModel {
             .disposed(by: disposeBag)
 
         self.episodes = realmService.allObjects
-            .flatMapLatest { [weak self] episodeRealmModels -> Observable<[EpisodeModel]> in
+            .flatMapLatest { [weak self] episodeRealms -> Observable<[EpisodeModel]> in
                 guard let self = self else { return .empty() }
                 var episodeModels = [EpisodeModel]()
-                for episodeRealmModel in episodeRealmModels {
-                    let episodeModel = EpisodeModel(from: episodeRealmModel)
+                for episodeRealm in episodeRealms {
+                    let episodeModel = EpisodeModel(from: episodeRealm)
                     episodeModels.append(episodeModel)
                 }
                 self.cellViewModels = [EpisodeCellViewModel?](repeating: nil, count: episodeModels.count)
@@ -104,9 +104,9 @@ final class EpisodeListViewModel: BaseViewModel {
 
     private func reloadDataFromServer() -> Observable<Void> {
         apiService.episodes
-            .flatMapLatest { [weak self] episodeRealmModels -> Observable<Void> in
+            .flatMapLatest { [weak self] episodeRealms -> Observable<Void> in
                 guard let self = self else { return .empty() }
-                _ = self.realmService.add(objects: episodeRealmModels)
+                _ = self.realmService.add(objects: episodeRealms)
                 self.loadData()
                 self.refreshingSubject.onNext(false)
                 return .empty()

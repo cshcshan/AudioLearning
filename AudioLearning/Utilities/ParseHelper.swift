@@ -9,7 +9,7 @@
 import SwiftSoup
 
 protocol ParseHelperProtocol {
-    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel]
+    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealm]
     func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String, episode: String)
         -> EpisodeDetailRealmModel?
 }
@@ -31,7 +31,7 @@ enum HtmlQuery: String {
 
 final class ParseSixMinutesHelper: ParseHelperProtocol {
 
-    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel] {
+    func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealm] {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return [] }
         var episodeModels = getListToEpisodeModels(from: document)
         if let episodeModel = getTopItemToEpisodeModels(from: document) {
@@ -59,10 +59,10 @@ extension ParseSixMinutesHelper {
 
     // MARK: List
 
-    private func getTopItemToEpisodeModels(from document: Document) -> EpisodeRealmModel? {
+    private func getTopItemToEpisodeModels(from document: Document) -> EpisodeRealm? {
         guard let elements = try? document.select(HtmlQuery.smTopItem.rawValue),
               let element = elements.first() else { return nil }
-        let model = EpisodeRealmModel()
+        let model = EpisodeRealm()
         model.episode = getEpisode(by: element)
         model.title = getTitle(by: element)
         model.desc = getDesc(by: element)
@@ -72,10 +72,10 @@ extension ParseSixMinutesHelper {
         return model
     }
 
-    private func getListToEpisodeModels(from document: Document) -> [EpisodeRealmModel] {
+    private func getListToEpisodeModels(from document: Document) -> [EpisodeRealm] {
         guard let elements = try? document.select(HtmlQuery.smList.rawValue) else { return [] }
-        return elements.map { element -> EpisodeRealmModel in
-            let model = EpisodeRealmModel()
+        return elements.map { element -> EpisodeRealm in
+            let model = EpisodeRealm()
             model.episode = getEpisode(by: element)
             model.title = getTitle(by: element)
             model.desc = getDesc(by: element)

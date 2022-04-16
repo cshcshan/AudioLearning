@@ -25,13 +25,13 @@ struct EpisodeModel {
         self.path = path
     }
 
-    init(from episodeRealmModel: EpisodeRealmModel?) {
-        self.episode = episodeRealmModel?.episode
-        self.title = episodeRealmModel?.title
-        self.desc = episodeRealmModel?.desc
-        self.date = episodeRealmModel?.date
-        self.imagePath = episodeRealmModel?.imagePath
-        self.path = episodeRealmModel?.path
+    init(from episodeRealm: EpisodeRealm?) {
+        self.episode = episodeRealm?.episode
+        self.title = episodeRealm?.title
+        self.desc = episodeRealm?.desc
+        self.date = episodeRealm?.date
+        self.imagePath = episodeRealm?.imagePath
+        self.path = episodeRealm?.path
     }
 }
 

@@ -41,7 +41,7 @@
 		3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */; };
 		3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */; };
 		3348C7662338C20A00CAC170 /* VocabularyListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */; };
-		3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABEF2334EDB30031B9C1 /* EpisodeRealmModel.swift */; };
+		3353ABF02334EDB30031B9C1 /* EpisodeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */; };
 		3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */; };
 		3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF42334F1A90031B9C1 /* RealmService.swift */; };
 		3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */; };
@@ -165,7 +165,7 @@
 		3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyRealmModel.swift; sourceTree = "<group>"; };
 		3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewModel.swift; sourceTree = "<group>"; };
 		3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewModelTests.swift; sourceTree = "<group>"; };
-		3353ABEF2334EDB30031B9C1 /* EpisodeRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeRealmModel.swift; sourceTree = "<group>"; };
+		3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeRealm.swift; sourceTree = "<group>"; };
 		3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionFileManager.swift; sourceTree = "<group>"; };
 		3353ABF42334F1A90031B9C1 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmServiceTests.swift; sourceTree = "<group>"; };
@@ -438,7 +438,7 @@
 		3353ABEE2334ED9A0031B9C1 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
-				3353ABEF2334EDB30031B9C1 /* EpisodeRealmModel.swift */,
+				3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */,
 				3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */,
 				3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */,
 			);
@@ -962,7 +962,7 @@
 				33D30032235D4FCF000A318F /* EpisodeCellViewModel.swift in Sources */,
 				33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */,
 				3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */,
-				3353ABF02334EDB30031B9C1 /* EpisodeRealmModel.swift in Sources */,
+				3353ABF02334EDB30031B9C1 /* EpisodeRealm.swift in Sources */,
 				33D641E523409B2000A97F9E /* FlashCardsCoordinator.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */,

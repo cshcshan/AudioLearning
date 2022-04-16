@@ -18,7 +18,7 @@ class EpisodeListViewModelTests: XCTestCase {
 
     var sut: EpisodeListViewModel!
     var apiService: MockAPIService!
-    var realmService: RealmService<EpisodeRealmModel>!
+    var realmService: RealmService<EpisodeRealm>!
 
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!

@@ -31,7 +31,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         // ViewModel
         let parseSixMinutesHelper = ParseSixMinutesHelper()
         let apiService = APIService(parseSMHelper: parseSixMinutesHelper)
-        let realmService = RealmService<EpisodeRealmModel>()
+        let realmService = RealmService<EpisodeRealm>()
         let viewModel = EpisodeListViewModel(apiService: apiService, realmService: realmService)
 
         // Note:

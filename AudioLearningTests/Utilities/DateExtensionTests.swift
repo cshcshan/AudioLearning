@@ -1,5 +1,5 @@
 //
-//  ExtensionDateTests.swift
+//  DateExtensionTests.swift
 //  AudioLearningTests
 //
 //  Created by Han Chen on 2019/9/4.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import AudioLearning
 
-class ExtensionDateTests: XCTestCase {
+final class DateExtensionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -20,7 +20,7 @@ class ExtensionDateTests: XCTestCase {
     }
 }
 
-extension ExtensionDateTests {
+extension DateExtensionTests {
 
     // NARK: testToString
 

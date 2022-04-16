@@ -30,7 +30,7 @@
 		332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158E23178A5A003C78EA /* EpisodeModelTests.swift */; };
 		332C15922317A5C4003C78EA /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* Episode.swift */; };
 		332C15952317A7C1003C78EA /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* String+Extension.swift */; };
-		332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15962317EF43003C78EA /* ExtensionStringTests.swift */; };
+		332C15972317EF43003C78EA /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15962317EF43003C78EA /* StringExtensionTests.swift */; };
 		332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */; };
 		332C159B2318CE10003C78EA /* ep-190815.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C159A2318CE10003C78EA /* ep-190815.html */; };
 		332C159D2318DD42003C78EA /* EpisodeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C159C2318DD42003C78EA /* EpisodeDetail.swift */; };
@@ -54,7 +54,7 @@
 		33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */; };
 		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
 		33892AA9231F6AA500340C17 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* Date+Extension.swift */; };
-		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
+		33892AAB231F73FA00340C17 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* DateExtensionTests.swift */; };
 		33A208342355C332008CBFB3 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208332355C332008CBFB3 /* UIButton+Extension.swift */; };
 		33A208362355C81D008CBFB3 /* BaseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */; };
 		33B1AF2323471A54007B7E8E /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2223471A54007B7E8E /* Page.swift */; };
@@ -154,7 +154,7 @@
 		332C158E23178A5A003C78EA /* EpisodeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModelTests.swift; sourceTree = "<group>"; };
 		332C15912317A5C4003C78EA /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		332C15942317A7C1003C78EA /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
-		332C15962317EF43003C78EA /* ExtensionStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStringTests.swift; sourceTree = "<group>"; };
+		332C15962317EF43003C78EA /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModelTests.swift; sourceTree = "<group>"; };
 		332C159A2318CE10003C78EA /* ep-190815.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "ep-190815.html"; sourceTree = "<group>"; };
 		332C159C2318DD42003C78EA /* EpisodeDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetail.swift; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 		33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
 		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
 		33892AA8231F6AA500340C17 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
+		33892AAA231F73FA00340C17 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		33A208332355C332008CBFB3 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModelTests.swift; sourceTree = "<group>"; };
 		33B1AF2223471A54007B7E8E /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
@@ -482,8 +482,8 @@
 		33892A9B231E0BC900340C17 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				332C15962317EF43003C78EA /* ExtensionStringTests.swift */,
-				33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */,
+				332C15962317EF43003C78EA /* StringExtensionTests.swift */,
+				33892AAA231F73FA00340C17 /* DateExtensionTests.swift */,
 				332C15872317834F003C78EA /* ParseSixMinutesHelperTests.swift */,
 			);
 			path = Utilities;
@@ -998,9 +998,9 @@
 				33E37821231CB61300C6671B /* EpisodeListViewModelTests.swift in Sources */,
 				33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */,
 				3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */,
-				33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */,
+				33892AAB231F73FA00340C17 /* DateExtensionTests.swift in Sources */,
 				33A208362355C81D008CBFB3 /* BaseViewModelTests.swift in Sources */,
-				332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */,
+				332C15972317EF43003C78EA /* StringExtensionTests.swift in Sources */,
 				33DB075D2329D0150030EBBA /* MusicPlayerViewModelTests.swift in Sources */,
 				330657552338CF6000381CC6 /* VocabularyDetailViewModelTests.swift in Sources */,
 				332C15882317834F003C78EA /* ParseSixMinutesHelperTests.swift in Sources */,

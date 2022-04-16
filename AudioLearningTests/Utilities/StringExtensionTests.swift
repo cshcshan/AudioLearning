@@ -1,5 +1,5 @@
 //
-//  ExtensionStringTests.swift
+//  StringExtensionTests.swift
 //  AudioLearningTests
 //
 //  Created by Han Chen on 2019/8/29.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import AudioLearning
 
-class ExtensionStringTests: XCTestCase {
+final class StringExtensionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -20,7 +20,7 @@ class ExtensionStringTests: XCTestCase {
     }
 }
 
-extension ExtensionStringTests {
+extension StringExtensionTests {
 
     // MARK: testToDate
 
@@ -58,7 +58,7 @@ extension ExtensionStringTests {
 }
 
 // swiftlint:disable line_length
-extension ExtensionStringTests {
+extension StringExtensionTests {
 
     // MARK: convertHtmlToNSAttributedString
 

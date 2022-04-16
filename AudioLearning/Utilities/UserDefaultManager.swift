@@ -22,18 +22,16 @@ final class UserDefaultManager: UserDefaultsManagerProtocol {
 
     var appearanceMode: AppearanceModeType {
         get {
-            guard let mode = UserDefaults.standard.object(forKey: UserDefaultKeys.appearance.rawValue) as? Int else {
-                self.appearanceMode = .dark
-                return .dark
-            }
-            guard let appearanceMode = AppearanceModeType(rawValue: mode) else {
-                self.appearanceMode = .dark
+            guard let mode = userDefaults.object(forKey: UserDefaultKeys.appearance.rawValue) as? Int,
+                  let appearanceMode = AppearanceModeType(rawValue: mode) else {
                 return .dark
             }
             return appearanceMode
         }
         set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: UserDefaultKeys.appearance.rawValue)
+            userDefaults.set(newValue.rawValue, forKey: UserDefaultKeys.appearance.rawValue)
         }
     }
+
+    private let userDefaults = UserDefaults.standard
 }

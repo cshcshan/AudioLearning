@@ -8,12 +8,9 @@ target 'AudioLearning' do
   use_frameworks!
 
   # Pods for AudioLearning
-  pod 'ReachabilitySwift'
-  pod 'SwiftSoup'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RealmSwift'
-  pod 'lottie-ios'
 
   target 'AudioLearningTests' do
     inherit! :search_paths

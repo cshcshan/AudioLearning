@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -98,6 +98,9 @@
 		33E37823231CEFA700C6671B /* ep-190815.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C159A2318CE10003C78EA /* ep-190815.html */; };
 		33E37825231D016900C6671B /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E37824231D016900C6671B /* AlertModel.swift */; };
 		33E37827231D01AC00C6671B /* AlertModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E37826231D01AC00C6671B /* AlertModelTests.swift */; };
+		33E3B9B1280B094D00CC8548 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B0280B094D00CC8548 /* SwiftSoup */; };
+		33E3B9B4280B096F00CC8548 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B3280B096F00CC8548 /* Reachability */; };
+		33E3B9B7280B09C300CC8548 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B6280B09C300CC8548 /* Lottie */; };
 		33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
@@ -238,6 +241,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */,
+				33E3B9B4280B096F00CC8548 /* Reachability in Frameworks */,
+				33E3B9B1280B094D00CC8548 /* SwiftSoup in Frameworks */,
+				33E3B9B7280B09C300CC8548 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,6 +617,11 @@
 			dependencies = (
 			);
 			name = AudioLearning;
+			packageProductDependencies = (
+				33E3B9B0280B094D00CC8548 /* SwiftSoup */,
+				33E3B9B3280B096F00CC8548 /* Reachability */,
+				33E3B9B6280B09C300CC8548 /* Lottie */,
+			);
 			productName = AudioLearning;
 			productReference = 332C154D23174CF8003C78EA /* AudioLearning.app */;
 			productType = "com.apple.product-type.application";
@@ -692,6 +703,11 @@
 				Base,
 			);
 			mainGroup = 332C154423174CF8003C78EA;
+			packageReferences = (
+				33E3B9AF280B094D00CC8548 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				33E3B9B2280B096F00CC8548 /* XCRemoteSwiftPackageReference "Reachability" */,
+				33E3B9B5280B09C300CC8548 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			productRefGroup = 332C154E23174CF8003C78EA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1307,6 +1323,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		33E3B9AF280B094D00CC8548 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		33E3B9B2280B096F00CC8548 /* XCRemoteSwiftPackageReference "Reachability" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ashleymills/Reachability.swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		33E3B9B5280B09C300CC8548 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		33E3B9B0280B094D00CC8548 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33E3B9AF280B094D00CC8548 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		33E3B9B3280B096F00CC8548 /* Reachability */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33E3B9B2280B096F00CC8548 /* XCRemoteSwiftPackageReference "Reachability" */;
+			productName = Reachability;
+		};
+		33E3B9B6280B09C300CC8548 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33E3B9B5280B09C300CC8548 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 332C154523174CF8003C78EA /* Project object */;
 }

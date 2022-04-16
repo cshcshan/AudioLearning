@@ -101,8 +101,8 @@ final class EpisodeDetailViewModel: BaseViewModel {
             .skip(1)
             .share() // use share() to avoid multiple subscriptions from the same Observable
 
-        Observable.of(loadEpisodeDetailModels, episodeDetails)
-            .merge()
+        Observable
+            .merge(loadEpisodeDetailModels, episodeDetails)
             .subscribe(onNext: { [weak self] model in
                 guard let self = self else { return }
                 self.refreshingSubject.onNext(false)
@@ -110,8 +110,8 @@ final class EpisodeDetailViewModel: BaseViewModel {
             })
             .disposed(by: bag)
 
-        self.audioLink = Observable.of(loadEpisodeDetailModels, episodeDetails)
-            .merge()
+        self.audioLink = Observable
+            .merge(loadEpisodeDetailModels, episodeDetails)
             .map { model -> String in
                 model.audioLink ?? ""
             }

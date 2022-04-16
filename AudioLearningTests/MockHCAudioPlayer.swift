@@ -56,20 +56,17 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
         play = playSubject.asObserver()
         let pauseSubject = PublishSubject<Void>()
         pause = pauseSubject.asObserver()
-        _ = Observable.of(
-            playSubject.map { true },
-            pauseSubject.map { false }
-        ).merge()
 
         // Forward and Rewind
         let forwardSubject = PublishSubject<Int64>()
         forward = forwardSubject.asObserver()
         let rewindSubject = PublishSubject<Int64>()
         rewind = rewindSubject.asObserver()
-        let mergeSkip = Observable.of(
-            forwardSubject.asObservable(),
-            rewindSubject.asObservable().map { -$0 }
-        ).merge()
+        let mergeSkip = Observable
+            .merge(
+                forwardSubject.asObservable(),
+                rewindSubject.asObservable().map { -$0 }
+            )
         mergeSkip
             .subscribe(onNext: { [weak self] seconds in
                 guard let self = self else { return }
@@ -86,21 +83,21 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
 
         let speedRateSubject = PublishSubject<Float>()
         speedRate = speedRateSubject.asObservable()
-        Observable.of(
-            speedUpSubject.asObservable(),
-            speedDownSubject.asObservable().map { -$0 }
-        )
-        .merge()
-        .map { [weak self] rate -> Float in
-            guard let self = self else { return 1 }
-            self.musicSpeedRate += rate
-            if self.musicSpeedRate < 0 { self.musicSpeedRate = 0 }
-            return self.musicSpeedRate
-        }
-        .subscribe(onNext: { rate in
-            speedRateSubject.onNext(rate)
-        })
-        .disposed(by: bag)
+        Observable
+            .merge(
+                speedUpSubject.asObservable(),
+                speedDownSubject.asObservable().map { -$0 }
+            )
+            .map { [weak self] rate -> Float in
+                guard let self = self else { return 1 }
+                self.musicSpeedRate += rate
+                if self.musicSpeedRate < 0 { self.musicSpeedRate = 0 }
+                return self.musicSpeedRate
+            }
+            .subscribe(onNext: { rate in
+                speedRateSubject.onNext(rate)
+            })
+            .disposed(by: bag)
 
         // Change Speed
         let changeSpeedSubject = PublishSubject<Float>()

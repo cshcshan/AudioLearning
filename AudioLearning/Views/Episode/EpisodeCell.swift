@@ -74,8 +74,8 @@ final class EpisodeCell: BaseTableViewCell {
     }
 
     private func setupColorBindings() {
-        Observable.of(highlightedSubject, selectedSubject)
-            .merge()
+        Observable
+            .merge(highlightedSubject, selectedSubject)
             .subscribe(onNext: { [weak self] isHighlighted in
                 guard let self = self else { return }
                 self.backgroundColor = Appearance.secondaryBgColor

@@ -41,7 +41,7 @@ final class VocabularyListViewModel: BaseViewModel {
     init(realmService: RealmService<VocabularyRealm>) {
         self.setEpisode = setEpisodeSubject.asObserver()
         self.reload = reloadSubject.asObserver()
-        self.vocabularies = Observable.of(realmService.allObjects, realmService.filterObjects).merge()
+        self.vocabularies = Observable.merge(realmService.allObjects, realmService.filterObjects)
         self.selectVocabulary = selectVocabularySubject.asObserver()
         self.showVocabularyDetail = selectVocabularySubject.asObservable()
         self.addVocabulary = addVocabularySubject.asObserver()
@@ -51,16 +51,16 @@ final class VocabularyListViewModel: BaseViewModel {
         self.showFlashCards = tapFlashCardsSubject.asObservable()
         super.init()
 
-        Observable.of(
-            showVocabularyDetail.map { $0 as AnyObject },
-            showAddVocabularyDetail.map { $0 as AnyObject }
-        )
-        .merge()
-        .subscribe(onNext: { [weak self] _ in
-            guard let self = self else { return }
-            self.hideVocabularyDetailView.onNext(false)
-        })
-        .disposed(by: bag)
+        Observable
+            .merge(
+                showVocabularyDetail.map { $0 as AnyObject },
+                showAddVocabularyDetail.map { $0 as AnyObject }
+            )
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.hideVocabularyDetailView.onNext(false)
+            })
+            .disposed(by: bag)
 
         setEpisodeSubject
             .subscribe(onNext: { [weak self] episode in

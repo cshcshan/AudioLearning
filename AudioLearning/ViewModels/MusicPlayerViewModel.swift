@@ -51,20 +51,20 @@ final class MusicPlayerViewModel {
         settingNewAudio = settingNewAudioSubject.asObserver()
         let tappedPlayPauseSubject = PublishSubject<Void>()
         tappedPlayPause = tappedPlayPauseSubject.asObserver()
-        isPlaying = Observable.of(
-            tappedPlayPauseSubject.asObservable().map { $0 as AnyObject },
-            settingNewAudioSubject.asObservable().map { $0 as AnyObject },
-            player.status.map { $0 as AnyObject }
-        )
-        .merge()
-        .scan(false, accumulator: { [weak self] aggregateValue, newValue -> Bool in
-            guard let self = self else { return false }
-            let playing = self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
-            NotificationCenter.default.post(name: .isPlaying, object: nil, userInfo: ["isPlaying": playing])
-            return playing
-        })
-        .startWith(false)
-        .asDriver(onErrorJustReturn: false)
+        isPlaying = Observable
+            .merge(
+                tappedPlayPauseSubject.asObservable().map { $0 as AnyObject },
+                settingNewAudioSubject.asObservable().map { $0 as AnyObject },
+                player.status.map { $0 as AnyObject }
+            )
+            .scan(false, accumulator: { [weak self] aggregateValue, newValue -> Bool in
+                guard let self = self else { return false }
+                let playing = self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
+                NotificationCenter.default.post(name: .isPlaying, object: nil, userInfo: ["isPlaying": playing])
+                return playing
+            })
+            .startWith(false)
+            .asDriver(onErrorJustReturn: false)
 
         let forward10SecondsSubject = PublishSubject<Void>()
         forward10Seconds = forward10SecondsSubject.asObserver()

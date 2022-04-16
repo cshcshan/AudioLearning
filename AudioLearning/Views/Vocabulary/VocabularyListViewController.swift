@@ -144,15 +144,17 @@ final class VocabularyListViewController: BaseViewController {
                             cell.startWiggleAnimation.onNext(())
                         })
                         .disposed(by: self.bag)
-                    Observable.of(
-                        self.addItem.rx.tap.map { $0 as AnyObject },
-                        self.tableView.rx.itemSelected.map { $0 as AnyObject }
-                    )
-                    .merge()
-                    .subscribe(onNext: { _ in
-                        cell.stopWiggleAnimation.onNext(())
-                    })
-                    .disposed(by: self.bag)
+
+                    Observable
+                        .merge(
+                            self.addItem.rx.tap.map { $0 as AnyObject },
+                            self.tableView.rx.itemSelected.map { $0 as AnyObject }
+                        )
+                        .subscribe(onNext: { _ in
+                            cell.stopWiggleAnimation.onNext(())
+                        })
+                        .disposed(by: self.bag)
+
                     cell.deleteVocabulary
                         .subscribe(onNext: { vocabularyRealm in
                             guard !vocabularyRealm.isInvalidated else { return }

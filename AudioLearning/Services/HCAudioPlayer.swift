@@ -105,54 +105,54 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
         play = playSubject.asObserver()
         let pauseSubject = PublishSubject<Void>()
         pause = pauseSubject.asObserver()
-        Observable.of(
-            playSubject.map { true },
-            pauseSubject.map { false }
-        )
-        .merge()
-        .subscribe(onNext: { [weak self] isPlay in
-            guard let player = self?.player else { return }
-            if isPlay {
-                player.play()
-            } else {
-                player.pause()
-            }
-        })
-        .disposed(by: bag)
+        Observable
+            .merge(
+                playSubject.map { true },
+                pauseSubject.map { false }
+            )
+            .subscribe(onNext: { [weak self] isPlay in
+                guard let player = self?.player else { return }
+                if isPlay {
+                    player.play()
+                } else {
+                    player.pause()
+                }
+            })
+            .disposed(by: bag)
 
         // Forward and Rewind
         let forwardSubject = PublishSubject<Int64>()
         forward = forwardSubject.asObserver()
         let rewindSubject = PublishSubject<Int64>()
         rewind = rewindSubject.asObserver()
-        Observable.of(
-            forwardSubject.asObservable(),
-            rewindSubject.asObservable().map { -$0 }
-        )
-        .merge()
-        .subscribe(onNext: { [weak self] seconds in
-            guard let player = self?.player else { return }
-            let currentTime = CMTimeGetSeconds(player.currentTime())
-            player.seek(to: CMTime(value: CMTimeValue(currentTime) + seconds, timescale: 1))
-        })
-        .disposed(by: bag)
+        Observable
+            .merge(
+                forwardSubject.asObservable(),
+                rewindSubject.asObservable().map { -$0 }
+            )
+            .subscribe(onNext: { [weak self] seconds in
+                guard let player = self?.player else { return }
+                let currentTime = CMTimeGetSeconds(player.currentTime())
+                player.seek(to: CMTime(value: CMTimeValue(currentTime) + seconds, timescale: 1))
+            })
+            .disposed(by: bag)
 
         // Speed Up and Down
         let speedUpSubject = PublishSubject<Float>()
         speedUp = speedUpSubject.asObserver()
         let speedDownSubject = PublishSubject<Float>()
         speedDown = speedDownSubject.asObserver()
-        speedRate = Observable.of(
-            speedUpSubject.asObservable(),
-            speedDownSubject.asObservable().map { -$0 }
-        )
-        .merge()
-        .map { [weak self] rate -> Float in
-            guard let player = self?.player else { return 1 }
-            player.rate += rate
-            if player.rate < 0 { player.rate = 0 }
-            return player.rate
-        }
+        speedRate = Observable
+            .merge(
+                speedUpSubject.asObservable(),
+                speedDownSubject.asObservable().map { -$0 }
+            )
+            .map { [weak self] rate -> Float in
+                guard let player = self?.player else { return 1 }
+                player.rate += rate
+                if player.rate < 0 { player.rate = 0 }
+                return player.rate
+            }
 
         // Change Speed
         let changeSpeedSubject = PublishSubject<Float>()

@@ -62,8 +62,8 @@ final class VocabularyCell: BaseTableViewCell {
     }
 
     private func setupBindings() {
-        Observable.of(highlightedSubject)
-            .merge()
+        Observable
+            .merge(highlightedSubject)
             .subscribe(onNext: { [weak self] isHighlighted in
                 guard let self = self else { return }
                 self.backgroundColor = Appearance.secondaryBgColor

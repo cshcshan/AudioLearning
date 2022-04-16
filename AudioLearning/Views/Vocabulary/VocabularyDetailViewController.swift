@@ -92,8 +92,8 @@ final class VocabularyDetailViewController: BaseViewController {
             .bind(to: viewModel.cancel)
             .disposed(by: bag)
 
-        Observable.of(viewModel.close, viewModel.saved)
-            .merge()
+        Observable
+            .merge(viewModel.close, viewModel.saved)
             .subscribe(onNext: { _ in
                 self.navigationController?.view.endEditing(true)
                 self.view.endEditing(true)

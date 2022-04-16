@@ -31,7 +31,7 @@ extension ExtensionDateTests {
         dateComponents.day = 15
         let date = Calendar.current.date(from: dateComponents)
 
-        XCTAssertEqual(date?.toString(dateFormat: "y/M/d"), "2019/8/15")
+        XCTAssertEqual(date?.string(withDateFormat: "y/M/d"), "2019/8/15")
     }
 
     func testToString_WithEmptyDateFormat() {
@@ -40,6 +40,6 @@ extension ExtensionDateTests {
         dateComponents.month = 8
         dateComponents.day = 15
         let date = Calendar.current.date(from: dateComponents)
-        XCTAssertEqual(date?.toString(dateFormat: ""), "")
+        XCTAssertEqual(date?.string(withDateFormat: ""), "")
     }
 }

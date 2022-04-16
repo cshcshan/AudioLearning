@@ -54,10 +54,7 @@ final class EpisodeCellViewModel: BaseViewModel {
 
         load.map(\.title).bind(to: title).disposed(by: bag)
         load.map(\.desc).bind(to: desc).disposed(by: bag)
-
-        load.map { $0.date?.toString(dateFormat: "yyyy/M/d") }
-            .bind(to: date)
-            .disposed(by: bag)
+        load.map { $0.date?.string(withDateFormat: "yyyy/M/d") }.bind(to: date).disposed(by: bag)
 
         let imagePath = load
             .map { episode -> String? in

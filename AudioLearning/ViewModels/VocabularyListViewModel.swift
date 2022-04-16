@@ -16,7 +16,6 @@ final class VocabularyListViewModel: BaseViewModel {
     private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
 
     // Inputs
-    private(set) var setEpisode: AnyObserver<String?>!
     private(set) var reload: AnyObserver<Void>!
     private(set) var selectVocabulary: AnyObserver<VocabularyRealm>!
     private(set) var addVocabulary: AnyObserver<Void>!
@@ -29,15 +28,17 @@ final class VocabularyListViewModel: BaseViewModel {
     private(set) var showAddVocabularyDetail: Observable<Void>!
     private(set) var showFlashCards: Observable<Void>!
 
-    private let setEpisodeSubject = PublishSubject<String?>()
     private let reloadSubject = PublishSubject<Void>()
     private let selectVocabularySubject = PublishSubject<VocabularyRealm>()
     private let addVocabularySubject = PublishSubject<Void>()
     private let deleteVocabularySubject = PublishSubject<VocabularyRealm>()
     private let tapFlashCardsSubject = PublishSubject<Void>()
 
-    init(realmService: RealmService<VocabularyRealm>) {
-        self.setEpisode = setEpisodeSubject.asObserver()
+    private let episodeID: String?
+
+    init(realmService: RealmService<VocabularyRealm>, episodeID: String?) {
+        self.episodeID = episodeID
+
         self.reload = reloadSubject.asObserver()
         self.vocabularies = Observable.merge(realmService.allObjects, realmService.filterObjects)
         self.selectVocabulary = selectVocabularySubject.asObserver()
@@ -59,20 +60,17 @@ final class VocabularyListViewModel: BaseViewModel {
         let sharedReloadSubject = reloadSubject.share()
 
         sharedReloadSubject
-            .withLatestFrom(setEpisodeSubject)
-            .compactMap { episode in
-                guard let episode = episode else { return nil }
+            .compactMap { [episodeID] _ in
+                guard let episodeID = episodeID else { return nil }
                 let sortedByAsc = ["updateDate": false]
-                return (NSPredicate(format: "episodeID == %@", episode), sortedByAsc)
+                return (NSPredicate(format: "episodeID == %@", episodeID), sortedByAsc)
             }
             .bind(to: realmService.filter)
             .disposed(by: bag)
 
         sharedReloadSubject
-            .withLatestFrom(setEpisodeSubject)
-            .debug()
-            .compactMap { episode in
-                guard episode == nil else { return nil }
+            .compactMap { [episodeID] _ in
+                guard episodeID == nil else { return nil }
                 let sortedByAsc = ["updateDate": false]
                 return sortedByAsc
             }

@@ -15,7 +15,6 @@ import XCTest
 
 class VocabularyListViewModelTests: XCTestCase {
 
-    var sut: VocabularyListViewModel!
     var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
@@ -26,19 +25,19 @@ class VocabularyListViewModelTests: XCTestCase {
         setupRealm()
         realmService = RealmService<VocabularyRealm>()
         initStub()
-        sut = VocabularyListViewModel(realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
         bag = DisposeBag()
     }
 
     override func tearDown() {
         flushData()
-        sut = nil
         realmService = nil
         super.tearDown()
     }
 
     func testHideVocabularyDetailView() {
+        let sut = VocabularyListViewModel(realmService: realmService, episodeID: nil)
+
         let hideVocabularyDetailView = scheduler.createObserver(Bool.self)
         sut.hideVocabularyDetailView
             .bind(to: hideVocabularyDetailView)
@@ -65,12 +64,11 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testVocabularies_EpisodeIsNotNil() {
+        let sut = VocabularyListViewModel(realmService: realmService, episodeID: "Episode 190811")
+
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(5, "Episode 190811")])
-            .bind(to: sut.setEpisode)
             .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
@@ -81,12 +79,11 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testVocabularies_EpisodeIsNil() {
+        let sut = VocabularyListViewModel(realmService: realmService, episodeID: nil)
+
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(5, nil)])
-            .bind(to: sut.setEpisode)
             .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
@@ -97,6 +94,8 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testShowVocabularyDetail() {
+        let sut = VocabularyListViewModel(realmService: realmService, episodeID: nil)
+
         let model190815 = VocabularyRealm()
         model190815.id = "190815"
         model190815.episodeID = "Episode 190815"
@@ -129,6 +128,8 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testShowAddVocabularyDetail() {
+        let sut = VocabularyListViewModel(realmService: realmService, episodeID: nil)
+
         let showAddVocabularyDetail = scheduler.createObserver(Void.self)
         sut.showAddVocabularyDetail
             .bind(to: showAddVocabularyDetail)
@@ -144,6 +145,8 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testShowFlashCards() {
+        let sut = VocabularyListViewModel(realmService: realmService, episodeID: nil)
+
         let showFlashCards = scheduler.createObserver(Void.self)
         sut.showFlashCards
             .bind(to: showFlashCards)

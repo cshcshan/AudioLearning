@@ -27,8 +27,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
     private func showVocabularyList() {
         // ViewModel
         let realmService = RealmService<VocabularyRealm>()
-        let viewModel = VocabularyListViewModel(realmService: realmService)
-        viewModel.setEpisode.onNext(episodeID)
+        let viewModel = VocabularyListViewModel(realmService: realmService, episodeID: episodeID)
 
         // Vocabulary Detail
         let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)

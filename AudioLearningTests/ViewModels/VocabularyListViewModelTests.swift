@@ -85,6 +85,9 @@ class VocabularyListViewModelTests: XCTestCase {
         sut.vocabularies
             .bind(to: vocabularies)
             .disposed(by: bag)
+        scheduler.createColdObservable([.next(5, nil)])
+            .bind(to: sut.setEpisode)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
             .disposed(by: bag)

@@ -36,8 +36,6 @@ final class VocabularyListViewModel: BaseViewModel {
     private let deleteVocabularySubject = PublishSubject<VocabularyRealm>()
     private let tapFlashCardsSubject = PublishSubject<Void>()
 
-    private var episode: String?
-
     init(realmService: RealmService<VocabularyRealm>) {
         self.setEpisode = setEpisodeSubject.asObserver()
         self.reload = reloadSubject.asObserver()
@@ -52,54 +50,41 @@ final class VocabularyListViewModel: BaseViewModel {
         super.init()
 
         Observable
-            .merge(
-                showVocabularyDetail.map { $0 as AnyObject },
-                showAddVocabularyDetail.map { $0 as AnyObject }
-            )
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.hideVocabularyDetailView.onNext(false)
-            })
+            .merge(showVocabularyDetail.map { _ in }, showAddVocabularyDetail.map { _ in })
+            .map { false }
+            .observe(on: MainScheduler.instance)
+            .bind(to: hideVocabularyDetailView)
             .disposed(by: bag)
 
-        setEpisodeSubject
-            .subscribe(onNext: { [weak self] episode in
-                guard let self = self else { return }
-                self.episode = episode
-            })
-            .disposed(by: bag)
+        let sharedReloadSubject = reloadSubject.share()
 
-        reloadSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
+        sharedReloadSubject
+            .withLatestFrom(setEpisodeSubject)
+            .compactMap { episode in
+                guard let episode = episode else { return nil }
                 let sortedByAsc = ["updateDate": false]
-                if let episode = self.episode {
-                    realmService.filter.onNext((NSPredicate(format: "episode == %@", episode), sortedByAsc))
-                } else {
-                    realmService.loadAll.onNext(sortedByAsc)
-                }
-            })
+                return (NSPredicate(format: "episode == %@", episode), sortedByAsc)
+            }
+            .bind(to: realmService.filter)
             .disposed(by: bag)
 
-        let deleteSuccessSubject = PublishSubject<Bool>()
-        deleteSuccessSubject
-            .subscribe(onNext: { [weak self] success in
-                guard let self = self else { return }
-                guard success else { return }
-                self.reloadSubject.onNext(())
-            })
+        sharedReloadSubject
+            .withLatestFrom(setEpisodeSubject)
+            .debug()
+            .compactMap { episode in
+                guard episode == nil else { return nil }
+                let sortedByAsc = ["updateDate": false]
+                return sortedByAsc
+            }
+            .bind(to: realmService.loadAll)
             .disposed(by: bag)
 
-        deleteVocabularySubject
-            .subscribe(onNext: { [weak self] vocabularyRealm in
-                guard let self = self else { return }
-                guard let id = vocabularyRealm.id else { return }
-                realmService.delete(predicate: NSPredicate(format: "id == %@", id))
-                    .subscribe(onNext: { success in
-                        deleteSuccessSubject.onNext(success)
-                    })
-                    .disposed(by: self.bag)
-            })
+        let deleteSuccessfully = PublishSubject<Bool>()
+        deleteSuccessfully.filter { $0 }.map { _ in }.bind(to: reloadSubject).disposed(by: bag)
+
+        deleteVocabularySubject.compactMap(\.id)
+            .flatMapLatest { realmService.delete(predicate: NSPredicate(format: "id == %@", $0)) }
+            .bind(to: deleteSuccessfully)
             .disposed(by: bag)
     }
 }

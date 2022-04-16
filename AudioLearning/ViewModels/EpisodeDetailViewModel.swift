@@ -39,19 +39,19 @@ final class EpisodeDetailViewModel: BaseViewModel {
 
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeDetailRealm>!
-    private let episodeModel: EpisodeModel
+    private let episode: Episode
 
     init(
         apiService: APIServiceProtocol,
         realmService: RealmService<EpisodeDetailRealm>,
-        episodeModel: EpisodeModel
+        episode: Episode
     ) {
         self.apiService = apiService
         self.realmService = realmService
-        self.episodeModel = episodeModel
+        self.episode = episode
         super.init()
 
-        if let imagePath = episodeModel.imagePath {
+        if let imagePath = episode.imagePath {
             apiService.getImage(path: imagePath) { [weak self] image in
                 guard let self = self else { return }
                 self.image.onNext(image)
@@ -65,7 +65,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
         self.showVocabulary = tapVocabularySubject.asObservable()
         self.addVocabulary = addVocabularySubject.asObserver()
         self.showAddVocabularyDetail = addVocabularySubject.asObservable()
-        self.title = episodeModel.title ?? ""
+        self.title = episode.title ?? ""
         self.alert = alertSubject
         self.refreshing = refreshingSubject
 
@@ -85,7 +85,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
                 guard let self = self else { return .empty() }
                 guard let model = episodeDetailRealms.first else {
                     self.refreshingSubject.onNext(true)
-                    apiService.loadEpisodeDetail.onNext(episodeModel)
+                    apiService.loadEpisodeDetail.onNext(episode)
                     return .empty()
                 }
                 return .just(EpisodeDetail(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
@@ -147,7 +147,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
     }
 
     private func loadData() {
-        guard let episode = episodeModel.id else { return }
+        guard let episode = episode.id else { return }
         let predicate = NSPredicate(format: "episode == %@", episode)
         realmService.filter.onNext((predicate, nil))
     }

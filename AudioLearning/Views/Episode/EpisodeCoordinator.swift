@@ -38,9 +38,9 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         //   If didn't store childCoordinator to BaseCoordinator.childCoordinators,
         //   the observable 'showEpisodeDetail' from viewModel will be disposed at the end of AppCoordinator.
         viewModel.showEpisodeDetail
-            .subscribe(onNext: { [weak self] episodeModel in
+            .subscribe(onNext: { [weak self] episode in
                 guard let self = self else { return }
-                self.showEpisodeDetail(apiService: apiService, episodeModel: episodeModel)
+                self.showEpisodeDetail(apiService: apiService, episode: episode)
             })
             .disposed(by: bag)
 
@@ -65,13 +65,13 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
             .disposed(by: bag)
     }
 
-    private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
+    private func showEpisodeDetail(apiService: APIService, episode: Episode) {
         // ViewModel
         let realmService = RealmService<EpisodeDetailRealm>()
         let viewModel = EpisodeDetailViewModel(
             apiService: apiService,
             realmService: realmService,
-            episodeModel: episodeModel
+            episode: episode
         )
 
         // Music and Vocabulary Detail
@@ -102,7 +102,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
 
         viewModel.showAddVocabularyDetail
             .subscribe(onNext: { word in
-                vocabularyDetailVC.viewModel.addWithWord.onNext((episodeModel.id, word))
+                vocabularyDetailVC.viewModel.addWithWord.onNext((episode.id, word))
             })
             .disposed(by: bag)
 
@@ -117,7 +117,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.showVocabulary(episode: episodeModel.id)
+                self.showVocabulary(episode: episode.id)
             })
             .disposed(by: bag)
 

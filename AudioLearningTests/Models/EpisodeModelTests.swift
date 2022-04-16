@@ -26,7 +26,7 @@ class EpisodeModelTests: XCTestCase {
         let date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         let imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
         let path = "/learningenglish/english/features/6-minute-english/ep-190815"
-        let sut = EpisodeModel(id: id, title: title, desc: desc, date: date, imagePath: imagePath, path: path)
+        let sut = Episode(id: id, title: title, desc: desc, date: date, imagePath: imagePath, path: path)
         XCTAssertEqual(sut.id, id)
         XCTAssertEqual(sut.title, title)
         XCTAssertEqual(sut.desc, desc)
@@ -36,7 +36,7 @@ class EpisodeModelTests: XCTestCase {
     }
 
     func testInit_WithNil() {
-        let sut = EpisodeModel()
+        let sut = Episode()
         XCTAssertNil(sut.id)
         XCTAssertNil(sut.title)
         XCTAssertNil(sut.desc)

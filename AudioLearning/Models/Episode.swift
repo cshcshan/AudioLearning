@@ -1,5 +1,5 @@
 //
-//  EpisodeModel.swift
+//  Episode.swift
 //  AudioLearning
 //
 //  Created by Han Chen on 2019/8/29.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct EpisodeModel {
+struct Episode {
     var id: String?
     var title: String?
     var desc: String?
@@ -44,4 +44,4 @@ struct EpisodeModel {
 
 // MARK: - Equatable
 
-extension EpisodeModel: Equatable {}
+extension Episode: Equatable {}

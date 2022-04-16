@@ -46,7 +46,7 @@ class EpisodeListViewModelTests: XCTestCase {
         let html = try! String(contentsOf: url)
         let episodesModels = ParseSixMinutesHelper().parseHtmlToEpisodeModels(by: html, urlString: urlString)
 
-        let expectingModel = EpisodeModel(
+        let expectingModel = Episode(
             id: "Episode 190822",
             title: "Does your age affect your political views?",
             desc: "Age and political views",
@@ -58,7 +58,7 @@ class EpisodeListViewModelTests: XCTestCase {
         apiService.episodesReturnValue = .just(episodesModels)
 
         // Create a MockObserver<[EpisodeModel]>
-        let episodes = scheduler.createObserver([EpisodeModel].self)
+        let episodes = scheduler.createObserver([Episode].self)
 
         // Output combines with the MockObserver(episodes above)
         sut.episodes
@@ -118,7 +118,7 @@ class EpisodeListViewModelTests: XCTestCase {
         var date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         var imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
         var path = "/learningenglish/english/features/6-minute-english/ep-190815"
-        let episodeModel190815 = EpisodeModel(
+        let episode190815 = Episode(
             id: id,
             title: title,
             desc: desc,
@@ -133,7 +133,7 @@ class EpisodeListViewModelTests: XCTestCase {
         date = "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         imagePath = ""
         path = "/learningenglish/english/features/6-minute-english/ep-190822"
-        let episodeModel190822 = EpisodeModel(
+        let episode190822 = Episode(
             id: id,
             title: title,
             desc: desc,
@@ -142,15 +142,15 @@ class EpisodeListViewModelTests: XCTestCase {
             path: path
         )
 
-        let showEpisodeDetail = scheduler.createObserver(EpisodeModel.self)
+        let showEpisodeDetail = scheduler.createObserver(Episode.self)
         sut.showEpisodeDetail
             .bind(to: showEpisodeDetail)
             .disposed(by: bag)
 
         scheduler
             .createColdObservable([
-                .next(10, episodeModel190815),
-                .next(20, episodeModel190822)
+                .next(10, episode190815),
+                .next(20, episode190822)
             ])
             .bind(to: sut.selectEpisode)
             .disposed(by: bag)
@@ -159,8 +159,8 @@ class EpisodeListViewModelTests: XCTestCase {
 
         XCTAssertEqual(showEpisodeDetail.events.count, 2)
         XCTAssertEqual(showEpisodeDetail.events, [
-            .next(10, episodeModel190815),
-            .next(20, episodeModel190822)
+            .next(10, episode190815),
+            .next(20, episode190822)
         ])
     }
 

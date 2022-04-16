@@ -13,7 +13,7 @@ import RxSwift
 final class EpisodeCellViewModel: BaseViewModel {
 
     struct Inputs {
-        let load: AnyObserver<EpisodeModel>
+        let load: AnyObserver<Episode>
     }
 
     struct Outputs {
@@ -29,7 +29,7 @@ final class EpisodeCellViewModel: BaseViewModel {
     let inputs: Inputs
     let outputs: Outputs
 
-    private let load = PublishSubject<EpisodeModel>()
+    private let load = PublishSubject<Episode>()
 
     private let title = BehaviorRelay<String?>(value: nil)
     private let date = BehaviorRelay<String?>(value: nil)

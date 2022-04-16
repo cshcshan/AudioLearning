@@ -32,11 +32,11 @@ final class ParseSixMinutesHelper: ParseHelperProtocol {
 
     func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealm] {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return [] }
-        var episodeModels = getListToEpisodeModels(from: document)
-        if let episodeModel = getTopItemToEpisodeModels(from: document) {
-            episodeModels.insert(episodeModel, at: 0)
+        var episodes = getListToEpisodeModels(from: document)
+        if let episode = getTopItemToEpisodeModels(from: document) {
+            episodes.insert(episode, at: 0)
         }
-        return episodeModels
+        return episodes
     }
 
     func parseHtmlToEpisodeDetailModel(

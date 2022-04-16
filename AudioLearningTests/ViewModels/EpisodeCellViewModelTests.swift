@@ -15,16 +15,16 @@ class EpisodeCellViewModelTests: XCTestCase {
 
     var sut: EpisodeCellViewModel!
     var apiService: APIServiceProtocol!
-    var episodeModel190815: EpisodeModel!
-    var episodeModel190822: EpisodeModel!
-    var episodeModelNil: EpisodeModel!
+    var episode190815: Episode!
+    var episode190822: Episode!
+    var episodeNil: Episode!
 
     var scheduler: TestScheduler!
     var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
-        episodeModel190815 = EpisodeModel(
+        episode190815 = Episode(
             id: "Episode 190815",
             title: "Cryptocurrencies",
             desc: "Libra, Bitcoin... would you invest in digital money?",
@@ -32,7 +32,7 @@ class EpisodeCellViewModelTests: XCTestCase {
             imagePath: "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190815"
         )
-        episodeModel190822 = EpisodeModel(
+        episode190822 = Episode(
             id: "Episode 190822",
             title: "Does your age affect your political views?",
             desc: "Age and political views",
@@ -40,7 +40,7 @@ class EpisodeCellViewModelTests: XCTestCase {
             imagePath: "http://ichef.bbci.co.uk/images/ic/976xn/p07jtrrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190822"
         )
-        episodeModelNil = EpisodeModel()
+        episodeNil = Episode()
         apiService = MockAPIService()
         sut = EpisodeCellViewModel(apiService: apiService)
         scheduler = TestScheduler(initialClock: 0)
@@ -57,9 +57,9 @@ class EpisodeCellViewModelTests: XCTestCase {
         let title = scheduler.createObserver(String?.self)
         sut.outputs.title.drive(title).disposed(by: bag)
         scheduler.createColdObservable([
-            .next(10, episodeModel190815),
-            .next(20, episodeModel190822),
-            .next(30, episodeModelNil)
+            .next(10, episode190815),
+            .next(20, episode190822),
+            .next(30, episodeNil)
         ])
         .bind(to: sut.inputs.load)
         .disposed(by: bag)
@@ -77,9 +77,9 @@ class EpisodeCellViewModelTests: XCTestCase {
         let date = scheduler.createObserver(String?.self)
         sut.outputs.date.drive(date).disposed(by: bag)
         scheduler.createColdObservable([
-            .next(10, episodeModel190815),
-            .next(20, episodeModel190822),
-            .next(30, episodeModelNil)
+            .next(10, episode190815),
+            .next(20, episode190822),
+            .next(30, episodeNil)
         ])
         .bind(to: sut.inputs.load)
         .disposed(by: bag)
@@ -97,9 +97,9 @@ class EpisodeCellViewModelTests: XCTestCase {
         let desc = scheduler.createObserver(String?.self)
         sut.outputs.desc.drive(desc).disposed(by: bag)
         scheduler.createColdObservable([
-            .next(10, episodeModel190815),
-            .next(20, episodeModel190822),
-            .next(30, episodeModelNil)
+            .next(10, episode190815),
+            .next(20, episode190822),
+            .next(30, episodeNil)
         ])
         .bind(to: sut.inputs.load)
         .disposed(by: bag)

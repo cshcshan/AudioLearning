@@ -13,7 +13,7 @@ import RxSwift
 protocol APIServiceProtocol {
     // Inputs
     var loadEpisodes: AnyObserver<Void>! { get }
-    var loadEpisodeDetail: AnyObserver<EpisodeModel>! { get }
+    var loadEpisodeDetail: AnyObserver<Episode>! { get }
 
     // Outputs
     var episodes: Observable<[EpisodeRealm]>! { get }
@@ -34,7 +34,7 @@ final class APIService: APIServiceProtocol {
 
     // Inputs
     private(set) var loadEpisodes: AnyObserver<Void>!
-    private(set) var loadEpisodeDetail: AnyObserver<EpisodeModel>!
+    private(set) var loadEpisodeDetail: AnyObserver<Episode>!
 
     // Outputs
     private(set) var episodes: Observable<[EpisodeRealm]>!
@@ -58,7 +58,7 @@ final class APIService: APIServiceProtocol {
         let loadEpisodesSubject = PublishSubject<Void>()
         loadEpisodes = loadEpisodesSubject.asObserver()
 
-        let loadEpisodeDetailSubject = PublishSubject<EpisodeModel>()
+        let loadEpisodeDetailSubject = PublishSubject<Episode>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
 
         episodes = loadEpisodesSubject
@@ -83,9 +83,9 @@ final class APIService: APIServiceProtocol {
             }
 
         episodeDetail = loadEpisodeDetailSubject
-            .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealm?> in
+            .flatMapLatest { [weak self] episode -> Observable<EpisodeDetailRealm?> in
                 guard let self = self else { return .empty() }
-                guard let id = episodeModel.id, let path = episodeModel.path else {
+                guard let id = episode.id, let path = episode.path else {
                     return .error(Errors.pathIsNull)
                 }
                 guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {

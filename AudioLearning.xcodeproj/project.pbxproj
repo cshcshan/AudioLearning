@@ -28,7 +28,7 @@
 		332C158B2317878C003C78EA /* 6-minute-english.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C158A2317878C003C78EA /* 6-minute-english.html */; };
 		332C158D231789A6003C78EA /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158C231789A6003C78EA /* ParseHelper.swift */; };
 		332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158E23178A5A003C78EA /* EpisodeModelTests.swift */; };
-		332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* EpisodeModel.swift */; };
+		332C15922317A5C4003C78EA /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* Episode.swift */; };
 		332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* ExtensionString.swift */; };
 		332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15962317EF43003C78EA /* ExtensionStringTests.swift */; };
 		332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */; };
@@ -152,7 +152,7 @@
 		332C158A2317878C003C78EA /* 6-minute-english.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "6-minute-english.html"; sourceTree = "<group>"; };
 		332C158C231789A6003C78EA /* ParseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
 		332C158E23178A5A003C78EA /* EpisodeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModelTests.swift; sourceTree = "<group>"; };
-		332C15912317A5C4003C78EA /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
+		332C15912317A5C4003C78EA /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		332C15942317A7C1003C78EA /* ExtensionString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionString.swift; sourceTree = "<group>"; };
 		332C15962317EF43003C78EA /* ExtensionStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStringTests.swift; sourceTree = "<group>"; };
 		332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModelTests.swift; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 			isa = PBXGroup;
 			children = (
 				3353ABEE2334ED9A0031B9C1 /* Realm */,
-				332C15912317A5C4003C78EA /* EpisodeModel.swift */,
+				332C15912317A5C4003C78EA /* Episode.swift */,
 				332C159C2318DD42003C78EA /* EpisodeDetail.swift */,
 				330657622339ED5500381CC6 /* VocabularySaveModel.swift */,
 				33E37824231D016900C6671B /* AlertModel.swift */,
@@ -983,7 +983,7 @@
 				33D641E92340A15C00A97F9E /* FlashCardsFlowLayout.swift in Sources */,
 				33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
-				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
+				332C15922317A5C4003C78EA /* Episode.swift in Sources */,
 				3353ABFA233725FC0031B9C1 /* EpisodeDetailRealm.swift in Sources */,
 				33065787233B23DD00381CC6 /* Constants.swift in Sources */,
 			);

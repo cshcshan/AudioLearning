@@ -165,7 +165,7 @@ final class EpisodeListViewController: BaseViewController {
             .disposed(by: bag)
 
         tableView.rx
-            .modelSelected(EpisodeModel.self)
+            .modelSelected(Episode.self)
             .bind(to: viewModel.selectEpisode)
             .disposed(by: bag)
 

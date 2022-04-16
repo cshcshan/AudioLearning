@@ -18,7 +18,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     var sut: EpisodeDetailViewModel!
     var apiService: MockAPIService!
     var realmService: RealmService<EpisodeDetailRealm>!
-    var episodeModel: EpisodeModel!
+    var episode: Episode!
 
     var scheduler: TestScheduler!
     var bag: DisposeBag!
@@ -26,7 +26,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "unit-testing-db"
-        episodeModel = EpisodeModel(
+        episode = Episode(
             id: "Episode 190815",
             title: "Cryptocurrencies",
             desc: "Libra, Bitcoin... would you invest in digital money?",
@@ -36,7 +36,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         )
         apiService = MockAPIService()
         realmService = RealmService()
-        sut = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
+        sut = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episode: episode)
 
         scheduler = TestScheduler(initialClock: 0)
         bag = DisposeBag()
@@ -110,7 +110,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     func testScriptHtml() {
         let episodeDetailRealm = EpisodeDetailRealm()
-        episodeDetailRealm.episode = episodeModel.id
+        episodeDetailRealm.episode = episode.id
         episodeDetailRealm.path = "path"
         episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealm.audioLink = "audio link"
@@ -134,7 +134,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     func testAudioLink() {
         let episodeDetailRealm = EpisodeDetailRealm()
-        episodeDetailRealm.episode = episodeModel.id
+        episodeDetailRealm.episode = episode.id
         episodeDetailRealm.path = "path"
         episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealm.audioLink = "audio-link"
@@ -226,6 +226,6 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
         scheduler.start()
 
-        XCTAssertEqual(apiService.episodeDetailPath, episodeModel.id)
+        XCTAssertEqual(apiService.episodeDetailPath, episode.id)
     }
 }

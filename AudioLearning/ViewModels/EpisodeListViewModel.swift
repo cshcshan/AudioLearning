@@ -15,23 +15,23 @@ final class EpisodeListViewModel: BaseViewModel {
     // Input
     private(set) var initalLoad: AnyObserver<Void>!
     private(set) var reload: AnyObserver<Void>!
-    private(set) var selectEpisode: AnyObserver<EpisodeModel>!
+    private(set) var selectEpisode: AnyObserver<Episode>!
     private(set) var selectIndexPath: AnyObserver<IndexPath>!
     private(set) var getCellViewModel: AnyObserver<Int>!
     private(set) var tapVocabulary: AnyObserver<Void>!
 
     // Output
-    private(set) var episodes: Observable<[EpisodeModel]>!
+    private(set) var episodes: Observable<[Episode]>!
     private(set) var alert: Observable<AlertModel>!
     private(set) var refreshing: Observable<Bool>!
-    private(set) var showEpisodeDetail: Observable<EpisodeModel>!
+    private(set) var showEpisodeDetail: Observable<Episode>!
     private(set) var getSelectEpisodeCell: Observable<IndexPath>!
     private(set) var setCellViewModel: Observable<EpisodeCellViewModel>!
     private(set) var showVocabulary: Observable<Void>!
 
     private let initalLoadSubject = PublishSubject<Void>()
     private let reloadSubject = PublishSubject<Void>()
-    private let selectEpisodeSubject = PublishSubject<EpisodeModel>()
+    private let selectEpisodeSubject = PublishSubject<Episode>()
     private let selectIndexPathSubject = PublishSubject<IndexPath>()
     private let getCellViewModelSubject = PublishSubject<Int>()
     private let tapVocabularySubject = PublishSubject<Void>()
@@ -64,15 +64,15 @@ final class EpisodeListViewModel: BaseViewModel {
             .disposed(by: bag)
 
         self.episodes = realmService.allObjects
-            .flatMapLatest { [weak self] episodeRealms -> Observable<[EpisodeModel]> in
+            .flatMapLatest { [weak self] episodeRealms -> Observable<[Episode]> in
                 guard let self = self else { return .empty() }
-                var episodeModels = [EpisodeModel]()
+                var episodes = [Episode]()
                 for episodeRealm in episodeRealms {
-                    let episodeModel = EpisodeModel(from: episodeRealm)
-                    episodeModels.append(episodeModel)
+                    let episode = Episode(from: episodeRealm)
+                    episodes.append(episode)
                 }
-                self.cellViewModels = [EpisodeCellViewModel?](repeating: nil, count: episodeModels.count)
-                return .just(episodeModels)
+                self.cellViewModels = [EpisodeCellViewModel?](repeating: nil, count: episodes.count)
+                return .just(episodes)
             }
 
         initalLoadSubject

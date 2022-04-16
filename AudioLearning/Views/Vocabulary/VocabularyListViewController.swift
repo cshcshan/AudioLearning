@@ -40,6 +40,8 @@ final class VocabularyListViewController: BaseViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+
+        viewModel.event.fetchData.accept(())
     }
 
     override func setupUIID() {
@@ -86,7 +88,7 @@ final class VocabularyListViewController: BaseViewController {
         let item = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
         item.accessibilityIdentifier = "Add"
         item.rx.tap
-            .bind(to: viewModel.addVocabulary)
+            .bind(to: viewModel.event.addVocabulary)
             .disposed(by: bag)
         addItem = item
         return item
@@ -96,34 +98,30 @@ final class VocabularyListViewController: BaseViewController {
         if let item = flashCardsItem { return item }
         let item = UIBarButtonItem(image: UIImage(named: "flashcards"), style: .plain, target: nil, action: nil)
         item.rx.tap
-            .bind(to: viewModel.tapFlashCards)
+            .bind(to: viewModel.event.flashCardsTapped)
             .disposed(by: bag)
         flashCardsItem = item
         return item
     }
 
     private func setupBindings() {
-        viewModel.hideVocabularyDetailView
-            .bind(to: maskView.rx.isHidden)
-            .disposed(by: bag)
+        viewModel.state.isVocabularyDetailViewHidden.asDriver().drive(maskView.rx.isHidden).disposed(by: bag)
 
-        viewModel.hideVocabularyDetailView
-            .filter { $0 == true }
-            .flatMap { _ -> Observable<TimeInterval> in
-                .just(TimeInterval(0.4))
-            }
+        viewModel.state.isVocabularyDetailViewHidden
+            .filter { $0 }
+            .map { _ in TimeInterval(0.4) }
+            .observe(on: MainScheduler.instance)
             .bind(to: maskView.rx.fadeOut)
             .disposed(by: bag)
 
-        viewModel.hideVocabularyDetailView
+        viewModel.state.isVocabularyDetailViewHidden
             .filter { $0 == false }
-            .flatMap { _ -> Observable<TimeInterval> in
-                .just(TimeInterval(0.4))
-            }
+            .map { _ in TimeInterval(0.4) }
+            .observe(on: MainScheduler.instance)
             .bind(to: maskView.rx.fadeIn)
             .disposed(by: bag)
 
-        viewModel.vocabularies
+        viewModel.state.vocabularies
             .do(onNext: { [weak self] vocabularies in
                 guard let self = self else { return }
                 self.setupNavigationBar(vocabularies.count)
@@ -133,8 +131,8 @@ final class VocabularyListViewController: BaseViewController {
                     self.hideEmptyView(self.tableView)
                 }
             })
-            .bind(
-                to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self),
+            .drive(
+                tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self),
                 curriedArgument: { [weak self] _, model, cell in
                     guard let self = self else { return }
                     cell.selectionStyle = .none
@@ -155,23 +153,16 @@ final class VocabularyListViewController: BaseViewController {
                         })
                         .disposed(by: self.bag)
 
-                    cell.deleteVocabulary
-                        .subscribe(onNext: { vocabularyRealm in
-                            guard !vocabularyRealm.isInvalidated else { return }
-                            cell.stopWiggleAnimation.onNext(())
-                            self.viewModel.deleteVocabulary.onNext(vocabularyRealm)
-                        })
-                        .disposed(by: self.bag)
+                    let deleteValidated = cell.deleteVocabulary.filter { !$0.isInvalidated }.share()
+                    deleteValidated.map { _ in }.bind(to: cell.stopWiggleAnimation).disposed(by: self.bag)
+                    deleteValidated.bind(to: self.viewModel.event.deleteVocabulary).disposed(by: self.bag)
                 }
             )
             .disposed(by: bag)
 
-        tableView.rx
-            .modelSelected(VocabularyRealm.self)
-            .bind(to: viewModel.selectVocabulary)
+        tableView.rx.modelSelected(VocabularyRealm.self)
+            .bind(to: viewModel.event.vocabularySelected)
             .disposed(by: bag)
-
-        viewModel.reload.onNext(())
     }
 }
 
@@ -185,6 +176,6 @@ extension VocabularyListViewController {
     }
 
     @objc func handleTapView(_ recognizer: UITapGestureRecognizer) {
-        viewModel.hideVocabularyDetailView.onNext(true)
+        viewModel.state.isVocabularyDetailViewHidden.accept(true)
     }
 }

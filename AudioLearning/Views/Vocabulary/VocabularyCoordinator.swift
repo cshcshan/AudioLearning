@@ -32,23 +32,11 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         // Vocabulary Detail
         let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)
 
-        viewModel.showVocabularyDetail
-            .subscribe(onNext: { vocabularyRealm in
-                vocabularyDetailVC.viewModel.load.onNext(vocabularyRealm)
-            })
-            .disposed(by: bag)
+        viewModel.event.vocabularySelected.bind(to: vocabularyDetailVC.viewModel.load).disposed(by: bag)
+        viewModel.event.addVocabulary.bind(to: vocabularyDetailVC.viewModel.add).disposed(by: bag)
 
-        viewModel.showAddVocabularyDetail
-            .subscribe(onNext: { _ in
-                vocabularyDetailVC.viewModel.add.onNext(())
-            })
-            .disposed(by: bag)
-
-        viewModel.showFlashCards
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.showFlashCards()
-            })
+        viewModel.event.flashCardsTapped
+            .subscribe(with: self, onNext: { `self`, _ in self.showFlashCards() })
             .disposed(by: bag)
 
         // ViewController
@@ -80,14 +68,10 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
-        viewModel.saved
-            .subscribe(onNext: { _ in
-                vocabularyListViewModel.reload.onNext(())
-            })
-            .disposed(by: bag)
+        viewModel.saved.bind(to: vocabularyListViewModel.event.fetchData).disposed(by: bag)
 
         viewModel.close.map { true }
-            .bind(to: vocabularyListViewModel.hideVocabularyDetailView)
+            .bind(to: vocabularyListViewModel.state.isVocabularyDetailViewHidden)
             .disposed(by: bag)
 
         // ViewController

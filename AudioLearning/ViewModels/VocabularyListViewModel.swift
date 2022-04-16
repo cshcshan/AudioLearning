@@ -12,54 +12,46 @@ import RxSwift
 
 final class VocabularyListViewModel: BaseViewModel {
 
-    // Inputs and Outputs
-    private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
+    struct State {
+        let vocabularies: Driver<[VocabularyRealm]>
+        let isVocabularyDetailViewHidden = BehaviorRelay<Bool>(value: true)
+    }
 
-    // Inputs
-    private(set) var reload: AnyObserver<Void>!
-    private(set) var selectVocabulary: AnyObserver<VocabularyRealm>!
-    private(set) var addVocabulary: AnyObserver<Void>!
-    private(set) var deleteVocabulary: AnyObserver<VocabularyRealm>!
-    private(set) var tapFlashCards: AnyObserver<Void>!
+    struct Event {
+        let fetchData = PublishRelay<Void>()
+        let vocabularySelected = PublishRelay<VocabularyRealm>()
+        let addVocabulary = PublishRelay<Void>()
+        let deleteVocabulary = PublishRelay<VocabularyRealm>()
+        let flashCardsTapped = PublishRelay<Void>()
+    }
 
-    // Outputs
-    private(set) var vocabularies: Observable<[VocabularyRealm]>!
-    private(set) var showVocabularyDetail: Observable<VocabularyRealm>!
-    private(set) var showAddVocabularyDetail: Observable<Void>!
-    private(set) var showFlashCards: Observable<Void>!
-
-    private let reloadSubject = PublishSubject<Void>()
-    private let selectVocabularySubject = PublishSubject<VocabularyRealm>()
-    private let addVocabularySubject = PublishSubject<Void>()
-    private let deleteVocabularySubject = PublishSubject<VocabularyRealm>()
-    private let tapFlashCardsSubject = PublishSubject<Void>()
+    let state: State
+    let event = Event()
 
     private let episodeID: String?
 
     init(realmService: RealmService<VocabularyRealm>, episodeID: String?) {
         self.episodeID = episodeID
 
-        self.reload = reloadSubject.asObserver()
-        self.vocabularies = Observable.merge(realmService.allObjects, realmService.filterObjects)
-        self.selectVocabulary = selectVocabularySubject.asObserver()
-        self.showVocabularyDetail = selectVocabularySubject.asObservable()
-        self.addVocabulary = addVocabularySubject.asObserver()
-        self.showAddVocabularyDetail = addVocabularySubject.asObservable()
-        self.deleteVocabulary = deleteVocabularySubject.asObserver()
-        self.tapFlashCards = tapFlashCardsSubject.asObserver()
-        self.showFlashCards = tapFlashCardsSubject.asObservable()
+        let vocabularies = Driver
+            .merge(
+                realmService.allObjects.asDriver(onErrorJustReturn: []),
+                realmService.filterObjects.asDriver(onErrorJustReturn: [])
+            )
+        self.state = State(vocabularies: vocabularies)
+
         super.init()
 
         Observable
-            .merge(showVocabularyDetail.map { _ in }, showAddVocabularyDetail.map { _ in })
+            .merge(event.vocabularySelected.map { _ in }, event.addVocabulary.map { _ in })
             .map { false }
             .observe(on: MainScheduler.instance)
-            .bind(to: hideVocabularyDetailView)
+            .bind(to: state.isVocabularyDetailViewHidden)
             .disposed(by: bag)
 
-        let sharedReloadSubject = reloadSubject.share()
+        let sharedFetchData = event.fetchData.share()
 
-        sharedReloadSubject
+        sharedFetchData
             .compactMap { [episodeID] _ in
                 guard let episodeID = episodeID else { return nil }
                 let sortedByAsc = ["updateDate": false]
@@ -68,7 +60,7 @@ final class VocabularyListViewModel: BaseViewModel {
             .bind(to: realmService.filter)
             .disposed(by: bag)
 
-        sharedReloadSubject
+        sharedFetchData
             .compactMap { [episodeID] _ in
                 guard episodeID == nil else { return nil }
                 let sortedByAsc = ["updateDate": false]
@@ -77,12 +69,13 @@ final class VocabularyListViewModel: BaseViewModel {
             .bind(to: realmService.loadAll)
             .disposed(by: bag)
 
-        let deleteSuccessfully = PublishSubject<Bool>()
-        deleteSuccessfully.filter { $0 }.map { _ in }.bind(to: reloadSubject).disposed(by: bag)
-
-        deleteVocabularySubject.compactMap(\.id)
-            .flatMapLatest { realmService.delete(predicate: NSPredicate(format: "id == %@", $0)) }
-            .bind(to: deleteSuccessfully)
+        event.deleteVocabulary.compactMap(\.id)
+            .flatMapLatest {
+                realmService.delete(predicate: NSPredicate(format: "id == %@", $0))
+            }
+            .filter { $0 }
+            .map { _ in }
+            .bind(to: event.fetchData)
             .disposed(by: bag)
     }
 }

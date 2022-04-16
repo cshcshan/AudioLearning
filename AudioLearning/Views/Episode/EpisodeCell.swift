@@ -89,7 +89,7 @@ final class EpisodeCell: BaseTableViewCell {
                 if self.photoImageView.image == self.darkBgTempImage || self.photoImageView.image == self.lightBgTempImage {
                     self.photoImageView.image = isHighlighted ? self.getHighlightedImage() : self.getNormalImage()
                 }
-                self.indicatorView.style = Appearance.mode == .dark ? .white : .gray
+                self.indicatorView.color = Appearance.mode == .dark ? .white : .gray
             })
             .disposed(by: disposeBag)
     }

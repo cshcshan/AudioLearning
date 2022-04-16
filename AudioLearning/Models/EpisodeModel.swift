@@ -26,7 +26,7 @@ struct EpisodeModel {
     }
 
     init(from episodeRealm: EpisodeRealm?) {
-        self.episode = episodeRealm?.episode
+        self.episode = episodeRealm?.id
         self.title = episodeRealm?.title
         self.desc = episodeRealm?.desc
         self.date = episodeRealm?.date

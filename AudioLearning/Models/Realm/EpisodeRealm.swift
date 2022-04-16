@@ -11,7 +11,7 @@ import RealmSwift
 
 @objcMembers
 final class EpisodeRealm: Object {
-    dynamic var episode: String?
+    dynamic var id: String?
     dynamic var title: String?
     dynamic var desc: String?
     dynamic var date: Date?
@@ -19,6 +19,6 @@ final class EpisodeRealm: Object {
     dynamic var path: String?
 
     override static func primaryKey() -> String {
-        "episode"
+        "id"
     }
 }

@@ -62,7 +62,7 @@ extension ParseSixMinutesHelper {
         guard let elements = try? document.select(HtmlQuery.smTopItem.rawValue),
               let element = elements.first() else { return nil }
         let model = EpisodeRealm()
-        model.episode = getEpisode(by: element)
+        model.id = getEpisode(by: element)
         model.title = getTitle(by: element)
         model.desc = getDesc(by: element)
         model.date = getDate(by: element)?.toDate(dateFormat: "dd MMM yyyy")
@@ -75,7 +75,7 @@ extension ParseSixMinutesHelper {
         guard let elements = try? document.select(HtmlQuery.smList.rawValue) else { return [] }
         return elements.map { element -> EpisodeRealm in
             let model = EpisodeRealm()
-            model.episode = getEpisode(by: element)
+            model.id = getEpisode(by: element)
             model.title = getTitle(by: element)
             model.desc = getDesc(by: element)
             model.date = getDate(by: element)?.toDate(dateFormat: "dd MMM yyyy")

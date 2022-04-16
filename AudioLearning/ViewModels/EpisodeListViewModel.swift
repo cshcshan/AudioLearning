@@ -124,6 +124,6 @@ final class EpisodeListViewModel: BaseViewModel {
     }
 
     private func loadData() {
-        realmService.loadAll.onNext(["episode": false])
+        realmService.loadAll.onNext(["id": false])
     }
 }

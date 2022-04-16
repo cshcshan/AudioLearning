@@ -36,7 +36,8 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         viewModel.event.addVocabulary.bind(to: vocabularyDetailVC.viewModel.add).disposed(by: bag)
 
         viewModel.event.flashCardsTapped
-            .subscribe(with: self, onNext: { `self`, _ in self.showFlashCards() })
+            .flatMapLatest { [weak self] _ in self?.showFlashCards() ?? .empty() }
+            .subscribe()
             .disposed(by: bag)
 
         // ViewController
@@ -84,8 +85,8 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         return viewController
     }
 
-    private func showFlashCards() {
+    private func showFlashCards() -> Observable<Void> {
         let flashCardsCoordinator = FlashCardsCoordinator(navigationController: navigationController)
-        _ = coordinate(to: flashCardsCoordinator)
+        return coordinate(to: flashCardsCoordinator)
     }
 }

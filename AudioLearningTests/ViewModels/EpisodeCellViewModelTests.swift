@@ -50,62 +50,50 @@ class EpisodeCellViewModelTests: XCTestCase {
     }
 
     func testTitle() {
-        let title = scheduler.createObserver(String.self)
-        sut.title
-            .bind(to: title)
-            .disposed(by: disposeBag)
+        let title = scheduler.createObserver(String?.self)
+        sut.outputs.title.drive(title).disposed(by: disposeBag)
         scheduler.createColdObservable([.next(10, episodeModel190815),
                                         .next(20, episodeModel190822),
-                                        .next(30, episodeModelNil),
-                                        .next(40, nil)])
-            .bind(to: sut.load)
+                                        .next(30, episodeModelNil)])
+            .bind(to: sut.inputs.load)
             .disposed(by: disposeBag)
         scheduler.start()
-        XCTAssertEqual(title.events.count, 5)
-        XCTAssertEqual(title.events, [.next(0, ""),
+        XCTAssertEqual(title.events.count, 4)
+        XCTAssertEqual(title.events, [.next(0, nil),
                                       .next(10, "Cryptocurrencies"),
                                       .next(20, "Does your age affect your political views?"),
-                                      .next(30, ""),
-                                      .next(40, "")])
+                                      .next(30, nil)])
     }
     
     func testDate() {
-        let date = scheduler.createObserver(String.self)
-        sut.date
-            .bind(to: date)
-            .disposed(by: disposeBag)
+        let date = scheduler.createObserver(String?.self)
+        sut.outputs.date.drive(date).disposed(by: disposeBag)
         scheduler.createColdObservable([.next(10, episodeModel190815),
                                         .next(20, episodeModel190822),
-                                        .next(30, episodeModelNil),
-                                        .next(40, nil)])
-            .bind(to: sut.load)
+                                        .next(30, episodeModelNil)])
+            .bind(to: sut.inputs.load)
             .disposed(by: disposeBag)
         scheduler.start()
-        XCTAssertEqual(date.events.count, 5)
-        XCTAssertEqual(date.events, [.next(0, ""),
+        XCTAssertEqual(date.events.count, 4)
+        XCTAssertEqual(date.events, [.next(0, nil),
                                      .next(10, "2019/8/15"),
                                      .next(20, "2019/8/22"),
-                                     .next(30, ""),
-                                     .next(40, "")])
+                                     .next(30, nil)])
     }
     
     func testDesc() {
-        let desc = scheduler.createObserver(String.self)
-        sut.desc
-            .bind(to: desc)
-            .disposed(by: disposeBag)
+        let desc = scheduler.createObserver(String?.self)
+        sut.outputs.desc.drive(desc).disposed(by: disposeBag)
         scheduler.createColdObservable([.next(10, episodeModel190815),
                                         .next(20, episodeModel190822),
-                                        .next(30, episodeModelNil),
-                                        .next(40, nil)])
-            .bind(to: sut.load)
+                                        .next(30, episodeModelNil)])
+            .bind(to: sut.inputs.load)
             .disposed(by: disposeBag)
         scheduler.start()
-        XCTAssertEqual(desc.events.count, 5)
-        XCTAssertEqual(desc.events, [.next(0, ""),
+        XCTAssertEqual(desc.events.count, 4)
+        XCTAssertEqual(desc.events, [.next(0, nil),
                                      .next(10, "Libra, Bitcoin... would you invest in digital money?"),
                                      .next(20, "Age and political views"),
-                                     .next(30, ""),
-                                     .next(40, "")])
+                                     .next(30, nil)])
     }
 }

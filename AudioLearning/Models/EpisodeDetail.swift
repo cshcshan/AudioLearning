@@ -7,8 +7,8 @@
 //
 
 struct EpisodeDetail {
-    var scriptHtml: String?
-    var audioLink: String?
+    let scriptHtml: String?
+    let audioLink: String?
 
     init(scriptHtml: String?, audioLink: String?) {
         self.scriptHtml = scriptHtml

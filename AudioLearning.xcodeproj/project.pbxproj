@@ -18,7 +18,7 @@
 		330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657622339ED5500381CC6 /* VocabularySaveModel.swift */; };
 		330657652339EE9900381CC6 /* VocabularySaveModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */; };
 		33065787233B23DD00381CC6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065786233B23DD00381CC6 /* Constants.swift */; };
-		33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */; };
+		33065789233B2B7B00381CC6 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33065788233B2B7B00381CC6 /* UIColor+Extension.swift */; };
 		3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */; };
 		332C155123174CF8003C78EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C155023174CF8003C78EA /* AppDelegate.swift */; };
 		332C155823174CF9003C78EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 332C155723174CF9003C78EA /* Assets.xcassets */; };
@@ -29,7 +29,7 @@
 		332C158D231789A6003C78EA /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158C231789A6003C78EA /* ParseHelper.swift */; };
 		332C158F23178A5A003C78EA /* EpisodeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C158E23178A5A003C78EA /* EpisodeModelTests.swift */; };
 		332C15922317A5C4003C78EA /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15912317A5C4003C78EA /* Episode.swift */; };
-		332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* ExtensionString.swift */; };
+		332C15952317A7C1003C78EA /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15942317A7C1003C78EA /* String+Extension.swift */; };
 		332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15962317EF43003C78EA /* ExtensionStringTests.swift */; };
 		332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */; };
 		332C159B2318CE10003C78EA /* ep-190815.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C159A2318CE10003C78EA /* ep-190815.html */; };
@@ -42,20 +42,20 @@
 		3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */; };
 		3348C7662338C20A00CAC170 /* VocabularyListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */; };
 		3353ABF02334EDB30031B9C1 /* EpisodeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */; };
-		3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */; };
+		3353ABF32334F0E70031B9C1 /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF22334F0E70031B9C1 /* FileManager+Extension.swift */; };
 		3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF42334F1A90031B9C1 /* RealmService.swift */; };
 		3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */; };
 		3353ABFA233725FC0031B9C1 /* EpisodeDetailRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF9233725FC0031B9C1 /* EpisodeDetailRealm.swift */; };
-		3371E42F234F570B00B905B3 /* ExtensionUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3371E42E234F570B00B905B3 /* ExtensionUIView.swift */; };
+		3371E42F234F570B00B905B3 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3371E42E234F570B00B905B3 /* UIView+Extension.swift */; };
 		33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */; };
 		33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */; };
 		33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9F231E323000340C17 /* EpisodeListViewController.swift */; };
 		33892AA2231E324800340C17 /* Episode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33892AA1231E324800340C17 /* Episode.storyboard */; };
 		33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */; };
 		33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA6231F65D800340C17 /* EpisodeCell.swift */; };
-		33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* ExtensionDate.swift */; };
+		33892AA9231F6AA500340C17 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AA8231F6AA500340C17 /* Date+Extension.swift */; };
 		33892AAB231F73FA00340C17 /* ExtensionDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */; };
-		33A208342355C332008CBFB3 /* ExtensionUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208332355C332008CBFB3 /* ExtensionUIButton.swift */; };
+		33A208342355C332008CBFB3 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208332355C332008CBFB3 /* UIButton+Extension.swift */; };
 		33A208362355C81D008CBFB3 /* BaseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */; };
 		33B1AF2323471A54007B7E8E /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2223471A54007B7E8E /* Page.swift */; };
 		33B1AF2523471D93007B7E8E /* EpisodeListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */; };
@@ -67,10 +67,10 @@
 		33D30038235D83FF000A318F /* EpisodeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D30037235D83FF000A318F /* EpisodeAnimator.swift */; };
 		33D406492347487600B1AE57 /* VocabularyListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406482347487600B1AE57 /* VocabularyListPage.swift */; };
 		33D4064B234748BE00B1AE57 /* VocabularyDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */; };
-		33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */; };
+		33D4065523488A0C00B1AE57 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065423488A0C00B1AE57 /* Notification+Extension.swift */; };
 		33D406572348B11D00B1AE57 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406562348B11D00B1AE57 /* BaseViewModel.swift */; };
 		33D406592348BAD300B1AE57 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D406582348BAD300B1AE57 /* UserDefaultManager.swift */; };
-		33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */; };
+		33D4065E234AB9A300B1AE57 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4065D234AB9A300B1AE57 /* UITableView+Extension.swift */; };
 		33D4068C234B37F800B1AE57 /* around-the-world.json in Resources */ = {isa = PBXBuildFile; fileRef = 33D4068B234B37F800B1AE57 /* around-the-world.json */; };
 		33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641D92340954200A97F9E /* FlashCardsViewModel.swift */; };
 		33D641DE2340985C00A97F9E /* FlashCardsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */; };
@@ -102,7 +102,7 @@
 		33E3B9B4280B096F00CC8548 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B3280B096F00CC8548 /* Reachability */; };
 		33E3B9B7280B09C300CC8548 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B6280B09C300CC8548 /* Lottie */; };
 		33E3B9BB280B1ED000CC8548 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9BA280B1ED000CC8548 /* SnapKit */; };
-		33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */; };
+		33EC4D58233C739700D2DAA5 /* Reactive+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC4D57233C739700D2DAA5 /* Reactive+Extension.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
 /* End PBXBuildFile section */
@@ -136,7 +136,7 @@
 		330657622339ED5500381CC6 /* VocabularySaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModel.swift; sourceTree = "<group>"; };
 		330657642339EE9900381CC6 /* VocabularySaveModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularySaveModelTests.swift; sourceTree = "<group>"; };
 		33065786233B23DD00381CC6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIColor.swift; sourceTree = "<group>"; };
+		33065788233B2B7B00381CC6 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		332C154D23174CF8003C78EA /* AudioLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		332C155023174CF8003C78EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 		332C158C231789A6003C78EA /* ParseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
 		332C158E23178A5A003C78EA /* EpisodeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModelTests.swift; sourceTree = "<group>"; };
 		332C15912317A5C4003C78EA /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
-		332C15942317A7C1003C78EA /* ExtensionString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionString.swift; sourceTree = "<group>"; };
+		332C15942317A7C1003C78EA /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		332C15962317EF43003C78EA /* ExtensionStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStringTests.swift; sourceTree = "<group>"; };
 		332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModelTests.swift; sourceTree = "<group>"; };
 		332C159A2318CE10003C78EA /* ep-190815.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "ep-190815.html"; sourceTree = "<group>"; };
@@ -166,20 +166,20 @@
 		3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewModel.swift; sourceTree = "<group>"; };
 		3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewModelTests.swift; sourceTree = "<group>"; };
 		3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeRealm.swift; sourceTree = "<group>"; };
-		3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionFileManager.swift; sourceTree = "<group>"; };
+		3353ABF22334F0E70031B9C1 /* FileManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extension.swift"; sourceTree = "<group>"; };
 		3353ABF42334F1A90031B9C1 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmServiceTests.swift; sourceTree = "<group>"; };
 		3353ABF9233725FC0031B9C1 /* EpisodeDetailRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailRealm.swift; sourceTree = "<group>"; };
-		3371E42E234F570B00B905B3 /* ExtensionUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIView.swift; sourceTree = "<group>"; };
+		3371E42E234F570B00B905B3 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModelTests.swift; sourceTree = "<group>"; };
 		33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModel.swift; sourceTree = "<group>"; };
 		33892A9F231E323000340C17 /* EpisodeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewController.swift; sourceTree = "<group>"; };
 		33892AA1231E324800340C17 /* Episode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Episode.storyboard; sourceTree = "<group>"; };
 		33892AA3231E32B900340C17 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
 		33892AA6231F65D800340C17 /* EpisodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCell.swift; sourceTree = "<group>"; };
-		33892AA8231F6AA500340C17 /* ExtensionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDate.swift; sourceTree = "<group>"; };
+		33892AA8231F6AA500340C17 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		33892AAA231F73FA00340C17 /* ExtensionDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDateTests.swift; sourceTree = "<group>"; };
-		33A208332355C332008CBFB3 /* ExtensionUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIButton.swift; sourceTree = "<group>"; };
+		33A208332355C332008CBFB3 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		33A208352355C81D008CBFB3 /* BaseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModelTests.swift; sourceTree = "<group>"; };
 		33B1AF2223471A54007B7E8E /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		33B1AF2423471D93007B7E8E /* EpisodeListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListPage.swift; sourceTree = "<group>"; };
@@ -191,10 +191,10 @@
 		33D30037235D83FF000A318F /* EpisodeAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeAnimator.swift; sourceTree = "<group>"; };
 		33D406482347487600B1AE57 /* VocabularyListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListPage.swift; sourceTree = "<group>"; };
 		33D4064A234748BE00B1AE57 /* VocabularyDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyDetailPage.swift; sourceTree = "<group>"; };
-		33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionNotification.swift; sourceTree = "<group>"; };
+		33D4065423488A0C00B1AE57 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		33D406562348B11D00B1AE57 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		33D406582348BAD300B1AE57 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
-		33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUITableView.swift; sourceTree = "<group>"; };
+		33D4065D234AB9A300B1AE57 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		33D4068B234B37F800B1AE57 /* around-the-world.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "around-the-world.json"; sourceTree = "<group>"; };
 		33D641D92340954200A97F9E /* FlashCardsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModel.swift; sourceTree = "<group>"; };
 		33D641DD2340985C00A97F9E /* FlashCardsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardsViewModelTests.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		33E37820231CB61300C6671B /* EpisodeListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListViewModelTests.swift; sourceTree = "<group>"; };
 		33E37824231D016900C6671B /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		33E37826231D01AC00C6671B /* AlertModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModelTests.swift; sourceTree = "<group>"; };
-		33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionReactive.swift; sourceTree = "<group>"; };
+		33EC4D57233C739700D2DAA5 /* Reactive+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+Extension.swift"; sourceTree = "<group>"; };
 		461F8E597385FB2CD8042A59 /* Pods-AudioLearningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearningTests.debug.xcconfig"; path = "Target Support Files/Pods-AudioLearningTests/Pods-AudioLearningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4683F1814582DB93FA1723BA /* Pods-AudioLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning/Pods-AudioLearning.release.xcconfig"; sourceTree = "<group>"; };
 		81304909D1C97AB5F49B302F /* Pods-AudioLearning-AudioLearningUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioLearning-AudioLearningUITests/Pods-AudioLearning-AudioLearningUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -400,15 +400,15 @@
 		332C15932317A727003C78EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				33892AA8231F6AA500340C17 /* ExtensionDate.swift */,
-				3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */,
-				33D4065423488A0C00B1AE57 /* ExtensionNotification.swift */,
-				33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */,
-				332C15942317A7C1003C78EA /* ExtensionString.swift */,
-				33A208332355C332008CBFB3 /* ExtensionUIButton.swift */,
-				33065788233B2B7B00381CC6 /* ExtensionUIColor.swift */,
-				33D4065D234AB9A300B1AE57 /* ExtensionUITableView.swift */,
-				3371E42E234F570B00B905B3 /* ExtensionUIView.swift */,
+				33892AA8231F6AA500340C17 /* Date+Extension.swift */,
+				3353ABF22334F0E70031B9C1 /* FileManager+Extension.swift */,
+				33D4065423488A0C00B1AE57 /* Notification+Extension.swift */,
+				33EC4D57233C739700D2DAA5 /* Reactive+Extension.swift */,
+				332C15942317A7C1003C78EA /* String+Extension.swift */,
+				33A208332355C332008CBFB3 /* UIButton+Extension.swift */,
+				33065788233B2B7B00381CC6 /* UIColor+Extension.swift */,
+				33D4065D234AB9A300B1AE57 /* UITableView+Extension.swift */,
+				3371E42E234F570B00B905B3 /* UIView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -934,12 +934,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				334644B7232F6AC80040407E /* HCAudioPlayer.swift in Sources */,
-				33A208342355C332008CBFB3 /* ExtensionUIButton.swift in Sources */,
+				33A208342355C332008CBFB3 /* UIButton+Extension.swift in Sources */,
 				33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */,
-				3371E42F234F570B00B905B3 /* ExtensionUIView.swift in Sources */,
+				3371E42F234F570B00B905B3 /* UIView+Extension.swift in Sources */,
 				33892AA4231E32B900340C17 /* EpisodeDetailViewController.swift in Sources */,
 				33E3780B231A605D00C6671B /* APIService.swift in Sources */,
-				332C15952317A7C1003C78EA /* ExtensionString.swift in Sources */,
+				332C15952317A7C1003C78EA /* String+Extension.swift in Sources */,
 				330657612339E43600381CC6 /* VocabularyCell.swift in Sources */,
 				330657532338CC1E00381CC6 /* VocabularyDetailViewModel.swift in Sources */,
 				33DB07522328FAD80030EBBA /* BaseViewController.swift in Sources */,
@@ -949,7 +949,7 @@
 				33DB07582329CEE00030EBBA /* MusicPlayerViewController.swift in Sources */,
 				3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */,
 				33E3780D231A66B300C6671B /* EnumError.swift in Sources */,
-				3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */,
+				3353ABF32334F0E70031B9C1 /* FileManager+Extension.swift in Sources */,
 				33892AA0231E323000340C17 /* EpisodeListViewController.swift in Sources */,
 				330657632339ED5500381CC6 /* VocabularySaveModel.swift in Sources */,
 				33E2CAD9235DCAEA00226085 /* SlideAnimator.swift in Sources */,
@@ -958,7 +958,7 @@
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
 				33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */,
 				3348C75C2338B21C00CAC170 /* VocabularyRealm.swift in Sources */,
-				33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */,
+				33D4065523488A0C00B1AE57 /* Notification+Extension.swift in Sources */,
 				33D30032235D4FCF000A318F /* EpisodeCellViewModel.swift in Sources */,
 				33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */,
 				3306575B2339CF6000381CC6 /* VocabularyListViewController.swift in Sources */,
@@ -966,14 +966,14 @@
 				33D641E523409B2000A97F9E /* FlashCardsCoordinator.swift in Sources */,
 				332C158D231789A6003C78EA /* ParseHelper.swift in Sources */,
 				3306578D233B3E2100381CC6 /* BaseTableViewCell.swift in Sources */,
-				33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */,
+				33EC4D58233C739700D2DAA5 /* Reactive+Extension.swift in Sources */,
 				33DB0799232A0E4A0030EBBA /* MusicPlayerViewModel.swift in Sources */,
 				334645012332514D0040407E /* BufferingSlider.swift in Sources */,
 				33D641E72340A10E00A97F9E /* FlashCardCell.swift in Sources */,
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,
 				33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */,
 				332C159D2318DD42003C78EA /* EpisodeDetail.swift in Sources */,
-				33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */,
+				33D4065E234AB9A300B1AE57 /* UITableView+Extension.swift in Sources */,
 				3306575D2339CFE800381CC6 /* VocabularyDetailViewController.swift in Sources */,
 				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,
 				33DB07502328D31B0030EBBA /* Coordinator.swift in Sources */,
@@ -981,8 +981,8 @@
 				3306575F2339D03700381CC6 /* VocabularyCoordinator.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,
 				33D641E92340A15C00A97F9E /* FlashCardsFlowLayout.swift in Sources */,
-				33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */,
-				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
+				33065789233B2B7B00381CC6 /* UIColor+Extension.swift in Sources */,
+				33892AA9231F6AA500340C17 /* Date+Extension.swift in Sources */,
 				332C15922317A5C4003C78EA /* Episode.swift in Sources */,
 				3353ABFA233725FC0031B9C1 /* EpisodeDetailRealm.swift in Sources */,
 				33065787233B23DD00381CC6 /* Constants.swift in Sources */,

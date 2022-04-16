@@ -81,27 +81,27 @@ final class EpisodeDetailViewModel: BaseViewModel {
             .disposed(by: disposeBag)
 
         let loadEpisodeDetailModels = realmService.filterObjects
-            .flatMapLatest { [weak self] episodeDetailRealms -> Observable<EpisodeDetailModel> in
+            .flatMapLatest { [weak self] episodeDetailRealms -> Observable<EpisodeDetail> in
                 guard let self = self else { return .empty() }
                 guard let model = episodeDetailRealms.first else {
                     self.refreshingSubject.onNext(true)
                     apiService.loadEpisodeDetail.onNext(episodeModel)
                     return .empty()
                 }
-                return .just(EpisodeDetailModel(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
+                return .just(EpisodeDetail(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
             }
             .take(1)
             .share() // use share() to avoid multiple subscriptions from the same Observable
 
-        let episodeDetailModels = realmService.filterObjects
-            .flatMapLatest { episodeDetailRealms -> Observable<EpisodeDetailModel> in
+        let episodeDetails = realmService.filterObjects
+            .flatMapLatest { episodeDetailRealms -> Observable<EpisodeDetail> in
                 guard let model = episodeDetailRealms.first else { return .empty() }
-                return .just(EpisodeDetailModel(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
+                return .just(EpisodeDetail(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
             }
             .skip(1)
             .share() // use share() to avoid multiple subscriptions from the same Observable
 
-        Observable.of(loadEpisodeDetailModels, episodeDetailModels)
+        Observable.of(loadEpisodeDetailModels, episodeDetails)
             .merge()
             .subscribe(onNext: { [weak self] model in
                 guard let self = self else { return }
@@ -110,7 +110,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
             })
             .disposed(by: disposeBag)
 
-        self.audioLink = Observable.of(loadEpisodeDetailModels, episodeDetailModels)
+        self.audioLink = Observable.of(loadEpisodeDetailModels, episodeDetails)
             .merge()
             .map { model -> String in
                 model.audioLink ?? ""

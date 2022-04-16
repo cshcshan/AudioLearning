@@ -105,12 +105,12 @@ final class APIService: APIServiceProtocol {
                         guard let html = String(data: data, encoding: .utf8) else {
                             throw Errors.convertDataToHtml
                         }
-                        let episodeDetailModel = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(
+                        let episodeDetail = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(
                             by: html,
                             urlString: url.absoluteString,
                             episode: episode
                         )
-                        return episodeDetailModel
+                        return episodeDetail
                     }
             }
     }

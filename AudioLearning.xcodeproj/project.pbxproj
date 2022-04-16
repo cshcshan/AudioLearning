@@ -33,7 +33,7 @@
 		332C15972317EF43003C78EA /* ExtensionStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15962317EF43003C78EA /* ExtensionStringTests.swift */; };
 		332C15992318CC71003C78EA /* EpisodeDetailModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */; };
 		332C159B2318CE10003C78EA /* ep-190815.html in Resources */ = {isa = PBXBuildFile; fileRef = 332C159A2318CE10003C78EA /* ep-190815.html */; };
-		332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */; };
+		332C159D2318DD42003C78EA /* EpisodeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332C159C2318DD42003C78EA /* EpisodeDetail.swift */; };
 		334644B7232F6AC80040407E /* HCAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334644B6232F6AC80040407E /* HCAudioPlayer.swift */; };
 		334644BE2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */; };
 		334644C32330E4F90040407E /* MockHCAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334644C22330E4F90040407E /* MockHCAudioPlayer.swift */; };
@@ -157,7 +157,7 @@
 		332C15962317EF43003C78EA /* ExtensionStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStringTests.swift; sourceTree = "<group>"; };
 		332C15982318CC71003C78EA /* EpisodeDetailModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModelTests.swift; sourceTree = "<group>"; };
 		332C159A2318CE10003C78EA /* ep-190815.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "ep-190815.html"; sourceTree = "<group>"; };
-		332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailModel.swift; sourceTree = "<group>"; };
+		332C159C2318DD42003C78EA /* EpisodeDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetail.swift; sourceTree = "<group>"; };
 		334644B6232F6AC80040407E /* HCAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HCAudioPlayer.swift; sourceTree = "<group>"; };
 		334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 190815_6min_english_cryptocurrency.mp3; sourceTree = "<group>"; };
 		334644C22330E4F90040407E /* MockHCAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHCAudioPlayer.swift; sourceTree = "<group>"; };
@@ -390,7 +390,7 @@
 			children = (
 				3353ABEE2334ED9A0031B9C1 /* Realm */,
 				332C15912317A5C4003C78EA /* EpisodeModel.swift */,
-				332C159C2318DD42003C78EA /* EpisodeDetailModel.swift */,
+				332C159C2318DD42003C78EA /* EpisodeDetail.swift */,
 				330657622339ED5500381CC6 /* VocabularySaveModel.swift */,
 				33E37824231D016900C6671B /* AlertModel.swift */,
 			);
@@ -972,7 +972,7 @@
 				33D641E72340A10E00A97F9E /* FlashCardCell.swift in Sources */,
 				3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */,
 				33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */,
-				332C159D2318DD42003C78EA /* EpisodeDetailModel.swift in Sources */,
+				332C159D2318DD42003C78EA /* EpisodeDetail.swift in Sources */,
 				33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */,
 				3306575D2339CFE800381CC6 /* VocabularyDetailViewController.swift in Sources */,
 				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,

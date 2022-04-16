@@ -9,8 +9,8 @@
 import Foundation
 
 struct AlertModel {
-    var title: String?
-    var message: String?
+    let title: String?
+    let message: String?
 
     init(title: String?, message: String?) {
         self.title = title

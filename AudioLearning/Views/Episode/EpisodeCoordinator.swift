@@ -102,7 +102,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
 
         viewModel.showAddVocabularyDetail
             .subscribe(onNext: { word in
-                vocabularyDetailVC.viewModel.addWithWord.onNext((episodeModel.episode, word))
+                vocabularyDetailVC.viewModel.addWithWord.onNext((episodeModel.id, word))
             })
             .disposed(by: bag)
 
@@ -117,7 +117,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         viewModel.showVocabulary
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.showVocabulary(episode: episodeModel.episode)
+                self.showVocabulary(episode: episodeModel.id)
             })
             .disposed(by: bag)
 

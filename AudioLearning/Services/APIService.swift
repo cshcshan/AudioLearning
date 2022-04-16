@@ -85,7 +85,7 @@ final class APIService: APIServiceProtocol {
         episodeDetail = loadEpisodeDetailSubject
             .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealm?> in
                 guard let self = self else { return .empty() }
-                guard let episode = episodeModel.episode, let path = episodeModel.path else {
+                guard let id = episodeModel.id, let path = episodeModel.path else {
                     return .error(Errors.pathIsNull)
                 }
                 guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
@@ -108,7 +108,7 @@ final class APIService: APIServiceProtocol {
                         let episodeDetail = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(
                             by: html,
                             urlString: url.absoluteString,
-                            episode: episode
+                            episode: id
                         )
                         return episodeDetail
                     }

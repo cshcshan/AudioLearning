@@ -27,7 +27,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "unit-testing-db"
         episodeModel = EpisodeModel(
-            episode: "Episode 190815",
+            id: "Episode 190815",
             title: "Cryptocurrencies",
             desc: "Libra, Bitcoin... would you invest in digital money?",
             date: "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
@@ -110,7 +110,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     func testScriptHtml() {
         let episodeDetailRealm = EpisodeDetailRealm()
-        episodeDetailRealm.episode = episodeModel.episode
+        episodeDetailRealm.episode = episodeModel.id
         episodeDetailRealm.path = "path"
         episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealm.audioLink = "audio link"
@@ -134,7 +134,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     func testAudioLink() {
         let episodeDetailRealm = EpisodeDetailRealm()
-        episodeDetailRealm.episode = episodeModel.episode
+        episodeDetailRealm.episode = episodeModel.id
         episodeDetailRealm.path = "path"
         episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealm.audioLink = "audio-link"
@@ -226,6 +226,6 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
         scheduler.start()
 
-        XCTAssertEqual(apiService.episodeDetailPath, episodeModel.episode)
+        XCTAssertEqual(apiService.episodeDetailPath, episodeModel.id)
     }
 }

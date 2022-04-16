@@ -20,14 +20,14 @@ class EpisodeModelTests: XCTestCase {
     }
 
     func testInit() {
-        let episode = "Episode 190815"
+        let id = "Episode 190815"
         let title = "Cryptocurrencies"
         let desc = "Libra, Bitcoin... would you invest in digital money?"
         let date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         let imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
         let path = "/learningenglish/english/features/6-minute-english/ep-190815"
-        let sut = EpisodeModel(episode: episode, title: title, desc: desc, date: date, imagePath: imagePath, path: path)
-        XCTAssertEqual(sut.episode, episode)
+        let sut = EpisodeModel(id: id, title: title, desc: desc, date: date, imagePath: imagePath, path: path)
+        XCTAssertEqual(sut.id, id)
         XCTAssertEqual(sut.title, title)
         XCTAssertEqual(sut.desc, desc)
         XCTAssertEqual(sut.date, date)
@@ -36,8 +36,8 @@ class EpisodeModelTests: XCTestCase {
     }
 
     func testInit_WithNil() {
-        let sut = EpisodeModel(episode: nil, title: nil, desc: nil, date: nil, imagePath: nil, path: nil)
-        XCTAssertNil(sut.episode)
+        let sut = EpisodeModel()
+        XCTAssertNil(sut.id)
         XCTAssertNil(sut.title)
         XCTAssertNil(sut.desc)
         XCTAssertNil(sut.date)

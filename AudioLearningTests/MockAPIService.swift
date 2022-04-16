@@ -36,9 +36,8 @@ class MockAPIService: APIServiceProtocol {
 
         self.episodeDetail = loadEpisodeDetailSubject
             .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealm?> in
-                guard let self = self else { return .empty() }
-                guard let episode = episodeModel.episode else { return .empty() }
-                self.episodeDetailPath = episode
+                guard let self = self, let id = episodeModel.id else { return .empty() }
+                self.episodeDetailPath = id
                 return self.episodeDetailReturnValue
             }
     }

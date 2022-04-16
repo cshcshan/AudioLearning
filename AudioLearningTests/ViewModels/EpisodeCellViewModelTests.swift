@@ -25,7 +25,7 @@ class EpisodeCellViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         episodeModel190815 = EpisodeModel(
-            episode: "Episode 190815",
+            id: "Episode 190815",
             title: "Cryptocurrencies",
             desc: "Libra, Bitcoin... would you invest in digital money?",
             date: "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
@@ -33,14 +33,14 @@ class EpisodeCellViewModelTests: XCTestCase {
             path: "/learningenglish/english/features/6-minute-english/ep-190815"
         )
         episodeModel190822 = EpisodeModel(
-            episode: "Episode 190822",
+            id: "Episode 190822",
             title: "Does your age affect your political views?",
             desc: "Age and political views",
             date: "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
             imagePath: "http://ichef.bbci.co.uk/images/ic/976xn/p07jtrrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190822"
         )
-        episodeModelNil = EpisodeModel(episode: nil, title: nil, desc: nil, date: nil, imagePath: nil, path: nil)
+        episodeModelNil = EpisodeModel()
         apiService = MockAPIService()
         sut = EpisodeCellViewModel(apiService: apiService)
         scheduler = TestScheduler(initialClock: 0)

@@ -9,15 +9,22 @@
 import Foundation
 
 struct EpisodeModel {
-    var episode: String?
+    var id: String?
     var title: String?
     var desc: String?
     var date: Date?
     var imagePath: String?
     var path: String?
 
-    init(episode: String?, title: String?, desc: String?, date: Date?, imagePath: String?, path: String?) {
-        self.episode = episode
+    init(
+        id: String? = nil,
+        title: String? = nil,
+        desc: String? = nil,
+        date: Date? = nil,
+        imagePath: String? = nil,
+        path: String? = nil
+    ) {
+        self.id = id
         self.title = title
         self.desc = desc
         self.date = date
@@ -26,7 +33,7 @@ struct EpisodeModel {
     }
 
     init(from episodeRealm: EpisodeRealm?) {
-        self.episode = episodeRealm?.id
+        self.id = episodeRealm?.id
         self.title = episodeRealm?.title
         self.desc = episodeRealm?.desc
         self.date = episodeRealm?.date

@@ -47,7 +47,7 @@ class EpisodeListViewModelTests: XCTestCase {
         let episodesModels = ParseSixMinutesHelper().parseHtmlToEpisodeModels(by: html, urlString: urlString)
 
         let expectingModel = EpisodeModel(
-            episode: "Episode 190822",
+            id: "Episode 190822",
             title: "Does your age affect your political views?",
             desc: "Age and political views",
             date: "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
@@ -112,14 +112,14 @@ class EpisodeListViewModelTests: XCTestCase {
     }
 
     func testShowEpisodeDetail() {
-        var episode = "Episode 190815"
+        var id = "Episode 190815"
         var title = "Cryptocurrencies"
         var desc = "Libra, Bitcoin... would you invest in digital money?"
         var date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         var imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
         var path = "/learningenglish/english/features/6-minute-english/ep-190815"
         let episodeModel190815 = EpisodeModel(
-            episode: episode,
+            id: id,
             title: title,
             desc: desc,
             date: date,
@@ -127,14 +127,14 @@ class EpisodeListViewModelTests: XCTestCase {
             path: path
         )
 
-        episode = "Episode 190822"
+        id = "Episode 190822"
         title = "Does your age affect your political views?"
         desc = "Age and political views"
         date = "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
         imagePath = ""
         path = "/learningenglish/english/features/6-minute-english/ep-190822"
         let episodeModel190822 = EpisodeModel(
-            episode: episode,
+            id: id,
             title: title,
             desc: desc,
             date: date,

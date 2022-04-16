@@ -50,7 +50,7 @@ class EpisodeListViewModelTests: XCTestCase {
             id: "Episode 190822",
             title: "Does your age affect your political views?",
             desc: "Age and political views",
-            date: "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
+            date: "22 Aug 2019".date(withDateFormat: "dd MMM yyyy"),
             imagePath: "http://ichef.bbci.co.uk/images/ic/976xn/p07jtrrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190822"
         )
@@ -115,7 +115,7 @@ class EpisodeListViewModelTests: XCTestCase {
         var id = "Episode 190815"
         var title = "Cryptocurrencies"
         var desc = "Libra, Bitcoin... would you invest in digital money?"
-        var date = "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
+        var date = "15 Aug 2019".date(withDateFormat: "dd MMM yyyy")
         var imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
         var path = "/learningenglish/english/features/6-minute-english/ep-190815"
         let episode190815 = Episode(
@@ -130,7 +130,7 @@ class EpisodeListViewModelTests: XCTestCase {
         id = "Episode 190822"
         title = "Does your age affect your political views?"
         desc = "Age and political views"
-        date = "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy")
+        date = "22 Aug 2019".date(withDateFormat: "dd MMM yyyy")
         imagePath = ""
         path = "/learningenglish/english/features/6-minute-english/ep-190822"
         let episode190822 = Episode(

@@ -30,7 +30,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
             id: "Episode 190815",
             title: "Cryptocurrencies",
             desc: "Libra, Bitcoin... would you invest in digital money?",
-            date: "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
+            date: "15 Aug 2019".date(withDateFormat: "dd MMM yyyy"),
             imagePath: "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190815"
         )

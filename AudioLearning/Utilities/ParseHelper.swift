@@ -66,7 +66,7 @@ extension ParseSixMinutesHelper {
         model.id = getEpisode(by: element)
         model.title = getTitle(by: element)
         model.desc = getDesc(by: element)
-        model.date = getDate(by: element)?.toDate(dateFormat: "dd MMM yyyy")
+        model.date = getDate(by: element)?.date(withDateFormat: "dd MMM yyyy")
         model.imagePath = getImagePath(by: element)
         model.path = getPath(by: element)
         return model
@@ -79,7 +79,7 @@ extension ParseSixMinutesHelper {
             model.id = getEpisode(by: element)
             model.title = getTitle(by: element)
             model.desc = getDesc(by: element)
-            model.date = getDate(by: element)?.toDate(dateFormat: "dd MMM yyyy")
+            model.date = getDate(by: element)?.date(withDateFormat: "dd MMM yyyy")
             model.imagePath = getImagePath(by: element)
             model.path = getPath(by: element)
             return model

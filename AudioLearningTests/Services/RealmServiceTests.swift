@@ -42,7 +42,7 @@ class RealmServiceTests: XCTestCase {
             model.id = String(index)
             model.title = "Hello \(index)"
             model.desc = "This is \(index) minutes english."
-            model.date = "201903\(index)".toDate(dateFormat: "yyyyMMdd")
+            model.date = "201903\(index)".date(withDateFormat: "yyyyMMdd")
             model.imagePath = "https://www.cshan.com/image\(index).jpg"
             model.path = "/episode-201903\(index).mp3"
             models.append(model)
@@ -59,7 +59,7 @@ class RealmServiceTests: XCTestCase {
         model.id = "100"
         model.title = "Hello World"
         model.desc = "This is 100 minutes english."
-        model.date = "20190314".toDate(dateFormat: "yyyyMMdd")
+        model.date = "20190314".date(withDateFormat: "yyyyMMdd")
         model.imagePath = "https://www.cshan.com/image.jpg"
         model.path = "/episode-201900314.mp3"
         sut.add(object: model)
@@ -249,7 +249,7 @@ extension RealmServiceTests {
             model.id = String(index)
             model.title = "Hello \(index)"
             model.desc = "This is \(index) minutes english."
-            model.date = "201903\(index)".toDate(dateFormat: "yyyyMMdd")
+            model.date = "201903\(index)".date(withDateFormat: "yyyyMMdd")
             model.imagePath = "https://www.cshan.com/image\(index).jpg"
             model.path = "/episode-201903\(index).mp3"
             models.append(model)

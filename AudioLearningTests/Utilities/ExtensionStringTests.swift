@@ -26,7 +26,7 @@ extension ExtensionStringTests {
 
     func testToDate_WithddMMMMyyyy() {
         let sut = String("15 Aug 2019")
-        let date = sut.toDate(dateFormat: "dd MMM yyyy")
+        let date = sut.date(withDateFormat: "dd MMM yyyy")
         XCTAssertNotNil(date)
 
         var dateComponents = DateComponents()
@@ -40,19 +40,19 @@ extension ExtensionStringTests {
 
     func testToDate_WithEmptyDateFormat() {
         let sut = String("15 Aug 2019")
-        let date = sut.toDate(dateFormat: "")
+        let date = sut.date(withDateFormat: "")
         XCTAssertNil(date)
     }
 
     func testToDate_WithEmptyString() {
         let sut = String("")
-        let date = sut.toDate(dateFormat: "dd MMM yyyy")
+        let date = sut.date(withDateFormat: "dd MMM yyyy")
         XCTAssertNil(date)
     }
 
     func testToDate_WithWeirdDateFormat() {
         let sut = String("15 Aug 2019")
-        let date = sut.toDate(dateFormat: "Hello")
+        let date = sut.date(withDateFormat: "Hello")
         XCTAssertNil(date)
     }
 }

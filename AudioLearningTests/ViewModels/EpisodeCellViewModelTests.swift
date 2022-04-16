@@ -28,7 +28,7 @@ class EpisodeCellViewModelTests: XCTestCase {
             id: "Episode 190815",
             title: "Cryptocurrencies",
             desc: "Libra, Bitcoin... would you invest in digital money?",
-            date: "15 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
+            date: "15 Aug 2019".date(withDateFormat: "dd MMM yyyy"),
             imagePath: "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190815"
         )
@@ -36,7 +36,7 @@ class EpisodeCellViewModelTests: XCTestCase {
             id: "Episode 190822",
             title: "Does your age affect your political views?",
             desc: "Age and political views",
-            date: "22 Aug 2019".toDate(dateFormat: "dd MMM yyyy"),
+            date: "22 Aug 2019".date(withDateFormat: "dd MMM yyyy"),
             imagePath: "http://ichef.bbci.co.uk/images/ic/976xn/p07jtrrn.jpg",
             path: "/learningenglish/english/features/6-minute-english/ep-190822"
         )

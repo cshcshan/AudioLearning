@@ -9,7 +9,7 @@
 import RxSwift
 import UIKit
 
-final class VocabularyCoordinator: BaseCoordinator<Void> {
+final class VocabularyCoordinator: Coordinator<Void> {
 
     private var navigationController: UINavigationController!
     private var episodeID: String?

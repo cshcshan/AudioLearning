@@ -82,7 +82,7 @@
 		33DB07482328806D0030EBBA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07472328806D0030EBBA /* AppCoordinator.swift */; };
 		33DB074C232886620030EBBA /* StoryboardGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074B232886620030EBBA /* StoryboardGettable.swift */; };
 		33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */; };
-		33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */; };
+		33DB07502328D31B0030EBBA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB074F2328D31B0030EBBA /* Coordinator.swift */; };
 		33DB07522328FAD80030EBBA /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07512328FAD80030EBBA /* BaseViewController.swift */; };
 		33DB07562329CEC40030EBBA /* MusicPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DB07552329CEC40030EBBA /* MusicPlayer.storyboard */; };
 		33DB07582329CEE00030EBBA /* MusicPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DB07572329CEE00030EBBA /* MusicPlayerViewController.swift */; };
@@ -206,7 +206,7 @@
 		33DB07472328806D0030EBBA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		33DB074B232886620030EBBA /* StoryboardGettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardGettable.swift; sourceTree = "<group>"; };
 		33DB074D232898B50030EBBA /* EpisodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeCoordinator.swift; sourceTree = "<group>"; };
-		33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		33DB074F2328D31B0030EBBA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		33DB07512328FAD80030EBBA /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		33DB07552329CEC40030EBBA /* MusicPlayer.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MusicPlayer.storyboard; sourceTree = "<group>"; };
 		33DB07572329CEE00030EBBA /* MusicPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewController.swift; sourceTree = "<group>"; };
@@ -550,7 +550,7 @@
 		33DB075B2329CF480030EBBA /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				33DB074F2328D31B0030EBBA /* BaseCoordinator.swift */,
+				33DB074F2328D31B0030EBBA /* Coordinator.swift */,
 				33DB07512328FAD80030EBBA /* BaseViewController.swift */,
 				3306578C233B3E2100381CC6 /* BaseTableViewCell.swift */,
 				33D406562348B11D00B1AE57 /* BaseViewModel.swift */,
@@ -976,7 +976,7 @@
 				33D4065E234AB9A300B1AE57 /* ExtensionUITableView.swift in Sources */,
 				3306575D2339CFE800381CC6 /* VocabularyDetailViewController.swift in Sources */,
 				33892AA7231F65D800340C17 /* EpisodeCell.swift in Sources */,
-				33DB07502328D31B0030EBBA /* BaseCoordinator.swift in Sources */,
+				33DB07502328D31B0030EBBA /* Coordinator.swift in Sources */,
 				33D406572348B11D00B1AE57 /* BaseViewModel.swift in Sources */,
 				3306575F2339D03700381CC6 /* VocabularyCoordinator.swift in Sources */,
 				33E37825231D016900C6671B /* AlertModel.swift in Sources */,

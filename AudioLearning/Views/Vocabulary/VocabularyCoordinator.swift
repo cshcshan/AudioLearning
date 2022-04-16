@@ -12,11 +12,11 @@ import UIKit
 final class VocabularyCoordinator: BaseCoordinator<Void> {
 
     private var navigationController: UINavigationController!
-    private var episode: String?
+    private var episodeID: String?
 
-    init(navigationController: UINavigationController, episode: String?) {
+    init(navigationController: UINavigationController, episodeID: String?) {
         self.navigationController = navigationController
-        self.episode = episode
+        self.episodeID = episodeID
     }
 
     override func start() -> Observable<Void> {
@@ -28,7 +28,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         // ViewModel
         let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyListViewModel(realmService: realmService)
-        viewModel.setEpisode.onNext(episode)
+        viewModel.setEpisode.onNext(episodeID)
 
         // Vocabulary Detail
         let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)

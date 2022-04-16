@@ -605,6 +605,7 @@
 			buildConfigurationList = 332C157523174CF9003C78EA /* Build configuration list for PBXNativeTarget "AudioLearning" */;
 			buildPhases = (
 				FE03CA5B658BF72BA822EBAD /* [CP] Check Pods Manifest.lock */,
+				33E3B9B8280B0C1B00CC8548 /* SwiftFormat */,
 				332C154923174CF8003C78EA /* Sources */,
 				332C154A23174CF8003C78EA /* Frameworks */,
 				332C154B23174CF8003C78EA /* Resources */,
@@ -825,6 +826,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "KEYWORDS=\"TODO|FIXME|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}/${PRODUCT_MODULE_NAME}/*\" \\( -name \"*.swift\" \\) -print0 | \\\nxargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | \\\nperl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"\n";
+		};
+		33E3B9B8280B0C1B00CC8548 /* SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftFormat;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" \"$SRCROOT\"\n";
 		};
 		80B7928115530CA5EB368CA0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

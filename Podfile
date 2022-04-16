@@ -11,6 +11,7 @@ target 'AudioLearning' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RealmSwift'
+  pod 'SwiftFormat/CLI', '~> 0.49'
 
   target 'AudioLearningTests' do
     inherit! :search_paths

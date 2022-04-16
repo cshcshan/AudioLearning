@@ -1,6 +1,4 @@
 PODS:
-  - lottie-ios (3.2.3)
-  - ReachabilitySwift (5.0.0)
   - Realm (10.10.0):
     - Realm/Headers (= 10.10.0)
   - Realm/Headers (10.10.0)
@@ -16,22 +14,18 @@ PODS:
   - RxSwift (6.2.0)
   - RxTest (6.2.0):
     - RxSwift (= 6.2.0)
-  - SwiftSoup (2.3.2)
+  - SwiftFormat/CLI (0.49.7)
 
 DEPENDENCIES:
-  - lottie-ios
-  - ReachabilitySwift
   - RealmSwift
   - RxBlocking
   - RxCocoa
   - RxSwift
   - RxTest
-  - SwiftSoup
+  - SwiftFormat/CLI (~> 0.49)
 
 SPEC REPOS:
   trunk:
-    - lottie-ios
-    - ReachabilitySwift
     - Realm
     - RealmSwift
     - RxBlocking
@@ -39,11 +33,9 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - RxTest
-    - SwiftSoup
+    - SwiftFormat
 
 SPEC CHECKSUMS:
-  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
-  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   Realm: f501df41a4222c67850c77cf135d472192ecf294
   RealmSwift: c69aadfc7db0d60075178d037c2f34ada73d5201
   RxBlocking: 0b29f7d2079109a8de49c411381bed7c33ef1eeb
@@ -51,8 +43,8 @@ SPEC CHECKSUMS:
   RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
   RxTest: 0c692fa672b694373ba86d2b00033595297a2831
-  SwiftSoup: f97bc4e988c7729d6457f9642f974c617a6e2510
+  SwiftFormat: b70e3c776a74c67ce8bd140425a8c86d4a843759
 
-PODFILE CHECKSUM: 71c607f76f6fd27d67ff4361b269c3da364aa9bb
+PODFILE CHECKSUM: 28bc0336c3dbc6b3433feca4080199160a1ae9a3
 
 COCOAPODS: 1.11.3

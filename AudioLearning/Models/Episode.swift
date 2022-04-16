@@ -9,12 +9,12 @@
 import Foundation
 
 struct Episode {
-    var id: String?
-    var title: String?
-    var desc: String?
-    var date: Date?
-    var imagePath: String?
-    var path: String?
+    let id: String?
+    let title: String?
+    let desc: String?
+    let date: Date?
+    let imagePath: String?
+    let path: String?
 
     init(
         id: String? = nil,

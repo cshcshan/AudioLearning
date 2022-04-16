@@ -58,10 +58,8 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         navigationController = UINavigationController(rootViewController: viewController)
 
         viewModel.showVocabulary
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.showVocabulary(episodeID: nil)
-            })
+            .flatMapLatest { [weak self] _ in self?.showVocabulary(episodeID: nil) ?? .empty() }
+            .subscribe()
             .disposed(by: bag)
     }
 
@@ -175,12 +173,12 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
         return viewController
     }
 
-    private func showVocabulary(episodeID: String?) {
+    private func showVocabulary(episodeID: String?) -> Observable<Void> {
         let vocabularyCoordinator = VocabularyCoordinator(
             navigationController: navigationController,
             episodeID: episodeID
         )
-        _ = coordinate(to: vocabularyCoordinator)
+        return coordinate(to: vocabularyCoordinator)
     }
 
     private func showEpisodeDetailFromPlaying() {

@@ -101,6 +101,7 @@
 		33E3B9B1280B094D00CC8548 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B0280B094D00CC8548 /* SwiftSoup */; };
 		33E3B9B4280B096F00CC8548 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B3280B096F00CC8548 /* Reachability */; };
 		33E3B9B7280B09C300CC8548 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9B6280B09C300CC8548 /* Lottie */; };
+		33E3B9BB280B1ED000CC8548 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 33E3B9BA280B1ED000CC8548 /* SnapKit */; };
 		33EC4D58233C739700D2DAA5 /* ExtensionReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC4D57233C739700D2DAA5 /* ExtensionReactive.swift */; };
 		A8BA5615E13A9742F39EBA73 /* Pods_AudioLearning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B56000326DBF5D1231F34655 /* Pods_AudioLearning.framework */; };
 		C781DBF1FC9B1353B224E2B6 /* Pods_AudioLearningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95E349CF7AA387FF16CDD40 /* Pods_AudioLearningTests.framework */; };
@@ -244,6 +245,7 @@
 				33E3B9B4280B096F00CC8548 /* Reachability in Frameworks */,
 				33E3B9B1280B094D00CC8548 /* SwiftSoup in Frameworks */,
 				33E3B9B7280B09C300CC8548 /* Lottie in Frameworks */,
+				33E3B9BB280B1ED000CC8548 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,6 +624,7 @@
 				33E3B9B0280B094D00CC8548 /* SwiftSoup */,
 				33E3B9B3280B096F00CC8548 /* Reachability */,
 				33E3B9B6280B09C300CC8548 /* Lottie */,
+				33E3B9BA280B1ED000CC8548 /* SnapKit */,
 			);
 			productName = AudioLearning;
 			productReference = 332C154D23174CF8003C78EA /* AudioLearning.app */;
@@ -708,6 +711,7 @@
 				33E3B9AF280B094D00CC8548 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				33E3B9B2280B096F00CC8548 /* XCRemoteSwiftPackageReference "Reachability" */,
 				33E3B9B5280B09C300CC8548 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				33E3B9B9280B1ED000CC8548 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 332C154E23174CF8003C78EA /* Products */;
 			projectDirPath = "";
@@ -1368,6 +1372,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		33E3B9B9280B1ED000CC8548 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1385,6 +1397,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 33E3B9B5280B09C300CC8548 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		33E3B9BA280B1ED000CC8548 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33E3B9B9280B1ED000CC8548 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

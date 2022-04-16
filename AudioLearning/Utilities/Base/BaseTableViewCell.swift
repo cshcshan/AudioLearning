@@ -11,7 +11,7 @@ import UIKit
 
 class BaseTableViewCell: UITableViewCell {
 
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,7 +28,7 @@ class BaseTableViewCell: UITableViewCell {
                 guard let self = self else { return }
                 self.setupUIColor()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     func setupUIColor() {}

@@ -19,7 +19,7 @@ class VocabularyDetailViewModelTests: XCTestCase {
     var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     private let realmModel190815 = VocabularyRealm()
     private let realmModel190822 = VocabularyRealm()
@@ -34,7 +34,7 @@ class VocabularyDetailViewModelTests: XCTestCase {
         setupModels()
         sut = VocabularyDetailViewModel(realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -53,13 +53,13 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, realmModel190815),
             .next(20, realmModel190822)
         ])
         .bind(to: sut.load)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 3)
         XCTAssertEqual(word.events, [
@@ -73,13 +73,13 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.add)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 3)
         XCTAssertEqual(word.events, [
@@ -93,13 +93,13 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, (nil, "Hello")),
             .next(20, (nil, "World"))
         ])
         .bind(to: sut.addWithWord)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 3)
         XCTAssertEqual(word.events, [
@@ -113,16 +113,16 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
@@ -137,16 +137,16 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
@@ -161,16 +161,16 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
@@ -185,16 +185,16 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
@@ -209,16 +209,16 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
@@ -233,16 +233,16 @@ extension VocabularyDetailViewModelTests {
         let word = scheduler.createObserver(String.self)
         sut.word
             .bind(to: word)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, (nil, "Hello"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
@@ -257,13 +257,13 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, realmModel190815),
             .next(20, realmModel190822)
         ])
         .bind(to: sut.load)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 3)
         XCTAssertEqual(note.events, [
@@ -277,13 +277,13 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.add)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 3)
         XCTAssertEqual(note.events, [
@@ -297,13 +297,13 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, (nil, "Hello 1")),
             .next(20, (nil, "Hello 2"))
         ])
         .bind(to: sut.addWithWord)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 5)
         XCTAssertEqual(note.events, [
@@ -319,13 +319,13 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, (nil, "Hello")),
             .next(20, (nil, "World"))
         ])
         .bind(to: sut.addWithWord)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 3)
         XCTAssertEqual(note.events, [
@@ -339,19 +339,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -368,19 +368,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -397,19 +397,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -426,19 +426,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -455,19 +455,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -484,19 +484,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -513,19 +513,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -542,19 +542,19 @@ extension VocabularyDetailViewModelTests {
         let note = scheduler.createObserver(String.self)
         sut.note
             .bind(to: note)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, realmModel190815)])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(20, (nil, "Not Found"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(30, (nil, "Hello 1"))])
             .bind(to: sut.addWithWord)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(40, ())])
             .bind(to: sut.add)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
@@ -576,13 +576,13 @@ extension VocabularyDetailViewModelTests {
         let saved = scheduler.createObserver(Void.self)
         sut.saved
             .bind(to: saved)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, saveModel190815),
             .next(20, saveModel190822)
         ])
         .bind(to: sut.save)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(saved.events.count, 2)
     }
@@ -591,10 +591,10 @@ extension VocabularyDetailViewModelTests {
         let close = scheduler.createObserver(Void.self)
         sut.close
             .bind(to: close)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, saveModel190815)])
             .bind(to: sut.save)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(close.events.count, 1)
     }
@@ -603,10 +603,10 @@ extension VocabularyDetailViewModelTests {
         let close = scheduler.createObserver(Void.self)
         sut.close
             .bind(to: close)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.cancel)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(close.events.count, 1)
     }

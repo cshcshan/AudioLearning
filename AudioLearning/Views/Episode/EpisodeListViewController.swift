@@ -55,7 +55,7 @@ final class EpisodeListViewController: BaseViewController {
                 guard let isPlaying = userInfo["isPlaying"] as? Bool else { return }
                 self.showPlayingButton(self.viewModel, to: self.tableView, isShow: isPlaying)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     override func setupUIColor() {
@@ -95,7 +95,7 @@ final class EpisodeListViewController: BaseViewController {
         vocabularyItem.accessibilityIdentifier = "VocabularyButton"
         vocabularyItem.rx.tap
             .bind(to: viewModel.tapVocabulary)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
         navigationItem.title = "6 Minute English"
     }
@@ -125,16 +125,16 @@ final class EpisodeListViewController: BaseViewController {
                             cell.viewModel = episodeCellViewModel
                             cell.viewModel?.inputs.load.onNext(model)
                         })
-                        .disposed(by: self.disposeBag)
+                        .disposed(by: self.bag)
                     self.viewModel.getCellViewModel.onNext(row)
                 }
             )
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         if !isUITesting {
             viewModel.refreshing
                 .bind(to: refreshControl.rx.isRefreshing)
-                .disposed(by: disposeBag)
+                .disposed(by: bag)
         }
 
         viewModel.alert
@@ -148,13 +148,13 @@ final class EpisodeListViewController: BaseViewController {
                     completionHandler: nil
                 )
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         if !isUITesting {
             refreshControl.rx
                 .controlEvent(.valueChanged)
                 .bind(to: viewModel.reload)
-                .disposed(by: disposeBag)
+                .disposed(by: bag)
         }
 
         viewModel.getSelectEpisodeCell
@@ -162,17 +162,17 @@ final class EpisodeListViewController: BaseViewController {
                 guard let self = self else { return }
                 self.selectedCell = self.tableView.cellForRow(at: indexPath) as? EpisodeCell
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         tableView.rx
             .modelSelected(EpisodeModel.self)
             .bind(to: viewModel.selectEpisode)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         tableView.rx
             .itemSelected
             .bind(to: viewModel.selectIndexPath)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // ViewController's UI actions to ViewModel
         viewModel.initalLoad.onNext(())

@@ -19,7 +19,7 @@ class VocabularyListViewModelTests: XCTestCase {
     var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
@@ -28,7 +28,7 @@ class VocabularyListViewModelTests: XCTestCase {
         initStub()
         sut = VocabularyListViewModel(realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -42,7 +42,7 @@ class VocabularyListViewModelTests: XCTestCase {
         let hideVocabularyDetailView = scheduler.createObserver(Bool.self)
         sut.hideVocabularyDetailView
             .bind(to: hideVocabularyDetailView)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, false),
             .next(20, true),
@@ -51,7 +51,7 @@ class VocabularyListViewModelTests: XCTestCase {
             .next(50, false)
         ])
         .bind(to: sut.hideVocabularyDetailView)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(hideVocabularyDetailView.events.count, 6)
         XCTAssertEqual(hideVocabularyDetailView.events, [
@@ -68,13 +68,13 @@ class VocabularyListViewModelTests: XCTestCase {
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(5, "Episode 190811")])
             .bind(to: sut.setEpisode)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(vocabularies.events.count, 1)
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 1)
@@ -84,10 +84,10 @@ class VocabularyListViewModelTests: XCTestCase {
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(vocabularies.events.count, 1)
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 10)
@@ -111,13 +111,13 @@ class VocabularyListViewModelTests: XCTestCase {
         let showVocabularyDetail = scheduler.createObserver(VocabularyRealm.self)
         sut.showVocabularyDetail
             .bind(to: showVocabularyDetail)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, model190815),
             .next(20, model190822)
         ])
         .bind(to: sut.selectVocabulary)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showVocabularyDetail.events, [
             .next(10, model190815),
@@ -129,13 +129,13 @@ class VocabularyListViewModelTests: XCTestCase {
         let showAddVocabularyDetail = scheduler.createObserver(Void.self)
         sut.showAddVocabularyDetail
             .bind(to: showAddVocabularyDetail)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.addVocabulary)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showAddVocabularyDetail.events.count, 2)
     }
@@ -144,13 +144,13 @@ class VocabularyListViewModelTests: XCTestCase {
         let showFlashCards = scheduler.createObserver(Void.self)
         sut.showFlashCards
             .bind(to: showFlashCards)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.tapFlashCards)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showFlashCards.events.count, 2)
     }

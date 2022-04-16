@@ -16,7 +16,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var appCoordinator: AppCoordinator!
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     func application(
         _ application: UIApplication,
@@ -30,7 +30,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let startCoordinator: (() -> Void) = { [weak self] in
             guard let self = self else { return }
             self.appCoordinator = AppCoordinator(window: self.window!)
-            self.appCoordinator.start().subscribe().disposed(by: self.disposeBag)
+            self.appCoordinator.start().subscribe().disposed(by: self.bag)
         }
         setupLaunchScreen(startCoordinator)
         return true

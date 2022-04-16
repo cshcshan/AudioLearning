@@ -51,7 +51,7 @@ final class FlashCardsViewController: BaseViewController {
                     item.flip(self.viewModel.wordSideArray[row])
                 }
             )
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.vocabularies
             .subscribe(onNext: { [weak self] vocabularyRealms in
@@ -63,7 +63,7 @@ final class FlashCardsViewController: BaseViewController {
                     self.currentIndex = nil
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.isWordSide
             .subscribe(onNext: { [weak self] isWordSide in
@@ -73,7 +73,7 @@ final class FlashCardsViewController: BaseViewController {
                       .cellForItem(at: IndexPath(item: index, section: 0)) as? FlashCardCell else { return }
                 cell.flip(isWordSide)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.load.onNext(())
     }

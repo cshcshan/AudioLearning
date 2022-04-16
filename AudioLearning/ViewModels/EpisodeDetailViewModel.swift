@@ -74,11 +74,11 @@ final class EpisodeDetailViewModel: BaseViewModel {
                 guard let self = self else { return }
                 self.hideVocabularyDetailView.onNext(false)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         reloadDataFromServer()
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         let loadEpisodeDetailModels = realmService.filterObjects
             .flatMapLatest { [weak self] episodeDetailRealms -> Observable<EpisodeDetail> in
@@ -108,7 +108,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
                 self.refreshingSubject.onNext(false)
                 self.scriptHtml.onNext(model.scriptHtml ?? "")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         self.audioLink = Observable.of(loadEpisodeDetailModels, episodeDetails)
             .merge()
@@ -121,7 +121,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
                 guard let self = self else { return }
                 self.loadData()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func reloadDataFromServer() -> Observable<Void> {

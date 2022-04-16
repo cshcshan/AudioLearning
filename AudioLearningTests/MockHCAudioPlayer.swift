@@ -33,7 +33,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
     private let currentSecondsSubject = PublishSubject<Double>()
     private let totalSecondsSubject = PublishSubject<Double>()
 
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     // Results
     var musicURL = PublishSubject<URL>()
@@ -76,7 +76,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
                 self.musicCurrentSeconds += Double(seconds)
                 self.currentSecondsSubject.onNext(self.musicCurrentSeconds)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // Speed Up and Down
         let speedUpSubject = PublishSubject<Float>()
@@ -100,7 +100,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
         .subscribe(onNext: { rate in
             speedRateSubject.onNext(rate)
         })
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
 
         // Change Speed
         let changeSpeedSubject = PublishSubject<Float>()
@@ -109,7 +109,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
             .subscribe(onNext: { speedRate in
                 speedRateSubject.onNext(speedRate)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // Change Audio Position
         let changeAudioPositionSubject = PublishSubject<Float>()
@@ -119,7 +119,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
                 guard let self = self else { return }
                 self.currentSecondsSubject.onNext(Double(position))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func setupOutputs() {

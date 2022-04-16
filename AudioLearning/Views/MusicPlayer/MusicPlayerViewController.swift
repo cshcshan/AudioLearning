@@ -20,7 +20,7 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
     @IBOutlet var totalLengthLabel: UILabel!
 
     var viewModel: MusicPlayerViewModel!
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     private let playImage = UIImage(named: "play-white")
     private let pauseImage = UIImage(named: "pause-white")
@@ -42,7 +42,7 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
                 guard let self = self else { return }
                 self.setupUIColor()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func setupUIColor() {
@@ -92,14 +92,14 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
     private func setupBindings() {
         playButton.rx.tap
             .bind(to: viewModel.tappedPlayPause)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         forwardButton.rx.tap
             .bind(to: viewModel.forward10Seconds)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         rewindButton.rx.tap
             .bind(to: viewModel.rewind10Seconds)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         speedSegmentedControl.rx.selectedSegmentIndex
             .map { index -> Float in
                 switch index {
@@ -112,17 +112,17 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
                 }
             }
             .bind(to: viewModel.changeSpeed)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         slider.rx.value
             .bind(to: viewModel.changeAudioPosition)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.readyToPlay
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.setupUI(isReady: true)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.isPlaying
             .drive(onNext: { [weak self] isPlaying in
@@ -132,36 +132,36 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
                     for: .normal
                 )
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.currentTime
             .drive(progressTimerLabel.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         viewModel.totalTime
             .drive(totalLengthLabel.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.currentSeconds
             .drive(slider.rx.value)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         viewModel.totalSeconds
             .drive(onNext: { [weak self] seconds in
                 guard let slider = self?.slider else { return }
                 slider.maximumValue = seconds
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.loadingBufferRate
             .drive(slider.bufferProgressView.rx.progress)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.speedSegmentedControlAlpha
             .drive(speedSegmentedControl.rx.alpha)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.sliderAlpha
             .drive(slider.rx.alpha)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func setupUI(isReady: Bool) {

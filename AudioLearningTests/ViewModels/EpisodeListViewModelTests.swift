@@ -21,7 +21,7 @@ class EpisodeListViewModelTests: XCTestCase {
     var realmService: RealmService<EpisodeRealm>!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
@@ -30,7 +30,7 @@ class EpisodeListViewModelTests: XCTestCase {
         realmService = RealmService()
         sut = EpisodeListViewModel(apiService: apiService, realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -63,7 +63,7 @@ class EpisodeListViewModelTests: XCTestCase {
         // Output combines with the MockObserver(episodes above)
         sut.episodes
             .bind(to: episodes)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // MockObservable combines with Input
         scheduler
@@ -73,7 +73,7 @@ class EpisodeListViewModelTests: XCTestCase {
                 .next(200, ())
             ])
             .bind(to: sut.reload)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -87,7 +87,7 @@ class EpisodeListViewModelTests: XCTestCase {
         let refreshing = scheduler.createObserver(Bool.self)
         sut.refreshing
             .bind(to: refreshing)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler
             .createColdObservable([
@@ -95,12 +95,12 @@ class EpisodeListViewModelTests: XCTestCase {
                 .next(10, ())
             ])
             .bind(to: sut.initalLoad)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // execute reload.flatMapLatest by episodes.subscribe()
         sut.episodes
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -145,7 +145,7 @@ class EpisodeListViewModelTests: XCTestCase {
         let showEpisodeDetail = scheduler.createObserver(EpisodeModel.self)
         sut.showEpisodeDetail
             .bind(to: showEpisodeDetail)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler
             .createColdObservable([
@@ -153,7 +153,7 @@ class EpisodeListViewModelTests: XCTestCase {
                 .next(20, episodeModel190822)
             ])
             .bind(to: sut.selectEpisode)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -168,13 +168,13 @@ class EpisodeListViewModelTests: XCTestCase {
         let showVocabulary = scheduler.createObserver(Void.self)
         sut.showVocabulary
             .bind(to: showVocabulary)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.tapVocabulary)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showVocabulary.events.count, 2)
     }
@@ -189,23 +189,23 @@ class EpisodeListViewModelTests: XCTestCase {
 
         sut.episodes
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler
             .createColdObservable([.next(10, ())])
             .bind(to: sut.reload)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         let setCellViewModel = scheduler.createObserver(EpisodeCellViewModel.self)
         sut.setCellViewModel
             .bind(to: setCellViewModel)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler
             .createColdObservable([
                 .next(200, 1),
                 .next(300, 2)
             ])
             .bind(to: sut.getCellViewModel)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(setCellViewModel.events.count, 2)
     }
@@ -221,15 +221,15 @@ class EpisodeListViewModelTests: XCTestCase {
         let alert = scheduler.createObserver(AlertModel.self)
         sut.alert
             .bind(to: alert)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(300, ())])
             .bind(to: sut.reload)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // execute reload.flatMapLatest by episodes.subscribe()
         sut.episodes
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler.start()
 

@@ -96,7 +96,7 @@ final class EpisodeDetailViewController: BaseViewController {
         let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
         vocabularyItem.rx.tap
             .bind(to: viewModel.tapVocabulary)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
     }
 
@@ -113,7 +113,7 @@ final class EpisodeDetailViewController: BaseViewController {
         if !isUITesting {
             viewModel.refreshing
                 .bind(to: refreshControl.rx.isRefreshing)
-                .disposed(by: disposeBag)
+                .disposed(by: bag)
         }
 
         navigationItem.title = viewModel.title
@@ -128,7 +128,7 @@ final class EpisodeDetailViewController: BaseViewController {
                     self.photoImageView.image = image
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.scriptHtml
             .observe(on: MainScheduler.instance)
@@ -148,7 +148,7 @@ final class EpisodeDetailViewController: BaseViewController {
                 self.refreshControl.endRefreshing()
             })
             .bind(to: htmlTextView.rx.attributedText)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.alert
             .observe(on: MainScheduler.instance)
@@ -161,11 +161,11 @@ final class EpisodeDetailViewController: BaseViewController {
                     completionHandler: nil
                 )
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.hideVocabularyDetailView
             .bind(to: maskView.rx.isHidden)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.hideVocabularyDetailView
             .filter { $0 == true }
@@ -175,7 +175,7 @@ final class EpisodeDetailViewController: BaseViewController {
                 return .just(TimeInterval(0.4))
             }
             .bind(to: maskView.rx.fadeOut)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.hideVocabularyDetailView
             .filter { $0 == false }
@@ -185,7 +185,7 @@ final class EpisodeDetailViewController: BaseViewController {
                 return .just(TimeInterval(0.4))
             }
             .bind(to: maskView.rx.fadeIn)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.load.onNext(())
 

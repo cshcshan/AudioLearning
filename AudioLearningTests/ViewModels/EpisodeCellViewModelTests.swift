@@ -20,7 +20,7 @@ class EpisodeCellViewModelTests: XCTestCase {
     var episodeModelNil: EpisodeModel!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
@@ -44,7 +44,7 @@ class EpisodeCellViewModelTests: XCTestCase {
         apiService = MockAPIService()
         sut = EpisodeCellViewModel(apiService: apiService)
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -55,14 +55,14 @@ class EpisodeCellViewModelTests: XCTestCase {
 
     func testTitle() {
         let title = scheduler.createObserver(String?.self)
-        sut.outputs.title.drive(title).disposed(by: disposeBag)
+        sut.outputs.title.drive(title).disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, episodeModel190815),
             .next(20, episodeModel190822),
             .next(30, episodeModelNil)
         ])
         .bind(to: sut.inputs.load)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(title.events.count, 4)
         XCTAssertEqual(title.events, [
@@ -75,14 +75,14 @@ class EpisodeCellViewModelTests: XCTestCase {
 
     func testDate() {
         let date = scheduler.createObserver(String?.self)
-        sut.outputs.date.drive(date).disposed(by: disposeBag)
+        sut.outputs.date.drive(date).disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, episodeModel190815),
             .next(20, episodeModel190822),
             .next(30, episodeModelNil)
         ])
         .bind(to: sut.inputs.load)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(date.events.count, 4)
         XCTAssertEqual(date.events, [
@@ -95,14 +95,14 @@ class EpisodeCellViewModelTests: XCTestCase {
 
     func testDesc() {
         let desc = scheduler.createObserver(String?.self)
-        sut.outputs.desc.drive(desc).disposed(by: disposeBag)
+        sut.outputs.desc.drive(desc).disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, episodeModel190815),
             .next(20, episodeModel190822),
             .next(30, episodeModelNil)
         ])
         .bind(to: sut.inputs.load)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(desc.events.count, 4)
         XCTAssertEqual(desc.events, [

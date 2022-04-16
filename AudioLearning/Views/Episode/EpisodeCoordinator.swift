@@ -42,7 +42,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
                 guard let self = self else { return }
                 self.showEpisodeDetail(apiService: apiService, episodeModel: episodeModel)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // after pressing playingButton, display the episode detail which is playing audio
         viewModel.showEpisodeDetailFromPlaying
@@ -50,7 +50,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
                 guard let self = self else { return }
                 self.showEpisodeDetailFromPlaying()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // ViewController
         let viewController = EpisodeListViewController.initialize(from: .episode, storyboardID: .episodeList)
@@ -62,7 +62,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
                 guard let self = self else { return }
                 self.showVocabulary(episode: nil)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
@@ -84,27 +84,27 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
                 return url
             }
             .bind(to: musicPlayerVC.viewModel.settingNewAudio)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.shrinkMusicPlayer
             .subscribe(onNext: { _ in
                 musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(0)
                 musicPlayerVC.viewModel.changeSliderAlpha.onNext(0)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.enlargeMusicPlayer
             .subscribe(onNext: { _ in
                 musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(1)
                 musicPlayerVC.viewModel.changeSliderAlpha.onNext(1)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.showAddVocabularyDetail
             .subscribe(onNext: { word in
                 vocabularyDetailVC.viewModel.addWithWord.onNext((episodeModel.episode, word))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // ViewController
         let viewController = EpisodeDetailViewController.initialize(from: .episode, storyboardID: .episodeDetail)
@@ -119,7 +119,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
                 guard let self = self else { return }
                 self.showVocabulary(episode: episodeModel.episode)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         vocabularyDetailVC.viewModel.alert
             .subscribe(onNext: { alert in
@@ -130,7 +130,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
                     completionHandler: nil
                 )
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         episodeDetailViewController = viewController
         navigationController.pushViewController(viewController, animated: true)
@@ -163,7 +163,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
 
         viewModel.close.map { true }
             .bind(to: episodeDetailViewModel.hideVocabularyDetailView)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // ViewController
         let viewController = VocabularyDetailViewController.initialize(

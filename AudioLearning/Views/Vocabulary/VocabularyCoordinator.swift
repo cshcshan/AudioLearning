@@ -37,20 +37,20 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
             .subscribe(onNext: { vocabularyRealm in
                 vocabularyDetailVC.viewModel.load.onNext(vocabularyRealm)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.showAddVocabularyDetail
             .subscribe(onNext: { _ in
                 vocabularyDetailVC.viewModel.add.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.showFlashCards
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.showFlashCards()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // ViewController
         let viewController = VocabularyListViewController.initialize(
@@ -70,7 +70,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
                     completionHandler: nil
                 )
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         navigationController.pushViewController(viewController, animated: true)
     }
@@ -85,11 +85,11 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
             .subscribe(onNext: { _ in
                 vocabularyListViewModel.reload.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.close.map { true }
             .bind(to: vocabularyListViewModel.hideVocabularyDetailView)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // ViewController
         let viewController = VocabularyDetailViewController.initialize(

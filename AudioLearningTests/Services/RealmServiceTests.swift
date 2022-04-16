@@ -17,7 +17,7 @@ class RealmServiceTests: XCTestCase {
 
     var sut: RealmService<EpisodeRealm>!
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
@@ -25,7 +25,7 @@ class RealmServiceTests: XCTestCase {
         sut = RealmService()
         initStub()
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -49,7 +49,7 @@ class RealmServiceTests: XCTestCase {
         }
         sut.add(objects: models)
             .bind(to: objects)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         XCTAssertEqual(objects.events, [.next(0, models), .completed(0)])
     }
 
@@ -64,7 +64,7 @@ class RealmServiceTests: XCTestCase {
         model.path = "/episode-201900314.mp3"
         sut.add(object: model)
             .bind(to: object)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         XCTAssertEqual(object.events, [.next(0, model), .completed(0)])
     }
 
@@ -82,7 +82,7 @@ class RealmServiceTests: XCTestCase {
             updateExpectation.fulfill()
         })
         .bind(to: success)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let filterExpectation = expectation(description: "Filter")
@@ -92,7 +92,7 @@ class RealmServiceTests: XCTestCase {
                 XCTAssertEqual(episodeRealms[0].title, "World 12")
                 XCTAssertEqual(episodeRealms[1].title, "World 20")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.filter.onNext((predicate, ["episode": true]))
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -109,7 +109,7 @@ class RealmServiceTests: XCTestCase {
             updateExpectationt.fulfill()
         })
         .bind(to: success)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let filterExpectation = expectation(description: "Filter")
@@ -119,7 +119,7 @@ class RealmServiceTests: XCTestCase {
                 XCTAssertEqual(episodeRealms[0].title, "Hello 12")
                 XCTAssertEqual(episodeRealms[1].title, "Hello 20")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.filter.onNext((predicate, ["episode": true]))
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -132,7 +132,7 @@ class RealmServiceTests: XCTestCase {
         let predicate = NSPredicate(format: "episode CONTAINS[c] '2'")
         sut.delete(predicate: predicate)
             .bind(to: success)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let loadAllExpectation = expectation(description: "Load All")
@@ -141,7 +141,7 @@ class RealmServiceTests: XCTestCase {
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms.count, 8)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.loadAll.onNext(nil)
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -153,7 +153,7 @@ class RealmServiceTests: XCTestCase {
         let success = scheduler.createObserver(Bool.self)
         sut.deleteAll()
             .bind(to: success)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let loadAllExpectation = expectation(description: "Load All")
@@ -162,7 +162,7 @@ class RealmServiceTests: XCTestCase {
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms.count, 0)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.loadAll.onNext(nil)
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -177,7 +177,7 @@ class RealmServiceTests: XCTestCase {
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms.count, 10)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.loadAll.onNext(nil)
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -193,7 +193,7 @@ class RealmServiceTests: XCTestCase {
                 XCTAssertEqual(episodeRealms[0].episode, "20")
                 XCTAssertEqual(episodeRealms[9].episode, "11")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.loadAll.onNext(["episode": false])
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -210,7 +210,7 @@ class RealmServiceTests: XCTestCase {
                 XCTAssertEqual(episodeRealms[0].episode, "12")
                 XCTAssertEqual(episodeRealms[1].episode, "20")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.filter.onNext((predicate, nil))
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
@@ -227,7 +227,7 @@ class RealmServiceTests: XCTestCase {
                 XCTAssertEqual(episodeRealms[0].episode, "20")
                 XCTAssertEqual(episodeRealms[1].episode, "12")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         sut.filter.onNext((predicate, ["episode": false]))
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }

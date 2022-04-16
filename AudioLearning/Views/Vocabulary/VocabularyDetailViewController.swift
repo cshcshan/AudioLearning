@@ -74,10 +74,10 @@ final class VocabularyDetailViewController: BaseViewController {
     private func setupBindings() {
         viewModel.word
             .bind(to: wordTextField.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         viewModel.note
             .bind(to: noteTextView.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         saveButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -87,10 +87,10 @@ final class VocabularyDetailViewController: BaseViewController {
                 )
                 self.viewModel.save.onNext(model)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         cancelButton.rx.tap
             .bind(to: viewModel.cancel)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         Observable.of(viewModel.close, viewModel.saved)
             .merge()
@@ -98,6 +98,6 @@ final class VocabularyDetailViewController: BaseViewController {
                 self.navigationController?.view.endEditing(true)
                 self.view.endEditing(true)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

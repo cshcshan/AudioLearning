@@ -40,13 +40,13 @@ final class FlashCardsViewModel: BaseViewModel {
                 guard let self = self else { return }
                 self.wordSideArray = [Bool](repeating: true, count: vocabularyRealms.count)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         loadSubject
             .subscribe(onNext: { _ in
                 realmService.loadAll.onNext(["updateDate": false])
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         flipSubject
             .subscribe(onNext: { [weak self] index in
@@ -55,6 +55,6 @@ final class FlashCardsViewModel: BaseViewModel {
                 self.wordSideArray[index] = value
                 self.isWordSideSubject.onNext(value)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

@@ -57,7 +57,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 self.word.onNext(model.word ?? "")
                 self.note.onNext(model.note ?? "")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         loadSubject
             .subscribe(onNext: { [weak self] vocabularyRealm in
@@ -66,7 +66,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 self.word.onNext(vocabularyRealm.word ?? "")
                 self.note.onNext(vocabularyRealm.note ?? "")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         addSubject
             .subscribe(onNext: { [weak self] _ in
@@ -75,7 +75,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 self.word.onNext("")
                 self.note.onNext("")
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         addWithWordSubject
             .subscribe(onNext: { [weak self] episode, word in
@@ -91,7 +91,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 }
                 realmService.filter.onNext((predicate, nil))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         saveSubject
             .subscribe(onNext: { [weak self] saveModel in
@@ -111,13 +111,13 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 self.savedSubject.onNext(())
                 self.closeSubject.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         cancelSubject
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.closeSubject.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

@@ -36,7 +36,7 @@ final class MusicPlayerViewModel {
     private(set) var speedSegmentedControlAlpha: Driver<CGFloat>!
     private(set) var sliderAlpha: Driver<CGFloat>!
 
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
     private var url: URL!
     private var player: HCAudioPlayerProtocol
 
@@ -73,7 +73,7 @@ final class MusicPlayerViewModel {
                 guard let player = self?.player else { return }
                 player.forward.onNext(10)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         let rewind10SecondsSubject = PublishSubject<Void>()
         rewind10Seconds = rewind10SecondsSubject.asObserver()
         rewind10SecondsSubject
@@ -81,7 +81,7 @@ final class MusicPlayerViewModel {
                 guard let player = self?.player else { return }
                 player.rewind.onNext(10)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         speedUp = player.speedUp
         speedDown = player.speedDown
@@ -97,7 +97,7 @@ final class MusicPlayerViewModel {
             guard let player = self?.player else { return }
             player.changeSpeed.onNext(speedRate)
         })
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
 
         let changeAudioPositionSubject = PublishSubject<Float>()
         changeAudioPosition = changeAudioPositionSubject.asObserver()
@@ -106,7 +106,7 @@ final class MusicPlayerViewModel {
                 guard let player = self?.player else { return }
                 player.changeAudioPosition.onNext(position)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         let changeSpeedSegmentedControlAlphaSubject = PublishSubject<CGFloat>()
         changeSpeedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asObserver()
@@ -123,7 +123,7 @@ final class MusicPlayerViewModel {
                 guard let self = self else { return }
                 self.player.pause.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func setupOutputs() {
@@ -135,7 +135,7 @@ final class MusicPlayerViewModel {
                     readyToPlaySubject.onNext(())
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         speedRate = player.speedRate
             .asDriver(onErrorJustReturn: 0)
 

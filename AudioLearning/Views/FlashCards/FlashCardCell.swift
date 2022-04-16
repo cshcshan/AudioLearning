@@ -20,7 +20,7 @@ final class FlashCardCell: UICollectionViewCell {
     }
 
     private var isWordSide = true
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,7 +36,7 @@ final class FlashCardCell: UICollectionViewCell {
                 guard let self = self else { return }
                 self.flip(self.isWordSide)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     func flip(_ isWordSide: Bool) {

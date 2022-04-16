@@ -10,7 +10,7 @@ import RxSwift
 
 class BaseCoordinator<ResultType> {
 
-    let disposeBag = DisposeBag()
+    let bag = DisposeBag()
 
     private let identifier = UUID()
     private var childCoordinators = [UUID: Any]()

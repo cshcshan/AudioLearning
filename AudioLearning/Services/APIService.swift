@@ -43,7 +43,7 @@ final class APIService: APIServiceProtocol {
     private var urlSession: URLSession
     private var parseSMHelper: ParseSixMinutesHelper
 
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     init(urlSession: URLSession = URLSession.shared, parseSMHelper: ParseSixMinutesHelper) {
         let configuration = urlSession.configuration
@@ -126,6 +126,6 @@ final class APIService: APIServiceProtocol {
                 }
                 completionHandler(UIImage(data: data))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

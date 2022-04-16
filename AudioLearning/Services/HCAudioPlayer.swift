@@ -72,7 +72,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
 
     private var player: AVPlayer?
     private var item: AVPlayerItem?
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     override init() {
         super.init()
@@ -98,7 +98,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
                 guard let self = self else { return }
                 self.setupPlayer(AVPlayer(url: url))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // Play and Pause
         let playSubject = PublishSubject<Void>()
@@ -118,7 +118,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
                 player.pause()
             }
         })
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
 
         // Forward and Rewind
         let forwardSubject = PublishSubject<Int64>()
@@ -135,7 +135,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
             let currentTime = CMTimeGetSeconds(player.currentTime())
             player.seek(to: CMTime(value: CMTimeValue(currentTime) + seconds, timescale: 1))
         })
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
 
         // Speed Up and Down
         let speedUpSubject = PublishSubject<Float>()
@@ -162,7 +162,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
                 guard let player = self?.player else { return }
                 player.rate = speedRate
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // Change Audio Location
         let changeAudioLocationSubject = PublishSubject<Float>()
@@ -172,7 +172,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
                 guard let player = self?.player else { return }
                 player.seek(to: CMTime(value: CMTimeValue(position), timescale: 1))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func setupOutputs() {

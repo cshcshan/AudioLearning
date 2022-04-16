@@ -29,7 +29,7 @@ final class EpisodeCell: BaseTableViewCell {
 
     private let highlightedSubject = PublishSubject<Bool>()
     private let selectedSubject = PublishSubject<Bool>()
-    private var disposeBag = DisposeBag()
+    private var bag = DisposeBag()
 
     var viewModel: EpisodeCellViewModel? {
         didSet {
@@ -46,7 +46,7 @@ final class EpisodeCell: BaseTableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
         photoImageView.image = nil
     }
 
@@ -92,19 +92,19 @@ final class EpisodeCell: BaseTableViewCell {
                 }
                 self.indicatorView.color = Appearance.mode == .dark ? .white : .gray
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     // MARK: - Bind
 
     private func bindViewModel() {
-        viewModel?.outputs.title.drive(titleLabel.rx.text).disposed(by: disposeBag)
-        viewModel?.outputs.date.drive(dateLabel.rx.text).disposed(by: disposeBag)
-        viewModel?.outputs.desc.drive(descLabel.rx.text).disposed(by: disposeBag)
+        viewModel?.outputs.title.drive(titleLabel.rx.text).disposed(by: bag)
+        viewModel?.outputs.date.drive(dateLabel.rx.text).disposed(by: bag)
+        viewModel?.outputs.desc.drive(descLabel.rx.text).disposed(by: bag)
 
         viewModel?.outputs.image
             .map { [weak self] image in image == nil ? self?.getNormalImage() : image }
-            .drive(photoImageView.rx.image).disposed(by: disposeBag)
+            .drive(photoImageView.rx.image).disposed(by: bag)
 
         viewModel?.outputs.imageRefreshing
             .map { !$0 }
@@ -121,7 +121,7 @@ final class EpisodeCell: BaseTableViewCell {
                 }
             )
             .emit(to: indicatorView.rx.isHidden)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func getNormalImage() -> UIImage? {

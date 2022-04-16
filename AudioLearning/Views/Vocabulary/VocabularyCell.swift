@@ -23,7 +23,7 @@ final class VocabularyCell: BaseTableViewCell {
     private(set) var stopWiggleAnimation = PublishSubject<Void>()
     private(set) var deleteVocabulary = PublishSubject<VocabularyRealm>()
     private let highlightedSubject = PublishSubject<Bool>()
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     var vocabularyRealm: VocabularyRealm? {
         didSet {
@@ -79,7 +79,7 @@ final class VocabularyCell: BaseTableViewCell {
                     for: .normal
                 )
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         deleteButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
@@ -87,7 +87,7 @@ final class VocabularyCell: BaseTableViewCell {
                 guard let model = self.vocabularyRealm else { return }
                 self.deleteVocabulary.onNext(model)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         startWiggleAnimation
             .subscribe(onNext: { [weak self] _ in
@@ -95,7 +95,7 @@ final class VocabularyCell: BaseTableViewCell {
                 self.deleteButton.isHidden = false
                 self.addWiggleAnimation()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         stopWiggleAnimation
             .subscribe(onNext: { [weak self] _ in
@@ -103,7 +103,7 @@ final class VocabularyCell: BaseTableViewCell {
                 self.deleteButton.isHidden = true
                 self.removeWiggleAnimation()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func bindUI() {
@@ -117,6 +117,6 @@ final class VocabularyCell: BaseTableViewCell {
         addGestureRecognizer(longPress)
         longPress.rx.event
             .bind(to: longPressSubject)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

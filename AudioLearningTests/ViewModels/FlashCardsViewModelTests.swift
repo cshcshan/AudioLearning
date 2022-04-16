@@ -19,7 +19,7 @@ class FlashCardsViewModelTests: XCTestCase {
     var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
@@ -28,7 +28,7 @@ class FlashCardsViewModelTests: XCTestCase {
         initStub()
         sut = FlashCardsViewModel(realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -42,13 +42,13 @@ class FlashCardsViewModelTests: XCTestCase {
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.load)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(vocabularies.events.count, 2)
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 10)
@@ -58,7 +58,7 @@ class FlashCardsViewModelTests: XCTestCase {
         let isWordSide = scheduler.createObserver(Bool.self)
         sut.isWordSide
             .bind(to: isWordSide)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, 0),
             .next(20, 1),
@@ -66,7 +66,7 @@ class FlashCardsViewModelTests: XCTestCase {
             .next(40, 1)
         ])
         .bind(to: sut.flip)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         sut.load.onNext(())
         scheduler.start()
         XCTAssertEqual(isWordSide.events.count, 4)

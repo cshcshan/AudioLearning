@@ -16,13 +16,13 @@ class BaseViewModelTests: XCTestCase {
     var sut: BaseViewModel!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
         sut = BaseViewModel()
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -34,13 +34,13 @@ class BaseViewModelTests: XCTestCase {
         let showEpisodeDetailFromPlaying = scheduler.createObserver(Void.self)
         sut.showEpisodeDetailFromPlaying
             .bind(to: showEpisodeDetailFromPlaying)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.tapPlaying)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showEpisodeDetailFromPlaying.events.count, 2)
     }

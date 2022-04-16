@@ -52,12 +52,12 @@ final class EpisodeCellViewModel: BaseViewModel {
 
         super.init()
 
-        load.map(\.title).bind(to: title).disposed(by: disposeBag)
-        load.map(\.desc).bind(to: desc).disposed(by: disposeBag)
+        load.map(\.title).bind(to: title).disposed(by: bag)
+        load.map(\.desc).bind(to: desc).disposed(by: bag)
 
         load.map { $0.date?.toString(dateFormat: "yyyy/M/d") }
             .bind(to: date)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         let imagePath = load
             .map { episode -> String? in
@@ -66,7 +66,7 @@ final class EpisodeCellViewModel: BaseViewModel {
             }
             .share()
 
-        imagePath.filter { $0 == nil }.map { _ in nil }.bind(to: image).disposed(by: disposeBag)
+        imagePath.filter { $0 == nil }.map { _ in nil }.bind(to: image).disposed(by: bag)
         imagePath
             .compactMap { $0 }
             .do(onNext: { [weak self] _ in
@@ -78,6 +78,6 @@ final class EpisodeCellViewModel: BaseViewModel {
                     self.imageRefreshing.accept(false)
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

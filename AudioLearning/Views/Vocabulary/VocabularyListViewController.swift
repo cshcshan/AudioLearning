@@ -87,7 +87,7 @@ final class VocabularyListViewController: BaseViewController {
         item.accessibilityIdentifier = "Add"
         item.rx.tap
             .bind(to: viewModel.addVocabulary)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         addItem = item
         return item
     }
@@ -97,7 +97,7 @@ final class VocabularyListViewController: BaseViewController {
         let item = UIBarButtonItem(image: UIImage(named: "flashcards"), style: .plain, target: nil, action: nil)
         item.rx.tap
             .bind(to: viewModel.tapFlashCards)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         flashCardsItem = item
         return item
     }
@@ -105,7 +105,7 @@ final class VocabularyListViewController: BaseViewController {
     private func setupBindings() {
         viewModel.hideVocabularyDetailView
             .bind(to: maskView.rx.isHidden)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.hideVocabularyDetailView
             .filter { $0 == true }
@@ -113,7 +113,7 @@ final class VocabularyListViewController: BaseViewController {
                 .just(TimeInterval(0.4))
             }
             .bind(to: maskView.rx.fadeOut)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.hideVocabularyDetailView
             .filter { $0 == false }
@@ -121,7 +121,7 @@ final class VocabularyListViewController: BaseViewController {
                 .just(TimeInterval(0.4))
             }
             .bind(to: maskView.rx.fadeIn)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.vocabularies
             .do(onNext: { [weak self] vocabularies in
@@ -143,7 +143,7 @@ final class VocabularyListViewController: BaseViewController {
                         .subscribe(onNext: { _ in
                             cell.startWiggleAnimation.onNext(())
                         })
-                        .disposed(by: self.disposeBag)
+                        .disposed(by: self.bag)
                     Observable.of(
                         self.addItem.rx.tap.map { $0 as AnyObject },
                         self.tableView.rx.itemSelected.map { $0 as AnyObject }
@@ -152,22 +152,22 @@ final class VocabularyListViewController: BaseViewController {
                     .subscribe(onNext: { _ in
                         cell.stopWiggleAnimation.onNext(())
                     })
-                    .disposed(by: self.disposeBag)
+                    .disposed(by: self.bag)
                     cell.deleteVocabulary
                         .subscribe(onNext: { vocabularyRealm in
                             guard !vocabularyRealm.isInvalidated else { return }
                             cell.stopWiggleAnimation.onNext(())
                             self.viewModel.deleteVocabulary.onNext(vocabularyRealm)
                         })
-                        .disposed(by: self.disposeBag)
+                        .disposed(by: self.bag)
                 }
             )
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         tableView.rx
             .modelSelected(VocabularyRealm.self)
             .bind(to: viewModel.selectVocabulary)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         viewModel.reload.onNext(())
     }

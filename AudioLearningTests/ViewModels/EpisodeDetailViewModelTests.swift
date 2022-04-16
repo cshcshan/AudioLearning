@@ -21,7 +21,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
     var episodeModel: EpisodeModel!
 
     var scheduler: TestScheduler!
-    var disposeBag: DisposeBag!
+    var bag: DisposeBag!
 
     override func setUp() {
         super.setUp()
@@ -39,7 +39,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         sut = EpisodeDetailViewModel(apiService: apiService, realmService: realmService, episodeModel: episodeModel)
 
         scheduler = TestScheduler(initialClock: 0)
-        disposeBag = DisposeBag()
+        bag = DisposeBag()
     }
 
     override func tearDown() {
@@ -52,13 +52,13 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let shrinkMusicPlayer = scheduler.createObserver(Void.self)
         sut.shrinkMusicPlayer
             .bind(to: shrinkMusicPlayer)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.shrinkMusicPlayer)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(shrinkMusicPlayer.events.count, 2)
     }
@@ -67,13 +67,13 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let enlargeMusicPlayer = scheduler.createObserver(Void.self)
         sut.enlargeMusicPlayer
             .bind(to: enlargeMusicPlayer)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.enlargeMusicPlayer)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(enlargeMusicPlayer.events.count, 2)
     }
@@ -82,7 +82,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let hideVocabularyDetailView = scheduler.createObserver(Bool.self)
         sut.hideVocabularyDetailView
             .bind(to: hideVocabularyDetailView)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, false),
             .next(20, true),
@@ -91,7 +91,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
             .next(50, false)
         ])
         .bind(to: sut.hideVocabularyDetailView)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(hideVocabularyDetailView.events.count, 6)
         XCTAssertEqual(hideVocabularyDetailView.events, [
@@ -119,10 +119,10 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let scriptHtml = scheduler.createObserver(String.self)
         sut.scriptHtml
             .bind(to: scriptHtml)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
 
         XCTAssertEqual(scriptHtml.events.count, 2)
@@ -143,10 +143,10 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let audioLink = scheduler.createObserver(String.self)
         sut.audioLink
             .bind(to: audioLink)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.start()
 
         XCTAssertEqual(audioLink.events.count, 1)
@@ -157,13 +157,13 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let showVocabulary = scheduler.createObserver(Void.self)
         sut.showVocabulary
             .bind(to: showVocabulary)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, ()),
             .next(20, ())
         ])
         .bind(to: sut.tapVocabulary)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showVocabulary.events.count, 2)
     }
@@ -172,13 +172,13 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let showAddVocabularyDetail = scheduler.createObserver(String.self)
         sut.showAddVocabularyDetail
             .bind(to: showAddVocabularyDetail)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([
             .next(10, "Hello"),
             .next(20, "World")
         ])
         .bind(to: sut.addVocabulary)
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
         scheduler.start()
         XCTAssertEqual(showAddVocabularyDetail.events.count, 2)
         XCTAssertEqual(showAddVocabularyDetail.events, [
@@ -198,15 +198,15 @@ class EpisodeDetailViewModelTests: XCTestCase {
         let alert = scheduler.createObserver(AlertModel.self)
         sut.alert
             .bind(to: alert)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         scheduler.createColdObservable([.next(300, ())])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // execute reload.flatMapLatest by scriptHtml.subscribe()
         sut.scriptHtml
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -217,12 +217,12 @@ class EpisodeDetailViewModelTests: XCTestCase {
     func testEpisode() {
         scheduler.createColdObservable([.next(10, ())])
             .bind(to: sut.load)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         // execute reload.flatMapLatest by scriptHtml.subscribe()
         sut.scriptHtml
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         scheduler.start()
 

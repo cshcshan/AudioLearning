@@ -22,7 +22,7 @@ class BaseViewModel {
     private let tapThemeSubject = PublishSubject<Void>()
     private let tapPlayingSubject = PublishSubject<Void>()
 
-    let disposeBag = DisposeBag()
+    let bag = DisposeBag()
 
     init() {
         self.tapTheme = tapThemeSubject.asObserver()
@@ -34,6 +34,6 @@ class BaseViewModel {
                 Appearance.mode = Appearance.mode == .dark ? .light : .dark
                 NotificationCenter.default.post(name: .changeAppearance, object: nil)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

@@ -61,7 +61,7 @@ final class EpisodeListViewModel: BaseViewModel {
 
         reloadDataFromServer()
             .subscribe()
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         self.episodes = realmService.allObjects
             .flatMapLatest { [weak self] episodeRealms -> Observable<[EpisodeModel]> in
@@ -82,13 +82,13 @@ final class EpisodeListViewModel: BaseViewModel {
                 self.refreshingSubject.onNext(true)
                 apiService.loadEpisodes.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         reloadSubject
             .subscribe(onNext: { _ in
                 apiService.loadEpisodes.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         self.setCellViewModel = getCellViewModelSubject
             .flatMapLatest { [weak self] index -> Observable<EpisodeCellViewModel> in

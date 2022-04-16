@@ -11,7 +11,7 @@ import UIKit
 
 class BaseViewController: UIViewController, StoryboardGettable {
 
-    let disposeBag = DisposeBag()
+    let bag = DisposeBag()
 
     var isUITesting: Bool {
         ProcessInfo.processInfo.arguments.contains("-UITesting")
@@ -58,7 +58,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
                 guard let self = self else { return }
                 self.setupUIColor()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     func setupUIID() {}
@@ -143,7 +143,7 @@ extension BaseViewController {
         themeButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         themeButton.rx.tap
             .bind(to: viewModel.tapTheme)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         themeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(themeButton)
         setupConstraintsOnBottomRight(
@@ -174,7 +174,7 @@ extension BaseViewController {
                 playingButton.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                 playingButton.rx.tap
                     .bind(to: viewModel.tapPlaying)
-                    .disposed(by: self.disposeBag)
+                    .disposed(by: self.bag)
                 playingButton.translatesAutoresizingMaskIntoConstraints = false
                 self.view.addSubview(playingButton)
                 self.setupConstraintsOnBottomRight(

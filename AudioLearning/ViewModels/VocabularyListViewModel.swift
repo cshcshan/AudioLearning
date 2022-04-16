@@ -60,14 +60,14 @@ final class VocabularyListViewModel: BaseViewModel {
             guard let self = self else { return }
             self.hideVocabularyDetailView.onNext(false)
         })
-        .disposed(by: disposeBag)
+        .disposed(by: bag)
 
         setEpisodeSubject
             .subscribe(onNext: { [weak self] episode in
                 guard let self = self else { return }
                 self.episode = episode
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         reloadSubject
             .subscribe(onNext: { [weak self] _ in
@@ -79,7 +79,7 @@ final class VocabularyListViewModel: BaseViewModel {
                     realmService.loadAll.onNext(sortedByAsc)
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         let deleteSuccessSubject = PublishSubject<Bool>()
         deleteSuccessSubject
@@ -88,7 +88,7 @@ final class VocabularyListViewModel: BaseViewModel {
                 guard success else { return }
                 self.reloadSubject.onNext(())
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         deleteVocabularySubject
             .subscribe(onNext: { [weak self] vocabularyRealm in
@@ -98,8 +98,8 @@ final class VocabularyListViewModel: BaseViewModel {
                     .subscribe(onNext: { success in
                         deleteSuccessSubject.onNext(success)
                     })
-                    .disposed(by: self.disposeBag)
+                    .disposed(by: self.bag)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 }

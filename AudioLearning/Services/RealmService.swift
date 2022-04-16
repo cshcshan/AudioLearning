@@ -22,7 +22,7 @@ final class RealmService<T: Object> {
     private var allObjectsSubject = PublishSubject<[T]>()
     private var filterObjectsSubject = PublishSubject<[T]>()
 
-    private let disposeBag = DisposeBag()
+    private let bag = DisposeBag()
 
     init() {
         self.allObjects = allObjectsSubject.asObservable()
@@ -33,13 +33,13 @@ final class RealmService<T: Object> {
                 guard let self = self else { return }
                 self.allObjectsSubject.onNext(self.loadAll(sortedByAsc: sortedByAsc))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
 
         filter
             .subscribe(onNext: { predicate, sortedByAsc in
                 self.filterObjectsSubject.onNext(self.filter(by: predicate, sortedByAscending: sortedByAsc))
             })
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
     }
 
     private func instanceRealm() -> Realm? {

@@ -17,7 +17,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     var sut: EpisodeDetailViewModel!
     var apiService: MockAPIService!
-    var realmService: RealmService<EpisodeDetailRealmModel>!
+    var realmService: RealmService<EpisodeDetailRealm>!
     var episodeModel: EpisodeModel!
 
     var scheduler: TestScheduler!
@@ -109,12 +109,12 @@ class EpisodeDetailViewModelTests: XCTestCase {
     }
 
     func testScriptHtml() {
-        let episodeDetailRealmModel = EpisodeDetailRealmModel()
-        episodeDetailRealmModel.episode = episodeModel.episode
-        episodeDetailRealmModel.path = "path"
-        episodeDetailRealmModel.scriptHtml = "<div><p>Hello</p></div>"
-        episodeDetailRealmModel.audioLink = "audio link"
-        apiService.episodeDetailReturnValue = .just(episodeDetailRealmModel)
+        let episodeDetailRealm = EpisodeDetailRealm()
+        episodeDetailRealm.episode = episodeModel.episode
+        episodeDetailRealm.path = "path"
+        episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
+        episodeDetailRealm.audioLink = "audio link"
+        apiService.episodeDetailReturnValue = .just(episodeDetailRealm)
 
         let scriptHtml = scheduler.createObserver(String.self)
         sut.scriptHtml
@@ -128,17 +128,17 @@ class EpisodeDetailViewModelTests: XCTestCase {
         XCTAssertEqual(scriptHtml.events.count, 2)
         XCTAssertEqual(scriptHtml.events, [
             .next(0, ""),
-            .next(10, episodeDetailRealmModel.scriptHtml!)
+            .next(10, episodeDetailRealm.scriptHtml!)
         ])
     }
 
     func testAudioLink() {
-        let episodeDetailRealmModel = EpisodeDetailRealmModel()
-        episodeDetailRealmModel.episode = episodeModel.episode
-        episodeDetailRealmModel.path = "path"
-        episodeDetailRealmModel.scriptHtml = "<div><p>Hello</p></div>"
-        episodeDetailRealmModel.audioLink = "audio-link"
-        apiService.episodeDetailReturnValue = .just(episodeDetailRealmModel)
+        let episodeDetailRealm = EpisodeDetailRealm()
+        episodeDetailRealm.episode = episodeModel.episode
+        episodeDetailRealm.path = "path"
+        episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
+        episodeDetailRealm.audioLink = "audio-link"
+        apiService.episodeDetailReturnValue = .just(episodeDetailRealm)
 
         let audioLink = scheduler.createObserver(String.self)
         sut.audioLink
@@ -150,7 +150,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
         scheduler.start()
 
         XCTAssertEqual(audioLink.events.count, 1)
-        XCTAssertEqual(audioLink.events, [.next(10, episodeDetailRealmModel.audioLink!)])
+        XCTAssertEqual(audioLink.events, [.next(10, episodeDetailRealm.audioLink!)])
     }
 
     func testShowVocabulary() {

@@ -17,7 +17,7 @@ protocol APIServiceProtocol {
 
     // Outputs
     var episodes: Observable<[EpisodeRealm]>! { get }
-    var episodeDetail: Observable<EpisodeDetailRealmModel?>! { get }
+    var episodeDetail: Observable<EpisodeDetailRealm?>! { get }
 
     func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void)
 }
@@ -38,7 +38,7 @@ final class APIService: APIServiceProtocol {
 
     // Outputs
     private(set) var episodes: Observable<[EpisodeRealm]>!
-    private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
+    private(set) var episodeDetail: Observable<EpisodeDetailRealm?>!
 
     private var urlSession: URLSession
     private var parseSMHelper: ParseSixMinutesHelper
@@ -83,7 +83,7 @@ final class APIService: APIServiceProtocol {
             }
 
         episodeDetail = loadEpisodeDetailSubject
-            .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealmModel?> in
+            .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealm?> in
                 guard let self = self else { return .empty() }
                 guard let episode = episodeModel.episode, let path = episodeModel.path else {
                     return .error(Errors.pathIsNull)
@@ -98,7 +98,7 @@ final class APIService: APIServiceProtocol {
                 let request = URLRequest(url: url)
                 return self.urlSession.rx
                     .response(request: request)
-                    .map { [weak self] response, data -> EpisodeDetailRealmModel? in
+                    .map { [weak self] response, data -> EpisodeDetailRealm? in
                         guard 200..<300 ~= response.statusCode else {
                             throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
                         }

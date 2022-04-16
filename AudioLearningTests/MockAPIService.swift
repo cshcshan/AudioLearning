@@ -15,10 +15,10 @@ class MockAPIService: APIServiceProtocol {
     private(set) var loadEpisodes: AnyObserver<Void>!
     private(set) var loadEpisodeDetail: AnyObserver<EpisodeModel>!
     private(set) var episodes: Observable<[EpisodeRealm]>!
-    private(set) var episodeDetail: Observable<EpisodeDetailRealmModel?>!
+    private(set) var episodeDetail: Observable<EpisodeDetailRealm?>!
 
     var episodesReturnValue: Observable<[EpisodeRealm]> = .empty()
-    var episodeDetailReturnValue: Observable<EpisodeDetailRealmModel?> = .empty()
+    var episodeDetailReturnValue: Observable<EpisodeDetailRealm?> = .empty()
     private(set) var episodeDetailPath: String?
 
     init() {
@@ -35,7 +35,7 @@ class MockAPIService: APIServiceProtocol {
             }
 
         self.episodeDetail = loadEpisodeDetailSubject
-            .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealmModel?> in
+            .flatMapLatest { [weak self] episodeModel -> Observable<EpisodeDetailRealm?> in
                 guard let self = self else { return .empty() }
                 guard let episode = episodeModel.episode else { return .empty() }
                 self.episodeDetailPath = episode

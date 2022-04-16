@@ -45,7 +45,7 @@
 		3353ABF32334F0E70031B9C1 /* ExtensionFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */; };
 		3353ABF52334F1A90031B9C1 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF42334F1A90031B9C1 /* RealmService.swift */; };
 		3353ABF82334FFBE0031B9C1 /* RealmServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */; };
-		3353ABFA233725FC0031B9C1 /* EpisodeDetailRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */; };
+		3353ABFA233725FC0031B9C1 /* EpisodeDetailRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABF9233725FC0031B9C1 /* EpisodeDetailRealm.swift */; };
 		3371E42F234F570B00B905B3 /* ExtensionUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3371E42E234F570B00B905B3 /* ExtensionUIView.swift */; };
 		33892A98231E0BA500340C17 /* EpisodeDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */; };
 		33892A9D231E104500340C17 /* EpisodeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */; };
@@ -169,7 +169,7 @@
 		3353ABF22334F0E70031B9C1 /* ExtensionFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionFileManager.swift; sourceTree = "<group>"; };
 		3353ABF42334F1A90031B9C1 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		3353ABF72334FFBE0031B9C1 /* RealmServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmServiceTests.swift; sourceTree = "<group>"; };
-		3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailRealmModel.swift; sourceTree = "<group>"; };
+		3353ABF9233725FC0031B9C1 /* EpisodeDetailRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailRealm.swift; sourceTree = "<group>"; };
 		3371E42E234F570B00B905B3 /* ExtensionUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIView.swift; sourceTree = "<group>"; };
 		33892A97231E0BA500340C17 /* EpisodeDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModelTests.swift; sourceTree = "<group>"; };
 		33892A9C231E104500340C17 /* EpisodeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModel.swift; sourceTree = "<group>"; };
@@ -439,7 +439,7 @@
 			isa = PBXGroup;
 			children = (
 				3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */,
-				3353ABF9233725FC0031B9C1 /* EpisodeDetailRealmModel.swift */,
+				3353ABF9233725FC0031B9C1 /* EpisodeDetailRealm.swift */,
 				3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */,
 			);
 			path = Realm;
@@ -984,7 +984,7 @@
 				33065789233B2B7B00381CC6 /* ExtensionUIColor.swift in Sources */,
 				33892AA9231F6AA500340C17 /* ExtensionDate.swift in Sources */,
 				332C15922317A5C4003C78EA /* EpisodeModel.swift in Sources */,
-				3353ABFA233725FC0031B9C1 /* EpisodeDetailRealmModel.swift in Sources */,
+				3353ABFA233725FC0031B9C1 /* EpisodeDetailRealm.swift in Sources */,
 				33065787233B23DD00381CC6 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

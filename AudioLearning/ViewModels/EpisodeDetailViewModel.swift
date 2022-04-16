@@ -38,12 +38,12 @@ final class EpisodeDetailViewModel: BaseViewModel {
     private let refreshingSubject = PublishSubject<Bool>()
 
     private let apiService: APIServiceProtocol!
-    private let realmService: RealmService<EpisodeDetailRealmModel>!
+    private let realmService: RealmService<EpisodeDetailRealm>!
     private let episodeModel: EpisodeModel
 
     init(
         apiService: APIServiceProtocol,
-        realmService: RealmService<EpisodeDetailRealmModel>,
+        realmService: RealmService<EpisodeDetailRealm>,
         episodeModel: EpisodeModel
     ) {
         self.apiService = apiService
@@ -81,9 +81,9 @@ final class EpisodeDetailViewModel: BaseViewModel {
             .disposed(by: disposeBag)
 
         let loadEpisodeDetailModels = realmService.filterObjects
-            .flatMapLatest { [weak self] episodeDetailRealmModels -> Observable<EpisodeDetailModel> in
+            .flatMapLatest { [weak self] episodeDetailRealms -> Observable<EpisodeDetailModel> in
                 guard let self = self else { return .empty() }
-                guard let model = episodeDetailRealmModels.first else {
+                guard let model = episodeDetailRealms.first else {
                     self.refreshingSubject.onNext(true)
                     apiService.loadEpisodeDetail.onNext(episodeModel)
                     return .empty()
@@ -94,8 +94,8 @@ final class EpisodeDetailViewModel: BaseViewModel {
             .share() // use share() to avoid multiple subscriptions from the same Observable
 
         let episodeDetailModels = realmService.filterObjects
-            .flatMapLatest { episodeDetailRealmModels -> Observable<EpisodeDetailModel> in
-                guard let model = episodeDetailRealmModels.first else { return .empty() }
+            .flatMapLatest { episodeDetailRealms -> Observable<EpisodeDetailModel> in
+                guard let model = episodeDetailRealms.first else { return .empty() }
                 return .just(EpisodeDetailModel(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
             }
             .skip(1)
@@ -126,10 +126,10 @@ final class EpisodeDetailViewModel: BaseViewModel {
 
     private func reloadDataFromServer() -> Observable<Void> {
         apiService.episodeDetail
-            .flatMapLatest { [weak self] episodeDetailRealmModel -> Observable<Void> in
+            .flatMapLatest { [weak self] episodeDetailRealm -> Observable<Void> in
                 guard let self = self else { return .empty() }
-                guard let episodeDetailRealmModel = episodeDetailRealmModel else { return .empty() }
-                _ = self.realmService.add(object: episodeDetailRealmModel)
+                guard let episodeDetailRealm = episodeDetailRealm else { return .empty() }
+                _ = self.realmService.add(object: episodeDetailRealm)
                 self.loadData()
                 self.refreshingSubject.onNext(false)
                 return .empty()

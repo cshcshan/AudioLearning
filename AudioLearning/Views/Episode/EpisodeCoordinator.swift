@@ -67,7 +67,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
 
     private func showEpisodeDetail(apiService: APIService, episodeModel: EpisodeModel) {
         // ViewModel
-        let realmService = RealmService<EpisodeDetailRealmModel>()
+        let realmService = RealmService<EpisodeDetailRealm>()
         let viewModel = EpisodeDetailViewModel(
             apiService: apiService,
             realmService: realmService,

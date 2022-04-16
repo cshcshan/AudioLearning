@@ -148,7 +148,7 @@ final class EpisodeDetailViewModel: BaseViewModel {
 
     private func loadData() {
         guard let episode = episode.id else { return }
-        let predicate = NSPredicate(format: "episode == %@", episode)
+        let predicate = NSPredicate(format: "id == %@", episode)
         realmService.filter.onNext((predicate, nil))
     }
 }

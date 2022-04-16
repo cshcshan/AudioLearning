@@ -86,7 +86,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                 self.note.onNext("")
                 var predicate = NSPredicate(format: "word == %@", word)
                 if let episode = episode {
-                    let episodePredicate = NSPredicate(format: "episode == %@", episode)
+                    let episodePredicate = NSPredicate(format: "id == %@", episode)
                     predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, episodePredicate])
                 }
                 realmService.filter.onNext((predicate, nil))

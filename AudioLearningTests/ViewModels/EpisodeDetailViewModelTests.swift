@@ -110,7 +110,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     func testScriptHtml() {
         let episodeDetailRealm = EpisodeDetailRealm()
-        episodeDetailRealm.episode = episode.id
+        episodeDetailRealm.id = episode.id
         episodeDetailRealm.path = "path"
         episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealm.audioLink = "audio link"
@@ -134,7 +134,7 @@ class EpisodeDetailViewModelTests: XCTestCase {
 
     func testAudioLink() {
         let episodeDetailRealm = EpisodeDetailRealm()
-        episodeDetailRealm.episode = episode.id
+        episodeDetailRealm.id = episode.id
         episodeDetailRealm.path = "path"
         episodeDetailRealm.scriptHtml = "<div><p>Hello</p></div>"
         episodeDetailRealm.audioLink = "audio-link"

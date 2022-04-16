@@ -108,7 +108,7 @@ final class APIService: APIServiceProtocol {
                         let episodeDetail = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(
                             by: html,
                             urlString: url.absoluteString,
-                            episode: id
+                            episodeID: id
                         )
                         return episodeDetail
                     }

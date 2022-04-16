@@ -21,11 +21,11 @@ final class VocabularyCell: BaseTableViewCell {
     private(set) var longPressSubject = PublishSubject<UILongPressGestureRecognizer>()
     private(set) var startWiggleAnimation = PublishSubject<Void>()
     private(set) var stopWiggleAnimation = PublishSubject<Void>()
-    private(set) var deleteVocabulary = PublishSubject<VocabularyRealmModel>()
+    private(set) var deleteVocabulary = PublishSubject<VocabularyRealm>()
     private let highlightedSubject = PublishSubject<Bool>()
     private let disposeBag = DisposeBag()
 
-    var vocabularyRealmModel: VocabularyRealmModel? {
+    var vocabularyRealm: VocabularyRealm? {
         didSet {
             bindUI()
         }
@@ -84,7 +84,7 @@ final class VocabularyCell: BaseTableViewCell {
         deleteButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                guard let model = self.vocabularyRealmModel else { return }
+                guard let model = self.vocabularyRealm else { return }
                 self.deleteVocabulary.onNext(model)
             })
             .disposed(by: disposeBag)
@@ -107,8 +107,8 @@ final class VocabularyCell: BaseTableViewCell {
     }
 
     private func bindUI() {
-        wordLabel.text = vocabularyRealmModel?.word
-        episodeLabel.text = vocabularyRealmModel?.episode
+        wordLabel.text = vocabularyRealm?.word
+        episodeLabel.text = vocabularyRealm?.episode
     }
 
     private func addLongPressed() {

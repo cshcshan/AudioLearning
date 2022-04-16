@@ -38,7 +38,7 @@
 		334644BE2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */; };
 		334644C32330E4F90040407E /* MockHCAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334644C22330E4F90040407E /* MockHCAudioPlayer.swift */; };
 		334645012332514D0040407E /* BufferingSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334645002332514D0040407E /* BufferingSlider.swift */; };
-		3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */; };
+		3348C75C2338B21C00CAC170 /* VocabularyRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C75B2338B21C00CAC170 /* VocabularyRealm.swift */; };
 		3348C7602338BD6F00CAC170 /* VocabularyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */; };
 		3348C7662338C20A00CAC170 /* VocabularyListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */; };
 		3353ABF02334EDB30031B9C1 /* EpisodeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */; };
@@ -162,7 +162,7 @@
 		334644BD2330C9AD0040407E /* 190815_6min_english_cryptocurrency.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 190815_6min_english_cryptocurrency.mp3; sourceTree = "<group>"; };
 		334644C22330E4F90040407E /* MockHCAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHCAudioPlayer.swift; sourceTree = "<group>"; };
 		334645002332514D0040407E /* BufferingSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferingSlider.swift; sourceTree = "<group>"; };
-		3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyRealmModel.swift; sourceTree = "<group>"; };
+		3348C75B2338B21C00CAC170 /* VocabularyRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyRealm.swift; sourceTree = "<group>"; };
 		3348C75F2338BD6F00CAC170 /* VocabularyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewModel.swift; sourceTree = "<group>"; };
 		3348C7652338C20A00CAC170 /* VocabularyListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyListViewModelTests.swift; sourceTree = "<group>"; };
 		3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeRealm.swift; sourceTree = "<group>"; };
@@ -440,7 +440,7 @@
 			children = (
 				3353ABEF2334EDB30031B9C1 /* EpisodeRealm.swift */,
 				3353ABF9233725FC0031B9C1 /* EpisodeDetailRealm.swift */,
-				3348C75B2338B21C00CAC170 /* VocabularyRealmModel.swift */,
+				3348C75B2338B21C00CAC170 /* VocabularyRealm.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -957,7 +957,7 @@
 				33D30038235D83FF000A318F /* EpisodeAnimator.swift in Sources */,
 				332C155123174CF8003C78EA /* AppDelegate.swift in Sources */,
 				33DB074E232898B50030EBBA /* EpisodeCoordinator.swift in Sources */,
-				3348C75C2338B21C00CAC170 /* VocabularyRealmModel.swift in Sources */,
+				3348C75C2338B21C00CAC170 /* VocabularyRealm.swift in Sources */,
 				33D4065523488A0C00B1AE57 /* ExtensionNotification.swift in Sources */,
 				33D30032235D4FCF000A318F /* EpisodeCellViewModel.swift in Sources */,
 				33D641DA2340954200A97F9E /* FlashCardsViewModel.swift in Sources */,

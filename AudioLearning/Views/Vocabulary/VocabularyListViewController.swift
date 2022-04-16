@@ -138,7 +138,7 @@ final class VocabularyListViewController: BaseViewController {
                 curriedArgument: { [weak self] _, model, cell in
                     guard let self = self else { return }
                     cell.selectionStyle = .none
-                    cell.vocabularyRealmModel = model
+                    cell.vocabularyRealm = model
                     cell.longPressSubject
                         .subscribe(onNext: { _ in
                             cell.startWiggleAnimation.onNext(())
@@ -154,10 +154,10 @@ final class VocabularyListViewController: BaseViewController {
                     })
                     .disposed(by: self.disposeBag)
                     cell.deleteVocabulary
-                        .subscribe(onNext: { vocabularyRealmModel in
-                            guard !vocabularyRealmModel.isInvalidated else { return }
+                        .subscribe(onNext: { vocabularyRealm in
+                            guard !vocabularyRealm.isInvalidated else { return }
                             cell.stopWiggleAnimation.onNext(())
-                            self.viewModel.deleteVocabulary.onNext(vocabularyRealmModel)
+                            self.viewModel.deleteVocabulary.onNext(vocabularyRealm)
                         })
                         .disposed(by: self.disposeBag)
                 }
@@ -165,14 +165,9 @@ final class VocabularyListViewController: BaseViewController {
             .disposed(by: disposeBag)
 
         tableView.rx
-            .modelSelected(VocabularyRealmModel.self)
+            .modelSelected(VocabularyRealm.self)
             .bind(to: viewModel.selectVocabulary)
             .disposed(by: disposeBag)
-
-//        tableView.rx
-//            .modelDeleted(VocabularyRealmModel.self)
-//            .bind(to: viewModel.deleteVocabulary)
-//            .disposed(by: disposeBag)
 
         viewModel.reload.onNext(())
     }

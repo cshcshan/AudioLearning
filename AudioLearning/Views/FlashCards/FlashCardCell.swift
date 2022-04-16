@@ -13,7 +13,7 @@ final class FlashCardCell: UICollectionViewCell {
 
     @IBOutlet var label: UILabel!
 
-    var vocabularyRealmModel: VocabularyRealmModel? {
+    var vocabularyRealm: VocabularyRealm? {
         didSet {
             bindUI()
         }
@@ -43,7 +43,7 @@ final class FlashCardCell: UICollectionViewCell {
         self.isWordSide = isWordSide
         contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor)
         label.textColor = isWordSide ? Appearance.textColor : Appearance.backgroundColor
-        label.text = isWordSide ? vocabularyRealmModel?.word : vocabularyRealmModel?.note
+        label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
     }
 
     private func setupUI() {
@@ -67,6 +67,6 @@ final class FlashCardCell: UICollectionViewCell {
     }
 
     private func bindUI() {
-        label.text = isWordSide ? vocabularyRealmModel?.word : vocabularyRealmModel?.note
+        label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
     }
 }

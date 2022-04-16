@@ -158,7 +158,7 @@ final class EpisodeCoordinator: BaseCoordinator<Void> {
     private func newVocabularyDetailVC(episodeDetailViewModel: EpisodeDetailViewModel)
         -> VocabularyDetailViewController {
         // ViewModel
-        let realmService = RealmService<VocabularyRealmModel>()
+        let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
         viewModel.close.map { true }

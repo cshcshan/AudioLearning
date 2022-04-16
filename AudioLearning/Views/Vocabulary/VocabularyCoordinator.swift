@@ -26,7 +26,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
 
     private func showVocabularyList() {
         // ViewModel
-        let realmService = RealmService<VocabularyRealmModel>()
+        let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyListViewModel(realmService: realmService)
         viewModel.setEpisode.onNext(episode)
 
@@ -34,8 +34,8 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
         let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)
 
         viewModel.showVocabularyDetail
-            .subscribe(onNext: { vocabularyRealmModel in
-                vocabularyDetailVC.viewModel.load.onNext(vocabularyRealmModel)
+            .subscribe(onNext: { vocabularyRealm in
+                vocabularyDetailVC.viewModel.load.onNext(vocabularyRealm)
             })
             .disposed(by: disposeBag)
 
@@ -78,7 +78,7 @@ final class VocabularyCoordinator: BaseCoordinator<Void> {
     private func newVocabularyDetailVC(vocabularyListViewModel: VocabularyListViewModel)
         -> VocabularyDetailViewController {
         // ViewModel
-        let realmService = RealmService<VocabularyRealmModel>()
+        let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
         viewModel.saved

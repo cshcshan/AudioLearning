@@ -16,7 +16,7 @@ import XCTest
 class FlashCardsViewModelTests: XCTestCase {
 
     var sut: FlashCardsViewModel!
-    var realmService: RealmService<VocabularyRealmModel>!
+    var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
@@ -24,7 +24,7 @@ class FlashCardsViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         setupRealm()
-        realmService = RealmService<VocabularyRealmModel>()
+        realmService = RealmService<VocabularyRealm>()
         initStub()
         sut = FlashCardsViewModel(realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
@@ -39,7 +39,7 @@ class FlashCardsViewModelTests: XCTestCase {
     }
 
     func testVocabularies() {
-        let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
+        let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
             .disposed(by: disposeBag)
@@ -86,9 +86,9 @@ extension FlashCardsViewModelTests {
     }
 
     private func initStub() {
-        var models = [VocabularyRealmModel]()
+        var models = [VocabularyRealm]()
         for index in 1...10 {
-            let model = VocabularyRealmModel()
+            let model = VocabularyRealm()
             model.id = "\(index)"
             model.episode = "Episode 190815"
             model.word = "Hello \(index)"

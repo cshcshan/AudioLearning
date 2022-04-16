@@ -47,16 +47,16 @@ final class FlashCardsViewController: BaseViewController {
                 to: collectionView.rx.items(cellIdentifier: "FlashCardCell", cellType: FlashCardCell.self),
                 curriedArgument: { [weak self] row, model, item in
                     guard let self = self else { return }
-                    item.vocabularyRealmModel = model
+                    item.vocabularyRealm = model
                     item.flip(self.viewModel.wordSideArray[row])
                 }
             )
             .disposed(by: disposeBag)
 
         viewModel.vocabularies
-            .subscribe(onNext: { [weak self] vocabularyRealmModels in
+            .subscribe(onNext: { [weak self] vocabularyRealms in
                 guard let self = self else { return }
-                self.modelCount = vocabularyRealmModels.count
+                self.modelCount = vocabularyRealms.count
                 if self.modelCount > 0 && self.currentIndex == nil {
                     self.currentIndex = 0
                 } else {

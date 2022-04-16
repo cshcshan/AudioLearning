@@ -25,7 +25,7 @@ final class FlashCardsCoordinator: BaseCoordinator<Void> {
 
     private func showFlashCardList() {
         // ViewModel
-        let realmService = RealmService<VocabularyRealmModel>()
+        let realmService = RealmService<VocabularyRealm>()
         let viewModel = FlashCardsViewModel(realmService: realmService)
 
         // Vocabulary

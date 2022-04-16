@@ -18,16 +18,16 @@ final class FlashCardsViewModel: BaseViewModel {
     private(set) var flip: AnyObserver<Int>! // index
 
     // Outputs
-    private(set) var vocabularies: Observable<[VocabularyRealmModel]>!
+    private(set) var vocabularies: Observable<[VocabularyRealm]>!
     private(set) var isWordSide: Observable<Bool>!
 
     private let loadSubject = PublishSubject<Void>()
     private let flipSubject = PublishSubject<Int>()
     private let isWordSideSubject = PublishSubject<Bool>()
 
-    private var realmService: RealmService<VocabularyRealmModel>
+    private var realmService: RealmService<VocabularyRealm>
 
-    init(realmService: RealmService<VocabularyRealmModel>) {
+    init(realmService: RealmService<VocabularyRealm>) {
         self.realmService = realmService
         super.init()
 
@@ -36,9 +36,9 @@ final class FlashCardsViewModel: BaseViewModel {
         self.isWordSide = isWordSideSubject.asObserver()
         self.vocabularies = realmService.allObjects
         realmService.allObjects
-            .subscribe(onNext: { [weak self] vocabularyRealmModels in
+            .subscribe(onNext: { [weak self] vocabularyRealms in
                 guard let self = self else { return }
-                self.wordSideArray = [Bool](repeating: true, count: vocabularyRealmModels.count)
+                self.wordSideArray = [Bool](repeating: true, count: vocabularyRealms.count)
             })
             .disposed(by: disposeBag)
 

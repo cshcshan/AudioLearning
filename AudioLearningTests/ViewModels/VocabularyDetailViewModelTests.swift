@@ -16,20 +16,20 @@ import XCTest
 class VocabularyDetailViewModelTests: XCTestCase {
 
     var sut: VocabularyDetailViewModel!
-    var realmService: RealmService<VocabularyRealmModel>!
+    var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
 
-    private let realmModel190815 = VocabularyRealmModel()
-    private let realmModel190822 = VocabularyRealmModel()
+    private let realmModel190815 = VocabularyRealm()
+    private let realmModel190822 = VocabularyRealm()
     private var saveModel190815: VocabularySaveModel!
     private var saveModel190822: VocabularySaveModel!
 
     override func setUp() {
         super.setUp()
         setupRealm()
-        realmService = RealmService<VocabularyRealmModel>()
+        realmService = RealmService<VocabularyRealm>()
         initStub()
         setupModels()
         sut = VocabularyDetailViewModel(realmService: realmService)
@@ -619,9 +619,9 @@ extension VocabularyDetailViewModelTests {
     }
 
     private func initStub() {
-        var models = [VocabularyRealmModel]()
+        var models = [VocabularyRealm]()
         for index in 1...10 {
-            let model = VocabularyRealmModel()
+            let model = VocabularyRealm()
             model.id = "\(index)"
             model.episode = "Episode 190815"
             model.word = "Hello \(index)"

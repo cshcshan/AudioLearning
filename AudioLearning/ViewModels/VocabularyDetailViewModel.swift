@@ -12,7 +12,7 @@ import RxSwift
 final class VocabularyDetailViewModel: BaseViewModel {
 
     // Inputs
-    private(set) var load: AnyObserver<VocabularyRealmModel>!
+    private(set) var load: AnyObserver<VocabularyRealm>!
     private(set) var add: AnyObserver<Void>!
     private(set) var addWithWord: AnyObserver<(String?, String)>! // episode and word
     private(set) var save: AnyObserver<VocabularySaveModel>!
@@ -25,7 +25,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
     private(set) var close: Observable<Void>!
     private(set) var alert: Observable<AlertModel>!
 
-    private let loadSubject = PublishSubject<VocabularyRealmModel>()
+    private let loadSubject = PublishSubject<VocabularyRealm>()
     private let addSubject = PublishSubject<Void>()
     private let addWithWordSubject = PublishSubject<(String?, String)>()
     private let saveSubject = PublishSubject<VocabularySaveModel>()
@@ -34,11 +34,11 @@ final class VocabularyDetailViewModel: BaseViewModel {
     private let closeSubject = PublishSubject<Void>()
     private let alertSubject = PublishSubject<AlertModel>()
 
-    private let realmService: RealmService<VocabularyRealmModel>
-    private var model: VocabularyRealmModel?
+    private let realmService: RealmService<VocabularyRealm>
+    private var model: VocabularyRealm?
     private var episode: String?
 
-    init(realmService: RealmService<VocabularyRealmModel>) {
+    init(realmService: RealmService<VocabularyRealm>) {
         self.realmService = realmService
         super.init()
 
@@ -52,19 +52,19 @@ final class VocabularyDetailViewModel: BaseViewModel {
         self.alert = alertSubject.asObservable()
 
         realmService.filterObjects
-            .subscribe(onNext: { vocabularyRealmModels in
-                guard let model = vocabularyRealmModels.first else { return }
+            .subscribe(onNext: { vocabularyRealms in
+                guard let model = vocabularyRealms.first else { return }
                 self.word.onNext(model.word ?? "")
                 self.note.onNext(model.note ?? "")
             })
             .disposed(by: disposeBag)
 
         loadSubject
-            .subscribe(onNext: { [weak self] vocabularyRealmModel in
+            .subscribe(onNext: { [weak self] vocabularyRealm in
                 guard let self = self else { return }
-                self.model = vocabularyRealmModel
-                self.word.onNext(vocabularyRealmModel.word ?? "")
-                self.note.onNext(vocabularyRealmModel.note ?? "")
+                self.model = vocabularyRealm
+                self.word.onNext(vocabularyRealm.word ?? "")
+                self.note.onNext(vocabularyRealm.note ?? "")
             })
             .disposed(by: disposeBag)
 
@@ -101,7 +101,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
                     self.alertSubject.onNext(alertModel)
                 }
                 guard let word = saveModel.word, !word.isEmpty else { return alert() }
-                let newModel = VocabularyRealmModel()
+                let newModel = VocabularyRealm()
                 newModel.id = self.model == nil ? UUID().uuidString : self.model!.id
                 newModel.episode = self.episode
                 newModel.word = saveModel.word

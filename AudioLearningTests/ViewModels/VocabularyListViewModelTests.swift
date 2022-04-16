@@ -16,7 +16,7 @@ import XCTest
 class VocabularyListViewModelTests: XCTestCase {
 
     var sut: VocabularyListViewModel!
-    var realmService: RealmService<VocabularyRealmModel>!
+    var realmService: RealmService<VocabularyRealm>!
 
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
@@ -24,7 +24,7 @@ class VocabularyListViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         setupRealm()
-        realmService = RealmService<VocabularyRealmModel>()
+        realmService = RealmService<VocabularyRealm>()
         initStub()
         sut = VocabularyListViewModel(realmService: realmService)
         scheduler = TestScheduler(initialClock: 0)
@@ -65,7 +65,7 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testVocabularies_EpisodeIsNotNil() {
-        let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
+        let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
             .disposed(by: disposeBag)
@@ -81,7 +81,7 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testVocabularies_EpisodeIsNil() {
-        let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
+        let vocabularies = scheduler.createObserver([VocabularyRealm].self)
         sut.vocabularies
             .bind(to: vocabularies)
             .disposed(by: disposeBag)
@@ -94,21 +94,21 @@ class VocabularyListViewModelTests: XCTestCase {
     }
 
     func testShowVocabularyDetail() {
-        let model190815 = VocabularyRealmModel()
+        let model190815 = VocabularyRealm()
         model190815.id = "190815"
         model190815.episode = "Episode 190815"
         model190815.word = "Apple"
         model190815.note = "蘋果🍎"
         model190815.updateDate = Date()
 
-        let model190822 = VocabularyRealmModel()
+        let model190822 = VocabularyRealm()
         model190815.id = "190822"
         model190822.episode = "Episode 190822"
         model190822.word = "Phone"
         model190822.note = "手機📱"
         model190822.updateDate = Date()
 
-        let showVocabularyDetail = scheduler.createObserver(VocabularyRealmModel.self)
+        let showVocabularyDetail = scheduler.createObserver(VocabularyRealm.self)
         sut.showVocabularyDetail
             .bind(to: showVocabularyDetail)
             .disposed(by: disposeBag)
@@ -163,9 +163,9 @@ extension VocabularyListViewModelTests {
     }
 
     private func initStub() {
-        var models = [VocabularyRealmModel]()
+        var models = [VocabularyRealm]()
         for index in 1...10 {
-            let model = VocabularyRealmModel()
+            let model = VocabularyRealm()
             model.id = "\(index)"
             model.episode = "Episode 19081\(index)"
             model.word = "Hello \(index)"

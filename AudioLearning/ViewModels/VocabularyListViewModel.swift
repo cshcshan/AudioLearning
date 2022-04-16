@@ -18,27 +18,27 @@ final class VocabularyListViewModel: BaseViewModel {
     // Inputs
     private(set) var setEpisode: AnyObserver<String?>!
     private(set) var reload: AnyObserver<Void>!
-    private(set) var selectVocabulary: AnyObserver<VocabularyRealmModel>!
+    private(set) var selectVocabulary: AnyObserver<VocabularyRealm>!
     private(set) var addVocabulary: AnyObserver<Void>!
-    private(set) var deleteVocabulary: AnyObserver<VocabularyRealmModel>!
+    private(set) var deleteVocabulary: AnyObserver<VocabularyRealm>!
     private(set) var tapFlashCards: AnyObserver<Void>!
 
     // Outputs
-    private(set) var vocabularies: Observable<[VocabularyRealmModel]>!
-    private(set) var showVocabularyDetail: Observable<VocabularyRealmModel>!
+    private(set) var vocabularies: Observable<[VocabularyRealm]>!
+    private(set) var showVocabularyDetail: Observable<VocabularyRealm>!
     private(set) var showAddVocabularyDetail: Observable<Void>!
     private(set) var showFlashCards: Observable<Void>!
 
     private let setEpisodeSubject = PublishSubject<String?>()
     private let reloadSubject = PublishSubject<Void>()
-    private let selectVocabularySubject = PublishSubject<VocabularyRealmModel>()
+    private let selectVocabularySubject = PublishSubject<VocabularyRealm>()
     private let addVocabularySubject = PublishSubject<Void>()
-    private let deleteVocabularySubject = PublishSubject<VocabularyRealmModel>()
+    private let deleteVocabularySubject = PublishSubject<VocabularyRealm>()
     private let tapFlashCardsSubject = PublishSubject<Void>()
 
     private var episode: String?
 
-    init(realmService: RealmService<VocabularyRealmModel>) {
+    init(realmService: RealmService<VocabularyRealm>) {
         self.setEpisode = setEpisodeSubject.asObserver()
         self.reload = reloadSubject.asObserver()
         self.vocabularies = Observable.of(realmService.allObjects, realmService.filterObjects).merge()
@@ -91,9 +91,9 @@ final class VocabularyListViewModel: BaseViewModel {
             .disposed(by: disposeBag)
 
         deleteVocabularySubject
-            .subscribe(onNext: { [weak self] vocabularyRealmModel in
+            .subscribe(onNext: { [weak self] vocabularyRealm in
                 guard let self = self else { return }
-                guard let id = vocabularyRealmModel.id else { return }
+                guard let id = vocabularyRealm.id else { return }
                 realmService.delete(predicate: NSPredicate(format: "id == %@", id))
                     .subscribe(onNext: { success in
                         deleteSuccessSubject.onNext(success)

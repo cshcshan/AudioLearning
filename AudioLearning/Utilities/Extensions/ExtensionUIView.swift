@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-    
+
     func addWiggleAnimation() {
         guard layer.animation(forKey: "wiggle") == nil else { return }
         let wiggleAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -20,11 +20,11 @@ extension UIView {
         wiggleAnimation.toValue = NSNumber(value: 1 * Double.pi / 180.0)
         layer.add(wiggleAnimation, forKey: "wiggle")
     }
-    
+
     func removeWiggleAnimation() {
         layer.removeAnimation(forKey: "wiggle")
     }
-    
+
     func addPulseAnimation() {
         guard layer.animation(forKey: "pulse") == nil else { return }
         let pulseAnimation = CASpringAnimation(keyPath: "transform.scale")
@@ -38,7 +38,7 @@ extension UIView {
         pulseAnimation.toValue = 1.5
         layer.add(pulseAnimation, forKey: "pulse")
     }
-    
+
     func removePulseAnimation() {
         layer.removeAnimation(forKey: "pulse")
     }

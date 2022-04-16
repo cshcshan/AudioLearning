@@ -15,7 +15,7 @@ struct EpisodeModel {
     var date: Date?
     var imagePath: String?
     var path: String?
-    
+
     init(episode: String?, title: String?, desc: String?, date: Date?, imagePath: String?, path: String?) {
         self.episode = episode
         self.title = title
@@ -24,7 +24,7 @@ struct EpisodeModel {
         self.imagePath = imagePath
         self.path = path
     }
-    
+
     init(from episodeRealmModel: EpisodeRealmModel?) {
         self.episode = episodeRealmModel?.episode
         self.title = episodeRealmModel?.title
@@ -34,5 +34,7 @@ struct EpisodeModel {
         self.path = episodeRealmModel?.path
     }
 }
+
+// MARK: - Equatable
 
 extension EpisodeModel: Equatable {}

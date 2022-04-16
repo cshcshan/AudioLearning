@@ -9,7 +9,7 @@
 struct EpisodeDetailModel {
     var scriptHtml: String?
     var audioLink: String?
-    
+
     init(scriptHtml: String?, audioLink: String?) {
         self.scriptHtml = scriptHtml
         self.audioLink = audioLink

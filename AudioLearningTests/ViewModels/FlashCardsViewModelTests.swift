@@ -6,18 +6,18 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import XCTest
 import RealmSwift
-import RxTest
-import RxSwift
 import RxCocoa
+import RxSwift
+import RxTest
+import XCTest
 @testable import AudioLearning
 
 class FlashCardsViewModelTests: XCTestCase {
-    
+
     var sut: FlashCardsViewModel!
     var realmService: RealmService<VocabularyRealmModel>!
-    
+
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
 
@@ -37,48 +37,54 @@ class FlashCardsViewModelTests: XCTestCase {
         realmService = nil
         super.tearDown()
     }
-    
+
     func testVocabularies() {
         let vocabularies = scheduler.createObserver([VocabularyRealmModel].self)
         sut.vocabularies
             .bind(to: vocabularies)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, ()),
-                                        .next(20, ())])
-            .bind(to: sut.load)
-            .disposed(by: disposeBag)
+        scheduler.createColdObservable([
+            .next(10, ()),
+            .next(20, ())
+        ])
+        .bind(to: sut.load)
+        .disposed(by: disposeBag)
         scheduler.start()
         XCTAssertEqual(vocabularies.events.count, 2)
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 10)
     }
-    
+
     func testIsWordSide() {
         let isWordSide = scheduler.createObserver(Bool.self)
         sut.isWordSide
             .bind(to: isWordSide)
             .disposed(by: disposeBag)
-        scheduler.createColdObservable([.next(10, 0),
-                                        .next(20, 1),
-                                        .next(30, 0),
-                                        .next(40, 1)])
-            .bind(to: sut.flip)
-            .disposed(by: disposeBag)
+        scheduler.createColdObservable([
+            .next(10, 0),
+            .next(20, 1),
+            .next(30, 0),
+            .next(40, 1)
+        ])
+        .bind(to: sut.flip)
+        .disposed(by: disposeBag)
         sut.load.onNext(())
         scheduler.start()
         XCTAssertEqual(isWordSide.events.count, 4)
-        XCTAssertEqual(isWordSide.events, [.next(10, false),
-                                           .next(20, false),
-                                           .next(30, true),
-                                           .next(40, true)])
+        XCTAssertEqual(isWordSide.events, [
+            .next(10, false),
+            .next(20, false),
+            .next(30, true),
+            .next(40, true)
+        ])
     }
 }
 
 extension FlashCardsViewModelTests {
-    
+
     private func setupRealm() {
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "RealmServiceTests"
     }
-    
+
     private func initStub() {
         var models = [VocabularyRealmModel]()
         for index in 1...10 {
@@ -92,7 +98,7 @@ extension FlashCardsViewModelTests {
         }
         _ = realmService.add(objects: models)
     }
-    
+
     private func flushData() {
         _ = realmService.deleteAll()
     }

@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIButton {
-    
+
     func circle(_ cornerRadius: CGFloat) {
         layer.cornerRadius = cornerRadius
         clipsToBounds = true

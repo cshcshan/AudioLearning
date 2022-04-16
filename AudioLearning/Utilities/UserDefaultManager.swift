@@ -17,9 +17,9 @@ protocol UserDefaultsManagerProtocol {
 }
 
 final class UserDefaultManager: UserDefaultsManagerProtocol {
-    
-    static let shared: UserDefaultManager = UserDefaultManager()
-    
+
+    static let shared = UserDefaultManager()
+
     var appearanceMode: AppearanceModeType {
         get {
             guard let mode = UserDefaults.standard.object(forKey: UserDefaultKeys.appearance.rawValue) as? Int else {

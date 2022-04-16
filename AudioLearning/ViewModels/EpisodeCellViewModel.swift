@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class EpisodeCellViewModel: BaseViewModel {
 
@@ -28,7 +28,7 @@ final class EpisodeCellViewModel: BaseViewModel {
 
     let inputs: Inputs
     let outputs: Outputs
-    
+
     private let load = PublishSubject<EpisodeModel>()
 
     private let title = BehaviorRelay<String?>(value: nil)
@@ -36,9 +36,9 @@ final class EpisodeCellViewModel: BaseViewModel {
     private let desc = BehaviorRelay<String?>(value: nil)
     private let image = BehaviorRelay<UIImage?>(value: nil)
     private let imageRefreshing = PublishRelay<Bool>()
-    
+
     private var apiService: APIServiceProtocol?
-    
+
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
         self.inputs = Inputs(load: load.asObserver())
@@ -47,12 +47,13 @@ final class EpisodeCellViewModel: BaseViewModel {
             date: date.asDriver(),
             desc: desc.asDriver(),
             image: image.asDriver(),
-            imageRefreshing: imageRefreshing.asSignal())
+            imageRefreshing: imageRefreshing.asSignal()
+        )
 
         super.init()
 
-        load.map { $0.title }.bind(to: title).disposed(by: disposeBag)
-        load.map { $0.desc }.bind(to: desc).disposed(by: disposeBag)
+        load.map(\.title).bind(to: title).disposed(by: disposeBag)
+        load.map(\.desc).bind(to: desc).disposed(by: disposeBag)
 
         load.map { $0.date?.toString(dateFormat: "yyyy/M/d") }
             .bind(to: date)

@@ -6,27 +6,27 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 class BaseViewController: UIViewController, StoryboardGettable {
-    
+
     let disposeBag = DisposeBag()
 
     var isUITesting: Bool {
-        return ProcessInfo.processInfo.arguments.contains("-UITesting")
+        ProcessInfo.processInfo.arguments.contains("-UITesting")
     }
-    
+
     private var interactionController: UIPercentDrivenInteractiveTransition?
-    
+
     private let tagOfThemeButton = 201
     private let tagOfPlayingButton = 202
-    
+
     private var slidePushAnimator: SlidePushAnimator!
     private var slidePopAnimator: SlidePopAnimator!
     private var episodePushAnimator: EpisodePushAnimator!
     private var episodePopAnimator: EpisodePopAnimator!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if #available(iOS 11, *) {
@@ -38,31 +38,31 @@ class BaseViewController: UIViewController, StoryboardGettable {
         setupUIColor()
         addScreenPanToView()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if parent is UINavigationController {
             navigationController?.delegate = self
         }
     }
-    
+
     override var prefersStatusBarHidden: Bool {
-        return false
+        false
     }
-    
+
     func setupNotification() {
         NotificationCenter.default.rx
             .notification(.changeAppearance)
-            .take(until: self.rx.deallocated)
+            .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.setupUIColor()
             })
             .disposed(by: disposeBag)
     }
-    
+
     func setupUIID() {}
-    
+
     func setupUIColor() {
         if let navigationBar = navigationController?.navigationBar {
 //            navigationBar.backgroundColor = Appearance.mode == .dark ? UIColor.black : UIColor.white
@@ -70,8 +70,13 @@ class BaseViewController: UIViewController, StoryboardGettable {
             navigationBar.tintColor = Appearance.textColor
             navigationBar.barStyle = Appearance.mode == .dark ? .black : .default
             navigationBar.isTranslucent = false
-            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: Appearance.textColor,
-                                                 NSAttributedString.Key.font: UIFont(name: "AvenirNext-DemiBold", size: 20.0)!]
+            navigationBar.titleTextAttributes = [
+                NSAttributedString.Key.foregroundColor: Appearance.textColor,
+                NSAttributedString.Key.font: UIFont(
+                    name: "AvenirNext-DemiBold",
+                    size: 20.0
+                )!
+            ]
         }
         if let themeButton = view.viewWithTag(tagOfThemeButton) {
             themeButton.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
@@ -82,8 +87,13 @@ class BaseViewController: UIViewController, StoryboardGettable {
 // MARK: - UINavigationControllerDelegate
 
 extension BaseViewController: UINavigationControllerDelegate {
-    
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+
+    func navigationController(
+        _ navigationController: UINavigationController,
+        animationControllerFor operation: UINavigationController.Operation,
+        from fromVC: UIViewController,
+        to toVC: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
         if fromVC is EpisodeListViewController && toVC is EpisodeDetailViewController {
             if episodePushAnimator == nil {
                 episodePushAnimator = EpisodePushAnimator()
@@ -98,7 +108,7 @@ extension BaseViewController: UINavigationControllerDelegate {
         switch operation {
         case .push:
             if slidePushAnimator == nil {
-               slidePushAnimator = SlidePushAnimator()
+                slidePushAnimator = SlidePushAnimator()
             }
             return slidePushAnimator
         case .pop:
@@ -109,9 +119,12 @@ extension BaseViewController: UINavigationControllerDelegate {
         default: return nil
         }
     }
-    
-    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return interactionController
+
+    func navigationController(
+        _ navigationController: UINavigationController,
+        interactionControllerFor animationController: UIViewControllerAnimatedTransitioning
+    ) -> UIViewControllerInteractiveTransitioning? {
+        interactionController
     }
 }
 
@@ -133,11 +146,14 @@ extension BaseViewController {
             .disposed(by: disposeBag)
         themeButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(themeButton)
-        setupConstraintsOnBottomRight(on: themeButton, to: item,
-                                      constraints: (right: -20, bottom: -10),
-                                      size: (width: side, height: side))
+        setupConstraintsOnBottomRight(
+            on: themeButton,
+            to: item,
+            constraints: (right: -20, bottom: -10),
+            size: (width: side, height: side)
+        )
     }
-    
+
     func showPlayingButton<T: BaseViewModel, U: UIView>(_ viewModel: T, to item: U, isShow: Bool) {
         let execute = { [weak self] in
             guard let self = self else { return }
@@ -161,9 +177,12 @@ extension BaseViewController {
                     .disposed(by: self.disposeBag)
                 playingButton.translatesAutoresizingMaskIntoConstraints = false
                 self.view.addSubview(playingButton)
-                self.setupConstraintsOnBottomRight(on: playingButton, to: item,
-                                                   constraints: (right: -20, bottom: -70),
-                                                   size: (width: side, height: side))
+                self.setupConstraintsOnBottomRight(
+                    on: playingButton,
+                    to: item,
+                    constraints: (right: -20, bottom: -70),
+                    size: (width: side, height: side)
+                )
             } else {
                 guard let playingButton = button else { return }
                 playingButton.removePulseAnimation()
@@ -174,30 +193,64 @@ extension BaseViewController {
             execute()
         }
     }
-    
+
     func animatePlayingButton() {
         guard let playingButton = view.viewWithTag(tagOfPlayingButton), playingButton.isHidden == false else { return }
         playingButton.removePulseAnimation()
         playingButton.addPulseAnimation()
     }
-    
-    private func setupConstraintsOnBottomRight(on subview: UIView, to item: UIView,
-                                               constraints: (right: CGFloat, bottom: CGFloat),
-                                               size: (width: CGFloat, height: CGFloat)) {
-        let right = NSLayoutConstraint(item: subview, attribute: .right, relatedBy: .equal, toItem: item,
-                                       attribute: .right, multiplier: 1, constant: constraints.right)
-        let bottom = NSLayoutConstraint(item: subview, attribute: .bottom, relatedBy: .equal, toItem: item,
-                                        attribute: .bottom, multiplier: 1, constant: constraints.bottom)
-        let width = NSLayoutConstraint(item: subview, attribute: .width, relatedBy: .equal, toItem: nil,
-                                       attribute: .notAnAttribute, multiplier: 1, constant: size.width)
-        let height = NSLayoutConstraint(item: subview, attribute: .height, relatedBy: .equal, toItem: nil,
-                                        attribute: .notAnAttribute, multiplier: 1, constant: size.height)
+
+    private func setupConstraintsOnBottomRight(
+        on subview: UIView,
+        to item: UIView,
+        constraints: (right: CGFloat, bottom: CGFloat),
+        size: (width: CGFloat, height: CGFloat)
+    ) {
+        let right = NSLayoutConstraint(
+            item: subview,
+            attribute: .right,
+            relatedBy: .equal,
+            toItem: item,
+            attribute: .right,
+            multiplier: 1,
+            constant: constraints.right
+        )
+        let bottom = NSLayoutConstraint(
+            item: subview,
+            attribute: .bottom,
+            relatedBy: .equal,
+            toItem: item,
+            attribute: .bottom,
+            multiplier: 1,
+            constant: constraints.bottom
+        )
+        let width = NSLayoutConstraint(
+            item: subview,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1,
+            constant: size.width
+        )
+        let height = NSLayoutConstraint(
+            item: subview,
+            attribute: .height,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1,
+            constant: size.height
+        )
         view.addConstraints([right, bottom, width, height])
     }
-    
-    func showConfirmAlert(title: String?, message: String?,
-                          confirmHandler: ((UIAlertAction) -> Void)?,
-                          completionHandler: (() -> Void)?) {
+
+    func showConfirmAlert(
+        title: String?,
+        message: String?,
+        confirmHandler: ((UIAlertAction) -> Void)?,
+        completionHandler: (() -> Void)?
+    ) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: confirmHandler)
         alert.addAction(action)
@@ -208,7 +261,7 @@ extension BaseViewController {
 // MARK: - Pan View
 
 extension BaseViewController {
-    
+
     private func addScreenPanToView() {
         if self == navigationController?.viewControllers.first {
         } else {
@@ -217,12 +270,12 @@ extension BaseViewController {
             view.addGestureRecognizer(pan)
         }
     }
-    
+
     @objc func handleScreenPanView(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         guard let view = recognizer.view else { return }
         let offsetX = recognizer.translation(in: view).x
         let percent = abs(offsetX) / view.frame.width
-        
+
         switch recognizer.state {
         case .began:
             interactionController = UIPercentDrivenInteractiveTransition()

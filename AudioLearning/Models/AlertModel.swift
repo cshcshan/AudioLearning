@@ -11,11 +11,13 @@ import Foundation
 struct AlertModel {
     var title: String?
     var message: String?
-    
+
     init(title: String?, message: String?) {
         self.title = title
         self.message = message
     }
 }
+
+// MARK: - Equatable
 
 extension AlertModel: Equatable {}

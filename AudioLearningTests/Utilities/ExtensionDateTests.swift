@@ -21,19 +21,19 @@ class ExtensionDateTests: XCTestCase {
 }
 
 extension ExtensionDateTests {
-    
+
     // NARK: testToString
-    
+
     func testToString_WithyMd() {
         var dateComponents = DateComponents()
         dateComponents.year = 2019
         dateComponents.month = 8
         dateComponents.day = 15
         let date = Calendar.current.date(from: dateComponents)
-        
+
         XCTAssertEqual(date?.toString(dateFormat: "y/M/d"), "2019/8/15")
     }
-    
+
     func testToString_WithEmptyDateFormat() {
         var dateComponents = DateComponents()
         dateComponents.year = 2019

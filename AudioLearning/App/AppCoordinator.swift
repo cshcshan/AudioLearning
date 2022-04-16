@@ -6,8 +6,8 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 final class AppCoordinator: BaseCoordinator<Void> {
 

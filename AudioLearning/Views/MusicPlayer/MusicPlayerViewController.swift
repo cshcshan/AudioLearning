@@ -6,25 +6,25 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 final class MusicPlayerViewController: UIViewController, StoryboardGettable {
-    
-    @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var forwardButton: UIButton!
-    @IBOutlet weak var rewindButton: UIButton!
-    @IBOutlet weak var speedSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var slider: BufferingSlider!
-    @IBOutlet weak var progressTimerLabel: UILabel!
-    @IBOutlet weak var totalLengthLabel: UILabel!
-    
+
+    @IBOutlet var playButton: UIButton!
+    @IBOutlet var forwardButton: UIButton!
+    @IBOutlet var rewindButton: UIButton!
+    @IBOutlet var speedSegmentedControl: UISegmentedControl!
+    @IBOutlet var slider: BufferingSlider!
+    @IBOutlet var progressTimerLabel: UILabel!
+    @IBOutlet var totalLengthLabel: UILabel!
+
     var viewModel: MusicPlayerViewModel!
     private let disposeBag = DisposeBag()
-    
+
     private let playImage = UIImage(named: "play-white")
     private let pauseImage = UIImage(named: "pause-white")
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNotification()
@@ -33,37 +33,39 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
         setupUI(isReady: false)
         setupBindings()
     }
-    
+
     private func setupNotification() {
         NotificationCenter.default.rx
             .notification(.changeAppearance)
-            .take(until: self.rx.deallocated)
+            .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.setupUIColor()
             })
             .disposed(by: disposeBag)
     }
-    
+
     private func setupUIColor() {
         let backgroundColor = Appearance.textColor
         let foreColor = Appearance.backgroundColor
         view.backgroundColor = backgroundColor
-        let forwardImage = Appearance.mode == .dark ?
-            UIImage(named: "forward-10") : UIImage(named: "forward-10-white")
-        let rewindImage = Appearance.mode == .dark ?
-            UIImage(named: "rewind-10") : UIImage(named: "rewind-10-white")
+        let forwardImage = Appearance.mode == .dark
+            ? UIImage(named: "forward-10")
+            : UIImage(named: "forward-10-white")
+        let rewindImage = Appearance.mode == .dark
+            ? UIImage(named: "rewind-10")
+            : UIImage(named: "rewind-10-white")
         forwardButton.setImage(forwardImage, for: .normal)
         rewindButton.setImage(rewindImage, for: .normal)
         speedSegmentedControl.tintColor = foreColor
         progressTimerLabel.textColor = foreColor
         totalLengthLabel.textColor = foreColor
     }
-    
+
     private func setupUI() {
         setupBlurEffect()
     }
-    
+
     private func setupBlurEffect() {
         // Blur Effect
         let blurEffect = UIBlurEffect(style: .light)
@@ -72,18 +74,26 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
         view.addSubview(blurView)
         view.sendSubviewToBack(blurView)
         let views = ["subview": blurView]
-        let horizontal = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|",
-                                                        options: [], metrics: nil, views: views)
-        let vertical = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|",
-                                                      options: [], metrics: nil, views: views)
+        let horizontal = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|-0-[subview]-0-|",
+            options: [],
+            metrics: nil,
+            views: views
+        )
+        let vertical = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-0-[subview]-0-|",
+            options: [],
+            metrics: nil,
+            views: views
+        )
         view.addConstraints(horizontal + vertical)
     }
-    
+
     private func setupBindings() {
         playButton.rx.tap
             .bind(to: viewModel.tappedPlayPause)
             .disposed(by: disposeBag)
-        
+
         forwardButton.rx.tap
             .bind(to: viewModel.forward10Seconds)
             .disposed(by: disposeBag)
@@ -91,7 +101,7 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
             .bind(to: viewModel.rewind10Seconds)
             .disposed(by: disposeBag)
         speedSegmentedControl.rx.selectedSegmentIndex
-            .map({ (index) -> Float in
+            .map { index -> Float in
                 switch index {
                 case 0: return 0.5
                 case 1: return 0.75
@@ -100,58 +110,60 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
                 case 4: return 2
                 default: return 1
                 }
-            })
+            }
             .bind(to: viewModel.changeSpeed)
             .disposed(by: disposeBag)
         slider.rx.value
             .bind(to: viewModel.changeAudioPosition)
             .disposed(by: disposeBag)
-        
+
         viewModel.readyToPlay
-            .drive(onNext: { [weak self] (_) in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.setupUI(isReady: true)
             })
             .disposed(by: disposeBag)
-        
+
         viewModel.isPlaying
-            .drive(onNext: { [weak self] (isPlaying) in
+            .drive(onNext: { [weak self] isPlaying in
                 guard let self = self else { return }
-                self.playButton.setImage(isPlaying ? self.pauseImage : self.playImage,
-                                         for: .normal)
+                self.playButton.setImage(
+                    isPlaying ? self.pauseImage : self.playImage,
+                    for: .normal
+                )
             })
             .disposed(by: disposeBag)
-        
+
         viewModel.currentTime
             .drive(progressTimerLabel.rx.text)
             .disposed(by: disposeBag)
         viewModel.totalTime
             .drive(totalLengthLabel.rx.text)
             .disposed(by: disposeBag)
-        
+
         viewModel.currentSeconds
             .drive(slider.rx.value)
             .disposed(by: disposeBag)
         viewModel.totalSeconds
-            .drive(onNext: { [weak self] (seconds) in
+            .drive(onNext: { [weak self] seconds in
                 guard let slider = self?.slider else { return }
                 slider.maximumValue = seconds
             })
             .disposed(by: disposeBag)
-        
+
         viewModel.loadingBufferRate
             .drive(slider.bufferProgressView.rx.progress)
             .disposed(by: disposeBag)
-        
+
         viewModel.speedSegmentedControlAlpha
             .drive(speedSegmentedControl.rx.alpha)
             .disposed(by: disposeBag)
-        
+
         viewModel.sliderAlpha
             .drive(slider.rx.alpha)
             .disposed(by: disposeBag)
     }
-    
+
     private func setupUI(isReady: Bool) {
         playButton.isEnabled = isReady
         forwardButton.isEnabled = isReady

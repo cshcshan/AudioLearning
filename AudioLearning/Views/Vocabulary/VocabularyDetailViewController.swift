@@ -6,32 +6,32 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import UIKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 
 final class VocabularyDetailViewController: BaseViewController {
-    
-    @IBOutlet weak var wordTextField: UITextField!
-    @IBOutlet weak var noteTextView: UITextView!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
-    
+
+    @IBOutlet var wordTextField: UITextField!
+    @IBOutlet var noteTextView: UITextView!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var cancelButton: UIButton!
+
     var viewModel: VocabularyDetailViewModel!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupBindings()
     }
-    
+
     override func setupUIID() {
         wordTextField.accessibilityIdentifier = "Word"
         noteTextView.accessibilityIdentifier = "Note"
         saveButton.accessibilityIdentifier = "Save"
         cancelButton.accessibilityIdentifier = "Cancel"
     }
-    
+
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
@@ -50,10 +50,16 @@ final class VocabularyDetailViewController: BaseViewController {
         cancelButton.setTitleColor(Appearance.textColor, for: .normal)
         cancelButton.layer.borderColor = Appearance.textColor.cgColor
     }
-    
+
     private func setupUI() {
-        wordTextField.attributedPlaceholder = NSAttributedString(string: "Word",
-                                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray.withAlphaComponent(0.4)])
+        wordTextField.attributedPlaceholder = NSAttributedString(
+            string: "Word",
+            attributes: [
+                NSAttributedString.Key
+                    .foregroundColor: UIColor.lightGray
+                    .withAlphaComponent(0.4)
+            ]
+        )
         wordTextField.layer.cornerRadius = 3
         wordTextField.layer.borderWidth = 1
         noteTextView.layer.cornerRadius = 3
@@ -64,7 +70,7 @@ final class VocabularyDetailViewController: BaseViewController {
         cancelButton.layer.cornerRadius = 3
         cancelButton.layer.borderWidth = 1
     }
-    
+
     private func setupBindings() {
         viewModel.word
             .bind(to: wordTextField.rx.text)
@@ -73,20 +79,22 @@ final class VocabularyDetailViewController: BaseViewController {
             .bind(to: noteTextView.rx.text)
             .disposed(by: disposeBag)
         saveButton.rx.tap
-            .subscribe(onNext: { [weak self] (_) in
+            .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let model = VocabularySaveModel(word: self.wordTextField.text,
-                                                note: self.noteTextView.text)
+                let model = VocabularySaveModel(
+                    word: self.wordTextField.text,
+                    note: self.noteTextView.text
+                )
                 self.viewModel.save.onNext(model)
             })
             .disposed(by: disposeBag)
         cancelButton.rx.tap
             .bind(to: viewModel.cancel)
             .disposed(by: disposeBag)
-        
+
         Observable.of(viewModel.close, viewModel.saved)
             .merge()
-            .subscribe(onNext: { (_) in
+            .subscribe(onNext: { _ in
                 self.navigationController?.view.endEditing(true)
                 self.view.endEditing(true)
             })

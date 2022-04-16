@@ -17,8 +17,8 @@ final class EpisodeRealmModel: Object {
     dynamic var date: Date?
     dynamic var imagePath: String?
     dynamic var path: String?
-    
+
     override static func primaryKey() -> String {
-        return "episode"
+        "episode"
     }
 }

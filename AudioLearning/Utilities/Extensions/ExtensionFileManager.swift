@@ -10,6 +10,6 @@ import Foundation
 
 extension FileManager {
     var documentURL: URL? {
-        return self.urls(for: .documentDirectory, in: .userDomainMask).first
+        urls(for: .documentDirectory, in: .userDomainMask).first
     }
 }

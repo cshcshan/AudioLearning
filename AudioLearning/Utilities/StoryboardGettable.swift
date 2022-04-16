@@ -27,7 +27,7 @@ enum StoryboardID: String {
 protocol StoryboardGettable {}
 
 extension StoryboardGettable where Self: UIViewController {
-    
+
     static func initialize(from storyboardName: StoryboardName, storyboardID: StoryboardID? = nil) -> Self {
         let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: Bundle.main)
         let viewController: UIViewController?

@@ -9,7 +9,7 @@
 struct VocabularySaveModel {
     var word: String?
     var note: String?
-    
+
     init(word: String?, note: String?) {
         self.word = word
         self.note = note

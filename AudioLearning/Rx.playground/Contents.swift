@@ -1,5 +1,5 @@
-import RxSwift
 import RxCocoa
+import RxSwift
 
 let disposeBag = DisposeBag()
 
@@ -76,11 +76,11 @@ print("\nJ: --- duplicate subscription")
 
 let j = PublishSubject<Void>()
 
-j.subscribe(onNext: { (_) in
+j.subscribe(onNext: { _ in
     print("next 1")
 }).disposed(by: disposeBag)
 
-j.subscribe(onNext: { (_) in
+j.subscribe(onNext: { _ in
     print("next 2")
 }).disposed(by: disposeBag)
 
@@ -88,16 +88,16 @@ j.onNext(())
 
 print("\nI: --- do, afterNext")
 Observable.of("AAA", "BBB", "CCC")
-    .flatMapLatest({ (str) -> Observable<String> in
-        return .just("\(str)Test")
-    })
-    .do(onNext: { (str) in
+    .flatMapLatest { str -> Observable<String> in
+        .just("\(str)Test")
+    }
+    .do(onNext: { str in
         print("do - onNext: \(str)")
-    }, afterNext: { (str) in
+    }, afterNext: { str in
         print("do - afterNext: \(str)")
-    }, onError: { (error) in
+    }, onError: { error in
         print("do - onError: \(error)")
-    }, afterError: { (error) in
+    }, afterError: { error in
         print("do - afterError: \(error)")
     }, onCompleted: {
         print("do - onCompleted")
@@ -110,9 +110,9 @@ Observable.of("AAA", "BBB", "CCC")
     }, onDispose: {
         print("do - onDispose")
     })
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print("subscribe - onNext: \(str)")
-    }, onError: { (error) in
+    }, onError: { error in
         print("subscribe - onError: \(error)")
     }, onCompleted: {
         print("subscribe - onCompleted")
@@ -123,31 +123,31 @@ Observable.of("AAA", "BBB", "CCC")
 
 print("\nH: --- two observers, one observables")
 
-let h1 = AnyObserver<String> { (event) in
+let h1 = AnyObserver<String> { event in
     switch event {
     case .next(let str):
         print("next 1: \(str)")
-    case .error(_): break
+    case .error: break
     case .completed:
         print("completed 1")
     }
 }
 
-let h2 = AnyObserver<String> { (event) in
+let h2 = AnyObserver<String> { event in
     switch event {
     case .next(let str):
         print("next 2: \(str)")
-    case .error(_): break
+    case .error: break
     case .completed:
         print("completed 2")
     }
 }
 
 let h = Observable<String>
-    .create({ (observer) -> Disposable in
+    .create { observer -> Disposable in
         observer.onNext("Observable")
         return Disposables.create()
-    })
+    }
 
 h.bind(to: h1).disposed(by: disposeBag)
 h.bind(to: h2).disposed(by: disposeBag)
@@ -157,11 +157,11 @@ print("\nG: --- one observer, two observables")
 let g = PublishSubject<String>()
 let gObserver: AnyObserver<String> = g.asObserver()
 
-g.subscribe(onNext: { (text) in
+g.subscribe(onNext: { text in
     print("1: \(text)")
 }).disposed(by: disposeBag)
 
-g.subscribe(onNext: { (text) in
+g.subscribe(onNext: { text in
     print("2: \(text)")
 }).disposed(by: disposeBag)
 
@@ -170,22 +170,24 @@ gObserver.onNext("GG")
 print("\nF: ---")
 
 var f = Observable<String>
-    .create({ (observer) -> Disposable in
+    .create { observer -> Disposable in
         observer.onNext("Observable 1")
         return Disposables.create()
-    })
+    }
+
 f
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print(str)
     })
     .disposed(by: disposeBag)
 f = Observable<String>
-    .create({ (observer) -> Disposable in
+    .create { observer -> Disposable in
         observer.onNext("Observable 2")
         return Disposables.create()
-    })
+    }
+
 f
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print(str)
     })
     .disposed(by: disposeBag)
@@ -195,7 +197,7 @@ print("\nE: --- emit next and complete")
 let e1 = PublishSubject<String>()
 e1.onNext("This is e1's first emission.") // haven't subscribed yet
 e1
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print(str)
     }, onCompleted: {
         print("e1 Completed")
@@ -206,7 +208,7 @@ e1.onNext("This is e1's second emission.")
 let e2 = BehaviorSubject(value: 1)
 e2.on(.next(2))
 e2
-    .subscribe(onNext: { (int) in
+    .subscribe(onNext: { int in
         print(int)
     }, onCompleted: {
         print("e2 Completed.")
@@ -220,9 +222,9 @@ print("\nD: --- BehaviorRelay")
 
 let behaviorRelay = BehaviorRelay(value: "initial value")
 behaviorRelay
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print(str)
-    }, onError: { (error) in
+    }, onError: { _ in
         print("Won't got an error")
     }, onCompleted: {
         print("Completed")
@@ -236,9 +238,9 @@ print("\nC: --- BehaviorSubject")
 
 let behaviorSubject = BehaviorSubject<String>(value: "initial value")
 _ = behaviorSubject
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print(str)
-    }, onError: { (error) in
+    }, onError: { _ in
         print("Won't got an error")
     }, onCompleted: {
         print("Completed")
@@ -252,18 +254,18 @@ print("\nB: ---")
 
 Observable
     .just("This is RxSwift.")
-    .subscribe(onNext: { (str) in
+    .subscribe(onNext: { str in
         print("next: \(str)")
     })
     .disposed(by: disposeBag)
 
 print("\nA: --- create AnyObserver with subscribe")
 
-let observer: AnyObserver<String> = AnyObserver { (event) in
+let observer: AnyObserver<String> = AnyObserver { event in
     switch event {
     case .next(let str):
         print("next: \(str)")
-    case .error(_): break
+    case .error: break
     case .completed:
         print("completed")
     }
@@ -271,4 +273,3 @@ let observer: AnyObserver<String> = AnyObserver { (event) in
 
 Observable.just("AA 1").subscribe(observer).disposed(by: disposeBag)
 Observable.just("AA 2").subscribe(observer).disposed(by: disposeBag)
-

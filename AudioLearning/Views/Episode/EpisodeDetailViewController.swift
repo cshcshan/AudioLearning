@@ -6,26 +6,26 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import UIKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 
 final class EpisodeDetailViewController: BaseViewController {
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var htmlTextView: UITextView!
-    @IBOutlet weak var playerView: UIView!
-    @IBOutlet weak var playerViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var maskView: UIView!
-    @IBOutlet weak var vocabularyDetailContainerView: UIView!
+
+    @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var contentView: UIView!
+    @IBOutlet var photoImageView: UIImageView!
+    @IBOutlet var htmlTextView: UITextView!
+    @IBOutlet var playerView: UIView!
+    @IBOutlet var playerViewHeight: NSLayoutConstraint!
+    @IBOutlet var maskView: UIView!
+    @IBOutlet var vocabularyDetailContainerView: UIView!
     private let refreshControl = UIRefreshControl()
     private var item: UIMenuItem!
-    
+
     private let darkBgTempImage = UIImage(named: "temp_pic-white")
     private let lightBgTempImage = UIImage(named: "temp_pic")
-    
+
     var viewModel: EpisodeDetailViewModel!
     var musicPlayerView: UIView!
     var vocabularyDetailView: UIView!
@@ -39,11 +39,11 @@ final class EpisodeDetailViewController: BaseViewController {
         setupBindings()
         enableMenuItem()
     }
-        
+
     override func setupUIID() {
         playerView.accessibilityIdentifier = "PlayerView"
     }
-    
+
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
@@ -57,7 +57,7 @@ final class EpisodeDetailViewController: BaseViewController {
             photoImageView.image = getNormalImage()
         }
     }
-    
+
     private func setupUI() {
         scrollView.contentInsetAdjustmentBehavior = .never
         setupNavigationBar()
@@ -75,7 +75,11 @@ final class EpisodeDetailViewController: BaseViewController {
             refreshControl.tintColor = Appearance.textColor
             scrollView.isScrollEnabled = true
             scrollView.addSubview(refreshControl)
-            scrollView.contentOffset = CGPoint(x: 0, y: -refreshControl.frame.height) // for changing refreshControl's tintColor
+            scrollView
+                .contentOffset = CGPoint(
+                    x: 0,
+                    y: -refreshControl.frame.height
+                ) // for changing refreshControl's tintColor
         }
         // htmlTextView
         htmlTextView.isEditable = false
@@ -86,7 +90,7 @@ final class EpisodeDetailViewController: BaseViewController {
         vocabularyDetailContainerView.addSubview(vocabularyDetailView)
         vocabularyDetailView.layer.cornerRadius = 10
     }
-    
+
     private func setupNavigationBar() {
         let image = UIImage(named: "dictionary-filled")
         let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
@@ -95,7 +99,7 @@ final class EpisodeDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
     }
-    
+
     private func setupPlayerViewShadow() {
         playerView.layer.masksToBounds = false
         playerView.layer.shadowColor = UIColor.black.cgColor
@@ -104,19 +108,19 @@ final class EpisodeDetailViewController: BaseViewController {
         playerView.layer.shadowRadius = 5
         playerView.layer.shadowPath = UIBezierPath(rect: playerView.bounds).cgPath
     }
-    
+
     private func setupBindings() {
         if !isUITesting {
             viewModel.refreshing
                 .bind(to: refreshControl.rx.isRefreshing)
                 .disposed(by: disposeBag)
         }
-        
+
         navigationItem.title = viewModel.title
-        
+
         viewModel.image
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (image) in
+            .subscribe(onNext: { [weak self] image in
                 guard let self = self else { return }
                 if image == nil {
                     self.photoImageView.image = self.getNormalImage()
@@ -125,80 +129,85 @@ final class EpisodeDetailViewController: BaseViewController {
                 }
             })
             .disposed(by: disposeBag)
-        
+
         viewModel.scriptHtml
             .observe(on: MainScheduler.instance)
-            .map({ [weak self] (html) -> NSAttributedString in
+            .map { [weak self] html -> NSAttributedString in
                 guard let self = self else { return NSAttributedString() }
                 let fontName = self.htmlTextView.font!.fontName
                 let fontSize = self.htmlTextView.font!.pointSize
-                return html.convertHtml(backgroundColor: Appearance.backgroundColor,
-                                        fontColor: Appearance.textColor,
-                                        fontName: fontName,
-                                        fontSize: fontSize)
-            })
-            .do(onNext: { [weak self] (_) in
+                return html.convertHtml(
+                    backgroundColor: Appearance.backgroundColor,
+                    fontColor: Appearance.textColor,
+                    fontName: fontName,
+                    fontSize: fontSize
+                )
+            }
+            .do(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.refreshControl.endRefreshing()
             })
             .bind(to: htmlTextView.rx.attributedText)
             .disposed(by: disposeBag)
-        
+
         viewModel.alert
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (alert) in
+            .subscribe(onNext: { [weak self] alert in
                 guard let self = self else { return }
-                self.showConfirmAlert(title: alert.title,
-                                      message: alert.message,
-                                      confirmHandler: nil,
-                                      completionHandler: nil)
+                self.showConfirmAlert(
+                    title: alert.title,
+                    message: alert.message,
+                    confirmHandler: nil,
+                    completionHandler: nil
+                )
             })
             .disposed(by: disposeBag)
-        
+
         viewModel.hideVocabularyDetailView
             .bind(to: maskView.rx.isHidden)
             .disposed(by: disposeBag)
-        
+
         viewModel.hideVocabularyDetailView
-            .filter({ $0 == true })
-            .flatMap({ [weak self] (_) -> Observable<TimeInterval> in
+            .filter { $0 == true }
+            .flatMap { [weak self] _ -> Observable<TimeInterval> in
                 guard let self = self else { return .just(TimeInterval(0)) }
                 self.enableMenuItem()
                 return .just(TimeInterval(0.4))
-            })
+            }
             .bind(to: maskView.rx.fadeOut)
             .disposed(by: disposeBag)
-        
+
         viewModel.hideVocabularyDetailView
-            .filter({ $0 == false })
-            .flatMap({ [weak self] (_) -> Observable<TimeInterval> in
+            .filter { $0 == false }
+            .flatMap { [weak self] _ -> Observable<TimeInterval> in
                 guard let self = self else { return .just(TimeInterval(0)) }
                 self.disableMenuItem()
                 return .just(TimeInterval(0.4))
-            })
+            }
             .bind(to: maskView.rx.fadeIn)
             .disposed(by: disposeBag)
-        
+
         viewModel.load.onNext(())
-        
-        playerViewHeight.constant == minPlayerViewHeight ?
-            viewModel.shrinkMusicPlayer.onNext(()) : viewModel.enlargeMusicPlayer.onNext(())
+
+        playerViewHeight.constant == minPlayerViewHeight
+            ? viewModel.shrinkMusicPlayer.onNext(())
+            : viewModel.enlargeMusicPlayer.onNext(())
     }
-    
+
     private func getNormalImage() -> UIImage? {
-        return Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
+        Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
     }
 }
 
 // MARK: - Tap Mask View
 
 extension EpisodeDetailViewController {
-    
+
     private func addTapToMaskView() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapView))
         maskView.addGestureRecognizer(tap)
     }
-    
+
     @objc func handleTapView(_ recognizer: UITapGestureRecognizer) {
         viewModel.hideVocabularyDetailView.onNext(true)
     }
@@ -207,7 +216,7 @@ extension EpisodeDetailViewController {
 // MARK: - Pan Player View Up & Down
 
 extension EpisodeDetailViewController {
-    
+
     func animatePlayerViewHeight() {
         playerViewHeight.constant = maxPlayerViewHeight
         playerView.superview?.setNeedsLayout()
@@ -219,17 +228,17 @@ extension EpisodeDetailViewController {
             self.playerView.superview?.layoutIfNeeded()
         })
     }
-    
+
     func addPanToPlayerView() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanPlayerView))
         playerView.addGestureRecognizer(pan)
     }
-    
+
     @objc func handlePanPlayerView(_ recognizer: UIPanGestureRecognizer) {
         guard let view = recognizer.view else { return }
         let offset = recognizer.translation(in: view)
         let velocity = recognizer.velocity(in: view)
-        
+
         switch recognizer.state {
         case .began:
             beganPlayerViewHeight = playerViewHeight.constant
@@ -237,8 +246,9 @@ extension EpisodeDetailViewController {
             var finalY = beganPlayerViewHeight - offset.y
             if finalY > maxPlayerViewHeight { finalY = maxPlayerViewHeight }
             if finalY < minPlayerViewHeight { finalY = minPlayerViewHeight }
-            finalY == minPlayerViewHeight ?
-                viewModel.shrinkMusicPlayer.onNext(()) : viewModel.enlargeMusicPlayer.onNext(())
+            finalY == minPlayerViewHeight
+                ? viewModel.shrinkMusicPlayer.onNext(())
+                : viewModel.enlargeMusicPlayer.onNext(())
             playerViewHeight.constant = finalY
             playerView.superview?.layoutIfNeeded()
         case .ended:
@@ -250,8 +260,9 @@ extension EpisodeDetailViewController {
             }
             UIView.animate(withDuration: 0.4) { [weak self] in
                 guard let self = self else { return }
-                finalY == self.minPlayerViewHeight ?
-                    self.viewModel.shrinkMusicPlayer.onNext(()) : self.viewModel.enlargeMusicPlayer.onNext(())
+                finalY == self.minPlayerViewHeight
+                    ? self.viewModel.shrinkMusicPlayer.onNext(())
+                    : self.viewModel.enlargeMusicPlayer.onNext(())
                 self.playerViewHeight.constant = finalY
                 self.playerView.superview?.layoutIfNeeded()
             }
@@ -263,18 +274,18 @@ extension EpisodeDetailViewController {
 // MARK: - Add to Vocabulary
 
 extension EpisodeDetailViewController {
-    
+
     private func enableMenuItem() {
         if item == nil {
             item = UIMenuItem(title: "Add to Vocabulary", action: #selector(addVocabulary))
         }
         UIMenuController.shared.menuItems = [item]
     }
-    
+
     private func disableMenuItem() {
         UIMenuController.shared.menuItems = []
     }
-    
+
     @objc func addVocabulary() {
         guard let textRange = htmlTextView.selectedTextRange else { return }
         guard let text = htmlTextView.text(in: textRange) else { return }

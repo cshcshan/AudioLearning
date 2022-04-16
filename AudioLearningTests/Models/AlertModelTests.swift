@@ -10,15 +10,15 @@ import XCTest
 @testable import AudioLearning
 
 class AlertModelTestsTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testInit() {
         let title = "Han"
         let message = "Hell World!"
@@ -26,7 +26,7 @@ class AlertModelTestsTests: XCTestCase {
         XCTAssertEqual(sut.title, title)
         XCTAssertEqual(sut.message, message)
     }
-    
+
     func testInit_WithNil() {
         let sut = AlertModel(title: nil, message: nil)
         XCTAssertNil(sut.title)

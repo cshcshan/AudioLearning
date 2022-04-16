@@ -10,7 +10,7 @@ import XCTest
 @testable import AudioLearning
 
 class VocabularySaveModelTests: XCTestCase {
-    
+
     func testInit() {
         let word = "Apple"
         let note = "蘋果🍎"
@@ -18,7 +18,7 @@ class VocabularySaveModelTests: XCTestCase {
         XCTAssertEqual(sut.word, word)
         XCTAssertEqual(sut.note, note)
     }
-    
+
     func testInit_WithNil() {
         let sut = VocabularySaveModel(word: nil, note: nil)
         XCTAssertNil(sut.word)

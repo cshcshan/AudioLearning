@@ -15,8 +15,8 @@ final class EpisodeDetailRealmModel: Object {
     dynamic var path: String?
     dynamic var scriptHtml: String?
     dynamic var audioLink: String?
-    
+
     override static func primaryKey() -> String {
-        return "episode"
+        "episode"
     }
 }

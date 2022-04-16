@@ -6,40 +6,46 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
-import UIKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 
 final class VocabularyListViewController: BaseViewController {
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var maskView: UIView!
-    @IBOutlet weak var vocabularyDetailContainerView: UIView!
-    
+
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var maskView: UIView!
+    @IBOutlet var vocabularyDetailContainerView: UIView!
+
     var viewModel: VocabularyListViewModel!
     var vocabularyDetailView: UIView!
     private var addItem: UIBarButtonItem!
     private var flashCardsItem: UIBarButtonItem!
-    
+
     private var showEmptyView: ((UITableView) -> Void) = { tableView in
-        tableView.showEmptyView(Appearance.backgroundColor,
-                                title: ("No words yet", Appearance.textColor),
-                                message: ("Tap Add to list and add words to show.", Appearance.textColor.withAlphaComponent(0.6)))
+        tableView.showEmptyView(
+            Appearance.backgroundColor,
+            title: ("No words yet", Appearance.textColor),
+            message: (
+                "Tap Add to list and add words to show.",
+                Appearance.textColor.withAlphaComponent(0.6)
+            )
+        )
     }
+
     private var hideEmptyView: ((UITableView) -> Void) = { tableView in
         tableView.hideEmptyView(nil, separatorStyle: .singleLine)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupBindings()
     }
-    
+
     override func setupUIID() {
         tableView.accessibilityIdentifier = "TableView"
     }
-    
+
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
@@ -48,7 +54,7 @@ final class VocabularyListViewController: BaseViewController {
         if tableView.backgroundView != nil { showEmptyView(tableView) }
         maskView.backgroundColor = Appearance.textColor.withAlphaComponent(0.4)
     }
-    
+
     private func setupUI() {
         tableView.contentInsetAdjustmentBehavior = .never
         setupNavigationBar(0)
@@ -65,7 +71,7 @@ final class VocabularyListViewController: BaseViewController {
         // themeButton
         showThemeButton(viewModel, to: tableView)
     }
-    
+
     private func setupNavigationBar(_ vocabulariesCount: Int) {
         if vocabulariesCount == 0 {
             navigationItem.rightBarButtonItems = [getAddItem()]
@@ -74,7 +80,7 @@ final class VocabularyListViewController: BaseViewController {
         }
         navigationItem.title = "Vocabulary"
     }
-    
+
     private func getAddItem() -> UIBarButtonItem {
         if let item = addItem { return item }
         let item = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
@@ -85,7 +91,7 @@ final class VocabularyListViewController: BaseViewController {
         addItem = item
         return item
     }
-    
+
     private func getFlashCardsItem() -> UIBarButtonItem {
         if let item = flashCardsItem { return item }
         let item = UIBarButtonItem(image: UIImage(named: "flashcards"), style: .plain, target: nil, action: nil)
@@ -95,74 +101,79 @@ final class VocabularyListViewController: BaseViewController {
         flashCardsItem = item
         return item
     }
-    
+
     private func setupBindings() {
         viewModel.hideVocabularyDetailView
             .bind(to: maskView.rx.isHidden)
             .disposed(by: disposeBag)
-        
+
         viewModel.hideVocabularyDetailView
-            .filter({ $0 == true })
-            .flatMap({ (_) -> Observable<TimeInterval> in
-                return .just(TimeInterval(0.4))
-            })
+            .filter { $0 == true }
+            .flatMap { _ -> Observable<TimeInterval> in
+                .just(TimeInterval(0.4))
+            }
             .bind(to: maskView.rx.fadeOut)
             .disposed(by: disposeBag)
-        
+
         viewModel.hideVocabularyDetailView
-            .filter({ $0 == false })
-            .flatMap({ (_) -> Observable<TimeInterval> in
-                return .just(TimeInterval(0.4))
-            })
+            .filter { $0 == false }
+            .flatMap { _ -> Observable<TimeInterval> in
+                .just(TimeInterval(0.4))
+            }
             .bind(to: maskView.rx.fadeIn)
             .disposed(by: disposeBag)
-        
+
         viewModel.vocabularies
-            .do(onNext: { [weak self] (vocabularies) in
+            .do(onNext: { [weak self] vocabularies in
                 guard let self = self else { return }
                 self.setupNavigationBar(vocabularies.count)
-                if vocabularies.count == 0 {
+                if vocabularies.isEmpty {
                     self.showEmptyView(self.tableView)
                 } else {
                     self.hideEmptyView(self.tableView)
                 }
             })
-            .bind(to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self), curriedArgument: { [weak self] (_, model, cell) in
-                guard let self = self else { return }
-                cell.selectionStyle = .none
-                cell.vocabularyRealmModel = model
-                cell.longPressSubject
-                    .subscribe(onNext: { (_) in
-                        cell.startWiggleAnimation.onNext(())
-                    })
-                    .disposed(by: self.disposeBag)
-                Observable.of(self.addItem.rx.tap.map({ $0 as AnyObject }),
-                              self.tableView.rx.itemSelected.map({ $0 as AnyObject }))
+            .bind(
+                to: tableView.rx.items(cellIdentifier: "VocabularyCell", cellType: VocabularyCell.self),
+                curriedArgument: { [weak self] _, model, cell in
+                    guard let self = self else { return }
+                    cell.selectionStyle = .none
+                    cell.vocabularyRealmModel = model
+                    cell.longPressSubject
+                        .subscribe(onNext: { _ in
+                            cell.startWiggleAnimation.onNext(())
+                        })
+                        .disposed(by: self.disposeBag)
+                    Observable.of(
+                        self.addItem.rx.tap.map { $0 as AnyObject },
+                        self.tableView.rx.itemSelected.map { $0 as AnyObject }
+                    )
                     .merge()
-                    .subscribe(onNext: { (_) in
+                    .subscribe(onNext: { _ in
                         cell.stopWiggleAnimation.onNext(())
                     })
                     .disposed(by: self.disposeBag)
-                cell.deleteVocabulary
-                    .subscribe(onNext: { (vocabularyRealmModel) in
-                        guard !vocabularyRealmModel.isInvalidated else { return }
-                        cell.stopWiggleAnimation.onNext(())
-                        self.viewModel.deleteVocabulary.onNext(vocabularyRealmModel)
-                    })
-                    .disposed(by: self.disposeBag)
-            })
+                    cell.deleteVocabulary
+                        .subscribe(onNext: { vocabularyRealmModel in
+                            guard !vocabularyRealmModel.isInvalidated else { return }
+                            cell.stopWiggleAnimation.onNext(())
+                            self.viewModel.deleteVocabulary.onNext(vocabularyRealmModel)
+                        })
+                        .disposed(by: self.disposeBag)
+                }
+            )
             .disposed(by: disposeBag)
-        
+
         tableView.rx
             .modelSelected(VocabularyRealmModel.self)
             .bind(to: viewModel.selectVocabulary)
             .disposed(by: disposeBag)
-        
+
 //        tableView.rx
 //            .modelDeleted(VocabularyRealmModel.self)
 //            .bind(to: viewModel.deleteVocabulary)
 //            .disposed(by: disposeBag)
-        
+
         viewModel.reload.onNext(())
     }
 }
@@ -170,12 +181,12 @@ final class VocabularyListViewController: BaseViewController {
 // MARK: - Tap Mask View
 
 extension VocabularyListViewController {
-    
+
     private func addTapToMaskView() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapView))
         maskView.addGestureRecognizer(tap)
     }
-    
+
     @objc func handleTapView(_ recognizer: UITapGestureRecognizer) {
         viewModel.hideVocabularyDetailView.onNext(true)
     }

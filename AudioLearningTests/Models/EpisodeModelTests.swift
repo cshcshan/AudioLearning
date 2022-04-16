@@ -10,15 +10,15 @@ import XCTest
 @testable import AudioLearning
 
 class EpisodeModelTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testInit() {
         let episode = "Episode 190815"
         let title = "Cryptocurrencies"
@@ -34,7 +34,7 @@ class EpisodeModelTests: XCTestCase {
         XCTAssertEqual(sut.imagePath, imagePath)
         XCTAssertEqual(sut.path, path)
     }
-    
+
     func testInit_WithNil() {
         let sut = EpisodeModel(episode: nil, title: nil, desc: nil, date: nil, imagePath: nil, path: nil)
         XCTAssertNil(sut.episode)

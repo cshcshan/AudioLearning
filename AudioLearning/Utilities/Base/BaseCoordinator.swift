@@ -18,12 +18,10 @@ class BaseCoordinator<ResultType> {
     func start() -> Observable<ResultType> {
         fatalError("Start method should be implemented.")
     }
-    
-    /*
-     1. Stores coordinator in a dictionary of child coordinators.
-     2. Calls method start() on that coordinator.
-     3. On the 'onNext:' of returning observable of method start() removes coordinator from the dictionary
-    */
+
+    // 1. Stores coordinator in a dictionary of child coordinators.
+    // 2. Calls method start() on that coordinator.
+    // 3. On the 'onNext:' of returning observable of method start() removes coordinator from the dictionary
     func coordinate<T>(to coordinator: BaseCoordinator<T>) -> Observable<T> {
         store(coordinator: coordinator)
         return coordinator.start()

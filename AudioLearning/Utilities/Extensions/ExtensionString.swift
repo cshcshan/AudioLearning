@@ -10,16 +10,21 @@ import Foundation
 import UIKit
 
 extension String {
-    
+
     func toDate(dateFormat: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat
         dateFormatter.locale = Locale(identifier: "en")
         return dateFormatter.date(from: self)
     }
-    
-    func convertHtml(backgroundColor: UIColor? = nil, fontColor: UIColor? = nil, fontName: String? = nil, fontSize: CGFloat? = nil) -> NSAttributedString {
-        var html = self.replacingOccurrences(of: "\n", with: "<br/>")
+
+    func convertHtml(
+        backgroundColor: UIColor? = nil,
+        fontColor: UIColor? = nil,
+        fontName: String? = nil,
+        fontSize: CGFloat? = nil
+    ) -> NSAttributedString {
+        var html = replacingOccurrences(of: "\n", with: "<br/>")
         if backgroundColor != nil || fontColor != nil || fontName != nil || fontSize == nil {
             var style = ""
             if let backgroundColor = backgroundColor { style += "background-color:\(backgroundColor.hexString);" }
@@ -30,11 +35,16 @@ extension String {
         }
         guard let data = html.data(using: .utf8) else { return NSAttributedString() }
         let options: [NSAttributedString.DocumentReadingOptionKey: Any]
-            = [.documentType: NSAttributedString.DocumentType.html,
-               .characterEncoding: String.Encoding.utf8.rawValue]
+            = [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue
+            ]
         guard let attrStr
-            = try? NSAttributedString(data: data, options: options,
-                                      documentAttributes: nil) else { return NSAttributedString() }
+            = try? NSAttributedString(
+                data: data,
+                options: options,
+                documentAttributes: nil
+            ) else { return NSAttributedString() }
         return attrStr
     }
 }

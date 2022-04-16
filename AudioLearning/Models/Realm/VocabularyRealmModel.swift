@@ -16,8 +16,8 @@ final class VocabularyRealmModel: Object {
     dynamic var word: String?
     dynamic var note: String?
     dynamic var updateDate: Date?
-    
+
     override static func primaryKey() -> String {
-        return "id"
+        "id"
     }
 }

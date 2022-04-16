@@ -10,7 +10,7 @@ import UIKit
 import XCTest
 
 class MusicPlayerPage: Page {
-    
+
     required init(_ app: XCUIApplication) {
         super.init(app)
     }

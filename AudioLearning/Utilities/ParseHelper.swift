@@ -10,7 +10,8 @@ import SwiftSoup
 
 protocol ParseHelperProtocol {
     func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel]
-    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String, episode: String) -> EpisodeDetailRealmModel?
+    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String, episode: String)
+        -> EpisodeDetailRealmModel?
 }
 
 enum HtmlQuery: String {
@@ -29,7 +30,7 @@ enum HtmlQuery: String {
 }
 
 final class ParseSixMinutesHelper: ParseHelperProtocol {
-    
+
     func parseHtmlToEpisodeModels(by htmlString: String, urlString: String) -> [EpisodeRealmModel] {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return [] }
         var episodeModels = getListToEpisodeModels(from: document)
@@ -38,8 +39,12 @@ final class ParseSixMinutesHelper: ParseHelperProtocol {
         }
         return episodeModels
     }
-    
-    func parseHtmlToEpisodeDetailModel(by htmlString: String, urlString: String, episode: String) -> EpisodeDetailRealmModel? {
+
+    func parseHtmlToEpisodeDetailModel(
+        by htmlString: String,
+        urlString: String,
+        episode: String
+    ) -> EpisodeDetailRealmModel? {
         guard let document = try? SwiftSoup.parse(htmlString, urlString) else { return nil }
         let model = EpisodeDetailRealmModel()
         model.episode = episode
@@ -51,12 +56,12 @@ final class ParseSixMinutesHelper: ParseHelperProtocol {
 }
 
 extension ParseSixMinutesHelper {
-    
+
     // MARK: List
-    
+
     private func getTopItemToEpisodeModels(from document: Document) -> EpisodeRealmModel? {
         guard let elements = try? document.select(HtmlQuery.smTopItem.rawValue),
-            let element = elements.first() else { return nil }
+              let element = elements.first() else { return nil }
         let model = EpisodeRealmModel()
         model.episode = getEpisode(by: element)
         model.title = getTitle(by: element)
@@ -66,10 +71,10 @@ extension ParseSixMinutesHelper {
         model.path = getPath(by: element)
         return model
     }
-    
+
     private func getListToEpisodeModels(from document: Document) -> [EpisodeRealmModel] {
         guard let elements = try? document.select(HtmlQuery.smList.rawValue) else { return [] }
-        return elements.map({ (element) -> EpisodeRealmModel in
+        return elements.map { element -> EpisodeRealmModel in
             let model = EpisodeRealmModel()
             model.episode = getEpisode(by: element)
             model.title = getTitle(by: element)
@@ -78,73 +83,73 @@ extension ParseSixMinutesHelper {
             model.imagePath = getImagePath(by: element)
             model.path = getPath(by: element)
             return model
-        })
+        }
     }
-    
+
     func getEpisode(by listElement: Element) -> String? {
         guard let episodes = try? listElement.select(HtmlQuery.smEpisode.rawValue),
-            let episode = episodes.first(),
-            let text = try? episode.text() else { return nil }
+              let episode = episodes.first(),
+              let text = try? episode.text() else { return nil }
         return text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     func getTitle(by listElement: Element) -> String? {
         guard let links = try? listElement.select(HtmlQuery.smTitle.rawValue),
-            let link = links.first(),
-            let title = try? link.text() else { return nil }
+              let link = links.first(),
+              let title = try? link.text() else { return nil }
         return title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     func getDesc(by listElement: Element) -> String? {
         guard let details = try? listElement.select(HtmlQuery.smDesc.rawValue),
-            let detail = details.first(),
-            let desc = try? detail.text() else { return nil }
+              let detail = details.first(),
+              let desc = try? detail.text() else { return nil }
         return desc.trimmingCharacters(in: .whitespaces)
     }
-    
+
     func getDate(by listElement: Element) -> String? {
         guard let episodeAndDates = try? listElement.select(HtmlQuery.smEpisodeAndDate.rawValue),
-            let episodeAndDate = episodeAndDates.first(),
-            let episodes = try? listElement.select(HtmlQuery.smEpisode.rawValue),
-            let episode = episodes.first() else { return nil }
+              let episodeAndDate = episodeAndDates.first(),
+              let episodes = try? listElement.select(HtmlQuery.smEpisode.rawValue),
+              let episode = episodes.first() else { return nil }
         try? episodeAndDate.removeChild(episode)
         guard let date = try? episodeAndDate.text() else { return nil }
         return date.replacingOccurrences(of: "/", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     func getImagePath(by listElement: Element) -> String? {
         guard let imgs = try? listElement.select(HtmlQuery.smImg.rawValue),
-            let img = imgs.first(),
-            let src = try? img.attr(HtmlQuery.smSrc.rawValue) else { return nil }
+              let img = imgs.first(),
+              let src = try? img.attr(HtmlQuery.smSrc.rawValue) else { return nil }
         return src.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     func getPath(by listElement: Element) -> String? {
         guard let links = try? listElement.select(HtmlQuery.smTitle.rawValue),
-            let link = links.first(),
-            let href = try? link.attr(HtmlQuery.smHref.rawValue) else { return nil }
+              let link = links.first(),
+              let href = try? link.attr(HtmlQuery.smHref.rawValue) else { return nil }
         return href.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
 extension ParseSixMinutesHelper {
-    
+
     // MARK: Detail
-    
+
     func getScriptHtml(by document: Document) -> String? {
         guard let scripts = try? document.select(HtmlQuery.smScript.rawValue),
-            let script = scripts.first() else { return nil }
+              let script = scripts.first() else { return nil }
         if let ulNodes = try? script.select(HtmlQuery.smUl.rawValue), let ulNode = ulNodes.first() {
             try? script.removeChild(ulNode)
         }
         guard let html = try? script.html() else { return nil }
         return html
     }
-    
+
     func getAudioLink(by document: Document) -> String? {
         guard let links = try? document.select(HtmlQuery.smAudioLink.rawValue),
-            let link = links.first(),
-            let href = try? link.attr(HtmlQuery.smHref.rawValue) else { return nil }
+              let link = links.first(),
+              let href = try? link.attr(HtmlQuery.smHref.rawValue) else { return nil }
         return href.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

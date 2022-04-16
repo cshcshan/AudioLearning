@@ -13,7 +13,7 @@ enum AppearanceModeType: Int {
     case light
 }
 
-struct Appearance {
+enum Appearance {
     private static var _mode: AppearanceModeType!
     static var mode: AppearanceModeType {
         get {
@@ -27,24 +27,26 @@ struct Appearance {
             UserDefaultManager.shared.appearanceMode = newValue
         }
     }
-    
+
     static var backgroundColor: UIColor {
-        return mode == .dark ? Dark.backgroundColor : Light.backgroundColor
+        mode == .dark ? Dark.backgroundColor : Light.backgroundColor
     }
+
     static var secondaryBgColor: UIColor {
-        return mode == .dark ? Dark.secondaryBgColor : Light.secondaryBgColor
+        mode == .dark ? Dark.secondaryBgColor : Light.secondaryBgColor
     }
+
     static var textColor: UIColor {
-        return mode == .dark ? Dark.textColor : Light.textColor
+        mode == .dark ? Dark.textColor : Light.textColor
     }
-    
-    private struct Dark {
+
+    private enum Dark {
         static let backgroundColor = UIColor(rgb: (65, 75, 61))
         static let secondaryBgColor = UIColor(rgb: (7, 17, 14))
         static let textColor = UIColor(rgb: (250, 250, 250))
     }
-    
-    private struct Light {
+
+    private enum Light {
         static let backgroundColor = UIColor(rgb: (250, 250, 250))
         static let secondaryBgColor = UIColor(rgb: (225, 225, 225))
         static let textColor = UIColor(rgb: (68, 68, 68))

@@ -9,7 +9,7 @@
 import UIKit
 
 final class FlashCardsFlowLayout: UICollectionViewFlowLayout {
-    
+
     override func prepare() {
         super.prepare()
         let space: CGFloat = 20.0

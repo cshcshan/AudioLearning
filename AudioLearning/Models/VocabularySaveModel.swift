@@ -7,8 +7,8 @@
 //
 
 struct VocabularySaveModel {
-    var word: String?
-    var note: String?
+    let word: String?
+    let note: String?
 
     init(word: String?, note: String?) {
         self.word = word

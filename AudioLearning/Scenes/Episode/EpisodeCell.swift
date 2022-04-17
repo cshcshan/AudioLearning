@@ -9,27 +9,23 @@
 import RxSwift
 import UIKit
 
-final class EpisodeCell: BaseTableViewCell {
+final class EpisodeCell: UITableViewCell {
+
+    // MARK: - IBOutlets
 
     @IBOutlet var containerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var descLabel: UILabel!
     @IBOutlet var indicatorView: UIActivityIndicatorView!
-    @IBOutlet var photoImageView: UIImageView! // remove weak mark because instance will be immediately deallocated because property is 'weak'
-    // remove weak mark because instance will be immediately deallocated because property is 'weak'
+    @IBOutlet var photoImageView: UIImageView!
     @IBOutlet var photoImageViewLeft: NSLayoutConstraint!
     @IBOutlet var photoImageViewRight: NSLayoutConstraint!
     @IBOutlet var photoImageViewTop: NSLayoutConstraint!
     @IBOutlet var photoImageViewBottom: NSLayoutConstraint!
     private var descLabelRight: NSLayoutConstraint!
 
-    private let darkBgTempImage = UIImage(named: "temp_pic-white")
-    private let lightBgTempImage = UIImage(named: "temp_pic")
-
-    private let highlightedSubject = PublishSubject<Bool>()
-    private let selectedSubject = PublishSubject<Bool>()
-    private var bag = DisposeBag()
+    // MARK: - Properties
 
     var viewModel: EpisodeCellViewModel? {
         didSet {
@@ -37,62 +33,75 @@ final class EpisodeCell: BaseTableViewCell {
         }
     }
 
+    private let darkBgTempImage = UIImage(named: "temp_pic-white")
+    private let lightBgTempImage = UIImage(named: "temp_pic")
+    private let bag = DisposeBag()
+
+    private var normalImage: UIImage? {
+        Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
+    }
+
+    private var highlightedImage: UIImage? {
+        Appearance.mode == .dark ? lightBgTempImage : darkBgTempImage
+    }
+
     // MARK: - View Lifecycle
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupColorBindings()
+        setupNotification()
+        setupUI()
+        updateUI(isHighlighted: isHighlighted || isSelected)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        bag = DisposeBag()
         photoImageView.image = nil
     }
 
-    override func layoutSubviews() {
-        separatorInset = .zero
-    }
-
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        highlightedSubject.onNext(highlighted)
+        updateUI(isHighlighted: highlighted)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        selectedSubject.onNext(selected)
+        updateUI(isHighlighted: selected)
     }
 
-    override func setupUIColor() {
-        super.setupUIColor()
-        highlightedSubject.onNext(false)
+    // MARK: - Setup
+
+    private func setupNotification() {
+        NotificationCenter.default.rx.notification(.changeAppearance)
+            .take(until: rx.deallocated)
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self, onNext: { `self`, _ in
+                self.updateUI(isHighlighted: self.isHighlighted || self.isSelected)
+            })
+            .disposed(by: bag)
     }
 
-    override func setupUI() {
+    private func setupUI() {
+        selectionStyle = .none
         // round-corner
         containerView.layer.cornerRadius = 10
         containerView.layer.masksToBounds = true
     }
 
-    private func setupColorBindings() {
-        Observable
-            .merge(highlightedSubject, selectedSubject)
-            .subscribe(onNext: { [weak self] isHighlighted in
-                guard let self = self else { return }
-                self.backgroundColor = Appearance.secondaryBgColor
-                self.containerView.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
-                self.titleLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
-                self.titleLabel.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
-                self.dateLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
-                self.dateLabel.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
-                self.descLabel.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
-                self.descLabel.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
-                if self.photoImageView.image == self.darkBgTempImage || self.photoImageView.image == self
-                    .lightBgTempImage {
-                    self.photoImageView.image = isHighlighted ? self.getHighlightedImage() : self.getNormalImage()
-                }
-                self.indicatorView.color = Appearance.mode == .dark ? .white : .gray
-            })
-            .disposed(by: bag)
+    private func updateUI(isHighlighted: Bool) {
+        backgroundColor = Appearance.secondaryBgColor
+
+        [containerView, titleLabel, dateLabel, descLabel].forEach {
+            $0?.backgroundColor = isHighlighted ? Appearance.textColor : Appearance.backgroundColor
+        }
+
+        [titleLabel, dateLabel, descLabel].forEach {
+            $0?.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
+        }
+
+        if photoImageView.image == darkBgTempImage || photoImageView.image == lightBgTempImage {
+            photoImageView.image = isHighlighted ? highlightedImage : normalImage
+        }
+
+        indicatorView.color = Appearance.mode == .dark ? .white : .gray
     }
 
     // MARK: - Bind
@@ -103,8 +112,9 @@ final class EpisodeCell: BaseTableViewCell {
         viewModel?.outputs.desc.drive(descLabel.rx.text).disposed(by: bag)
 
         viewModel?.outputs.image
-            .map { [weak self] image in image == nil ? self?.getNormalImage() : image }
-            .drive(photoImageView.rx.image).disposed(by: bag)
+            .map { [weak self] image in image == nil ? self?.normalImage : image }
+            .drive(photoImageView.rx.image)
+            .disposed(by: bag)
 
         viewModel?.outputs.imageRefreshing
             .map { !$0 }
@@ -122,46 +132,5 @@ final class EpisodeCell: BaseTableViewCell {
             )
             .emit(to: indicatorView.rx.isHidden)
             .disposed(by: bag)
-    }
-
-    private func getNormalImage() -> UIImage? {
-        Appearance.mode == .dark ? darkBgTempImage : lightBgTempImage
-    }
-
-    private func getHighlightedImage() -> UIImage? {
-        Appearance.mode == .dark ? lightBgTempImage : darkBgTempImage
-    }
-
-    private func hidePhotoImageView(_ isHidden: Bool) {
-        photoImageView.isHidden = isHidden
-        // remove first, then add constranits, otherwise app will get errors of auto-layout
-        if isHidden {
-            containerView.removeConstraint(photoImageViewLeft)
-            containerView.removeConstraint(photoImageViewRight)
-            containerView.removeConstraint(photoImageViewTop)
-            containerView.removeConstraint(photoImageViewBottom)
-            if descLabelRight == nil {
-                descLabelRight = NSLayoutConstraint(
-                    item: descLabel!,
-                    attribute: .right,
-                    relatedBy: .equal,
-                    toItem: containerView!,
-                    attribute: .right,
-                    multiplier: 1,
-                    constant: -10
-                )
-            }
-            containerView.addConstraint(descLabelRight)
-        } else {
-            if descLabelRight != nil {
-                containerView.removeConstraint(descLabelRight)
-            }
-            containerView.addConstraint(photoImageViewLeft)
-            containerView.addConstraint(photoImageViewRight)
-            containerView.addConstraint(photoImageViewTop)
-            containerView.addConstraint(photoImageViewBottom)
-        }
-        containerView.setNeedsLayout()
-        containerView.layoutIfNeeded()
     }
 }

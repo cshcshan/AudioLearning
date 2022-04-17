@@ -114,11 +114,10 @@ final class EpisodeListViewController: BaseViewController {
                 self.refreshControl.endRefreshing()
             })
             .bind(
-                to: tableView.rx.items(cellIdentifier: "EpisodeCell", cellType: EpisodeCell.self),
+                to: tableView.rx.items(cellIdentifier: EpisodeCell.cellIdentifier, cellType: EpisodeCell.self),
                 curriedArgument: { [weak self] row, model, cell in
                     guard let self = self else { return }
                     cell.accessibilityIdentifier = "EpisodeCell_\(row)"
-                    cell.selectionStyle = .none
                     self.viewModel.setCellViewModel
                         .take(1)
                         .subscribe(onNext: { episodeCellViewModel in

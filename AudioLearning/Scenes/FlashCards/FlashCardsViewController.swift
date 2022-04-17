@@ -48,7 +48,7 @@ final class FlashCardsViewController: BaseViewController {
                 curriedArgument: { [weak self] row, model, item in
                     guard let self = self else { return }
                     item.vocabularyRealm = model
-                    item.flip(self.viewModel.wordSideArray[row])
+                    item.event.flip.accept(self.viewModel.wordSideArray[row])
                 }
             )
             .disposed(by: bag)
@@ -66,12 +66,12 @@ final class FlashCardsViewController: BaseViewController {
             .disposed(by: bag)
 
         viewModel.isWordSide
-            .subscribe(onNext: { [weak self] isWordSide in
-                guard let self = self else { return }
+            .subscribe(with: self, onNext: { `self`, isWordSide in
                 guard let index = self.currentIndex,
-                      let cell = self.collectionView
-                      .cellForItem(at: IndexPath(item: index, section: 0)) as? FlashCardCell else { return }
-                cell.flip(isWordSide)
+                      let cell = self.collectionView.cellForItem(
+                          at: IndexPath(item: index, section: 0)
+                      ) as? FlashCardCell else { return }
+                cell.event.flip.accept(isWordSide)
             })
             .disposed(by: bag)
 

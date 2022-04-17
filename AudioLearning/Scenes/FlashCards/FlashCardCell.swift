@@ -6,44 +6,51 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
+import RxRelay
 import RxSwift
 import UIKit
 
 final class FlashCardCell: UICollectionViewCell {
 
+    struct Event {
+        let flip = PublishRelay<Bool>()
+    }
+
+    // MARK: - IBOutlets
+
     @IBOutlet var label: UILabel!
+
+    // MARK: - Properties
+
+    let event = Event()
 
     var vocabularyRealm: VocabularyRealm? {
         didSet {
-            bindUI()
+            updateUI()
         }
     }
 
     private var isWordSide = true
     private let bag = DisposeBag()
 
+    // MARK: - View Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupNotification()
         setupUI()
+        bind()
     }
 
+    // MARK: - Setup
+
     private func setupNotification() {
-        NotificationCenter.default.rx
-            .notification(.changeAppearance)
+        NotificationCenter.default.rx.notification(.changeAppearance)
             .take(until: rx.deallocated)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
+            .subscribe(with: self, onNext: { `self`, _ in
                 self.flip(self.isWordSide)
             })
             .disposed(by: bag)
-    }
-
-    func flip(_ isWordSide: Bool) {
-        self.isWordSide = isWordSide
-        contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor)
-        label.textColor = isWordSide ? Appearance.textColor : Appearance.backgroundColor
-        label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
     }
 
     private func setupUI() {
@@ -66,7 +73,28 @@ final class FlashCardCell: UICollectionViewCell {
         layer.shadowPath = UIBezierPath(roundedRect: roundedRect, cornerRadius: cornerRadius).cgPath
     }
 
-    private func bindUI() {
+    // MARK: - Update
+
+    private func updateUI() {
+        label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
+    }
+
+    // MARK: - Bindings
+
+    private func bind() {
+        event.flip.asSignal()
+            .emit(with: self, onNext: { `self`, isWordSide in
+                self.flip(isWordSide)
+            })
+            .disposed(by: bag)
+    }
+
+    // MARK: - Helpers
+
+    private func flip(_ isWordSide: Bool) {
+        self.isWordSide = isWordSide
+        contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor)
+        label.textColor = isWordSide ? Appearance.textColor : Appearance.backgroundColor
         label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
     }
 }

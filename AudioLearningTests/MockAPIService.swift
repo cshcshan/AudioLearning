@@ -16,6 +16,7 @@ class MockAPIService: APIServiceProtocol {
     private(set) var loadEpisodeDetail: AnyObserver<Episode>!
     private(set) var episodes: Observable<[EpisodeRealm]>!
     private(set) var episodeDetail: Observable<EpisodeDetailRealm?>!
+    private(set) var error: Observable<Error>!
 
     var episodesReturnValue: Observable<[EpisodeRealm]> = .empty()
     var episodeDetailReturnValue: Observable<EpisodeDetailRealm?> = .empty()
@@ -28,11 +29,15 @@ class MockAPIService: APIServiceProtocol {
         let loadEpisodeDetailSubject = PublishSubject<Episode>()
         self.loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
 
-        self.episodes = loadEpisodesSubject
-            .flatMapLatest { [weak self] _ -> Observable<[EpisodeRealm]> in
+        let loadResultEvent = loadEpisodesSubject
+            .flatMapLatest { [weak self] _ -> Observable<Event<[EpisodeRealm]>> in
                 guard let self = self else { return .empty() }
-                return self.episodesReturnValue
+                return self.episodesReturnValue.materialize()
             }
+            .share()
+
+        self.episodes = loadResultEvent.map(\.element).compactMap { $0 }
+        self.error = loadResultEvent.map(\.error).compactMap { $0 }
 
         self.episodeDetail = loadEpisodeDetailSubject
             .flatMapLatest { [weak self] episode -> Observable<EpisodeDetailRealm?> in

@@ -18,6 +18,7 @@ protocol APIServiceProtocol {
     // Outputs
     var episodes: Observable<[EpisodeRealm]>! { get }
     var episodeDetail: Observable<EpisodeDetailRealm?>! { get }
+    var error: Observable<Error>! { get }
 
     func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void)
 }
@@ -39,6 +40,7 @@ final class APIService: APIServiceProtocol {
     // Outputs
     private(set) var episodes: Observable<[EpisodeRealm]>!
     private(set) var episodeDetail: Observable<EpisodeDetailRealm?>!
+    private(set) var error: Observable<Error>!
 
     private var urlSession: URLSession
     private var parseSMHelper: ParseSixMinutesHelper
@@ -61,8 +63,8 @@ final class APIService: APIServiceProtocol {
         let loadEpisodeDetailSubject = PublishSubject<Episode>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
 
-        episodes = loadEpisodesSubject
-            .flatMapLatest { [weak self] _ -> Observable<[EpisodeRealm]> in
+        let loadResultEvent = loadEpisodesSubject
+            .flatMapLatest { [weak self] _ -> Observable<Event<[EpisodeRealm]>> in
                 guard let self = self else { return .empty() }
                 guard let url = URLPath.episodeList.url else {
                     return .error(Errors.urlIsNull)
@@ -80,7 +82,12 @@ final class APIService: APIServiceProtocol {
                         }
                         return self.parseSMHelper.parseHtmlToEpisodeModels(by: html, urlString: url.absoluteString)
                     }
+                    .materialize()
             }
+            .share()
+
+        episodes = loadResultEvent.map(\.element).compactMap { $0 }
+        error = loadResultEvent.map(\.error).compactMap { $0 }
 
         episodeDetail = loadEpisodeDetailSubject
             .flatMapLatest { [weak self] episode -> Observable<EpisodeDetailRealm?> in

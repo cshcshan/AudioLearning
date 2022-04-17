@@ -14,7 +14,7 @@ import XCTest
 @testable import AudioLearning
 
 // swiftlint:disable force_try
-class EpisodeListViewModelTests: XCTestCase {
+final class EpisodeListViewModelTests: XCTestCase {
 
     var sut: EpisodeListViewModel!
     var apiService: MockAPIService!
@@ -39,7 +39,7 @@ class EpisodeListViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testEpisodes() {
+    func test_episodes() {
         let bundle = Bundle(for: type(of: self))
         let urlString = bundle.path(forResource: "6-minute-english", ofType: "html")!
         let url = URL(fileURLWithPath: urlString)
@@ -58,160 +58,58 @@ class EpisodeListViewModelTests: XCTestCase {
         apiService.episodesReturnValue = .just(episodesModels)
 
         // Create a MockObserver<[EpisodeModel]>
-        let episodes = scheduler.createObserver([Episode].self)
+        let cellViewModels = scheduler.createObserver([EpisodeCellViewModel].self)
 
-        // Output combines with the MockObserver(episodes above)
-        sut.episodes
-            .bind(to: episodes)
-            .disposed(by: bag)
+        // Output combines with the MockObserver(cellViewModels above)
+        sut.state.cellViewModels.drive(cellViewModels).disposed(by: bag)
 
         // MockObservable combines with Input
         scheduler
             .createColdObservable([
-                .next(0, ()),
-                .next(10, ()),
-                .next(200, ())
+                .next(0, false),
+                .next(10, false),
+                .next(200, false)
             ])
-            .bind(to: sut.reload)
+            .bind(to: sut.event.fetchDataWithIsFirstTime)
             .disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(episodes.events.count, 3)
+        XCTAssertEqual(cellViewModels.events.count, 4)
 
-        let firstModel = episodes.events.first!.value.element!.first!
-        XCTAssertEqual(firstModel, expectingModel)
+        let secondModel = cellViewModels.events[1].value.element!.first!
+        XCTAssertEqual(secondModel.title, expectingModel.title)
+        XCTAssertEqual(secondModel.desc, expectingModel.desc)
+        XCTAssertEqual(secondModel.date, "2019/8/22")
     }
 
-    func testRefreshing() {
-        let refreshing = scheduler.createObserver(Bool.self)
-        sut.refreshing
-            .bind(to: refreshing)
-            .disposed(by: bag)
+    func test_isRefreshing() {
+        let isRefreshing = scheduler.createObserver(Bool.self)
+        sut.state.isRefreshing.drive(isRefreshing).disposed(by: bag)
 
         scheduler
             .createColdObservable([
-                .next(0, ()),
-                .next(10, ())
+                .next(0, true),
+                .next(10, true)
             ])
-            .bind(to: sut.initalLoad)
+            .bind(to: sut.event.fetchDataWithIsFirstTime)
             .disposed(by: bag)
 
-        // execute reload.flatMapLatest by episodes.subscribe()
-        sut.episodes
-            .subscribe()
-            .disposed(by: bag)
+        // execute reload.flatMapLatest by cellViewModels.subscribe()
+        sut.state.cellViewModels.drive().disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(refreshing.events.count, 2)
-        XCTAssertEqual(refreshing.events, [
+        XCTAssertEqual(isRefreshing.events.count, 3)
+        XCTAssertEqual(isRefreshing.events, [
+            .next(0, false),
             .next(0, true),
             .next(10, true)
         ])
     }
 
-    func testShowEpisodeDetail() {
-        var id = "Episode 190815"
-        var title = "Cryptocurrencies"
-        var desc = "Libra, Bitcoin... would you invest in digital money?"
-        var date = "15 Aug 2019".date(withDateFormat: "dd MMM yyyy")
-        var imagePath = "http://ichef.bbci.co.uk/images/ic/624xn/p07hjdrn.jpg"
-        var path = "/learningenglish/english/features/6-minute-english/ep-190815"
-        let episode190815 = Episode(
-            id: id,
-            title: title,
-            desc: desc,
-            date: date,
-            imagePath: imagePath,
-            path: path
-        )
-
-        id = "Episode 190822"
-        title = "Does your age affect your political views?"
-        desc = "Age and political views"
-        date = "22 Aug 2019".date(withDateFormat: "dd MMM yyyy")
-        imagePath = ""
-        path = "/learningenglish/english/features/6-minute-english/ep-190822"
-        let episode190822 = Episode(
-            id: id,
-            title: title,
-            desc: desc,
-            date: date,
-            imagePath: imagePath,
-            path: path
-        )
-
-        let showEpisodeDetail = scheduler.createObserver(Episode.self)
-        sut.showEpisodeDetail
-            .bind(to: showEpisodeDetail)
-            .disposed(by: bag)
-
-        scheduler
-            .createColdObservable([
-                .next(10, episode190815),
-                .next(20, episode190822)
-            ])
-            .bind(to: sut.selectEpisode)
-            .disposed(by: bag)
-
-        scheduler.start()
-
-        XCTAssertEqual(showEpisodeDetail.events.count, 2)
-        XCTAssertEqual(showEpisodeDetail.events, [
-            .next(10, episode190815),
-            .next(20, episode190822)
-        ])
-    }
-
-    func testShowVocabulary() {
-        let showVocabulary = scheduler.createObserver(Void.self)
-        sut.showVocabulary
-            .bind(to: showVocabulary)
-            .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.tapVocabulary)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(showVocabulary.events.count, 2)
-    }
-
-    func testGetCellViewModel() {
-        let bundle = Bundle(for: type(of: self))
-        let urlString = bundle.path(forResource: "6-minute-english", ofType: "html")!
-        let url = URL(fileURLWithPath: urlString)
-        let html = try! String(contentsOf: url)
-        let episodesModels = ParseSixMinutesHelper().parseHtmlToEpisodeModels(by: html, urlString: urlString)
-        apiService.episodesReturnValue = .just(episodesModels)
-
-        sut.episodes
-            .subscribe()
-            .disposed(by: bag)
-        scheduler
-            .createColdObservable([.next(10, ())])
-            .bind(to: sut.reload)
-            .disposed(by: bag)
-
-        let setCellViewModel = scheduler.createObserver(EpisodeCellViewModel.self)
-        sut.setCellViewModel
-            .bind(to: setCellViewModel)
-            .disposed(by: bag)
-        scheduler
-            .createColdObservable([
-                .next(200, 1),
-                .next(300, 2)
-            ])
-            .bind(to: sut.getCellViewModel)
-            .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(setCellViewModel.events.count, 2)
-    }
-
-    func testInit_WithError() {
-        let error = NSError(domain: "unit test", code: 2, userInfo: nil)
+    func test_init_withError() {
+        let error = NSError(domain: "unit test", code: 100, userInfo: nil)
         let expectingModel = AlertModel(
             title: "Get Episode List Error",
             message: error.localizedDescription
@@ -219,22 +117,44 @@ class EpisodeListViewModelTests: XCTestCase {
         apiService.episodesReturnValue = .error(error)
 
         let alert = scheduler.createObserver(AlertModel.self)
-        sut.alert
-            .bind(to: alert)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(300, ())])
-            .bind(to: sut.reload)
+        sut.event.showAlert.bind(to: alert).disposed(by: bag)
+
+        scheduler.createColdObservable([.next(300, false)])
+            .bind(to: sut.event.fetchDataWithIsFirstTime)
             .disposed(by: bag)
 
-        // execute reload.flatMapLatest by episodes.subscribe()
-        sut.episodes
-            .subscribe()
-            .disposed(by: bag)
+        // execute reload.flatMapLatest by cellViewModels.subscribe()
+        sut.state.cellViewModels.drive().disposed(by: bag)
 
         scheduler.start()
 
         XCTAssertEqual(alert.events.count, 1)
         XCTAssertEqual(alert.events, [.next(300, expectingModel)])
+    }
+
+    func test_init_withConsecutiveError() {
+        let error = NSError(domain: "unit test", code: 101, userInfo: nil)
+        let expectingModel = AlertModel(
+            title: "Get Episode List Error",
+            message: error.localizedDescription
+        )
+        apiService.episodesReturnValue = .error(error)
+
+        let alert = scheduler.createObserver(AlertModel.self)
+        sut.event.showAlert.bind(to: alert).disposed(by: bag)
+
+        scheduler.createColdObservable([.next(300, false), .next(500, false)])
+            .bind(to: sut.event.fetchDataWithIsFirstTime)
+            .disposed(by: bag)
+
+        // execute reload.flatMapLatest by cellViewModels.subscribe()
+        sut.state.cellViewModels
+            .drive().disposed(by: bag)
+
+        scheduler.start()
+
+        XCTAssertEqual(alert.events.count, 2)
+        XCTAssertEqual(alert.events, [.next(300, expectingModel), .next(500, expectingModel)])
     }
 }
 

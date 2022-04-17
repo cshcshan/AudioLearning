@@ -34,12 +34,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
         let realmService = RealmService<EpisodeRealm>()
         let viewModel = EpisodeListViewModel(apiService: apiService, realmService: realmService)
 
-        // Note:
-        //   If didn't store childCoordinator to BaseCoordinator.childCoordinators,
-        //   the observable 'showEpisodeDetail' from viewModel will be disposed at the end of AppCoordinator.
-        viewModel.showEpisodeDetail
-            .subscribe(onNext: { [weak self] episode in
-                guard let self = self else { return }
+        viewModel.event.episodeSelectedWithData.asSignal()
+            .emit(with: self, onNext: { `self`, episode in
                 self.showEpisodeDetail(apiService: apiService, episode: episode)
             })
             .disposed(by: bag)
@@ -57,7 +53,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
         viewController.viewModel = viewModel
         navigationController = UINavigationController(rootViewController: viewController)
 
-        viewModel.showVocabulary
+        viewModel.event.vocabularyTapped
+            .observe(on: MainScheduler.instance)
             .flatMapLatest { [weak self] _ in self?.showVocabulary(episodeID: nil) ?? .empty() }
             .subscribe()
             .disposed(by: bag)

@@ -12,118 +12,92 @@ import RxSwift
 
 final class EpisodeListViewModel: BaseViewModel {
 
-    // Input
-    private(set) var initalLoad: AnyObserver<Void>!
-    private(set) var reload: AnyObserver<Void>!
-    private(set) var selectEpisode: AnyObserver<Episode>!
-    private(set) var selectIndexPath: AnyObserver<IndexPath>!
-    private(set) var getCellViewModel: AnyObserver<Int>!
-    private(set) var tapVocabulary: AnyObserver<Void>!
+    struct State {
+        let cellViewModels: Driver<[EpisodeCellViewModel]>
+        let isRefreshing: Driver<Bool>
+    }
+
+    struct Event {
+        let fetchDataWithIsFirstTime = PublishRelay<Bool>()
+        let episodeSelected = PublishRelay<Int>()
+        let episodeSelectedWithData = PublishRelay<Episode>()
+        let vocabularyTapped = PublishRelay<Void>()
+        let showAlert = PublishRelay<AlertModel>()
+    }
+
+    // MARK: - Properties
+
+    let state: State
+    let event = Event()
 
     // Output
-    private(set) var episodes: Observable<[Episode]>!
-    private(set) var alert: Observable<AlertModel>!
-    private(set) var refreshing: Observable<Bool>!
-    private(set) var showEpisodeDetail: Observable<Episode>!
-    private(set) var getSelectEpisodeCell: Observable<IndexPath>!
-    private(set) var setCellViewModel: Observable<EpisodeCellViewModel>!
-    private(set) var showVocabulary: Observable<Void>!
-
-    private let initalLoadSubject = PublishSubject<Void>()
-    private let reloadSubject = PublishSubject<Void>()
-    private let selectEpisodeSubject = PublishSubject<Episode>()
-    private let selectIndexPathSubject = PublishSubject<IndexPath>()
-    private let getCellViewModelSubject = PublishSubject<Int>()
-    private let tapVocabularySubject = PublishSubject<Void>()
-    private let alertSubject = PublishSubject<AlertModel>()
-    private let refreshingSubject = PublishSubject<Bool>()
+    private let cellViewModels = BehaviorRelay<[EpisodeCellViewModel]>(value: [])
+    private let isRefreshing = BehaviorRelay<Bool>(value: false)
 
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeRealm>!
-    private var cellViewModels: [EpisodeCellViewModel?]!
+
+    private var episodes: [Episode] = []
 
     init(apiService: APIServiceProtocol, realmService: RealmService<EpisodeRealm>) {
         self.apiService = apiService
         self.realmService = realmService
+
+        self.state = State(
+            cellViewModels: cellViewModels.asDriver(onErrorJustReturn: []),
+            isRefreshing: isRefreshing.asDriver()
+        )
+
         super.init()
 
-        self.initalLoad = initalLoadSubject.asObserver()
-        self.reload = reloadSubject.asObserver()
-        self.selectEpisode = selectEpisodeSubject.asObserver()
-        self.selectIndexPath = selectIndexPathSubject.asObserver()
-        self.getSelectEpisodeCell = selectIndexPathSubject.asObservable()
-        self.showEpisodeDetail = selectEpisodeSubject.asObservable()
-        self.getCellViewModel = getCellViewModelSubject.asObserver()
-        self.tapVocabulary = tapVocabularySubject.asObserver()
-        self.showVocabulary = tapVocabularySubject.asObservable()
-        self.alert = alertSubject.asObservable()
-        self.refreshing = refreshingSubject.asObservable()
-
-        reloadDataFromServer()
-            .subscribe()
-            .disposed(by: bag)
-
-        self.episodes = realmService.allObjects
-            .flatMapLatest { [weak self] episodeRealms -> Observable<[Episode]> in
-                guard let self = self else { return .empty() }
-                var episodes = [Episode]()
-                for episodeRealm in episodeRealms {
-                    let episode = Episode(from: episodeRealm)
-                    episodes.append(episode)
-                }
-                self.cellViewModels = [EpisodeCellViewModel?](repeating: nil, count: episodes.count)
-                return .just(episodes)
-            }
-
-        initalLoadSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.loadData()
-                self.refreshingSubject.onNext(true)
-                apiService.loadEpisodes.onNext(())
-            })
-            .disposed(by: bag)
-
-        reloadSubject
-            .subscribe(onNext: { _ in
-                apiService.loadEpisodes.onNext(())
-            })
-            .disposed(by: bag)
-
-        self.setCellViewModel = getCellViewModelSubject
-            .flatMapLatest { [weak self] index -> Observable<EpisodeCellViewModel> in
-                guard let self = self else { return .empty() }
-                var cellViewModel = self.cellViewModels[index]
-                if cellViewModel == nil {
-                    cellViewModel = EpisodeCellViewModel(apiService: apiService)
-                }
-                self.cellViewModels[index] = cellViewModel
-                return .just(cellViewModel!)
-            }
-    }
-
-    private func reloadDataFromServer() -> Observable<Void> {
         apiService.episodes
-            .flatMapLatest { [weak self] episodeRealms -> Observable<Void> in
-                guard let self = self else { return .empty() }
-                _ = self.realmService.add(objects: episodeRealms)
-                self.loadData()
-                self.refreshingSubject.onNext(false)
-                return .empty()
+            .flatMapLatest { [weak self] episodeRealms in
+                self?.realmService.add(objects: episodeRealms) ?? .empty()
             }
-            .catch { [weak self] error -> Observable<Void> in
-                guard let self = self else { return .empty() }
-                self.refreshingSubject.onNext(false)
-                let alertModel = AlertModel(
-                    title: "Get Episode List Error",
-                    message: error.localizedDescription
-                )
-                self.alertSubject.onNext(alertModel)
-                return self.reloadDataFromServer()
+            .do(onNext: { [weak self] _ in self?.fetchDataFromLocalDB() })
+            .map { _ in false }
+            .bind(to: isRefreshing)
+            .disposed(by: bag)
+
+        apiService.error
+            .map { error in AlertModel(title: "Get Episode List Error", message: error.localizedDescription) }
+            .bind(to: event.showAlert)
+            .disposed(by: bag)
+
+        realmService.allObjects
+            .map { [weak self] episodeRealms in
+                self?.episodes = []
+                return episodeRealms.map { episodeRealm in
+                    let episode = Episode(from: episodeRealm)
+                    self?.episodes.append(episode)
+                    return EpisodeCellViewModel(apiService: apiService, episode: episode)
+                }
             }
+            .bind(to: cellViewModels)
+            .disposed(by: bag)
+
+        let isFirstTimeFetchData = event.fetchDataWithIsFirstTime.filter { $0 }.share()
+        isFirstTimeFetchData.map { _ in true }.bind(to: isRefreshing).disposed(by: bag)
+        isFirstTimeFetchData
+            .map { _ in }
+            .do(onNext: { [weak self] in self?.fetchDataFromLocalDB() })
+            .bind(to: apiService.loadEpisodes)
+            .disposed(by: bag)
+
+        event.fetchDataWithIsFirstTime.filter { !$0 }.map { _ in }.bind(to: apiService.loadEpisodes).disposed(by: bag)
+
+        event.episodeSelected
+            .compactMap { [weak self] index -> Episode? in
+                guard let self = self, self.episodes.indices.contains(index) else { return nil }
+                return self.episodes[index]
+            }
+            .bind(to: event.episodeSelectedWithData)
+            .disposed(by: bag)
     }
 
-    private func loadData() {
+    // MARK: - Helpers
+
+    private func fetchDataFromLocalDB() {
         realmService.loadAll.onNext(["id": false])
     }
 }

@@ -16,6 +16,7 @@ final class EpisodeListViewController: BaseViewController {
     private let refreshControl = UIRefreshControl()
 
     var viewModel: EpisodeListViewModel!
+    // This is for push or pop animator
     var selectedCell: EpisodeCell?
 
     private var showEmptyView: ((UITableView) -> Void) = { tableView in
@@ -37,6 +38,8 @@ final class EpisodeListViewController: BaseViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+
+        viewModel.event.fetchDataWithIsFirstTime.accept(true)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -93,53 +96,38 @@ final class EpisodeListViewController: BaseViewController {
         let image = UIImage(named: "dictionary-filled")
         let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
         vocabularyItem.accessibilityIdentifier = "VocabularyButton"
-        vocabularyItem.rx.tap
-            .bind(to: viewModel.tapVocabulary)
-            .disposed(by: bag)
+        vocabularyItem.rx.tap.bind(to: viewModel.event.vocabularyTapped).disposed(by: bag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
         navigationItem.title = "6 Minute English"
     }
 
     private func setupBindings() {
         // ViewModel's output to the ViewController
-        viewModel.episodes
-            .observe(on: MainScheduler.instance)
-            .do(onNext: { [weak self] episodes in
+        viewModel.state.cellViewModels
+            .do(onNext: { [weak self] cellViewModels in
                 guard let self = self else { return }
-                if episodes.isEmpty {
+                if cellViewModels.isEmpty {
                     self.showEmptyView(self.tableView)
                 } else {
                     self.hideEmptyView(self.tableView)
                 }
                 self.refreshControl.endRefreshing()
             })
-            .bind(
-                to: tableView.rx.items(cellIdentifier: EpisodeCell.cellIdentifier, cellType: EpisodeCell.self),
-                curriedArgument: { [weak self] row, model, cell in
-                    guard let self = self else { return }
-                    cell.accessibilityIdentifier = "EpisodeCell_\(row)"
-                    self.viewModel.setCellViewModel
-                        .take(1)
-                        .subscribe(onNext: { episodeCellViewModel in
-                            cell.viewModel = episodeCellViewModel
-                            cell.viewModel?.inputs.load.onNext(model)
-                        })
-                        .disposed(by: self.bag)
-                    self.viewModel.getCellViewModel.onNext(row)
-                }
-            )
+            .drive(
+                tableView.rx.items(cellIdentifier: EpisodeCell.cellIdentifier, cellType: EpisodeCell.self)
+            ) { [weak self] row, item, cell in
+                guard let self = self else { return }
+                cell.accessibilityIdentifier = "EpisodeCell_\(row)"
+                cell.viewModel = item
+            }
             .disposed(by: bag)
 
         if !isUITesting {
-            viewModel.refreshing
-                .bind(to: refreshControl.rx.isRefreshing)
-                .disposed(by: bag)
+            viewModel.state.isRefreshing.drive(refreshControl.rx.isRefreshing).disposed(by: bag)
         }
 
-        viewModel.alert
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] alert in
-                guard let self = self else { return }
+        viewModel.event.showAlert.asSignal()
+            .emit(with: self, onNext: { `self`, alert in
                 self.showConfirmAlert(
                     title: alert.title,
                     message: alert.message,
@@ -150,30 +138,19 @@ final class EpisodeListViewController: BaseViewController {
             .disposed(by: bag)
 
         if !isUITesting {
-            refreshControl.rx
-                .controlEvent(.valueChanged)
-                .bind(to: viewModel.reload)
+            refreshControl.rx.controlEvent(.valueChanged)
+                .map { _ in false }
+                .bind(to: viewModel.event.fetchDataWithIsFirstTime)
                 .disposed(by: bag)
         }
 
-        viewModel.getSelectEpisodeCell
-            .subscribe(onNext: { [weak self] indexPath in
+        tableView.rx.itemSelected
+            .do(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
                 self.selectedCell = self.tableView.cellForRow(at: indexPath) as? EpisodeCell
             })
+            .map(\.row)
+            .bind(to: viewModel.event.episodeSelected)
             .disposed(by: bag)
-
-        tableView.rx
-            .modelSelected(Episode.self)
-            .bind(to: viewModel.selectEpisode)
-            .disposed(by: bag)
-
-        tableView.rx
-            .itemSelected
-            .bind(to: viewModel.selectIndexPath)
-            .disposed(by: bag)
-
-        // ViewController's UI actions to ViewModel
-        viewModel.initalLoad.onNext(())
     }
 }

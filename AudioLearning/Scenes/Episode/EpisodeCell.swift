@@ -97,6 +97,10 @@ final class EpisodeCell: UITableViewCell {
             $0?.textColor = isHighlighted ? Appearance.backgroundColor : Appearance.textColor
         }
 
+        titleLabel.text = viewModel?.title
+        dateLabel.text = viewModel?.date
+        descLabel.text = viewModel?.desc
+
         if photoImageView.image == darkBgTempImage || photoImageView.image == lightBgTempImage {
             photoImageView.image = isHighlighted ? highlightedImage : normalImage
         }
@@ -107,10 +111,6 @@ final class EpisodeCell: UITableViewCell {
     // MARK: - Bind
 
     private func bindViewModel() {
-        viewModel?.outputs.title.drive(titleLabel.rx.text).disposed(by: bag)
-        viewModel?.outputs.date.drive(dateLabel.rx.text).disposed(by: bag)
-        viewModel?.outputs.desc.drive(descLabel.rx.text).disposed(by: bag)
-
         viewModel?.outputs.image
             .map { [weak self] image in image == nil ? self?.normalImage : image }
             .drive(photoImageView.rx.image)

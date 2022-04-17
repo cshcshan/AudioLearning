@@ -11,9 +11,8 @@ import RxTest
 import XCTest
 @testable import AudioLearning
 
-class EpisodeCellViewModelTests: XCTestCase {
+final class EpisodeCellViewModelTests: XCTestCase {
 
-    var sut: EpisodeCellViewModel!
     var apiService: APIServiceProtocol!
     var episode190815: Episode!
     var episode190822: Episode!
@@ -42,74 +41,42 @@ class EpisodeCellViewModelTests: XCTestCase {
         )
         episodeNil = Episode()
         apiService = MockAPIService()
-        sut = EpisodeCellViewModel(apiService: apiService)
         scheduler = TestScheduler(initialClock: 0)
         bag = DisposeBag()
     }
 
     override func tearDown() {
-        sut = nil
         apiService = nil
         super.tearDown()
     }
 
     func testTitle() {
-        let title = scheduler.createObserver(String?.self)
-        sut.outputs.title.drive(title).disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, episode190815),
-            .next(20, episode190822),
-            .next(30, episodeNil)
-        ])
-        .bind(to: sut.inputs.load)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(title.events.count, 4)
-        XCTAssertEqual(title.events, [
-            .next(0, nil),
-            .next(10, "Cryptocurrencies"),
-            .next(20, "Does your age affect your political views?"),
-            .next(30, nil)
-        ])
+        let sut1 = EpisodeCellViewModel(apiService: apiService, episode: episode190815)
+        let sut2 = EpisodeCellViewModel(apiService: apiService, episode: episode190822)
+        let sut3 = EpisodeCellViewModel(apiService: apiService, episode: episodeNil)
+
+        XCTAssertEqual(sut1.title, "Cryptocurrencies")
+        XCTAssertEqual(sut2.title, "Does your age affect your political views?")
+        XCTAssertEqual(sut3.title, nil)
     }
 
     func testDate() {
-        let date = scheduler.createObserver(String?.self)
-        sut.outputs.date.drive(date).disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, episode190815),
-            .next(20, episode190822),
-            .next(30, episodeNil)
-        ])
-        .bind(to: sut.inputs.load)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(date.events.count, 4)
-        XCTAssertEqual(date.events, [
-            .next(0, nil),
-            .next(10, "2019/8/15"),
-            .next(20, "2019/8/22"),
-            .next(30, nil)
-        ])
+        let sut1 = EpisodeCellViewModel(apiService: apiService, episode: episode190815)
+        let sut2 = EpisodeCellViewModel(apiService: apiService, episode: episode190822)
+        let sut3 = EpisodeCellViewModel(apiService: apiService, episode: episodeNil)
+
+        XCTAssertEqual(sut1.date, "2019/8/15")
+        XCTAssertEqual(sut2.date, "2019/8/22")
+        XCTAssertEqual(sut3.date, nil)
     }
 
     func testDesc() {
-        let desc = scheduler.createObserver(String?.self)
-        sut.outputs.desc.drive(desc).disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, episode190815),
-            .next(20, episode190822),
-            .next(30, episodeNil)
-        ])
-        .bind(to: sut.inputs.load)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(desc.events.count, 4)
-        XCTAssertEqual(desc.events, [
-            .next(0, nil),
-            .next(10, "Libra, Bitcoin... would you invest in digital money?"),
-            .next(20, "Age and political views"),
-            .next(30, nil)
-        ])
+        let sut1 = EpisodeCellViewModel(apiService: apiService, episode: episode190815)
+        let sut2 = EpisodeCellViewModel(apiService: apiService, episode: episode190822)
+        let sut3 = EpisodeCellViewModel(apiService: apiService, episode: episodeNil)
+
+        XCTAssertEqual(sut1.desc, "Libra, Bitcoin... would you invest in digital money?")
+        XCTAssertEqual(sut2.desc, "Age and political views")
+        XCTAssertEqual(sut3.desc, nil)
     }
 }

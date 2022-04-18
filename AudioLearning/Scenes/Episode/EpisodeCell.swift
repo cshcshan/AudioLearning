@@ -111,12 +111,12 @@ final class EpisodeCell: UITableViewCell {
     // MARK: - Bind
 
     private func bindViewModel() {
-        viewModel?.outputs.image
+        viewModel?.state.image
             .map { [weak self] image in image == nil ? self?.normalImage : image }
             .drive(photoImageView.rx.image)
             .disposed(by: bag)
 
-        viewModel?.outputs.imageRefreshing
+        viewModel?.state.isImageRefreshing
             .map { !$0 }
             .do(
                 onNext: { [indicatorView] isRefreshing in
@@ -130,7 +130,7 @@ final class EpisodeCell: UITableViewCell {
                     }
                 }
             )
-            .emit(to: indicatorView.rx.isHidden)
+            .drive(indicatorView.rx.isHidden)
             .disposed(by: bag)
     }
 }

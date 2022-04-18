@@ -12,21 +12,21 @@ import RxSwift
 
 final class EpisodeCellViewModel: BaseViewModel {
 
-    struct Outputs {
+    struct State {
         let image: Driver<UIImage?>
-        let imageRefreshing: Signal<Bool>
+        let isImageRefreshing: Driver<Bool>
     }
 
     // MARK: - Properties
 
-    let outputs: Outputs
+    let state: State
 
     let title: String?
     let date: String?
     let desc: String?
 
     private let image = BehaviorRelay<UIImage?>(value: nil)
-    private let imageRefreshing = PublishRelay<Bool>()
+    private let isImageRefreshing = BehaviorRelay<Bool>(value: false)
 
     private var apiService: APIServiceProtocol?
 
@@ -35,18 +35,15 @@ final class EpisodeCellViewModel: BaseViewModel {
         self.title = episode.title
         self.date = episode.date?.string(withDateFormat: "yyyy/M/d")
         self.desc = episode.desc
-        self.outputs = Outputs(
-            image: image.asDriver(),
-            imageRefreshing: imageRefreshing.asSignal()
-        )
+        self.state = State(image: image.asDriver(), isImageRefreshing: isImageRefreshing.asDriver())
 
         super.init()
 
         if let imagePath = episode.imagePath {
-            imageRefreshing.accept(true)
+            isImageRefreshing.accept(true)
             apiService.getImage(path: imagePath) { [weak self] image in
                 self?.image.accept(image)
-                self?.imageRefreshing.accept(false)
+                self?.isImageRefreshing.accept(false)
             }
         } else {
             image.accept(nil)

@@ -51,8 +51,7 @@ class BaseViewController: UIViewController, StoryboardGettable {
     }
 
     func setupNotification() {
-        NotificationCenter.default.rx
-            .notification(.changeAppearance)
+        NotificationCenter.default.rx.notification(.changeAppearance)
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -149,7 +148,7 @@ extension BaseViewController {
         setupConstraintsOnBottomRight(
             on: themeButton,
             to: item,
-            constraints: (right: -20, bottom: -10),
+            constraints: (right: -30, bottom: -50),
             size: (width: side, height: side)
         )
     }

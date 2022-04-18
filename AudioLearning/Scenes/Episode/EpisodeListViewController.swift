@@ -12,8 +12,16 @@ import UIKit
 
 final class EpisodeListViewController: BaseViewController {
 
+    // MARK: - IBOutlets
+
     @IBOutlet var tableView: UITableView!
+
+    // MARK: - Views
+
     private let refreshControl = UIRefreshControl()
+    private let barAppearance = UINavigationBarAppearance()
+
+    // MARK: - Properties
 
     var viewModel: EpisodeListViewModel!
     // This is for push or pop animator
@@ -34,6 +42,8 @@ final class EpisodeListViewController: BaseViewController {
         tableView.hideEmptyView(nil, separatorStyle: .singleLine)
     }
 
+    // MARK: - View Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -47,10 +57,11 @@ final class EpisodeListViewController: BaseViewController {
         animatePlayingButton()
     }
 
+    // MARK: - Setup
+
     override func setupNotification() {
         super.setupNotification()
-        NotificationCenter.default.rx
-            .notification(.isPlaying)
+        NotificationCenter.default.rx.notification(.isPlaying)
             .take(until: rx.deallocated)
             .subscribe(onNext: { [weak self] notification in
                 guard let self = self else { return }
@@ -64,14 +75,21 @@ final class EpisodeListViewController: BaseViewController {
     override func setupUIColor() {
         super.setupUIColor()
         view.backgroundColor = Appearance.backgroundColor
+
+        barAppearance.backgroundColor = Appearance.backgroundColor
+        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+        navigationController?.navigationBar.standardAppearance = barAppearance
+
         tableView.backgroundColor = Appearance.secondaryBgColor
         tableView.separatorColor = tableView.backgroundColor
         if tableView.backgroundView != nil { showEmptyView(tableView) }
+
         refreshControl.tintColor = Appearance.textColor
     }
 
     private func setupUI() {
         tableView.contentInsetAdjustmentBehavior = .never
+        setupNavigationBarAppearance()
         setupNavigationBar()
         // refreshControl
         if !isUITesting {
@@ -90,6 +108,13 @@ final class EpisodeListViewController: BaseViewController {
         showEmptyView(tableView)
         // themeButton
         showThemeButton(viewModel, to: tableView)
+    }
+
+    private func setupNavigationBarAppearance() {
+        barAppearance.configureWithDefaultBackground()
+        barAppearance.backgroundColor = Appearance.backgroundColor
+        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+        navigationController?.navigationBar.standardAppearance = barAppearance
     }
 
     private func setupNavigationBar() {
@@ -115,8 +140,7 @@ final class EpisodeListViewController: BaseViewController {
             })
             .drive(
                 tableView.rx.items(cellIdentifier: EpisodeCell.cellIdentifier, cellType: EpisodeCell.self)
-            ) { [weak self] row, item, cell in
-                guard let self = self else { return }
+            ) { row, item, cell in
                 cell.accessibilityIdentifier = "EpisodeCell_\(row)"
                 cell.viewModel = item
             }

@@ -55,13 +55,19 @@ final class EpisodeListViewModel: BaseViewModel {
                 self?.realmService.add(objects: episodeRealms) ?? .empty()
             }
             .do(onNext: { [weak self] _ in self?.fetchDataFromLocalDB() })
-            .map { _ in false }
-            .bind(to: isRefreshing)
+            .subscribe()
             .disposed(by: bag)
 
-        apiService.error
+        apiService.fetchEpisodesError
             .map { error in AlertModel(title: "Get Episode List Error", message: error.localizedDescription) }
             .bind(to: event.showAlert)
+            .disposed(by: bag)
+
+        Observable
+            .merge([apiService.episodes.map { _ in }, apiService.fetchEpisodesError.map { _ in }])
+            .map { _ in false }
+            .observe(on: MainScheduler.instance)
+            .bind(to: isRefreshing)
             .disposed(by: bag)
 
         realmService.allObjects

@@ -132,7 +132,7 @@ final class EpisodeListViewModelTests: XCTestCase {
         XCTAssertEqual(alert.events, [.next(300, expectingModel)])
     }
 
-    func test_init_withConsecutiveError() {
+    func test_init_withConsecutiveErrors() {
         let error = NSError(domain: "unit test", code: 101, userInfo: nil)
         let expectingModel = AlertModel(
             title: "Get Episode List Error",

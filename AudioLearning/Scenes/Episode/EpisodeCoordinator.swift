@@ -73,32 +73,30 @@ final class EpisodeCoordinator: Coordinator<Void> {
         let musicPlayerVC = newOrGetMusicPlayerVC()
         let vocabularyDetailVC = newVocabularyDetailVC(episodeDetailViewModel: viewModel)
 
-        viewModel.audioLink
-            .map { link -> URL in
-                guard let url = URL(string: link) else { throw Errors.urlIsNull }
-                return url
-            }
-            .bind(to: musicPlayerVC.viewModel.settingNewAudio)
+        viewModel.state.audioURLString
+            .compactMap(URL.init)
+            .drive(musicPlayerVC.viewModel.settingNewAudio)
             .disposed(by: bag)
 
-        viewModel.shrinkMusicPlayer
-            .subscribe(onNext: { _ in
-                musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(0)
-                musicPlayerVC.viewModel.changeSliderAlpha.onNext(0)
-            })
+        viewModel.event.shrinkAudioPlayer.asSignal()
+            .map { _ in 0 }
+            .emit(
+                to: musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
+                musicPlayerVC.viewModel.changeSliderAlpha
+            )
             .disposed(by: bag)
 
-        viewModel.enlargeMusicPlayer
-            .subscribe(onNext: { _ in
-                musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(1)
-                musicPlayerVC.viewModel.changeSliderAlpha.onNext(1)
-            })
+        viewModel.event.enlargeAudioPlayer.asSignal()
+            .map { _ in 1 }
+            .emit(
+                to: musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
+                musicPlayerVC.viewModel.changeSliderAlpha
+            )
             .disposed(by: bag)
 
-        viewModel.showAddVocabularyDetail
-            .subscribe(onNext: { word in
-                vocabularyDetailVC.viewModel.addWithWord.onNext((episode.id, word))
-            })
+        viewModel.event.addVocabularyTapped
+            .map { word in (episode.id, word) }
+            .bind(to: vocabularyDetailVC.viewModel.addWithWord)
             .disposed(by: bag)
 
         // ViewController
@@ -109,7 +107,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
         viewController.addChild(musicPlayerVC)
         viewController.addChild(vocabularyDetailVC)
 
-        viewModel.showVocabulary
+        viewModel.event.vocabularyTapped
+            .observe(on: MainScheduler.instance)
             .flatMapLatest { [weak self] _ in self?.showVocabulary(episodeID: episode.id) ?? .empty() }
             .subscribe()
             .disposed(by: bag)
@@ -155,7 +154,7 @@ final class EpisodeCoordinator: Coordinator<Void> {
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
         viewModel.close.map { true }
-            .bind(to: episodeDetailViewModel.hideVocabularyDetailView)
+            .bind(to: episodeDetailViewModel.state.isVocabularyDetailViewHidden)
             .disposed(by: bag)
 
         // ViewController

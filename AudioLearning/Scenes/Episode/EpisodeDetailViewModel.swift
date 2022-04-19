@@ -11,31 +11,34 @@ import RxSwift
 
 final class EpisodeDetailViewModel: BaseViewModel {
 
-    // Inputs and Outputs
-    private(set) var shrinkMusicPlayer = PublishSubject<Void>()
-    private(set) var enlargeMusicPlayer = PublishSubject<Void>()
-    private(set) var hideVocabularyDetailView = BehaviorSubject<Bool>(value: true)
+    struct State {
+        let isRefreshing: Driver<Bool>
+        let image: Driver<UIImage?>
+        let scriptHtmlString: Driver<String>
+        let audioURLString: Driver<String>
+        let isVocabularyDetailViewHidden = BehaviorRelay<Bool>(value: true)
+    }
 
-    // Input
-    private(set) var load: AnyObserver<Void>!
-    private(set) var tapVocabulary: AnyObserver<Void>!
-    private(set) var addVocabulary: AnyObserver<String>!
+    struct Event {
+        let fetchData = PublishRelay<Void>()
+        let vocabularyTapped = PublishRelay<Void>()
+        let addVocabularyTapped = PublishRelay<String>()
+        let showAlert = PublishRelay<AlertModel>()
+        let shrinkAudioPlayer = PublishRelay<Void>()
+        let enlargeAudioPlayer = PublishRelay<Void>()
+    }
 
-    // Output
-    private(set) var title = ""
-    private(set) var image = BehaviorSubject<UIImage?>(value: nil)
-    private(set) var scriptHtml = BehaviorSubject<String>(value: "")
-    private(set) var audioLink: Observable<String>!
-    private(set) var alert: Observable<AlertModel>!
-    private(set) var refreshing: Observable<Bool>!
-    private(set) var showVocabulary: Observable<Void>!
-    private(set) var showAddVocabularyDetail: Observable<String>!
+    // MARK: - Properties
 
-    private let loadSubject = PublishSubject<Void>()
-    private let tapVocabularySubject = PublishSubject<Void>()
-    private let addVocabularySubject = PublishSubject<String>()
-    private let alertSubject = PublishSubject<AlertModel>()
-    private let refreshingSubject = PublishSubject<Bool>()
+    let state: State
+    let event = Event()
+
+    let title: String
+
+    private let image = BehaviorRelay<UIImage?>(value: nil)
+    private let scriptHtmlString = BehaviorRelay<String>(value: "")
+    private let audioURLString = BehaviorRelay<String>(value: "")
+    private let isRefreshing = BehaviorRelay<Bool>(value: false)
 
     private let apiService: APIServiceProtocol!
     private let realmService: RealmService<EpisodeDetailRealm>!
@@ -49,104 +52,74 @@ final class EpisodeDetailViewModel: BaseViewModel {
         self.apiService = apiService
         self.realmService = realmService
         self.episode = episode
+        self.title = episode.title ?? ""
+
+        self.state = State(
+            isRefreshing: isRefreshing.asDriver(),
+            image: image.asDriver(),
+            scriptHtmlString: scriptHtmlString.asDriver(),
+            audioURLString: audioURLString.asDriver()
+        )
+
         super.init()
 
-        if let imagePath = episode.imagePath {
-            apiService.getImage(path: imagePath) { [weak self] image in
-                guard let self = self else { return }
-                self.image.onNext(image)
+        apiService.episodeDetail
+            .compactMap { $0 }
+            .flatMapLatest { [weak self] episodeDetailRealm in
+                self?.realmService.add(object: episodeDetailRealm) ?? .empty()
             }
-        } else {
-            image.onNext(nil)
-        }
-
-        self.load = loadSubject.asObserver()
-        self.tapVocabulary = tapVocabularySubject.asObserver()
-        self.showVocabulary = tapVocabularySubject.asObservable()
-        self.addVocabulary = addVocabularySubject.asObserver()
-        self.showAddVocabularyDetail = addVocabularySubject.asObservable()
-        self.title = episode.title ?? ""
-        self.alert = alertSubject
-        self.refreshing = refreshingSubject
-
-        showAddVocabularyDetail
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.hideVocabularyDetailView.onNext(false)
-            })
-            .disposed(by: bag)
-
-        reloadDataFromServer()
+            .do(onNext: { [weak self] _ in self?.fetchDataFromLocalDB() })
             .subscribe()
             .disposed(by: bag)
 
-        let loadEpisodeDetailModels = realmService.filterObjects
-            .flatMapLatest { [weak self] episodeDetailRealms -> Observable<EpisodeDetail> in
-                guard let self = self else { return .empty() }
-                guard let model = episodeDetailRealms.first else {
-                    self.refreshingSubject.onNext(true)
-                    apiService.loadEpisodeDetail.onNext(episode)
-                    return .empty()
-                }
-                return .just(EpisodeDetail(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
-            }
-            .take(1)
-            .share() // use share() to avoid multiple subscriptions from the same Observable
-
-        let episodeDetails = realmService.filterObjects
-            .flatMapLatest { episodeDetailRealms -> Observable<EpisodeDetail> in
-                guard let model = episodeDetailRealms.first else { return .empty() }
-                return .just(EpisodeDetail(scriptHtml: model.scriptHtml, audioLink: model.audioLink))
-            }
-            .skip(1)
-            .share() // use share() to avoid multiple subscriptions from the same Observable
+        apiService.fetchEpisodeDetailError
+            .map { error in AlertModel(title: "Load Episode Detail Error", message: error.localizedDescription) }
+            .bind(to: event.showAlert)
+            .disposed(by: bag)
 
         Observable
-            .merge(loadEpisodeDetailModels, episodeDetails)
-            .subscribe(onNext: { [weak self] model in
-                guard let self = self else { return }
-                self.refreshingSubject.onNext(false)
-                self.scriptHtml.onNext(model.scriptHtml ?? "")
-            })
+            .merge([apiService.episodeDetail.map { _ in }, apiService.fetchEpisodeDetailError.map { _ in }])
+            .map { _ in false }
+            .bind(to: isRefreshing)
             .disposed(by: bag)
 
-        self.audioLink = Observable
-            .merge(loadEpisodeDetailModels, episodeDetails)
-            .map { model -> String in
-                model.audioLink ?? ""
+        if let imagePath = episode.imagePath {
+            apiService.getImage(path: imagePath) { [weak self] image in
+                self?.image.accept(image)
             }
+        } else {
+            image.accept(nil)
+        }
 
-        loadSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.loadData()
-            })
+        let filterObjects = realmService.filterObjects.share()
+
+        let isEmptyFilterObjects = filterObjects.filter(\.isEmpty).share()
+        isEmptyFilterObjects.map { _ in true }.bind(to: isRefreshing).disposed(by: bag)
+        isEmptyFilterObjects
+            .map { _ in episode }
+            .bind(to: apiService.loadEpisodeDetail)
+            .disposed(by: bag)
+
+        let episodeDetail = filterObjects
+            .compactMap(\.first)
+            .map { EpisodeDetail(scriptHtml: $0.scriptHtml, audioLink: $0.audioLink) }
+            .share()
+
+        episodeDetail.map { _ in false }.bind(to: isRefreshing).disposed(by: bag)
+        episodeDetail.map { $0.scriptHtml ?? "" }.bind(to: scriptHtmlString).disposed(by: bag)
+        episodeDetail.map { $0.audioLink ?? "" }.bind(to: audioURLString).disposed(by: bag)
+
+        event.addVocabularyTapped.asSignal()
+            .map { _ in false }
+            .emit(to: state.isVocabularyDetailViewHidden)
+            .disposed(by: bag)
+
+        event.fetchData
+            .subscribe(with: self, onNext: { `self`, _ in self.fetchDataFromLocalDB() })
             .disposed(by: bag)
     }
 
-    private func reloadDataFromServer() -> Observable<Void> {
-        apiService.episodeDetail
-            .flatMapLatest { [weak self] episodeDetailRealm -> Observable<Void> in
-                guard let self = self else { return .empty() }
-                guard let episodeDetailRealm = episodeDetailRealm else { return .empty() }
-                _ = self.realmService.add(object: episodeDetailRealm)
-                self.loadData()
-                self.refreshingSubject.onNext(false)
-                return .empty()
-            }
-            .catch { [weak self] error -> Observable<Void> in
-                guard let self = self else { return .empty() }
-                self.refreshingSubject.onNext(false)
-                let alertModel = AlertModel(
-                    title: "Load Episode Detail Error",
-                    message: error.localizedDescription
-                )
-                self.alertSubject.onNext(alertModel)
-                return .empty()
-            }
-    }
-
-    private func loadData() {
+    private func fetchDataFromLocalDB() {
         guard let episode = episode.id else { return }
         let predicate = NSPredicate(format: "id == %@", episode)
         realmService.filter.onNext((predicate, nil))

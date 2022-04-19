@@ -17,8 +17,10 @@ protocol APIServiceProtocol {
 
     // Outputs
     var episodes: Observable<[EpisodeRealm]>! { get }
+    var fetchEpisodesError: Observable<Error>! { get }
+
     var episodeDetail: Observable<EpisodeDetailRealm?>! { get }
-    var error: Observable<Error>! { get }
+    var fetchEpisodeDetailError: Observable<Error>! { get }
 
     func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void)
 }
@@ -39,8 +41,10 @@ final class APIService: APIServiceProtocol {
 
     // Outputs
     private(set) var episodes: Observable<[EpisodeRealm]>!
+    private(set) var fetchEpisodesError: Observable<Error>!
+
     private(set) var episodeDetail: Observable<EpisodeDetailRealm?>!
-    private(set) var error: Observable<Error>!
+    private(set) var fetchEpisodeDetailError: Observable<Error>!
 
     private var urlSession: URLSession
     private var parseSMHelper: ParseSixMinutesHelper
@@ -63,15 +67,13 @@ final class APIService: APIServiceProtocol {
         let loadEpisodeDetailSubject = PublishSubject<Episode>()
         loadEpisodeDetail = loadEpisodeDetailSubject.asObserver()
 
-        let loadResultEvent = loadEpisodesSubject
+        let loadEpisodesResultEvent = loadEpisodesSubject
             .flatMapLatest { [weak self] _ -> Observable<Event<[EpisodeRealm]>> in
                 guard let self = self else { return .empty() }
-                guard let url = URLPath.episodeList.url else {
-                    return .error(Errors.urlIsNull)
-                }
+                guard let url = URLPath.episodeList.url else { return .error(Errors.urlIsNull) }
+
                 let request = URLRequest(url: url)
-                return self.urlSession.rx
-                    .response(request: request)
+                return self.urlSession.rx.response(request: request)
                     .map { [weak self] (response: HTTPURLResponse, data: Data) -> [EpisodeRealm] in
                         guard let self = self else { return [] }
                         guard 200..<300 ~= response.statusCode else {
@@ -86,25 +88,22 @@ final class APIService: APIServiceProtocol {
             }
             .share()
 
-        episodes = loadResultEvent.map(\.element).compactMap { $0 }
-        error = loadResultEvent.map(\.error).compactMap { $0 }
+        episodes = loadEpisodesResultEvent.map(\.element).compactMap { $0 }
+        fetchEpisodesError = loadEpisodesResultEvent.map(\.error).compactMap { $0 }
 
-        episodeDetail = loadEpisodeDetailSubject
-            .flatMapLatest { [weak self] episode -> Observable<EpisodeDetailRealm?> in
+        let loadEpisodeDetailEvent = loadEpisodeDetailSubject
+            .flatMapLatest { [weak self] episode -> Observable<Event<EpisodeDetailRealm?>> in
                 guard let self = self else { return .empty() }
-                guard let id = episode.id, let path = episode.path else {
-                    return .error(Errors.pathIsNull)
-                }
-                guard path.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
-                    return .error(Errors.pathIsNull)
-                }
-                guard let domain = URLPath.domain.url else {
-                    return .error(Errors.urlIsNull)
-                }
+
+                guard let id = episode.id, let path = episode.path,
+                      path.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+                else { return .error(Errors.pathIsNull) }
+
+                guard let domain = URLPath.domain.url else { return .error(Errors.urlIsNull) }
+
                 let url = domain.appendingPathComponent(path)
                 let request = URLRequest(url: url)
-                return self.urlSession.rx
-                    .response(request: request)
+                return self.urlSession.rx.response(request: request)
                     .map { [weak self] response, data -> EpisodeDetailRealm? in
                         guard 200..<300 ~= response.statusCode else {
                             throw RxCocoaURLError.httpRequestFailed(response: response, data: data)
@@ -112,14 +111,19 @@ final class APIService: APIServiceProtocol {
                         guard let html = String(data: data, encoding: .utf8) else {
                             throw Errors.convertDataToHtml
                         }
-                        let episodeDetail = self?.parseSMHelper.parseHtmlToEpisodeDetailModel(
+
+                        return self?.parseSMHelper.parseHtmlToEpisodeDetailModel(
                             by: html,
                             urlString: url.absoluteString,
                             episodeID: id
                         )
-                        return episodeDetail
                     }
+                    .materialize()
             }
+            .share()
+
+        episodeDetail = loadEpisodeDetailEvent.map(\.element).compactMap { $0 }
+        fetchEpisodeDetailError = loadEpisodeDetailEvent.map(\.error).compactMap { $0 }
     }
 
     func getImage(path: String, completionHandler: @escaping (UIImage?) -> Void) {

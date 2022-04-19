@@ -38,6 +38,8 @@ final class EpisodeDetailViewController: BaseViewController {
         setupUI()
         setupBindings()
         enableMenuItem()
+
+        viewModel.event.fetchData.accept(())
     }
 
     override func setupUIID() {
@@ -94,9 +96,7 @@ final class EpisodeDetailViewController: BaseViewController {
     private func setupNavigationBar() {
         let image = UIImage(named: "dictionary-filled")
         let vocabularyItem = UIBarButtonItem(image: image, style: .plain, target: nil, action: nil)
-        vocabularyItem.rx.tap
-            .bind(to: viewModel.tapVocabulary)
-            .disposed(by: bag)
+        vocabularyItem.rx.tap.bind(to: viewModel.event.vocabularyTapped).disposed(by: bag)
         navigationItem.rightBarButtonItems = [vocabularyItem]
     }
 
@@ -111,49 +111,37 @@ final class EpisodeDetailViewController: BaseViewController {
 
     private func setupBindings() {
         if !isUITesting {
-            viewModel.refreshing
-                .bind(to: refreshControl.rx.isRefreshing)
-                .disposed(by: bag)
+            viewModel.state.isRefreshing.drive(refreshControl.rx.isRefreshing).disposed(by: bag)
         }
 
         navigationItem.title = viewModel.title
 
-        viewModel.image
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] image in
-                guard let self = self else { return }
-                if image == nil {
-                    self.photoImageView.image = self.getNormalImage()
-                } else {
-                    self.photoImageView.image = image
-                }
+        viewModel.state.image.asDriver()
+            .drive(with: self, onNext: { `self`, image in
+                self.photoImageView.image = image == nil ? self.getNormalImage() : image
             })
             .disposed(by: bag)
 
-        viewModel.scriptHtml
-            .observe(on: MainScheduler.instance)
-            .map { [weak self] html -> NSAttributedString in
-                guard let self = self else { return NSAttributedString() }
-                let fontName = self.htmlTextView.font!.fontName
-                let fontSize = self.htmlTextView.font!.pointSize
-                return html.convertHtml(
+        viewModel.state.scriptHtmlString
+            .map { [weak self] htmlString -> NSAttributedString in
+                guard let self = self,
+                      let fontName = self.htmlTextView.font?.fontName,
+                      let fontSize = self.htmlTextView.font?.pointSize
+                else { return NSAttributedString() }
+
+                return htmlString.convertHtml(
                     backgroundColor: Appearance.backgroundColor,
                     fontColor: Appearance.textColor,
                     fontName: fontName,
                     fontSize: fontSize
                 )
             }
-            .do(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.refreshControl.endRefreshing()
-            })
-            .bind(to: htmlTextView.rx.attributedText)
+            .do(onNext: { [weak self] _ in self?.refreshControl.endRefreshing() })
+            .drive(htmlTextView.rx.attributedText)
             .disposed(by: bag)
 
-        viewModel.alert
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] alert in
-                guard let self = self else { return }
+        viewModel.event.showAlert.asSignal()
+            .emit(with: self, onNext: { `self`, alert in
                 self.showConfirmAlert(
                     title: alert.title,
                     message: alert.message,
@@ -163,35 +151,27 @@ final class EpisodeDetailViewController: BaseViewController {
             })
             .disposed(by: bag)
 
-        viewModel.hideVocabularyDetailView
-            .bind(to: maskView.rx.isHidden)
+        viewModel.state.isVocabularyDetailViewHidden.asDriver()
+            .drive(maskView.rx.isHidden)
             .disposed(by: bag)
 
-        viewModel.hideVocabularyDetailView
-            .filter { $0 == true }
-            .flatMap { [weak self] _ -> Observable<TimeInterval> in
-                guard let self = self else { return .just(TimeInterval(0)) }
-                self.enableMenuItem()
-                return .just(TimeInterval(0.4))
-            }
+        viewModel.state.isVocabularyDetailViewHidden
+            .filter { $0 }
+            .do(onNext: { [weak self] _ in self?.enableMenuItem() })
+            .map { _ in TimeInterval(0.4) }
             .bind(to: maskView.rx.fadeOut)
             .disposed(by: bag)
 
-        viewModel.hideVocabularyDetailView
+        viewModel.state.isVocabularyDetailViewHidden
             .filter { $0 == false }
-            .flatMap { [weak self] _ -> Observable<TimeInterval> in
-                guard let self = self else { return .just(TimeInterval(0)) }
-                self.disableMenuItem()
-                return .just(TimeInterval(0.4))
-            }
+            .do(onNext: { [weak self] _ in self?.disableMenuItem() })
+            .map { _ in TimeInterval(0.4) }
             .bind(to: maskView.rx.fadeIn)
             .disposed(by: bag)
 
-        viewModel.load.onNext(())
-
         playerViewHeight.constant == minPlayerViewHeight
-            ? viewModel.shrinkMusicPlayer.onNext(())
-            : viewModel.enlargeMusicPlayer.onNext(())
+            ? viewModel.event.shrinkAudioPlayer.accept(())
+            : viewModel.event.enlargeAudioPlayer.accept(())
     }
 
     private func getNormalImage() -> UIImage? {
@@ -209,7 +189,7 @@ extension EpisodeDetailViewController {
     }
 
     @objc func handleTapView(_ recognizer: UITapGestureRecognizer) {
-        viewModel.hideVocabularyDetailView.onNext(true)
+        viewModel.state.isVocabularyDetailViewHidden.accept(true)
     }
 }
 
@@ -236,6 +216,7 @@ extension EpisodeDetailViewController {
 
     @objc func handlePanPlayerView(_ recognizer: UIPanGestureRecognizer) {
         guard let view = recognizer.view else { return }
+
         let offset = recognizer.translation(in: view)
         let velocity = recognizer.velocity(in: view)
 
@@ -247,8 +228,8 @@ extension EpisodeDetailViewController {
             if finalY > maxPlayerViewHeight { finalY = maxPlayerViewHeight }
             if finalY < minPlayerViewHeight { finalY = minPlayerViewHeight }
             finalY == minPlayerViewHeight
-                ? viewModel.shrinkMusicPlayer.onNext(())
-                : viewModel.enlargeMusicPlayer.onNext(())
+                ? viewModel.event.shrinkAudioPlayer.accept(())
+                : viewModel.event.enlargeAudioPlayer.accept(())
             playerViewHeight.constant = finalY
             playerView.superview?.layoutIfNeeded()
         case .ended:
@@ -258,11 +239,10 @@ extension EpisodeDetailViewController {
             } else if offset.y < -50 || velocity.y < -500 {
                 finalY = maxPlayerViewHeight
             }
-            UIView.animate(withDuration: 0.4) { [weak self] in
-                guard let self = self else { return }
+            UIView.animate(withDuration: 0.4) {
                 finalY == self.minPlayerViewHeight
-                    ? self.viewModel.shrinkMusicPlayer.onNext(())
-                    : self.viewModel.enlargeMusicPlayer.onNext(())
+                    ? self.viewModel.event.shrinkAudioPlayer.accept(())
+                    : self.viewModel.event.enlargeAudioPlayer.accept(())
                 self.playerViewHeight.constant = finalY
                 self.playerView.superview?.layoutIfNeeded()
             }
@@ -287,8 +267,9 @@ extension EpisodeDetailViewController {
     }
 
     @objc func addVocabulary() {
-        guard let textRange = htmlTextView.selectedTextRange else { return }
-        guard let text = htmlTextView.text(in: textRange) else { return }
-        viewModel.addVocabulary.onNext(text)
+        guard let textRange = htmlTextView.selectedTextRange,
+              let text = htmlTextView.text(in: textRange)
+        else { return }
+        viewModel.event.addVocabularyTapped.accept(text)
     }
 }

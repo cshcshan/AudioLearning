@@ -13,7 +13,7 @@ import RxTest
 import XCTest
 @testable import AudioLearning
 
-class EpisodeDetailViewModelTests: XCTestCase {
+final class EpisodeDetailViewModelTests: XCTestCase {
 
     var sut: EpisodeDetailViewModel!
     var apiService: MockAPIService!
@@ -48,67 +48,43 @@ class EpisodeDetailViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testShrinkMusicPlayer() {
-        let shrinkMusicPlayer = scheduler.createObserver(Void.self)
-        sut.shrinkMusicPlayer
-            .bind(to: shrinkMusicPlayer)
+    func test_shrinkAudioPlayer() {
+        let shrinkAudioPlayer = scheduler.createObserver(Void.self)
+        sut.event.shrinkAudioPlayer.bind(to: shrinkAudioPlayer).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, ()),
+                .next(20, ())
+            ])
+            .bind(to: sut.event.shrinkAudioPlayer)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.shrinkMusicPlayer)
-        .disposed(by: bag)
+
         scheduler.start()
-        XCTAssertEqual(shrinkMusicPlayer.events.count, 2)
+        XCTAssertEqual(shrinkAudioPlayer.events.count, 2)
     }
 
-    func testEnlargeMusicPlayer() {
-        let enlargeMusicPlayer = scheduler.createObserver(Void.self)
-        sut.enlargeMusicPlayer
-            .bind(to: enlargeMusicPlayer)
+    func test_enlargeAudioPlayer() {
+        let enlargeAudioPlayer = scheduler.createObserver(Void.self)
+        sut.event.enlargeAudioPlayer.bind(to: enlargeAudioPlayer).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, ()),
+                .next(20, ())
+            ])
+            .bind(to: sut.event.enlargeAudioPlayer)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.enlargeMusicPlayer)
-        .disposed(by: bag)
+
         scheduler.start()
-        XCTAssertEqual(enlargeMusicPlayer.events.count, 2)
+        XCTAssertEqual(enlargeAudioPlayer.events.count, 2)
     }
 
-    func testHideVocabularyDetailView() {
-        let hideVocabularyDetailView = scheduler.createObserver(Bool.self)
-        sut.hideVocabularyDetailView
-            .bind(to: hideVocabularyDetailView)
-            .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, false),
-            .next(20, true),
-            .next(30, true),
-            .next(40, true),
-            .next(50, false)
-        ])
-        .bind(to: sut.hideVocabularyDetailView)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(hideVocabularyDetailView.events.count, 6)
-        XCTAssertEqual(hideVocabularyDetailView.events, [
-            .next(0, true),
-            .next(10, false),
-            .next(20, true),
-            .next(30, true),
-            .next(40, true),
-            .next(50, false)
-        ])
-    }
-
-    func testTitle() {
+    func test_title() {
         XCTAssertEqual(sut.title, "Cryptocurrencies")
     }
 
-    func testScriptHtml() {
+    func test_scriptHtml() {
         let episodeDetailRealm = EpisodeDetailRealm()
         episodeDetailRealm.id = episode.id
         episodeDetailRealm.path = "path"
@@ -116,23 +92,23 @@ class EpisodeDetailViewModelTests: XCTestCase {
         episodeDetailRealm.audioLink = "audio link"
         apiService.episodeDetailReturnValue = .just(episodeDetailRealm)
 
-        let scriptHtml = scheduler.createObserver(String.self)
-        sut.scriptHtml
-            .bind(to: scriptHtml)
-            .disposed(by: bag)
+        let scriptHtmlString = scheduler.createObserver(String.self)
+        sut.state.scriptHtmlString.drive(scriptHtmlString).disposed(by: bag)
+
         scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.load)
+            .bind(to: sut.event.fetchData)
             .disposed(by: bag)
+
         scheduler.start()
 
-        XCTAssertEqual(scriptHtml.events.count, 2)
-        XCTAssertEqual(scriptHtml.events, [
+        XCTAssertEqual(scriptHtmlString.events.count, 2)
+        XCTAssertEqual(scriptHtmlString.events, [
             .next(0, ""),
             .next(10, episodeDetailRealm.scriptHtml!)
         ])
     }
 
-    func testAudioLink() {
+    func test_audioURLString() {
         let episodeDetailRealm = EpisodeDetailRealm()
         episodeDetailRealm.id = episode.id
         episodeDetailRealm.path = "path"
@@ -140,54 +116,23 @@ class EpisodeDetailViewModelTests: XCTestCase {
         episodeDetailRealm.audioLink = "audio-link"
         apiService.episodeDetailReturnValue = .just(episodeDetailRealm)
 
-        let audioLink = scheduler.createObserver(String.self)
-        sut.audioLink
-            .bind(to: audioLink)
-            .disposed(by: bag)
+        let audioURLString = scheduler.createObserver(String.self)
+        sut.state.audioURLString.drive(audioURLString).disposed(by: bag)
+
         scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.load)
+            .bind(to: sut.event.fetchData)
             .disposed(by: bag)
+
         scheduler.start()
 
-        XCTAssertEqual(audioLink.events.count, 1)
-        XCTAssertEqual(audioLink.events, [.next(10, episodeDetailRealm.audioLink!)])
+        XCTAssertEqual(audioURLString.events.count, 2)
+        XCTAssertEqual(
+            audioURLString.events,
+            [.next(0, ""), .next(10, episodeDetailRealm.audioLink!)]
+        )
     }
 
-    func testShowVocabulary() {
-        let showVocabulary = scheduler.createObserver(Void.self)
-        sut.showVocabulary
-            .bind(to: showVocabulary)
-            .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.tapVocabulary)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(showVocabulary.events.count, 2)
-    }
-
-    func testShowAddVocabularyDetail() {
-        let showAddVocabularyDetail = scheduler.createObserver(String.self)
-        sut.showAddVocabularyDetail
-            .bind(to: showAddVocabularyDetail)
-            .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, "Hello"),
-            .next(20, "World")
-        ])
-        .bind(to: sut.addVocabulary)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(showAddVocabularyDetail.events.count, 2)
-        XCTAssertEqual(showAddVocabularyDetail.events, [
-            .next(10, "Hello"),
-            .next(20, "World")
-        ])
-    }
-
-    func testInit_WithError() {
+    func test_init_withError() {
         let error = NSError(domain: "unit test", code: 2, userInfo: nil)
         let expectingModel = AlertModel(
             title: "Load Episode Detail Error",
@@ -196,17 +141,14 @@ class EpisodeDetailViewModelTests: XCTestCase {
         apiService.episodeDetailReturnValue = .error(error)
 
         let alert = scheduler.createObserver(AlertModel.self)
-        sut.alert
-            .bind(to: alert)
-            .disposed(by: bag)
+        sut.event.showAlert.bind(to: alert).disposed(by: bag)
+
         scheduler.createColdObservable([.next(300, ())])
-            .bind(to: sut.load)
+            .bind(to: sut.event.fetchData)
             .disposed(by: bag)
 
-        // execute reload.flatMapLatest by scriptHtml.subscribe()
-        sut.scriptHtml
-            .subscribe()
-            .disposed(by: bag)
+        // execute reload.flatMapLatest by scriptHtmlString.drive()
+        sut.state.scriptHtmlString.drive().disposed(by: bag)
 
         scheduler.start()
 
@@ -214,15 +156,13 @@ class EpisodeDetailViewModelTests: XCTestCase {
         XCTAssertEqual(alert.events, [.next(300, expectingModel)])
     }
 
-    func testEpisode() {
+    func test_episode() {
         scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.load)
+            .bind(to: sut.event.fetchData)
             .disposed(by: bag)
 
-        // execute reload.flatMapLatest by scriptHtml.subscribe()
-        sut.scriptHtml
-            .subscribe()
-            .disposed(by: bag)
+        // execute reload.flatMapLatest by scriptHtmlString.drive()
+        sut.state.scriptHtmlString.drive().disposed(by: bag)
 
         scheduler.start()
 

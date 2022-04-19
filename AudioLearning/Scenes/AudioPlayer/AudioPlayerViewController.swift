@@ -1,5 +1,5 @@
 //
-//  MusicPlayerViewController.swift
+//  AudioPlayerViewController.swift
 //  AudioLearning
 //
 //  Created by Han Chen on 2019/9/12.
@@ -9,7 +9,7 @@
 import RxSwift
 import UIKit
 
-final class MusicPlayerViewController: UIViewController, StoryboardGettable {
+final class AudioPlayerViewController: UIViewController, StoryboardGettable {
 
     @IBOutlet var playButton: UIButton!
     @IBOutlet var forwardButton: UIButton!
@@ -19,7 +19,7 @@ final class MusicPlayerViewController: UIViewController, StoryboardGettable {
     @IBOutlet var progressTimerLabel: UILabel!
     @IBOutlet var totalLengthLabel: UILabel!
 
-    var viewModel: MusicPlayerViewModel!
+    var viewModel: AudioPlayerViewModel!
     private let bag = DisposeBag()
 
     private let playImage = UIImage(named: "play-white")

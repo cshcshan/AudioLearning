@@ -36,10 +36,10 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
     private let bag = DisposeBag()
 
     // Results
-    var musicURL = PublishSubject<URL>()
-    var musicCurrentSeconds: Double = 0
-    var musicTotalSeconds: Double = 100
-    var musicSpeedRate: Float = 1
+    var audioURL = PublishSubject<URL>()
+    var audioCurrentSeconds: Double = 0
+    var audioTotalSeconds: Double = 100
+    var audioSpeedRate: Float = 1
 
     init() {
         setupInputs()
@@ -47,7 +47,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
     }
 
     private func setupInputs() {
-        // New Music
+        // New Audio
         let newAudioSubject = PublishSubject<URL>()
         newAudio = newAudioSubject.asObserver()
 
@@ -70,8 +70,8 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
         mergeSkip
             .subscribe(onNext: { [weak self] seconds in
                 guard let self = self else { return }
-                self.musicCurrentSeconds += Double(seconds)
-                self.currentSecondsSubject.onNext(self.musicCurrentSeconds)
+                self.audioCurrentSeconds += Double(seconds)
+                self.currentSecondsSubject.onNext(self.audioCurrentSeconds)
             })
             .disposed(by: bag)
 
@@ -90,9 +90,9 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
             )
             .map { [weak self] rate -> Float in
                 guard let self = self else { return 1 }
-                self.musicSpeedRate += rate
-                if self.musicSpeedRate < 0 { self.musicSpeedRate = 0 }
-                return self.musicSpeedRate
+                self.audioSpeedRate += rate
+                if self.audioSpeedRate < 0 { self.audioSpeedRate = 0 }
+                return self.audioSpeedRate
             }
             .subscribe(onNext: { rate in
                 speedRateSubject.onNext(rate)
@@ -125,7 +125,7 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
 
         currentSeconds = currentSecondsSubject.asObservable()
         totalSeconds = totalSecondsSubject.asObservable()
-        totalSecondsSubject.onNext(musicTotalSeconds)
+        totalSecondsSubject.onNext(audioTotalSeconds)
 
         let loadingBufferSubject = PublishSubject<Double>()
         loadingBuffer = loadingBufferSubject.asObservable()
@@ -135,8 +135,8 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
     }
 
     private func reset() {
-        musicCurrentSeconds = 0
-        musicTotalSeconds = 100
-        musicSpeedRate = 1
+        audioCurrentSeconds = 0
+        audioTotalSeconds = 100
+        audioSpeedRate = 1
     }
 }

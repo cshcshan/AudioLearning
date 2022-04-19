@@ -14,7 +14,7 @@ final class EpisodeCoordinator: Coordinator<Void> {
     private let window: UIWindow
     private var navigationController: UINavigationController!
     private var episodeDetailViewController: EpisodeDetailViewController?
-    private var musicPlayerVC: MusicPlayerViewController?
+    private var audioPlayerVC: AudioPlayerViewController?
 
     required init(window: UIWindow) {
         self.window = window
@@ -69,28 +69,28 @@ final class EpisodeCoordinator: Coordinator<Void> {
             episode: episode
         )
 
-        // Music and Vocabulary Detail
-        let musicPlayerVC = newOrGetMusicPlayerVC()
+        // Audio and Vocabulary Detail
+        let audioPlayerVC = newOrGetAudioPlayerVC()
         let vocabularyDetailVC = newVocabularyDetailVC(episodeDetailViewModel: viewModel)
 
         viewModel.state.audioURLString
             .compactMap(URL.init)
-            .drive(musicPlayerVC.viewModel.settingNewAudio)
+            .drive(audioPlayerVC.viewModel.settingNewAudio)
             .disposed(by: bag)
 
         viewModel.event.shrinkAudioPlayer.asSignal()
             .map { _ in 0 }
             .emit(
-                to: musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
-                musicPlayerVC.viewModel.changeSliderAlpha
+                to: audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
+                audioPlayerVC.viewModel.changeSliderAlpha
             )
             .disposed(by: bag)
 
         viewModel.event.enlargeAudioPlayer.asSignal()
             .map { _ in 1 }
             .emit(
-                to: musicPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
-                musicPlayerVC.viewModel.changeSliderAlpha
+                to: audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
+                audioPlayerVC.viewModel.changeSliderAlpha
             )
             .disposed(by: bag)
 
@@ -102,9 +102,9 @@ final class EpisodeCoordinator: Coordinator<Void> {
         // ViewController
         let viewController = EpisodeDetailViewController.initialize(from: .episode, storyboardID: .episodeDetail)
         viewController.viewModel = viewModel
-        viewController.musicPlayerView = musicPlayerVC.view
+        viewController.audioPlayerView = audioPlayerVC.view
         viewController.vocabularyDetailView = vocabularyDetailVC.view
-        viewController.addChild(musicPlayerVC)
+        viewController.addChild(audioPlayerVC)
         viewController.addChild(vocabularyDetailVC)
 
         viewModel.event.vocabularyTapped
@@ -128,22 +128,22 @@ final class EpisodeCoordinator: Coordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
     }
 
-    private func newOrGetMusicPlayerVC() -> MusicPlayerViewController {
-        if let musicPlayerVC = musicPlayerVC {
-            musicPlayerVC.viewModel.reset.onNext(())
-            musicPlayerVC.view.removeFromSuperview()
-            musicPlayerVC.removeFromParent()
-            return musicPlayerVC
+    private func newOrGetAudioPlayerVC() -> AudioPlayerViewController {
+        if let audioPlayerVC = audioPlayerVC {
+            audioPlayerVC.viewModel.reset.onNext(())
+            audioPlayerVC.view.removeFromSuperview()
+            audioPlayerVC.removeFromParent()
+            return audioPlayerVC
         }
 
         let player = HCAudioPlayer()
-        let musicPlayerViewModel = MusicPlayerViewModel(player: player)
-        let viewController = MusicPlayerViewController.initialize(
-            from: .musicPlayer,
-            storyboardID: .musicPlayerViewController
+        let audioPlayerViewModel = AudioPlayerViewModel(player: player)
+        let viewController = AudioPlayerViewController.initialize(
+            from: .audioPlayer,
+            storyboardID: .audioPlayerViewController
         )
-        viewController.viewModel = musicPlayerViewModel
-        musicPlayerVC = viewController
+        viewController.viewModel = audioPlayerViewModel
+        audioPlayerVC = viewController
         return viewController
     }
 

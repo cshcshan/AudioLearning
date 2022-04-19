@@ -27,7 +27,7 @@ final class EpisodeDetailViewController: BaseViewController {
     private let lightBgTempImage = UIImage(named: "temp_pic")
 
     var viewModel: EpisodeDetailViewModel!
-    var musicPlayerView: UIView!
+    var audioPlayerView: UIView!
     var vocabularyDetailView: UIView!
     private var beganPlayerViewHeight: CGFloat = .zero
     private let maxPlayerViewHeight: CGFloat = 176.5 + 32 + 16
@@ -66,10 +66,10 @@ final class EpisodeDetailViewController: BaseViewController {
         addTapToMaskView()
         // playerView
         setupPlayerViewShadow()
-        musicPlayerView.frame = playerView.bounds
+        audioPlayerView.frame = playerView.bounds
         playerView.clipsToBounds = true
-        playerView.addSubview(musicPlayerView)
-        playerView.sendSubviewToBack(musicPlayerView)
+        playerView.addSubview(audioPlayerView)
+        playerView.sendSubviewToBack(audioPlayerView)
         animatePlayerViewHeight()
         addPanToPlayerView()
         // refreshControl

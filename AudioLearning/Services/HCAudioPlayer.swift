@@ -90,7 +90,7 @@ final class HCAudioPlayer: NSObject, HCAudioPlayerProtocol {
     }
 
     private func setupInputs() {
-        // New Music
+        // New Audio
         let newAudioSubject = PublishSubject<URL>()
         newAudio = newAudioSubject.asObserver()
         newAudioSubject

@@ -1,5 +1,5 @@
 //
-//  MusicPlayerViewModelTests.swift
+//  AudioPlayerViewModelTests.swift
 //  AudioLearningTests
 //
 //  Created by Han Chen on 2019/9/12.
@@ -13,9 +13,9 @@ import RxTest
 import XCTest
 @testable import AudioLearning
 
-class MusicPlayerViewModelTests: XCTestCase {
+final class AudioPlayerViewModelTests: XCTestCase {
 
-    var sut: MusicPlayerViewModel!
+    var sut: AudioPlayerViewModel!
     var player: MockHCAudioPlayer!
 
     var scheduler: TestScheduler!
@@ -24,7 +24,7 @@ class MusicPlayerViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         player = MockHCAudioPlayer()
-        sut = MusicPlayerViewModel(player: player)
+        sut = AudioPlayerViewModel(player: player)
         scheduler = TestScheduler(initialClock: 0)
         bag = DisposeBag()
     }
@@ -38,7 +38,7 @@ class MusicPlayerViewModelTests: XCTestCase {
 
 // MARK: - isPlaying
 
-extension MusicPlayerViewModelTests {
+extension AudioPlayerViewModelTests {
 
     // MARK: PlayOldAudio
 
@@ -318,12 +318,12 @@ extension MusicPlayerViewModelTests {
     }
 }
 
-// MARK: - Foward and Rewind
+// MARK: - Forward and Rewind
 
-extension MusicPlayerViewModelTests {
+extension AudioPlayerViewModelTests {
 
     func testSkipForward_With10S() {
-        player.musicCurrentSeconds = 20
+        player.audioCurrentSeconds = 20
 
         let currentTime = scheduler.createObserver(String.self)
         sut.currentTime
@@ -346,7 +346,7 @@ extension MusicPlayerViewModelTests {
     }
 
     func testSkipRewind_With10S() {
-        player.musicCurrentSeconds = 20
+        player.audioCurrentSeconds = 20
 
         let currentTime = scheduler.createObserver(String.self)
         sut.currentTime
@@ -371,10 +371,10 @@ extension MusicPlayerViewModelTests {
 
 // MARK: - Speed
 
-extension MusicPlayerViewModelTests {
+extension AudioPlayerViewModelTests {
 
     func testChangeSpeed_AddHalf() {
-        player.musicSpeedRate = 1
+        player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -397,7 +397,7 @@ extension MusicPlayerViewModelTests {
     }
 
     func testChangeSpeed_MinusHalf() {
-        player.musicSpeedRate = 2
+        player.audioSpeedRate = 2
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -422,10 +422,10 @@ extension MusicPlayerViewModelTests {
 
 // Change Speed
 
-extension MusicPlayerViewModelTests {
+extension AudioPlayerViewModelTests {
 
     func testChangeSpeed_WhenIsNotPlaying() {
-        player.musicSpeedRate = 1
+        player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -447,7 +447,7 @@ extension MusicPlayerViewModelTests {
     }
 
     func testChangeSpeed_WhenPlaying() {
-        player.musicSpeedRate = 1
+        player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -481,7 +481,7 @@ extension MusicPlayerViewModelTests {
     }
 
     func testChangeSpeed_IsNotPlaying_ThenChangeSpeed_ThenPlay_ThenChangeSpeed() {
-        player.musicSpeedRate = 1
+        player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -496,7 +496,7 @@ extension MusicPlayerViewModelTests {
         ])
         .bind(to: sut.changeSpeed)
         .disposed(by: bag)
-        // Play music
+        // Play audio
         scheduler.createHotObservable([.next(35, url)])
             .bind(to: sut.settingNewAudio)
             .disposed(by: bag)
@@ -516,7 +516,7 @@ extension MusicPlayerViewModelTests {
     }
 
     func testChangeSpeed_IsNotPlaying_ThenChangeSpeed_ThenPlay_ThenChangeSpeed_ThenPause_ThenChangeSpeed() {
-        player.musicSpeedRate = 1
+        player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -531,7 +531,7 @@ extension MusicPlayerViewModelTests {
         ])
         .bind(to: sut.changeSpeed)
         .disposed(by: bag)
-        // Play music
+        // Play audio
         scheduler.createHotObservable([.next(35, url)])
             .bind(to: sut.settingNewAudio)
             .disposed(by: bag)
@@ -551,7 +551,7 @@ extension MusicPlayerViewModelTests {
     }
 
     func testChangeSpeed_IsNotPlaying_ThenChangeSpeed_ThenPlay_ThenChangeSpeed_ThenPause_ThenChangeSpeed_ThenPlay() {
-        player.musicSpeedRate = 1
+        player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
         sut.speedRate
@@ -566,7 +566,7 @@ extension MusicPlayerViewModelTests {
         ])
         .bind(to: sut.changeSpeed)
         .disposed(by: bag)
-        // Play music
+        // Play audio
         scheduler.createHotObservable([.next(35, url)])
             .bind(to: sut.settingNewAudio)
             .disposed(by: bag)
@@ -592,10 +592,10 @@ extension MusicPlayerViewModelTests {
 
 // Change Audio Position
 
-extension MusicPlayerViewModelTests {
+extension AudioPlayerViewModelTests {
 
     func testChangeAudioPosition() {
-        player.musicCurrentSeconds = 10
+        player.audioCurrentSeconds = 10
         let currentSeconds = scheduler.createObserver(Float.self)
         sut.currentSeconds
             .drive(currentSeconds)

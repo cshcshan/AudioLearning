@@ -10,7 +10,7 @@ import UIKit
 
 enum StoryboardName: String {
     case episode = "Episode"
-    case musicPlayer = "MusicPlayer"
+    case audioPlayer = "AudioPlayer"
     case vocabulary = "Vocabulary"
     case flashCards = "FlashCards"
 }
@@ -18,7 +18,7 @@ enum StoryboardName: String {
 enum StoryboardID: String {
     case episodeList = "EpisodeList"
     case episodeDetail = "EpisodeDetail"
-    case musicPlayerViewController = "MusicPlayerViewController"
+    case audioPlayerViewController = "AudioPlayerViewController"
     case vocabularyListViewController = "VocabularyListViewController"
     case vocabularyDetailViewController = "VocabularyDetailViewController"
     case flashCardsViewController = "FlashCardsViewController"

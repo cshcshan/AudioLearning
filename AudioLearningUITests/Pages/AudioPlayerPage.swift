@@ -1,5 +1,5 @@
 //
-//  MusicPlayerPage.swift
+//  AudioPlayerPage.swift
 //  AudioLearningUITests
 //
 //  Created by Han Chen on 2019/10/4.
@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class MusicPlayerPage: Page {
+class AudioPlayerPage: Page {
 
     required init(_ app: XCUIApplication) {
         super.init(app)

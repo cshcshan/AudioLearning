@@ -1,5 +1,5 @@
 //
-//  MusicPlayerViewModel.swift
+//  AudioPlayerViewModel.swift
 //  AudioLearning
 //
 //  Created by Han Chen on 2019/9/12.
@@ -9,7 +9,7 @@
 import RxCocoa
 import RxSwift
 
-final class MusicPlayerViewModel {
+final class AudioPlayerViewModel {
 
     // Inputs
     private(set) var tappedPlayPause: AnyObserver<Void>!
@@ -18,7 +18,7 @@ final class MusicPlayerViewModel {
     private(set) var rewind10Seconds: AnyObserver<Void>!
     private(set) var speedUp: AnyObserver<Float>!
     private(set) var speedDown: AnyObserver<Float>!
-    private(set) var changeSpeed: AnyObserver<Float>! // will call 'change speed' when playing music
+    private(set) var changeSpeed: AnyObserver<Float>! // will call 'change speed' when playing audio
     private(set) var changeAudioPosition: AnyObserver<Float>!
     private(set) var changeSpeedSegmentedControlAlpha: AnyObserver<CGFloat>!
     private(set) var changeSliderAlpha: AnyObserver<CGFloat>!
@@ -183,7 +183,7 @@ final class MusicPlayerViewModel {
             if url == nil {
                 return false
             } else {
-                playMusic(!aggregateValue)
+                playAudio(!aggregateValue)
                 return !aggregateValue
             }
         }
@@ -194,7 +194,7 @@ final class MusicPlayerViewModel {
         self.url = url
     }
 
-    private func playMusic(_ isPlay: Bool) {
+    private func playAudio(_ isPlay: Bool) {
         if isPlay {
             player.play.onNext(())
         } else {

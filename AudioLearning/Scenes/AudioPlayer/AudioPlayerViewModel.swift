@@ -11,195 +11,148 @@ import RxSwift
 
 final class AudioPlayerViewModel {
 
-    // Inputs
-    private(set) var tappedPlayPause: AnyObserver<Void>!
-    private(set) var settingNewAudio: AnyObserver<URL>!
-    private(set) var forward10Seconds: AnyObserver<Void>!
-    private(set) var rewind10Seconds: AnyObserver<Void>!
-    private(set) var speedUp: AnyObserver<Float>!
-    private(set) var speedDown: AnyObserver<Float>!
-    private(set) var changeSpeed: AnyObserver<Float>! // will call 'change speed' when playing audio
-    private(set) var changeAudioPosition: AnyObserver<Float>!
-    private(set) var changeSpeedSegmentedControlAlpha: AnyObserver<CGFloat>!
-    private(set) var changeSliderAlpha: AnyObserver<CGFloat>!
-    private(set) var reset: AnyObserver<Void>!
+    struct State {
+        let isReadyToPlay: Driver<Bool>
+        let isPlaying: Driver<Bool>
+        let speedRate: Driver<Float>
+        let currentTime: Driver<String>
+        let totalTime: Driver<String>
+        let currentSeconds: Driver<Float>
+        let totalSeconds: Driver<Float>
+        let loadingBufferRate: Driver<Float>
+        let speedSegmentedControlAlpha: Driver<CGFloat>
+        let sliderAlpha: Driver<CGFloat>
+    }
 
-    // Outputs
-    private(set) var readyToPlay: Driver<Void>!
-    private(set) var isPlaying: Driver<Bool>!
-    private(set) var speedRate: Driver<Float>!
-    private(set) var currentTime: Driver<String>!
-    private(set) var totalTime: Driver<String>!
-    private(set) var currentSeconds: Driver<Float>!
-    private(set) var totalSeconds: Driver<Float>!
-    private(set) var loadingBufferRate: Driver<Float>!
-    private(set) var speedSegmentedControlAlpha: Driver<CGFloat>!
-    private(set) var sliderAlpha: Driver<CGFloat>!
+    struct Event {
+        let playOrPauseTapped = PublishRelay<Void>()
+        let playNewAudio = PublishRelay<URL>()
+        let forward10SecondsTapped = PublishRelay<Void>()
+        let rewind10SecondsTapped = PublishRelay<Void>()
+        let changeSpeed = PublishRelay<Float>() // will call 'change speed' when playing audio
+        let changeAudioPosition = PublishRelay<Float>()
+
+        let changeSpeedSegmentedControlAlpha = PublishRelay<CGFloat>()
+        let changeSliderAlpha = PublishRelay<CGFloat>()
+    }
+
+    // MARK: - Properties
+
+    let state: State
+    let event = Event()
+
+    private let defaultTimeString = "--:--"
+
+    private let isReadyToPlay = BehaviorRelay<Bool>(value: false)
+    private let isPlaying = BehaviorRelay<Bool>(value: false)
+    private let speedRate = BehaviorRelay<Float>(value: 1)
+    private let currentTime: BehaviorRelay<String>
+    private let totalTime: BehaviorRelay<String>
+    private let currentSeconds = BehaviorRelay<Float>(value: 0)
+    private let totalSeconds = BehaviorRelay<Float>(value: 0)
+    private let loadingBufferRate = BehaviorRelay<Float>(value: 0)
 
     private let bag = DisposeBag()
+
     private var url: URL!
     private var player: HCAudioPlayerProtocol
 
     init(player: HCAudioPlayerProtocol) {
         self.player = player
-        setupInputs()
-        setupOutputs()
-    }
 
-    private func setupInputs() {
-        let settingNewAudioSubject = PublishSubject<URL>()
-        settingNewAudio = settingNewAudioSubject.asObserver()
-        let tappedPlayPauseSubject = PublishSubject<Void>()
-        tappedPlayPause = tappedPlayPauseSubject.asObserver()
-        isPlaying = Observable
-            .merge(
-                tappedPlayPauseSubject.asObservable().map { $0 as AnyObject },
-                settingNewAudioSubject.asObservable().map { $0 as AnyObject },
-                player.status.map { $0 as AnyObject }
-            )
-            .scan(false, accumulator: { [weak self] aggregateValue, newValue -> Bool in
-                guard let self = self else { return false }
-                let playing = self.updateIsPlayingStatus(aggregateValue: aggregateValue, newValue: newValue)
-                NotificationCenter.default.post(name: .isPlaying, object: nil, userInfo: ["isPlaying": playing])
-                return playing
-            })
-            .startWith(false)
-            .asDriver(onErrorJustReturn: false)
-
-        let forward10SecondsSubject = PublishSubject<Void>()
-        forward10Seconds = forward10SecondsSubject.asObserver()
-        forward10SecondsSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let player = self?.player else { return }
-                player.forward.onNext(10)
-            })
-            .disposed(by: bag)
-        let rewind10SecondsSubject = PublishSubject<Void>()
-        rewind10Seconds = rewind10SecondsSubject.asObserver()
-        rewind10SecondsSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let player = self?.player else { return }
-                player.rewind.onNext(10)
-            })
-            .disposed(by: bag)
-
-        speedUp = player.speedUp
-        speedDown = player.speedDown
-
-        let changeSpeedSubject = PublishSubject<Float>()
-        changeSpeed = changeSpeedSubject.asObserver()
-        Observable.combineLatest(
-            isPlaying.asObservable(),
-            changeSpeedSubject.asObservable()
+        self.currentTime = BehaviorRelay<String>(value: defaultTimeString)
+        self.totalTime = BehaviorRelay<String>(value: defaultTimeString)
+        self.state = State(
+            isReadyToPlay: isReadyToPlay.asDriver(),
+            isPlaying: isPlaying.asDriver(),
+            speedRate: speedRate.asDriver(),
+            currentTime: currentTime.asDriver(),
+            totalTime: totalTime.asDriver(),
+            currentSeconds: currentSeconds.asDriver(),
+            totalSeconds: totalSeconds.asDriver(),
+            loadingBufferRate: loadingBufferRate.asDriver(),
+            speedSegmentedControlAlpha: event.changeSpeedSegmentedControlAlpha.asDriver(onErrorJustReturn: 1),
+            sliderAlpha: event.changeSliderAlpha.asDriver(onErrorJustReturn: 1)
         )
-        .subscribe(onNext: { [weak self] isPlaying, speedRate in
-            guard isPlaying else { return }
-            guard let player = self?.player else { return }
-            player.changeSpeed.onNext(speedRate)
-        })
-        .disposed(by: bag)
 
-        let changeAudioPositionSubject = PublishSubject<Float>()
-        changeAudioPosition = changeAudioPositionSubject.asObserver()
-        changeAudioPositionSubject
-            .subscribe(onNext: { [weak self] position in
-                guard let player = self?.player else { return }
-                player.changeAudioPosition.onNext(position)
-            })
-            .disposed(by: bag)
-
-        let changeSpeedSegmentedControlAlphaSubject = PublishSubject<CGFloat>()
-        changeSpeedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asObserver()
-        speedSegmentedControlAlpha = changeSpeedSegmentedControlAlphaSubject.asDriver(onErrorJustReturn: 1)
-
-        let changeSliderAlphaSubject = PublishSubject<CGFloat>()
-        changeSliderAlpha = changeSliderAlphaSubject.asObserver()
-        sliderAlpha = changeSliderAlphaSubject.asDriver(onErrorJustReturn: 1)
-
-        let resetSubject = PublishSubject<Void>()
-        reset = resetSubject.asObserver()
-        resetSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.player.pause.onNext(())
-            })
-            .disposed(by: bag)
+        bind()
     }
 
-    private func setupOutputs() {
-        let readyToPlaySubject = PublishSubject<Void>()
-        readyToPlay = readyToPlaySubject.asDriver(onErrorJustReturn: ())
-        player.status
-            .subscribe(onNext: { status in
-                if status == .readyToPlay {
-                    readyToPlaySubject.onNext(())
-                }
-            })
+    private func bind() {
+        // event.playOrPauseTapped
+
+        let playOrPauseTapped = event.playOrPauseTapped.withLatestFrom(isPlaying).share()
+
+        let needsUpdatePlayStatus = playOrPauseTapped.filter { [weak self] _ in self?.url != nil }
+        needsUpdatePlayStatus.filter { $0 }.map { _ in }.bind(to: player.play).disposed(by: bag)
+        needsUpdatePlayStatus.filter { !$0 }.map { _ in }.bind(to: player.pause).disposed(by: bag)
+
+        let playOrPauseTappedResult = playOrPauseTapped
+            .map { [weak self] isPlaying in self?.url == nil ? false : !isPlaying }
+
+        // event.playNewAudio
+
+        let needsUpdateNewAudio = event.playNewAudio
+            .distinctUntilChanged()
+            .filter { [weak self] url in url != self?.url }
+            .share()
+
+        needsUpdateNewAudio
+            .do(onNext: { [weak self] url in self?.url = url })
+            .bind(to: player.newAudio)
             .disposed(by: bag)
-        speedRate = player.speedRate
-            .asDriver(onErrorJustReturn: 0)
 
-        currentTime = player.currentSeconds
-            .map { [weak self] seconds -> String in
-                guard let self = self else { return "" }
-                return self.convertTime(seconds: seconds)
-            }
-            .asDriver(onErrorJustReturn: "")
-        totalTime = player.totalSeconds
-            .map { [weak self] seconds -> String in
-                guard let self = self else { return "" }
-                return self.convertTime(seconds: seconds)
-            }
-            .asDriver(onErrorJustReturn: "")
-        currentSeconds = player.currentSeconds
-            .map { Float($0) }
-            .asDriver(onErrorJustReturn: 0)
-        totalSeconds = player.totalSeconds
-            .map { Float($0) }
-            .asDriver(onErrorJustReturn: 0)
+        let playNewAudioResult = needsUpdateNewAudio.map { _ in false }
 
-        loadingBufferRate = player.loadingBufferPercent
-            .map { Float($0 / 100) }
-            .asDriver(onErrorJustReturn: 0)
-    }
+        // player.status
 
-    private func updateIsPlayingStatus(aggregateValue: Bool, newValue: AnyObject) -> Bool {
-        if let status = newValue as? HCAudioPlayer.Status {
-            // player.status
-            if status == .finish {
-                return false
-            } else {
-                return aggregateValue
-            }
-        } else if let url = newValue as? URL {
-            // settingNewAudioSubject
-            guard self.url != url else {
-                // if self.url == url, then isPlaying will not be affected
-                return aggregateValue
-            }
-            setAudio(url: url)
-            return false
-        } else {
-            if url == nil {
-                return false
-            } else {
-                playAudio(!aggregateValue)
-                return !aggregateValue
-            }
+        let playerStatusResult = player.status.withLatestFrom(isPlaying) { status, isPlaying in
+            status == .finish ? false : isPlaying
         }
-    }
 
-    private func setAudio(url: URL) {
-        player.newAudio.onNext(url)
-        self.url = url
-    }
+        Observable
+            .merge(playOrPauseTappedResult, playNewAudioResult, playerStatusResult)
+            .do(onNext: { isPlaying in
+                NotificationCenter.default.post(name: .isPlaying, object: nil, userInfo: ["isPlaying": isPlaying])
+            })
+            .bind(to: isPlaying)
+            .disposed(by: bag)
 
-    private func playAudio(_ isPlay: Bool) {
-        if isPlay {
-            player.play.onNext(())
-        } else {
-            player.pause.onNext(())
-        }
+        event.forward10SecondsTapped.map { _ in 10 }.bind(to: player.forward).disposed(by: bag)
+        event.rewind10SecondsTapped.map { _ in 10 }.bind(to: player.rewind).disposed(by: bag)
+
+        Observable
+            .combineLatest(
+                isPlaying.asObservable(),
+                event.changeSpeed.asObservable()
+            )
+            .filter { isPlaying, _ in isPlaying }
+            .map { _, speedRate in speedRate }
+            .bind(to: player.changeSpeed)
+            .disposed(by: bag)
+
+        event.changeAudioPosition.bind(to: player.changeAudioPosition).disposed(by: bag)
+
+        player.status.map { $0 == .readyToPlay }.distinctUntilChanged().bind(to: isReadyToPlay).disposed(by: bag)
+        player.speedRate.bind(to: speedRate).disposed(by: bag)
+
+        player.currentSeconds
+            .map { [weak self, defaultTimeString] seconds -> String in
+                self?.convertTime(seconds: seconds) ?? defaultTimeString
+            }
+            .bind(to: currentTime)
+            .disposed(by: bag)
+
+        player.totalSeconds
+            .map { [weak self, defaultTimeString] seconds -> String in
+                self?.convertTime(seconds: seconds) ?? defaultTimeString
+            }
+            .bind(to: totalTime)
+            .disposed(by: bag)
+
+        player.currentSeconds.map(Float.init).bind(to: currentSeconds).disposed(by: bag)
+        player.totalSeconds.map(Float.init).bind(to: totalSeconds).disposed(by: bag)
+        player.loadingBufferPercent.map { Float($0 / 100) }.bind(to: loadingBufferRate).disposed(by: bag)
     }
 
     private func convertTime(seconds: Double) -> String {

@@ -218,8 +218,8 @@ extension EpisodeDetailViewController {
 extension EpisodeDetailViewController {
 
     func animatePlayerViewHeight() {
-        audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(1)
-        audioPlayerVC.viewModel.changeSliderAlpha.onNext(1)
+        audioPlayerVC.viewModel.event.changeSpeedSegmentedControlAlpha.accept(1)
+        audioPlayerVC.viewModel.event.changeSliderAlpha.accept(1)
 
         audioPlayerView.snp.updateConstraints {
             $0.top.equalTo(view.snp.bottom).inset(maxPlayerViewHeight)
@@ -232,8 +232,8 @@ extension EpisodeDetailViewController {
         }
         audioPlayerView.superview?.setNeedsLayout()
         UIView.animate(withDuration: 0.8) {
-            self.audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(0)
-            self.audioPlayerVC.viewModel.changeSliderAlpha.onNext(0)
+            self.audioPlayerVC.viewModel.event.changeSpeedSegmentedControlAlpha.accept(0)
+            self.audioPlayerVC.viewModel.event.changeSliderAlpha.accept(0)
             self.audioPlayerView.superview?.layoutIfNeeded()
         }
     }

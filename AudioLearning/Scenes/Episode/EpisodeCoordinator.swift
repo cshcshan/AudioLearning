@@ -74,22 +74,23 @@ final class EpisodeCoordinator: Coordinator<Void> {
 
         viewModel.state.audioURLString
             .compactMap(URL.init)
-            .drive(audioPlayerVC.viewModel.settingNewAudio)
+            .asObservable()
+            .bind(to: audioPlayerVC.viewModel.event.playNewAudio)
             .disposed(by: bag)
 
         viewModel.event.shrinkAudioPlayer.asSignal()
             .map { _ in 0 }
             .emit(
-                to: audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
-                audioPlayerVC.viewModel.changeSliderAlpha
+                to: audioPlayerVC.viewModel.event.changeSpeedSegmentedControlAlpha,
+                audioPlayerVC.viewModel.event.changeSliderAlpha
             )
             .disposed(by: bag)
 
         viewModel.event.enlargeAudioPlayer.asSignal()
             .map { _ in 1 }
             .emit(
-                to: audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha,
-                audioPlayerVC.viewModel.changeSliderAlpha
+                to: audioPlayerVC.viewModel.event.changeSpeedSegmentedControlAlpha,
+                audioPlayerVC.viewModel.event.changeSliderAlpha
             )
             .disposed(by: bag)
 

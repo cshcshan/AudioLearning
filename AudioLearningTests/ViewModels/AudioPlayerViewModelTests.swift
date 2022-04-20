@@ -42,24 +42,24 @@ extension AudioPlayerViewModelTests {
 
     // MARK: PlayOldAudio
 
-    func testInit_IsPlaying_PlayNewAudio() {
+    func test_init_isPlaying_playNewAudio() {
         // Creates a MockObserver<Bool>
         let isPlaying = scheduler.createObserver(Bool.self)
 
         // Output combines with the MockObserver(isPlaying above)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         // MockObservable combines with Input
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
         let url2 = URL(string: "https://www.cshan.com/2.mp3")!
-        scheduler.createHotObservable([
-            .next(10, url1),
-            .next(20, url2)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, url1),
+                .next(20, url2)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -71,22 +71,21 @@ extension AudioPlayerViewModelTests {
         ])
     }
 
-    func testInit_IsPlaying_TappedPlayPause() {
+    func test_init_isPlaying_tappedPlayPause() {
         // Creates a MockObserver<Bool>
         let isPlaying = scheduler.createObserver(Bool.self)
 
         // Output combines with the MockObserver(isPlaying above)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         // MockObservable combines with Input
-        scheduler.createHotObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+        scheduler
+            .createHotObservable([
+                .next(10, ()),
+                .next(20, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -98,29 +97,31 @@ extension AudioPlayerViewModelTests {
         ])
     }
 
-    func testInit_IsPlaying_PlayNewAudioFirst_ThenTappedPlayPause() {
+    func test_init_isPlaying_playNewAudioFirst_thenTappedPlayPause() {
         let isPlaying = scheduler.createObserver(Bool.self)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
         let url2 = URL(string: "https://www.cshan.com/2.mp3")!
         let url3 = URL(string: "https://www.cshan.com/3.mp3")!
-        scheduler.createHotObservable([
-            .next(5, url1),
-            .next(15, url2),
-            .next(25, url3)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, ()),
-            .next(20, ()),
-            .next(30, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(5, url1),
+                .next(15, url2),
+                .next(25, url3)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, ()),
+                .next(20, ()),
+                .next(30, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -136,28 +137,30 @@ extension AudioPlayerViewModelTests {
         ])
     }
 
-    func testInit_IsPlaying_PlayNewAudioFirstTwoTimes_ThenTappedPlayPause() {
+    func test_init_isPlaying_playNewAudioFirstTwoTimes_thenTappedPlayPause() {
         let isPlaying = scheduler.createObserver(Bool.self)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
         let url2 = URL(string: "https://www.cshan.com/2.mp3")!
         let url3 = URL(string: "https://www.cshan.com/3.mp3")!
-        scheduler.createHotObservable([
-            .next(5, url1),
-            .next(15, url2),
-            .next(25, url3)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(20, ()),
-            .next(30, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(5, url1),
+                .next(15, url2),
+                .next(25, url3)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(20, ()),
+                .next(30, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -172,27 +175,29 @@ extension AudioPlayerViewModelTests {
         ])
     }
 
-    func testInit_IsPlaying_PlayNewAudioFirst_ThenTappedPlayPauseTwoTimes() {
+    func test_init_isPlaying_playNewAudioFirst_thenTappedPlayPauseTwoTimes() {
         let isPlaying = scheduler.createObserver(Bool.self)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
         let url2 = URL(string: "https://www.cshan.com/2.mp3")!
-        scheduler.createHotObservable([
-            .next(5, url1),
-            .next(25, url2)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, ()),
-            .next(20, ()),
-            .next(30, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(5, url1),
+                .next(25, url2)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, ()),
+                .next(20, ()),
+                .next(30, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -207,27 +212,29 @@ extension AudioPlayerViewModelTests {
         ])
     }
 
-    func testInit_IsPlaying_TappedPlayPauseFirst_ThenPlayNewAudio() {
+    func test_init_isPlaying_tappedPlayPauseFirst_thenPlayNewAudio() {
         let isPlaying = scheduler.createObserver(Bool.self)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
         let url2 = URL(string: "https://www.cshan.com/2.mp3")!
-        scheduler.createHotObservable([
-            .next(15, url1),
-            .next(25, url2)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, ()),
-            .next(20, ()),
-            .next(30, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(15, url1),
+                .next(25, url2)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, ()),
+                .next(20, ()),
+                .next(30, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
@@ -244,73 +251,74 @@ extension AudioPlayerViewModelTests {
 
     // MARK: PlayOldAudio
 
-    func testInit_IsPlaying_PlayOldAudio_ThenTappedPlayPause() {
+    func test_init_isPlaying_playOldAudio_thenTappedPlayPause() {
         let isPlaying = scheduler.createObserver(Bool.self)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
-        scheduler.createHotObservable([
-            .next(5, url1),
-            .next(15, url1),
-            .next(25, url1)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, ()),
-            .next(20, ()),
-            .next(30, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(5, url1),
+                .next(15, url1),
+                .next(25, url1)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, ()),
+                .next(20, ()),
+                .next(30, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(isPlaying.events.count, 7)
+        XCTAssertEqual(isPlaying.events.count, 5)
         XCTAssertEqual(isPlaying.events, [
             .next(0, false),
             .next(5, false),
             .next(10, true),
-            .next(15, true),
             .next(20, false),
-            .next(25, false),
             .next(30, true)
         ])
     }
 
-    func testInit_IsPlaying_PlayOldAudioTwoTimes_ThenTappedPlayPause_ThenPlayNewAudio() {
+    func test_init_isPlaying_playOldAudioTwoTimes_thenTappedPlayPause_thenPlayNewAudio() {
         let isPlaying = scheduler.createObserver(Bool.self)
-        sut.isPlaying
-            .drive(isPlaying)
-            .disposed(by: bag)
+        sut.state.isPlaying.drive(isPlaying).disposed(by: bag)
 
         let url1 = URL(string: "https://www.cshan.com/1.mp3")!
         let url2 = URL(string: "https://www.cshan.com/2.mp3")!
-        scheduler.createHotObservable([
-            .next(5, url1),
-            .next(15, url1),
-            .next(25, url2)
-        ])
-        .bind(to: sut.settingNewAudio)
-        .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, ()),
-            .next(20, ()),
-            .next(30, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(5, url1),
+                .next(15, url1),
+                .next(25, url2)
+            ])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, ()),
+                .next(20, ()),
+                .next(30, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(isPlaying.events.count, 7)
+        XCTAssertEqual(isPlaying.events.count, 6)
         XCTAssertEqual(isPlaying.events, [
             .next(0, false),
             .next(5, false),
             .next(10, true),
-            .next(15, true),
             .next(20, false),
             .next(25, false),
             .next(30, true)
@@ -322,101 +330,44 @@ extension AudioPlayerViewModelTests {
 
 extension AudioPlayerViewModelTests {
 
-    func testSkipForward_With10S() {
+    func test_skipForward_with10S() {
         player.audioCurrentSeconds = 20
 
         let currentTime = scheduler.createObserver(String.self)
-        sut.currentTime
-            .drive(currentTime)
-            .disposed(by: bag)
+        sut.state.currentTime.drive(currentTime).disposed(by: bag)
 
-        scheduler.createHotObservable([.next(15, ())])
-            .bind(to: sut.forward10Seconds)
+        scheduler
+            .createHotObservable([.next(15, ())])
+            .bind(to: sut.event.forward10SecondsTapped)
             .disposed(by: bag)
 
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
+        sut.state.isPlaying.drive().disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(currentTime.events.count, 1)
-        XCTAssertEqual(currentTime.events, [.next(15, "00:30")])
+        XCTAssertEqual(currentTime.events.count, 2)
+        XCTAssertEqual(currentTime.events, [.next(0, "--:--"), .next(15, "00:30")])
     }
 
-    func testSkipRewind_With10S() {
+    func test_skipRewind_with10S() {
         player.audioCurrentSeconds = 20
 
         let currentTime = scheduler.createObserver(String.self)
-        sut.currentTime
-            .drive(currentTime)
-            .disposed(by: bag)
+        sut.state.currentTime.drive(currentTime).disposed(by: bag)
 
-        scheduler.createHotObservable([.next(15, ())])
-            .bind(to: sut.rewind10Seconds)
-            .disposed(by: bag)
-
-        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
-
-        scheduler.start()
-
-        XCTAssertEqual(currentTime.events.count, 1)
-        XCTAssertEqual(currentTime.events, [.next(15, "00:10")])
-    }
-}
-
-// MARK: - Speed
-
-extension AudioPlayerViewModelTests {
-
-    func testChangeSpeed_AddHalf() {
-        player.audioSpeedRate = 1
-
-        let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
-            .disposed(by: bag)
-
-        scheduler.createHotObservable([.next(15, 0.5)])
-            .bind(to: sut.speedUp)
+        scheduler
+            .createHotObservable([.next(15, ())])
+            .bind(to: sut.event.rewind10SecondsTapped)
             .disposed(by: bag)
 
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
+        sut.state.isPlaying.drive().disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(speedRate.events.count, 1)
-        XCTAssertEqual(speedRate.events, [.next(15, 1.5)])
-    }
-
-    func testChangeSpeed_MinusHalf() {
-        player.audioSpeedRate = 2
-
-        let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
-            .disposed(by: bag)
-
-        scheduler.createHotObservable([.next(15, 0.5)])
-            .bind(to: sut.speedDown)
-            .disposed(by: bag)
-
-        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
-
-        scheduler.start()
-
-        XCTAssertEqual(speedRate.events.count, 1)
-        XCTAssertEqual(speedRate.events, [.next(15, 1.5)])
+        XCTAssertEqual(currentTime.events.count, 2)
+        XCTAssertEqual(currentTime.events, [.next(0, "--:--"), .next(15, "00:10")])
     }
 }
 
@@ -424,166 +375,192 @@ extension AudioPlayerViewModelTests {
 
 extension AudioPlayerViewModelTests {
 
-    func testChangeSpeed_WhenIsNotPlaying() {
+    func test_changeSpeed_whenIsNotPlaying() {
         player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
+        sut.state.speedRate.drive(speedRate).disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, 2),
+                .next(20, 3),
+                .next(30, 0.5)
+            ])
+            .bind(to: sut.event.changeSpeed)
             .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, 2),
-            .next(20, 3),
-            .next(30, 0.5)
-        ])
-        .bind(to: sut.changeSpeed)
-        .disposed(by: bag)
+
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
+        sut.state.isPlaying.drive().disposed(by: bag)
+
         scheduler.start()
-        XCTAssertEqual(speedRate.events.count, 0)
+        XCTAssertEqual(speedRate.events.count, 1)
     }
 
-    func testChangeSpeed_WhenPlaying() {
+    func test_changeSpeed_whenPlaying() {
         player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
-            .disposed(by: bag)
+        sut.state.speedRate.drive(speedRate).disposed(by: bag)
+
         let url = URL(string: "https://www.cshan.com/1.mp3")!
-        scheduler.createHotObservable([.next(5, url)])
-            .bind(to: sut.settingNewAudio)
+        scheduler
+            .createHotObservable([.next(5, url)])
+            .bind(to: sut.event.playNewAudio)
             .disposed(by: bag)
-        scheduler.createHotObservable([.next(10, ())])
-            .bind(to: sut.tappedPlayPause)
+
+        scheduler
+            .createHotObservable([.next(10, ())])
+            .bind(to: sut.event.playOrPauseTapped)
             .disposed(by: bag)
-        scheduler.createHotObservable([
+
+        scheduler
+            .createHotObservable([
+                .next(20, 2),
+                .next(30, 3),
+                .next(40, 0.5)
+            ])
+            .bind(to: sut.event.changeSpeed)
+            .disposed(by: bag)
+
+        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
+        sut.state.isPlaying.drive().disposed(by: bag)
+
+        scheduler.start()
+
+        XCTAssertEqual(speedRate.events.count, 4)
+        XCTAssertEqual(speedRate.events, [
+            .next(0, 1),
             .next(20, 2),
             .next(30, 3),
             .next(40, 0.5)
         ])
-        .bind(to: sut.changeSpeed)
-        .disposed(by: bag)
-        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
+    }
+
+    func test_changeSpeed_isNotPlaying_thenChangeSpeed_thenPlay_thenChangeSpeed() {
+        player.audioSpeedRate = 1
+
+        let speedRate = scheduler.createObserver(Float.self)
+        sut.state.speedRate.drive(speedRate).disposed(by: bag)
+
+        let url = URL(string: "https://www.cshan.com/1.mp3")!
+
+        // Change speed: clock 10 will not be called.
+        scheduler
+            .createHotObservable([
+                .next(10, 2),
+                .next(30, 3),
+                .next(50, 0.5)
+            ])
+            .bind(to: sut.event.changeSpeed)
             .disposed(by: bag)
+
+        // Play audio
+        scheduler
+            .createHotObservable([.next(35, url)])
+            .bind(to: sut.event.playNewAudio)
+            .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([.next(40, ())])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
+
+        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
+        sut.state.isPlaying.drive().disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(speedRate.events.count, 3)
         XCTAssertEqual(speedRate.events, [
-            .next(20, 2),
-            .next(30, 3),
-            .next(40, 0.5)
-        ])
-    }
-
-    func testChangeSpeed_IsNotPlaying_ThenChangeSpeed_ThenPlay_ThenChangeSpeed() {
-        player.audioSpeedRate = 1
-
-        let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
-            .disposed(by: bag)
-        let url = URL(string: "https://www.cshan.com/1.mp3")!
-        // Change speed: clock 10 will not be called.
-        scheduler.createHotObservable([
-            .next(10, 2),
-            .next(30, 3),
-            .next(50, 0.5)
-        ])
-        .bind(to: sut.changeSpeed)
-        .disposed(by: bag)
-        // Play audio
-        scheduler.createHotObservable([.next(35, url)])
-            .bind(to: sut.settingNewAudio)
-            .disposed(by: bag)
-        scheduler.createHotObservable([.next(40, ())])
-            .bind(to: sut.tappedPlayPause)
-            .disposed(by: bag)
-        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(speedRate.events.count, 2)
-        XCTAssertEqual(speedRate.events, [
+            .next(0, 1),
             .next(40, 3),
             .next(50, 0.5)
         ])
     }
 
-    func testChangeSpeed_IsNotPlaying_ThenChangeSpeed_ThenPlay_ThenChangeSpeed_ThenPause_ThenChangeSpeed() {
+    func test_changeSpeed_isNotPlaying_thenChangeSpeed_thenPlay_thenChangeSpeed_thenPause_thenChangeSpeed() {
         player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
-            .disposed(by: bag)
+        sut.state.speedRate.drive(speedRate).disposed(by: bag)
+
         let url = URL(string: "https://www.cshan.com/1.mp3")!
+
         // Change speed: clock 10 will not be called.
-        scheduler.createHotObservable([
-            .next(10, 2),
-            .next(30, 3),
-            .next(50, 0.5)
-        ])
-        .bind(to: sut.changeSpeed)
-        .disposed(by: bag)
+        scheduler
+            .createHotObservable([
+                .next(10, 2),
+                .next(30, 3),
+                .next(50, 0.5)
+            ])
+            .bind(to: sut.event.changeSpeed)
+            .disposed(by: bag)
+
         // Play audio
-        scheduler.createHotObservable([.next(35, url)])
-            .bind(to: sut.settingNewAudio)
+        scheduler
+            .createHotObservable([.next(35, url)])
+            .bind(to: sut.event.playNewAudio)
             .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(40, ()),
-            .next(45, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(40, ()),
+                .next(45, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
+
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
+        sut.state.isPlaying.drive().disposed(by: bag)
+
         scheduler.start()
-        XCTAssertEqual(speedRate.events.count, 1)
-        XCTAssertEqual(speedRate.events, [.next(40, 3)])
+
+        XCTAssertEqual(speedRate.events.count, 2)
+        XCTAssertEqual(speedRate.events, [.next(0, 1), .next(40, 3)])
     }
 
-    func testChangeSpeed_IsNotPlaying_ThenChangeSpeed_ThenPlay_ThenChangeSpeed_ThenPause_ThenChangeSpeed_ThenPlay() {
+    func test_changeSpeed_isNotPlaying_thenChangeSpeed_thenPlay_thenChangeSpeed_thenPause_thenChangeSpeed_thenPlay() {
         player.audioSpeedRate = 1
 
         let speedRate = scheduler.createObserver(Float.self)
-        sut.speedRate
-            .drive(speedRate)
-            .disposed(by: bag)
+        sut.state.speedRate.drive(speedRate).disposed(by: bag)
+
         let url = URL(string: "https://www.cshan.com/1.mp3")!
+
         // Change speed: clock 10 will not be called.
-        scheduler.createHotObservable([
-            .next(10, 2),
-            .next(30, 3),
-            .next(50, 0.5)
-        ])
-        .bind(to: sut.changeSpeed)
-        .disposed(by: bag)
+        scheduler
+            .createHotObservable([
+                .next(10, 2),
+                .next(30, 3),
+                .next(50, 0.5)
+            ])
+            .bind(to: sut.event.changeSpeed)
+            .disposed(by: bag)
+
         // Play audio
-        scheduler.createHotObservable([.next(35, url)])
-            .bind(to: sut.settingNewAudio)
+        scheduler
+            .createHotObservable([.next(35, url)])
+            .bind(to: sut.event.playNewAudio)
             .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(40, ()),
-            .next(45, ()),
-            .next(55, ())
-        ])
-        .bind(to: sut.tappedPlayPause)
-        .disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(40, ()),
+                .next(45, ()),
+                .next(55, ())
+            ])
+            .bind(to: sut.event.playOrPauseTapped)
+            .disposed(by: bag)
+
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
+        sut.state.isPlaying.drive().disposed(by: bag)
+
         scheduler.start()
-        XCTAssertEqual(speedRate.events.count, 2)
+
+        XCTAssertEqual(speedRate.events.count, 3)
         XCTAssertEqual(speedRate.events, [
+            .next(0, 1),
             .next(40, 3),
             .next(55, 0.5)
         ])
@@ -594,25 +571,28 @@ extension AudioPlayerViewModelTests {
 
 extension AudioPlayerViewModelTests {
 
-    func testChangeAudioPosition() {
+    func test_changeAudioPosition() {
         player.audioCurrentSeconds = 10
+
         let currentSeconds = scheduler.createObserver(Float.self)
-        sut.currentSeconds
-            .drive(currentSeconds)
+        sut.state.currentSeconds.drive(currentSeconds).disposed(by: bag)
+
+        scheduler
+            .createHotObservable([
+                .next(10, 50),
+                .next(15, 85)
+            ])
+            .bind(to: sut.event.changeAudioPosition)
             .disposed(by: bag)
-        scheduler.createHotObservable([
-            .next(10, 50),
-            .next(15, 85)
-        ])
-        .bind(to: sut.changeAudioPosition)
-        .disposed(by: bag)
+
         // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
-        sut.isPlaying
-            .drive()
-            .disposed(by: bag)
+        sut.state.isPlaying.drive().disposed(by: bag)
+
         scheduler.start()
-        XCTAssertEqual(currentSeconds.events.count, 2)
+
+        XCTAssertEqual(currentSeconds.events.count, 3)
         XCTAssertEqual(currentSeconds.events, [
+            .next(0, 0),
             .next(10, 50),
             .next(15, 85)
         ])

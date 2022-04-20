@@ -88,16 +88,10 @@ final class AudioPlayerViewController: UIViewController, StoryboardGettable {
     }
 
     private func setupBindings() {
-        playButton.rx.tap
-            .bind(to: viewModel.tappedPlayPause)
-            .disposed(by: bag)
+        playButton.rx.tap.bind(to: viewModel.event.playOrPauseTapped).disposed(by: bag)
+        forwardButton.rx.tap.bind(to: viewModel.event.forward10SecondsTapped).disposed(by: bag)
+        rewindButton.rx.tap.bind(to: viewModel.event.rewind10SecondsTapped).disposed(by: bag)
 
-        forwardButton.rx.tap
-            .bind(to: viewModel.forward10Seconds)
-            .disposed(by: bag)
-        rewindButton.rx.tap
-            .bind(to: viewModel.rewind10Seconds)
-            .disposed(by: bag)
         speedSegmentedControl.rx.selectedSegmentIndex
             .map { index -> Float in
                 switch index {
@@ -109,57 +103,37 @@ final class AudioPlayerViewController: UIViewController, StoryboardGettable {
                 default: return 1
                 }
             }
-            .bind(to: viewModel.changeSpeed)
-            .disposed(by: bag)
-        slider.rx.value
-            .bind(to: viewModel.changeAudioPosition)
+            .bind(to: viewModel.event.changeSpeed)
             .disposed(by: bag)
 
-        viewModel.readyToPlay
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.setupUI(isReady: true)
+        slider.rx.value.bind(to: viewModel.event.changeAudioPosition).disposed(by: bag)
+
+        viewModel.state.isReadyToPlay
+            .distinctUntilChanged()
+            .drive(with: self, onNext: { `self`, isReadyToPlay in self.setupUI(isReady: isReadyToPlay) })
+            .disposed(by: bag)
+
+        viewModel.state.isPlaying
+            .drive(with: self, onNext: { `self`, isPlaying in
+                let image = isPlaying ? self.pauseImage : self.playImage
+                self.playButton.setImage(image, for: .normal)
             })
             .disposed(by: bag)
 
-        viewModel.isPlaying
-            .drive(onNext: { [weak self] isPlaying in
-                guard let self = self else { return }
-                self.playButton.setImage(
-                    isPlaying ? self.pauseImage : self.playImage,
-                    for: .normal
-                )
+        viewModel.state.currentTime.drive(progressTimerLabel.rx.text).disposed(by: bag)
+        viewModel.state.totalTime.drive(totalLengthLabel.rx.text).disposed(by: bag)
+
+        viewModel.state.currentSeconds.drive(slider.rx.value).disposed(by: bag)
+        viewModel.state.totalSeconds
+            .drive(with: self, onNext: { `self`, seconds in
+                self.slider.maximumValue = seconds
             })
             .disposed(by: bag)
 
-        viewModel.currentTime
-            .drive(progressTimerLabel.rx.text)
-            .disposed(by: bag)
-        viewModel.totalTime
-            .drive(totalLengthLabel.rx.text)
-            .disposed(by: bag)
+        viewModel.state.loadingBufferRate.drive(slider.bufferProgressView.rx.progress).disposed(by: bag)
 
-        viewModel.currentSeconds
-            .drive(slider.rx.value)
-            .disposed(by: bag)
-        viewModel.totalSeconds
-            .drive(onNext: { [weak self] seconds in
-                guard let slider = self?.slider else { return }
-                slider.maximumValue = seconds
-            })
-            .disposed(by: bag)
-
-        viewModel.loadingBufferRate
-            .drive(slider.bufferProgressView.rx.progress)
-            .disposed(by: bag)
-
-        viewModel.speedSegmentedControlAlpha
-            .drive(speedSegmentedControl.rx.alpha)
-            .disposed(by: bag)
-
-        viewModel.sliderAlpha
-            .drive(slider.rx.alpha)
-            .disposed(by: bag)
+        viewModel.state.speedSegmentedControlAlpha.drive(speedSegmentedControl.rx.alpha).disposed(by: bag)
+        viewModel.state.sliderAlpha.drive(slider.rx.alpha).disposed(by: bag)
     }
 
     private func setupUI(isReady: Bool) {

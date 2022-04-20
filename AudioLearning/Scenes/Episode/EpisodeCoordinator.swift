@@ -6,6 +6,7 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 import UIKit
 
@@ -14,7 +15,6 @@ final class EpisodeCoordinator: Coordinator<Void> {
     private let window: UIWindow
     private var navigationController: UINavigationController!
     private var episodeDetailViewController: EpisodeDetailViewController?
-    private var audioPlayerVC: AudioPlayerViewController?
 
     required init(window: UIWindow) {
         self.window = window
@@ -41,11 +41,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
             .disposed(by: bag)
 
         // after pressing playingButton, display the episode detail which is playing audio
-        viewModel.showEpisodeDetailFromPlaying
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.showEpisodeDetailFromPlaying()
-            })
+        viewModel.showEpisodeDetailFromPlaying.asSignal(onErrorSignalWith: .empty())
+            .emit(with: self, onNext: { `self`, _ in self.showEpisodeDetailFromPlaying() })
             .disposed(by: bag)
 
         // ViewController
@@ -70,8 +67,10 @@ final class EpisodeCoordinator: Coordinator<Void> {
         )
 
         // Audio and Vocabulary Detail
-        let audioPlayerVC = newOrGetAudioPlayerVC()
-        let vocabularyDetailVC = newVocabularyDetailVC(episodeDetailViewModel: viewModel)
+        let audioPlayerVC = makeAudioPlayerVC()
+        let vocabularyDetailVC = makeVocabularyDetailVC(
+            isVocabularyDetailViewHidden: viewModel.state.isVocabularyDetailViewHidden
+        )
 
         viewModel.state.audioURLString
             .compactMap(URL.init)
@@ -102,9 +101,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
         // ViewController
         let viewController = EpisodeDetailViewController.initialize(from: .episode, storyboardID: .episodeDetail)
         viewController.viewModel = viewModel
-        viewController.audioPlayerView = audioPlayerVC.view
+        viewController.audioPlayerVC = audioPlayerVC
         viewController.vocabularyDetailView = vocabularyDetailVC.view
-        viewController.addChild(audioPlayerVC)
         viewController.addChild(vocabularyDetailVC)
 
         viewModel.event.vocabularyTapped
@@ -128,14 +126,7 @@ final class EpisodeCoordinator: Coordinator<Void> {
         navigationController.pushViewController(viewController, animated: true)
     }
 
-    private func newOrGetAudioPlayerVC() -> AudioPlayerViewController {
-        if let audioPlayerVC = audioPlayerVC {
-            audioPlayerVC.viewModel.reset.onNext(())
-            audioPlayerVC.view.removeFromSuperview()
-            audioPlayerVC.removeFromParent()
-            return audioPlayerVC
-        }
-
+    private func makeAudioPlayerVC() -> AudioPlayerViewController {
         let player = HCAudioPlayer()
         let audioPlayerViewModel = AudioPlayerViewModel(player: player)
         let viewController = AudioPlayerViewController.initialize(
@@ -143,19 +134,17 @@ final class EpisodeCoordinator: Coordinator<Void> {
             storyboardID: .audioPlayerViewController
         )
         viewController.viewModel = audioPlayerViewModel
-        audioPlayerVC = viewController
         return viewController
     }
 
-    private func newVocabularyDetailVC(episodeDetailViewModel: EpisodeDetailViewModel)
-        -> VocabularyDetailViewController {
+    private func makeVocabularyDetailVC(
+        isVocabularyDetailViewHidden: BehaviorRelay<Bool>
+    ) -> VocabularyDetailViewController {
         // ViewModel
         let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
-        viewModel.close.map { true }
-            .bind(to: episodeDetailViewModel.state.isVocabularyDetailViewHidden)
-            .disposed(by: bag)
+        viewModel.close.map { true }.bind(to: isVocabularyDetailViewHidden).disposed(by: bag)
 
         // ViewController
         let viewController = VocabularyDetailViewController.initialize(

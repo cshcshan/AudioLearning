@@ -9,6 +9,7 @@
 import Lottie
 import RealmSwift
 import RxSwift
+import SnapKit
 import UIKit
 
 @UIApplicationMain

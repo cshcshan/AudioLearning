@@ -12,26 +12,38 @@ import UIKit
 
 final class EpisodeDetailViewController: BaseViewController {
 
+    // MARK: - IBOutlets
+
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var contentView: UIView!
     @IBOutlet var photoImageView: UIImageView!
     @IBOutlet var htmlTextView: UITextView!
-    @IBOutlet var playerView: UIView!
-    @IBOutlet var playerViewHeight: NSLayoutConstraint!
     @IBOutlet var maskView: UIView!
     @IBOutlet var vocabularyDetailContainerView: UIView!
+
     private let refreshControl = UIRefreshControl()
     private var item: UIMenuItem!
 
     private let darkBgTempImage = UIImage(named: "temp_pic-white")
     private let lightBgTempImage = UIImage(named: "temp_pic")
 
+    // MARK: - Properties
+
     var viewModel: EpisodeDetailViewModel!
-    var audioPlayerView: UIView!
+    var audioPlayerVC: AudioPlayerViewController!
     var vocabularyDetailView: UIView!
+
     private var beganPlayerViewHeight: CGFloat = .zero
-    private let maxPlayerViewHeight: CGFloat = 176.5 + 32 + 16
-    private let minPlayerViewHeight: CGFloat = 90
+    private let maxPlayerViewHeight: CGFloat = 176.5 + 32 + 16 + 34
+    private let minPlayerViewHeight: CGFloat = 124
+
+    private lazy var audioPlayerView: UIView! = audioPlayerVC.view
+
+    private var playerViewHeight: CGFloat {
+        view.bounds.height - audioPlayerView.frame.minY
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,8 +54,10 @@ final class EpisodeDetailViewController: BaseViewController {
         viewModel.event.fetchData.accept(())
     }
 
+    // MARK: - Setup
+
     override func setupUIID() {
-        playerView.accessibilityIdentifier = "PlayerView"
+        audioPlayerView.accessibilityIdentifier = "PlayerView"
     }
 
     override func setupUIColor() {
@@ -64,14 +78,18 @@ final class EpisodeDetailViewController: BaseViewController {
         scrollView.contentInsetAdjustmentBehavior = .never
         setupNavigationBar()
         addTapToMaskView()
+
         // playerView
+        addChild(audioPlayerVC)
+        view.addSubview(audioPlayerView)
+        audioPlayerView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.snp.bottom).inset(maxPlayerViewHeight)
+        }
         setupPlayerViewShadow()
-        audioPlayerView.frame = playerView.bounds
-        playerView.clipsToBounds = true
-        playerView.addSubview(audioPlayerView)
-        playerView.sendSubviewToBack(audioPlayerView)
         animatePlayerViewHeight()
         addPanToPlayerView()
+
         // refreshControl
         if !isUITesting {
             refreshControl.tintColor = Appearance.textColor
@@ -83,9 +101,11 @@ final class EpisodeDetailViewController: BaseViewController {
                     y: -refreshControl.frame.height
                 ) // for changing refreshControl's tintColor
         }
+
         // htmlTextView
         htmlTextView.isEditable = false
         htmlTextView.isScrollEnabled = false
+
         // vocabularyDetailView
         vocabularyDetailContainerView.backgroundColor = .clear
         vocabularyDetailContainerView.frame = vocabularyDetailView.bounds
@@ -101,12 +121,12 @@ final class EpisodeDetailViewController: BaseViewController {
     }
 
     private func setupPlayerViewShadow() {
-        playerView.layer.masksToBounds = false
-        playerView.layer.shadowColor = UIColor.black.cgColor
-        playerView.layer.shadowOpacity = 0.4
-        playerView.layer.shadowOffset = CGSize(width: -2, height: -5)
-        playerView.layer.shadowRadius = 5
-        playerView.layer.shadowPath = UIBezierPath(rect: playerView.bounds).cgPath
+        audioPlayerView.layer.masksToBounds = false
+        audioPlayerView.layer.shadowColor = UIColor.black.cgColor
+        audioPlayerView.layer.shadowOpacity = 0.4
+        audioPlayerView.layer.shadowOffset = CGSize(width: -2, height: -5)
+        audioPlayerView.layer.shadowRadius = 5
+        audioPlayerView.layer.shadowPath = UIBezierPath(rect: audioPlayerView.bounds).cgPath
     }
 
     private func setupBindings() {
@@ -169,7 +189,7 @@ final class EpisodeDetailViewController: BaseViewController {
             .bind(to: maskView.rx.fadeIn)
             .disposed(by: bag)
 
-        playerViewHeight.constant == minPlayerViewHeight
+        playerViewHeight == minPlayerViewHeight
             ? viewModel.event.shrinkAudioPlayer.accept(())
             : viewModel.event.enlargeAudioPlayer.accept(())
     }
@@ -198,31 +218,40 @@ extension EpisodeDetailViewController {
 extension EpisodeDetailViewController {
 
     func animatePlayerViewHeight() {
-        playerViewHeight.constant = maxPlayerViewHeight
-        playerView.superview?.setNeedsLayout()
-        playerView.superview?.layoutIfNeeded()
-        playerViewHeight.constant = minPlayerViewHeight
-        playerView.superview?.setNeedsLayout()
-        UIView.animate(withDuration: 0.8, animations: { [weak self] in
-            guard let self = self else { return }
-            self.playerView.superview?.layoutIfNeeded()
-        })
+        audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(1)
+        audioPlayerVC.viewModel.changeSliderAlpha.onNext(1)
+
+        audioPlayerView.snp.updateConstraints {
+            $0.top.equalTo(view.snp.bottom).inset(maxPlayerViewHeight)
+        }
+        audioPlayerView.superview?.setNeedsLayout()
+        audioPlayerView.superview?.layoutIfNeeded()
+
+        audioPlayerView.snp.updateConstraints {
+            $0.top.equalTo(view.snp.bottom).inset(minPlayerViewHeight)
+        }
+        audioPlayerView.superview?.setNeedsLayout()
+        UIView.animate(withDuration: 0.8) {
+            self.audioPlayerVC.viewModel.changeSpeedSegmentedControlAlpha.onNext(0)
+            self.audioPlayerVC.viewModel.changeSliderAlpha.onNext(0)
+            self.audioPlayerView.superview?.layoutIfNeeded()
+        }
     }
 
-    func addPanToPlayerView() {
+    private func addPanToPlayerView() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanPlayerView))
-        playerView.addGestureRecognizer(pan)
+        audioPlayerView.addGestureRecognizer(pan)
     }
 
     @objc func handlePanPlayerView(_ recognizer: UIPanGestureRecognizer) {
-        guard let view = recognizer.view else { return }
+        guard let recognizerView = recognizer.view else { return }
 
-        let offset = recognizer.translation(in: view)
-        let velocity = recognizer.velocity(in: view)
+        let offset = recognizer.translation(in: recognizerView)
+        let velocity = recognizer.velocity(in: recognizerView)
 
         switch recognizer.state {
         case .began:
-            beganPlayerViewHeight = playerViewHeight.constant
+            beganPlayerViewHeight = recognizerView.bounds.height - audioPlayerView.frame.minY
         case .changed:
             var finalY = beganPlayerViewHeight - offset.y
             if finalY > maxPlayerViewHeight { finalY = maxPlayerViewHeight }
@@ -230,8 +259,11 @@ extension EpisodeDetailViewController {
             finalY == minPlayerViewHeight
                 ? viewModel.event.shrinkAudioPlayer.accept(())
                 : viewModel.event.enlargeAudioPlayer.accept(())
-            playerViewHeight.constant = finalY
-            playerView.superview?.layoutIfNeeded()
+
+            audioPlayerView.snp.updateConstraints {
+                $0.top.equalTo(self.view.snp.bottom).inset(finalY)
+            }
+            audioPlayerView.superview?.layoutIfNeeded()
         case .ended:
             var finalY = beganPlayerViewHeight
             if offset.y > 50 || velocity.y > 500 {
@@ -239,12 +271,15 @@ extension EpisodeDetailViewController {
             } else if offset.y < -50 || velocity.y < -500 {
                 finalY = maxPlayerViewHeight
             }
+
             UIView.animate(withDuration: 0.4) {
                 finalY == self.minPlayerViewHeight
                     ? self.viewModel.event.shrinkAudioPlayer.accept(())
                     : self.viewModel.event.enlargeAudioPlayer.accept(())
-                self.playerViewHeight.constant = finalY
-                self.playerView.superview?.layoutIfNeeded()
+                self.audioPlayerView.snp.updateConstraints {
+                    $0.top.equalTo(self.view.snp.bottom).inset(finalY)
+                }
+                self.audioPlayerView.superview?.layoutIfNeeded()
             }
         default: break
         }

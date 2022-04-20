@@ -35,11 +35,9 @@ final class AudioPlayerViewController: UIViewController, StoryboardGettable {
     }
 
     private func setupNotification() {
-        NotificationCenter.default.rx
-            .notification(.changeAppearance)
+        NotificationCenter.default.rx.notification(.changeAppearance)
             .take(until: rx.deallocated)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
+            .subscribe(with: self, onNext: { `self`, _ in
                 self.setupUIColor()
             })
             .disposed(by: bag)

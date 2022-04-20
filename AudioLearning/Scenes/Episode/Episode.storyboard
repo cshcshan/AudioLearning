@@ -132,13 +132,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wzW-dy-kFZ">
-                                <rect key="frame" x="0.0" y="44" width="414" height="742"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-a5-ewG">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="742"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="852"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u6a-0M-uHl">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="742"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="852"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="temp_pic" translatesAutoresizingMaskIntoConstraints="NO" id="Qe7-EU-hfA">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="233"/>
@@ -147,7 +147,7 @@
                                                         </constraints>
                                                     </imageView>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="CZR-nE-psP">
-                                                        <rect key="frame" x="0.0" y="233" width="414" height="509"/>
+                                                        <rect key="frame" x="0.0" y="233" width="414" height="619"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -185,24 +185,6 @@
                                     <constraint firstItem="u6a-0M-uHl" firstAttribute="height" secondItem="wzW-dy-kFZ" secondAttribute="height" priority="250" id="mdp-Rb-L77"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQB-zp-Vsj">
-                                <rect key="frame" x="0.0" y="786" width="414" height="76"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="horizontal-line" translatesAutoresizingMaskIntoConstraints="NO" id="etg-dS-WKV">
-                                        <rect key="frame" x="177" y="5" width="60" height="5"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="kHX-tV-gBi"/>
-                                            <constraint firstAttribute="height" constant="5" id="yI2-hL-I70"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="etg-dS-WKV" firstAttribute="centerX" secondItem="zQB-zp-Vsj" secondAttribute="centerX" id="RhJ-77-mVg"/>
-                                    <constraint firstAttribute="height" constant="76" id="krx-3p-r9N"/>
-                                    <constraint firstItem="etg-dS-WKV" firstAttribute="top" secondItem="zQB-zp-Vsj" secondAttribute="top" constant="5" id="wad-dB-zem"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V14-0A-Nc3">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
@@ -225,15 +207,12 @@
                         <viewLayoutGuide key="safeArea" id="NRA-aO-tp4"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="wzW-dy-kFZ" secondAttribute="bottom" id="2Cm-y9-unb"/>
                             <constraint firstItem="V14-0A-Nc3" firstAttribute="leading" secondItem="NRA-aO-tp4" secondAttribute="leading" id="5VH-3z-yBV"/>
                             <constraint firstItem="wzW-dy-kFZ" firstAttribute="top" secondItem="NRA-aO-tp4" secondAttribute="top" id="661-4Z-75R"/>
-                            <constraint firstItem="NRA-aO-tp4" firstAttribute="bottom" secondItem="zQB-zp-Vsj" secondAttribute="bottom" id="6w4-f0-ukC"/>
                             <constraint firstItem="V14-0A-Nc3" firstAttribute="trailing" secondItem="NRA-aO-tp4" secondAttribute="trailing" id="8zf-Ln-OLZ"/>
                             <constraint firstItem="V14-0A-Nc3" firstAttribute="top" secondItem="NRA-aO-tp4" secondAttribute="top" id="AA7-XT-qHC"/>
-                            <constraint firstItem="zQB-zp-Vsj" firstAttribute="top" secondItem="wzW-dy-kFZ" secondAttribute="bottom" id="UtD-cj-3QL"/>
-                            <constraint firstAttribute="trailing" secondItem="zQB-zp-Vsj" secondAttribute="trailing" id="atL-G9-el1"/>
                             <constraint firstItem="wzW-dy-kFZ" firstAttribute="leading" secondItem="NRA-aO-tp4" secondAttribute="leading" id="fff-w4-CVf"/>
-                            <constraint firstItem="zQB-zp-Vsj" firstAttribute="leading" secondItem="OIE-x3-fZ8" secondAttribute="leading" id="kI1-NU-1YD"/>
                             <constraint firstAttribute="trailing" secondItem="wzW-dy-kFZ" secondAttribute="trailing" id="p83-l8-hkH"/>
                             <constraint firstItem="NRA-aO-tp4" firstAttribute="bottom" secondItem="V14-0A-Nc3" secondAttribute="bottom" id="pnp-2h-FZr"/>
                         </constraints>
@@ -243,8 +222,6 @@
                         <outlet property="htmlTextView" destination="CZR-nE-psP" id="0BO-1V-Fc9"/>
                         <outlet property="maskView" destination="V14-0A-Nc3" id="vgD-O8-Vnm"/>
                         <outlet property="photoImageView" destination="Qe7-EU-hfA" id="q8l-wS-HWo"/>
-                        <outlet property="playerView" destination="zQB-zp-Vsj" id="ABD-fZ-GaJ"/>
-                        <outlet property="playerViewHeight" destination="krx-3p-r9N" id="sXR-eC-LRG"/>
                         <outlet property="scrollView" destination="GdN-a5-ewG" id="9am-NE-ClB"/>
                         <outlet property="vocabularyDetailContainerView" destination="GG1-uR-FBF" id="Ipo-NW-5fV"/>
                     </connections>
@@ -255,7 +232,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="horizontal-line" width="30" height="30"/>
         <image name="temp_pic" width="256" height="256"/>
     </resources>
 </document>

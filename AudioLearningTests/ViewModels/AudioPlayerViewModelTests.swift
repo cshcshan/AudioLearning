@@ -347,7 +347,31 @@ extension AudioPlayerViewModelTests {
         scheduler.start()
 
         XCTAssertEqual(currentTime.events.count, 2)
-        XCTAssertEqual(currentTime.events, [.next(0, "--:--"), .next(15, "00:30")])
+        XCTAssertEqual(currentTime.events, [.next(0, "00:00"), .next(15, "00:30")])
+    }
+
+    func test_skipForward_overTotalSeconds() {
+        player.audioCurrentSeconds = 20
+        player.audioTotalSeconds = 40
+
+        let currentTime = scheduler.createObserver(String.self)
+        sut.state.currentTime.drive(currentTime).disposed(by: bag)
+
+        scheduler
+            .createHotObservable([.next(15, ()), .next(25, ()), .next(30, ())])
+            .bind(to: sut.event.forward10SecondsTapped)
+            .disposed(by: bag)
+
+        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
+        sut.state.isPlaying.drive().disposed(by: bag)
+
+        scheduler.start()
+
+        XCTAssertEqual(currentTime.events.count, 4)
+        XCTAssertEqual(
+            currentTime.events,
+            [.next(0, "00:00"), .next(15, "00:30"), .next(25, "00:40"), .next(30, "00:40")]
+        )
     }
 
     func test_skipRewind_with10S() {
@@ -367,7 +391,30 @@ extension AudioPlayerViewModelTests {
         scheduler.start()
 
         XCTAssertEqual(currentTime.events.count, 2)
-        XCTAssertEqual(currentTime.events, [.next(0, "--:--"), .next(15, "00:10")])
+        XCTAssertEqual(currentTime.events, [.next(0, "00:00"), .next(15, "00:10")])
+    }
+
+    func test_skipRewind_lessThan0() {
+        player.audioCurrentSeconds = 20
+
+        let currentTime = scheduler.createObserver(String.self)
+        sut.state.currentTime.drive(currentTime).disposed(by: bag)
+
+        scheduler
+            .createHotObservable([.next(15, ()), .next(25, ()), .next(30, ())])
+            .bind(to: sut.event.rewind10SecondsTapped)
+            .disposed(by: bag)
+
+        // execute merge putNewAudio and tappedPlayPause by isPlaying.drive()
+        sut.state.isPlaying.drive().disposed(by: bag)
+
+        scheduler.start()
+
+        XCTAssertEqual(currentTime.events.count, 4)
+        XCTAssertEqual(
+            currentTime.events,
+            [.next(0, "00:00"), .next(15, "00:10"), .next(25, "00:00"), .next(30, "00:00")]
+        )
     }
 }
 

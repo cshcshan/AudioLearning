@@ -84,8 +84,8 @@ final class AudioPlayerViewModel {
         let playOrPauseTapped = event.playOrPauseTapped.withLatestFrom(isPlaying).share()
 
         let needsUpdatePlayStatus = playOrPauseTapped.filter { [weak self] _ in self?.url != nil }
-        needsUpdatePlayStatus.filter { $0 }.map { _ in }.bind(to: player.play).disposed(by: bag)
-        needsUpdatePlayStatus.filter { !$0 }.map { _ in }.bind(to: player.pause).disposed(by: bag)
+        needsUpdatePlayStatus.filter { $0 }.map { _ in }.bind(to: player.event.playAudio).disposed(by: bag)
+        needsUpdatePlayStatus.filter { !$0 }.map { _ in }.bind(to: player.event.pauseAudio).disposed(by: bag)
 
         let playOrPauseTappedResult = playOrPauseTapped
             .map { [weak self] isPlaying in self?.url == nil ? false : !isPlaying }
@@ -99,14 +99,14 @@ final class AudioPlayerViewModel {
 
         needsUpdateNewAudio
             .do(onNext: { [weak self] url in self?.url = url })
-            .bind(to: player.newAudio)
+            .bind(to: player.event.playNewAudio)
             .disposed(by: bag)
 
         let playNewAudioResult = needsUpdateNewAudio.map { _ in false }
 
         // player.status
 
-        let playerStatusResult = player.status.withLatestFrom(isPlaying) { status, isPlaying in
+        let playerStatusResult = player.state.status.asObservable().withLatestFrom(isPlaying) { status, isPlaying in
             status == .finish ? false : isPlaying
         }
 
@@ -118,8 +118,8 @@ final class AudioPlayerViewModel {
             .bind(to: isPlaying)
             .disposed(by: bag)
 
-        event.forward10SecondsTapped.map { _ in 10 }.bind(to: player.forward).disposed(by: bag)
-        event.rewind10SecondsTapped.map { _ in 10 }.bind(to: player.rewind).disposed(by: bag)
+        event.forward10SecondsTapped.map { _ in 10 }.bind(to: player.event.forwardAudio).disposed(by: bag)
+        event.rewind10SecondsTapped.map { _ in 10 }.bind(to: player.event.rewindAudio).disposed(by: bag)
 
         Observable
             .combineLatest(
@@ -128,31 +128,31 @@ final class AudioPlayerViewModel {
             )
             .filter { isPlaying, _ in isPlaying }
             .map { _, speedRate in speedRate }
-            .bind(to: player.changeSpeed)
+            .bind(to: player.event.changeAudioSpeed)
             .disposed(by: bag)
 
-        event.changeAudioPosition.bind(to: player.changeAudioPosition).disposed(by: bag)
+        event.changeAudioPosition.bind(to: player.event.changeAudioPosition).disposed(by: bag)
 
-        player.status.map { $0 == .readyToPlay }.distinctUntilChanged().bind(to: isReadyToPlay).disposed(by: bag)
-        player.speedRate.bind(to: speedRate).disposed(by: bag)
+        player.state.status.map { $0 == .readyToPlay }.distinctUntilChanged().drive(isReadyToPlay).disposed(by: bag)
+        player.state.speedRate.drive(speedRate).disposed(by: bag)
 
-        player.currentSeconds
+        player.state.currentSeconds
             .map { [weak self, defaultTimeString] seconds -> String in
                 self?.convertTime(seconds: seconds) ?? defaultTimeString
             }
-            .bind(to: currentTime)
+            .drive(currentTime)
             .disposed(by: bag)
 
-        player.totalSeconds
+        player.state.totalSeconds
             .map { [weak self, defaultTimeString] seconds -> String in
                 self?.convertTime(seconds: seconds) ?? defaultTimeString
             }
-            .bind(to: totalTime)
+            .drive(totalTime)
             .disposed(by: bag)
 
-        player.currentSeconds.map(Float.init).bind(to: currentSeconds).disposed(by: bag)
-        player.totalSeconds.map(Float.init).bind(to: totalSeconds).disposed(by: bag)
-        player.loadingBufferPercent.map { Float($0 / 100) }.bind(to: loadingBufferRate).disposed(by: bag)
+        player.state.currentSeconds.map(Float.init).drive(currentSeconds).disposed(by: bag)
+        player.state.totalSeconds.map(Float.init).drive(totalSeconds).disposed(by: bag)
+        player.state.loadingBufferPercent.map { Float($0 / 100) }.drive(loadingBufferRate).disposed(by: bag)
     }
 
     private func convertTime(seconds: Double) -> String {

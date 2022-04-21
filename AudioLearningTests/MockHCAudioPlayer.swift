@@ -6,32 +6,31 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 @testable import AudioLearning
 
-class MockHCAudioPlayer: HCAudioPlayerProtocol {
+final class MockHCAudioPlayer: HCAudioPlayerProtocol {
 
-    // Inputs
-    var newAudio: AnyObserver<URL>!
-    var play: AnyObserver<Void>!
-    var pause: AnyObserver<Void>!
-    var forward: AnyObserver<Int64>!
-    var rewind: AnyObserver<Int64>!
-    var speedUp: AnyObserver<Float>!
-    var speedDown: AnyObserver<Float>!
-    var changeSpeed: AnyObserver<Float>!
-    var changeAudioPosition: AnyObserver<Float>!
+    // MARK: - Properties
 
-    // Outputs
-    var status: Observable<HCAudioPlayer.Status>!
-    var speedRate: Observable<Float>!
-    var currentSeconds: Observable<Double>!
-    var totalSeconds: Observable<Double>!
-    var loadingBuffer: Observable<Double>!
-    var loadingBufferPercent: Observable<Double>!
+    lazy var state = HCAudioPlayerState(
+        status: status.asDriver(),
+        speedRate: speedRate.asDriver(),
+        currentSeconds: currentSeconds.asDriver(),
+        totalSeconds: totalSeconds.asDriver(),
+        loadingBuffer: loadingBuffer.asDriver(),
+        loadingBufferPercent: loadingBufferPercent.asDriver()
+    )
 
-    private let currentSecondsSubject = PublishSubject<Double>()
-    private let totalSecondsSubject = PublishSubject<Double>()
+    let event = HCAudioPlayerEvent()
+
+    private(set) lazy var status = BehaviorRelay<HCAudioPlayer.Status>(value: .unknown)
+    private(set) lazy var speedRate = BehaviorRelay<Float>(value: 1.0)
+    private(set) lazy var currentSeconds = BehaviorRelay<Double>(value: 0.0)
+    private(set) lazy var totalSeconds = BehaviorRelay<Double>(value: audioTotalSeconds)
+    private(set) lazy var loadingBuffer = BehaviorRelay<Double>(value: 0.0)
+    private(set) lazy var loadingBufferPercent = BehaviorRelay<Double>(value: 0.0)
 
     private let bag = DisposeBag()
 
@@ -43,95 +42,40 @@ class MockHCAudioPlayer: HCAudioPlayerProtocol {
 
     init() {
         setupInputs()
-        setupOutputs()
     }
 
     private func setupInputs() {
-        // New Audio
-        let newAudioSubject = PublishSubject<URL>()
-        newAudio = newAudioSubject.asObserver()
-
-        // Play and Pause
-        let playSubject = PublishSubject<Void>()
-        play = playSubject.asObserver()
-        let pauseSubject = PublishSubject<Void>()
-        pause = pauseSubject.asObserver()
-
         // Forward and Rewind
-        let forwardSubject = PublishSubject<Int64>()
-        forward = forwardSubject.asObserver()
-        let rewindSubject = PublishSubject<Int64>()
-        rewind = rewindSubject.asObserver()
-        let mergeSkip = Observable
-            .merge(
-                forwardSubject.asObservable(),
-                rewindSubject.asObservable().map { -$0 }
-            )
-        mergeSkip
-            .subscribe(onNext: { [weak self] seconds in
-                guard let self = self else { return }
-                self.audioCurrentSeconds += Double(seconds)
-                self.currentSecondsSubject.onNext(self.audioCurrentSeconds)
-            })
+        Observable
+            .merge(event.forwardAudio.asObservable(), event.rewindAudio.map { -$0 })
+            .map { [weak self] seconds in
+                var audioCurrentSeconds = self?.audioCurrentSeconds ?? 0.0
+                let audioTotalSeconds = self?.audioTotalSeconds ?? 0.0
+                audioCurrentSeconds += Double(seconds)
+                audioCurrentSeconds = min(max(audioCurrentSeconds, 0.0), audioTotalSeconds)
+                self?.audioCurrentSeconds = audioCurrentSeconds
+                return audioCurrentSeconds
+            }
+            .bind(to: currentSeconds)
             .disposed(by: bag)
 
         // Speed Up and Down
-        let speedUpSubject = PublishSubject<Float>()
-        speedUp = speedUpSubject.asObserver()
-        let speedDownSubject = PublishSubject<Float>()
-        speedDown = speedDownSubject.asObserver()
-
-        let speedRateSubject = PublishSubject<Float>()
-        speedRate = speedRateSubject.asObservable()
         Observable
-            .merge(
-                speedUpSubject.asObservable(),
-                speedDownSubject.asObservable().map { -$0 }
-            )
-            .map { [weak self] rate -> Float in
-                guard let self = self else { return 1 }
-                self.audioSpeedRate += rate
-                if self.audioSpeedRate < 0 { self.audioSpeedRate = 0 }
-                return self.audioSpeedRate
+            .merge(event.speedAudioUp.asObservable(), event.speedAudioDown.map { -$0 })
+            .map { [audioSpeedRate] rate -> Float in
+                var audioSpeedRate = audioSpeedRate
+                audioSpeedRate += rate
+                audioSpeedRate = max(audioSpeedRate, 0)
+                return audioSpeedRate
             }
-            .subscribe(onNext: { rate in
-                speedRateSubject.onNext(rate)
-            })
+            .bind(to: speedRate)
             .disposed(by: bag)
 
         // Change Speed
-        let changeSpeedSubject = PublishSubject<Float>()
-        changeSpeed = changeSpeedSubject.asObserver()
-        changeSpeedSubject
-            .subscribe(onNext: { speedRate in
-                speedRateSubject.onNext(speedRate)
-            })
-            .disposed(by: bag)
+        event.changeAudioSpeed.bind(to: speedRate).disposed(by: bag)
 
         // Change Audio Position
-        let changeAudioPositionSubject = PublishSubject<Float>()
-        changeAudioPosition = changeAudioPositionSubject.asObserver()
-        changeAudioPositionSubject
-            .subscribe(onNext: { [weak self] position in
-                guard let self = self else { return }
-                self.currentSecondsSubject.onNext(Double(position))
-            })
-            .disposed(by: bag)
-    }
-
-    private func setupOutputs() {
-        let statusSubject = PublishSubject<HCAudioPlayer.Status>()
-        status = statusSubject.asObservable()
-
-        currentSeconds = currentSecondsSubject.asObservable()
-        totalSeconds = totalSecondsSubject.asObservable()
-        totalSecondsSubject.onNext(audioTotalSeconds)
-
-        let loadingBufferSubject = PublishSubject<Double>()
-        loadingBuffer = loadingBufferSubject.asObservable()
-
-        let loadingBufferPercentSubject = PublishSubject<Double>()
-        loadingBufferPercent = loadingBufferPercentSubject.asObservable()
+        event.changeAudioPosition.map(Double.init).bind(to: currentSeconds).disposed(by: bag)
     }
 
     private func reset() {

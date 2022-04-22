@@ -61,7 +61,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
 
         Observable
             .merge(
-                realmService.filterObjects.compactMap(\.first).map(\.word),
+                realmService.state.filterItems.compactMap(\.first).map(\.word),
                 state.vocabulary.map { $0?.word },
                 event.reset.map { _ in nil }
             )
@@ -72,7 +72,7 @@ final class VocabularyDetailViewModel: BaseViewModel {
 
         Observable
             .merge(
-                realmService.filterObjects.compactMap(\.first).map(\.note),
+                realmService.state.filterItems.compactMap(\.first).map(\.note),
                 state.vocabulary.map { $0?.note },
                 event.reset.map { _ in nil },
                 addEpisodeWord.map { _ in nil }
@@ -87,9 +87,9 @@ final class VocabularyDetailViewModel: BaseViewModel {
                     let episodePredicate = NSPredicate(format: "id == %@", episodeID)
                     predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, episodePredicate])
                 }
-                return (predicate, nil)
+                return RealmFilter(predicate: predicate, sortFields: [])
             }
-            .bind(to: realmService.filter)
+            .bind(to: realmService.event.filter)
             .disposed(by: bag)
 
         event.save

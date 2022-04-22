@@ -50,12 +50,15 @@ final class EpisodeListViewModel: BaseViewModel {
 
         super.init()
 
+        // API bindings
+
         apiService.episodes
             .flatMapLatest { [weak self] episodeRealms in
                 self?.realmService.add(objects: episodeRealms) ?? .empty()
             }
-            .do(onNext: { [weak self] _ in self?.fetchDataFromLocalDB() })
-            .subscribe()
+            .subscribe(with: self, onNext: { `self`, _ in
+                self.fetchDataFromLocalDB()
+            })
             .disposed(by: bag)
 
         apiService.fetchEpisodesError
@@ -70,7 +73,9 @@ final class EpisodeListViewModel: BaseViewModel {
             .bind(to: isRefreshing)
             .disposed(by: bag)
 
-        realmService.allObjects
+        // DB bindings
+
+        realmService.state.allItems
             .map { [weak self] episodeRealms in
                 self?.episodes = []
                 return episodeRealms.map { episodeRealm in
@@ -81,6 +86,8 @@ final class EpisodeListViewModel: BaseViewModel {
             }
             .bind(to: cellViewModels)
             .disposed(by: bag)
+
+        // Events bindings
 
         let isFirstTimeFetchData = event.fetchDataWithIsFirstTime.filter { $0 }.share()
         isFirstTimeFetchData.map { _ in true }.bind(to: isRefreshing).disposed(by: bag)
@@ -104,6 +111,6 @@ final class EpisodeListViewModel: BaseViewModel {
     // MARK: - Helpers
 
     private func fetchDataFromLocalDB() {
-        realmService.loadAll.onNext(["id": false])
+        realmService.event.loadAll.accept([RealmSortField(fieldName: "id", isAscending: false)])
     }
 }

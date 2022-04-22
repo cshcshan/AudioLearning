@@ -63,22 +63,28 @@ final class EpisodeDetailViewModel: BaseViewModel {
 
         super.init()
 
-        apiService.episodeDetail
+        // API bindings
+
+        let apiEpisodeDetail = apiService.episodeDetail.share()
+        let apiError = apiService.fetchEpisodeDetailError.share()
+
+        apiEpisodeDetail
             .compactMap { $0 }
             .flatMapLatest { [weak self] episodeDetailRealm in
                 self?.realmService.add(object: episodeDetailRealm) ?? .empty()
             }
-            .do(onNext: { [weak self] _ in self?.fetchDataFromLocalDB() })
-            .subscribe()
+            .subscribe(with: self, onNext: { `self`, _ in
+                self.fetchDataFromLocalDB()
+            })
             .disposed(by: bag)
 
-        apiService.fetchEpisodeDetailError
-            .map { error in AlertModel(title: "Load Episode Detail Error", message: error.localizedDescription) }
+        apiError
+            .map { error in AlertModel(title: "Get Episode Detail Error", message: error.localizedDescription) }
             .bind(to: event.showAlert)
             .disposed(by: bag)
 
         Observable
-            .merge([apiService.episodeDetail.map { _ in }, apiService.fetchEpisodeDetailError.map { _ in }])
+            .merge([apiEpisodeDetail.map { _ in }, apiError.map { _ in }])
             .map { _ in false }
             .bind(to: isRefreshing)
             .disposed(by: bag)
@@ -91,17 +97,12 @@ final class EpisodeDetailViewModel: BaseViewModel {
             image.accept(nil)
         }
 
-        let filterObjects = realmService.filterObjects.share()
+        // DB bindings
 
-        let isEmptyFilterObjects = filterObjects.filter(\.isEmpty).share()
-        isEmptyFilterObjects.map { _ in true }.bind(to: isRefreshing).disposed(by: bag)
-        isEmptyFilterObjects
-            .map { _ in episode }
-            .bind(to: apiService.loadEpisodeDetail)
-            .disposed(by: bag)
+        let filterItem = realmService.state.filterItems.map(\.first).share()
 
-        let episodeDetail = filterObjects
-            .compactMap(\.first)
+        let episodeDetail = filterItem
+            .compactMap { $0 }
             .map { EpisodeDetail(scriptHtml: $0.scriptHtml, audioLink: $0.audioLink) }
             .share()
 
@@ -109,19 +110,20 @@ final class EpisodeDetailViewModel: BaseViewModel {
         episodeDetail.map { $0.scriptHtml ?? "" }.bind(to: scriptHtmlString).disposed(by: bag)
         episodeDetail.map { $0.audioLink ?? "" }.bind(to: audioURLString).disposed(by: bag)
 
+        // Events bindings
+
         event.addVocabularyTapped.asSignal()
             .map { _ in false }
             .emit(to: state.isVocabularyDetailViewHidden)
             .disposed(by: bag)
 
-        event.fetchData
-            .subscribe(with: self, onNext: { `self`, _ in self.fetchDataFromLocalDB() })
-            .disposed(by: bag)
+        event.fetchData.map { _ in episode }.bind(to: apiService.loadEpisodeDetail).disposed(by: bag)
     }
 
     private func fetchDataFromLocalDB() {
         guard let episode = episode.id else { return }
         let predicate = NSPredicate(format: "id == %@", episode)
-        realmService.filter.onNext((predicate, nil))
+        let filter = RealmFilter(predicate: predicate, sortFields: [])
+        realmService.event.filter.accept(filter)
     }
 }

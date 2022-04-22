@@ -135,7 +135,7 @@ final class EpisodeDetailViewModelTests: XCTestCase {
     func test_init_withError() {
         let error = NSError(domain: "unit test", code: 2, userInfo: nil)
         let expectingModel = AlertModel(
-            title: "Load Episode Detail Error",
+            title: "Get Episode Detail Error",
             message: error.localizedDescription
         )
         apiService.episodeDetailReturnValue = .error(error)
@@ -147,7 +147,6 @@ final class EpisodeDetailViewModelTests: XCTestCase {
             .bind(to: sut.event.fetchData)
             .disposed(by: bag)
 
-        // execute reload.flatMapLatest by scriptHtmlString.drive()
         sut.state.scriptHtmlString.drive().disposed(by: bag)
 
         scheduler.start()
@@ -161,7 +160,6 @@ final class EpisodeDetailViewModelTests: XCTestCase {
             .bind(to: sut.event.fetchData)
             .disposed(by: bag)
 
-        // execute reload.flatMapLatest by scriptHtmlString.drive()
         sut.state.scriptHtmlString.drive().disposed(by: bag)
 
         scheduler.start()

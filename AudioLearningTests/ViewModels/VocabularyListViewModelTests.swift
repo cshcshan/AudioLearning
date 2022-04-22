@@ -65,7 +65,7 @@ final class VocabularyListViewModelTests: XCTestCase {
         ])
     }
 
-    func test_Vocabularies_withNotNullEpisodeID() {
+    func test_vocabularies_withNotNullEpisodeID() {
         let sut = VocabularyListViewModel(realmService: realmService, episodeID: "Episode 190811")
 
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
@@ -78,7 +78,7 @@ final class VocabularyListViewModelTests: XCTestCase {
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 1)
     }
 
-    func test_Vocabularies_withNullEpisodeID() {
+    func test_vocabularies_withNullEpisodeID() {
         let sut = VocabularyListViewModel(realmService: realmService, episodeID: nil)
 
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)

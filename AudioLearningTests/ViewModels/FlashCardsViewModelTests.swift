@@ -43,13 +43,17 @@ class FlashCardsViewModelTests: XCTestCase {
         sut.vocabularies
             .bind(to: vocabularies)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.load)
-        .disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, ()),
+                .next(20, ())
+            ])
+            .bind(to: sut.load)
+            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(vocabularies.events.count, 2)
         XCTAssertEqual(vocabularies.events.first?.value.element?.count, 10)
     }

@@ -34,8 +34,9 @@ final class FlashCardsViewModel: BaseViewModel {
         self.load = loadSubject.asObserver()
         self.flip = flipSubject.asObserver()
         self.isWordSide = isWordSideSubject.asObserver()
-        self.vocabularies = realmService.allObjects
-        realmService.allObjects
+        self.vocabularies = realmService.state.allItems.asObservable()
+
+        vocabularies
             .subscribe(onNext: { [weak self] vocabularyRealms in
                 guard let self = self else { return }
                 self.wordSideArray = [Bool](repeating: true, count: vocabularyRealms.count)
@@ -43,9 +44,8 @@ final class FlashCardsViewModel: BaseViewModel {
             .disposed(by: bag)
 
         loadSubject
-            .subscribe(onNext: { _ in
-                realmService.loadAll.onNext(["updateDate": false])
-            })
+            .map { [RealmSortField(fieldName: "updateDate", isAscending: false)] }
+            .bind(to: realmService.event.loadAll)
             .disposed(by: bag)
 
         flipSubject

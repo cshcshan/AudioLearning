@@ -13,7 +13,7 @@ import RxTest
 import XCTest
 @testable import AudioLearning
 
-class RealmServiceTests: XCTestCase {
+final class RealmServiceTests: XCTestCase {
 
     var sut: RealmService<EpisodeRealm>!
     var scheduler: TestScheduler!
@@ -34,10 +34,9 @@ class RealmServiceTests: XCTestCase {
         super.tearDown()
     }
 
-    func testAddObjects() {
+    func test_addObjects() {
         let objects = scheduler.createObserver([EpisodeRealm]?.self)
-        var models = [EpisodeRealm]()
-        for index in 21...30 {
+        let models: [EpisodeRealm] = (21...30).map { index in
             let model = EpisodeRealm()
             model.id = String(index)
             model.title = "Hello \(index)"
@@ -45,16 +44,16 @@ class RealmServiceTests: XCTestCase {
             model.date = "201903\(index)".date(withDateFormat: "yyyyMMdd")
             model.imagePath = "https://www.cshan.com/image\(index).jpg"
             model.path = "/episode-201903\(index).mp3"
-            models.append(model)
+            return model
         }
-        sut.add(objects: models)
-            .bind(to: objects)
-            .disposed(by: bag)
+        sut.add(objects: models).bind(to: objects).disposed(by: bag)
+
         XCTAssertEqual(objects.events, [.next(0, models), .completed(0)])
     }
 
-    func testAddObject() {
+    func test_addObject() {
         let object = scheduler.createObserver(EpisodeRealm?.self)
+
         let model = EpisodeRealm()
         model.id = "100"
         model.title = "Hello World"
@@ -62,173 +61,210 @@ class RealmServiceTests: XCTestCase {
         model.date = "20190314".date(withDateFormat: "yyyyMMdd")
         model.imagePath = "https://www.cshan.com/image.jpg"
         model.path = "/episode-201900314.mp3"
-        sut.add(object: model)
-            .bind(to: object)
-            .disposed(by: bag)
+
+        sut.add(object: model).bind(to: object).disposed(by: bag)
+
         XCTAssertEqual(object.events, [.next(0, model), .completed(0)])
     }
 
-    func testUpdate() {
+    func test_update() {
         let success = scheduler.createObserver(Bool.self)
 
         let updateExpectation = expectation(description: "Updated")
         let predicate = NSPredicate(format: "id CONTAINS[c] '2'")
-        sut.update(predicate: predicate, updateHandler: { data in
-            guard let data = data else { return }
-            let objects = Array(data)
-            for object in objects {
-                object.title = "World \(object.id ?? "")"
-            }
-            updateExpectation.fulfill()
-        })
-        .bind(to: success)
-        .disposed(by: bag)
+
+        sut
+            .update(predicate: predicate, updateHandler: { data in
+                guard let data = data else { return }
+                let objects = Array(data)
+                for object in objects {
+                    object.title = "World \(object.id ?? "")"
+                }
+                updateExpectation.fulfill()
+            })
+            .bind(to: success)
+            .disposed(by: bag)
+
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let filterExpectation = expectation(description: "Filter")
-        sut.filterObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.filterItems
+            .bind(onNext: { episodeRealms in
                 filterExpectation.fulfill()
                 XCTAssertEqual(episodeRealms[0].title, "World 12")
                 XCTAssertEqual(episodeRealms[1].title, "World 20")
             })
             .disposed(by: bag)
-        sut.filter.onNext((predicate, ["id": true]))
+
+        let sortFields = [RealmSortField(fieldName: "id", isAscending: true)]
+        let filter = RealmFilter(predicate: predicate, sortFields: sortFields)
+        sut.event.filter.accept(filter)
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testUpdate_DontChangeAnything() {
+    func test_update_DontChangeAnything() {
         let success = scheduler.createObserver(Bool.self)
 
         let updateExpectationt = expectation(description: "Updated")
         let predicate = NSPredicate(format: "id CONTAINS[c] '2'")
-        sut.update(predicate: predicate, updateHandler: { _ in
-            updateExpectationt.fulfill()
-        })
-        .bind(to: success)
-        .disposed(by: bag)
+
+        sut
+            .update(predicate: predicate, updateHandler: { _ in
+                updateExpectationt.fulfill()
+            })
+            .bind(to: success)
+            .disposed(by: bag)
+
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let filterExpectation = expectation(description: "Filter")
-        sut.filterObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.filterItems
+            .bind(onNext: { episodeRealms in
                 filterExpectation.fulfill()
                 XCTAssertEqual(episodeRealms[0].title, "Hello 12")
                 XCTAssertEqual(episodeRealms[1].title, "Hello 20")
             })
             .disposed(by: bag)
-        sut.filter.onNext((predicate, ["id": true]))
+
+        let sortFields = [RealmSortField(fieldName: "id", isAscending: true)]
+        let filter = RealmFilter(predicate: predicate, sortFields: sortFields)
+        sut.event.filter.accept(filter)
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testDelete() {
+    func test_delete() {
         let success = scheduler.createObserver(Bool.self)
         let predicate = NSPredicate(format: "id CONTAINS[c] '2'")
-        sut.delete(predicate: predicate)
-            .bind(to: success)
-            .disposed(by: bag)
+
+        sut.delete(predicate: predicate).bind(to: success).disposed(by: bag)
+
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let loadAllExpectation = expectation(description: "Load All")
-        sut.allObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.allItems
+            .bind(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms.count, 8)
             })
             .disposed(by: bag)
-        sut.loadAll.onNext(nil)
+
+        sut.event.loadAll.accept([])
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testDeleteAll() {
+    func test_deleteAll() {
         let success = scheduler.createObserver(Bool.self)
-        sut.deleteAll()
-            .bind(to: success)
-            .disposed(by: bag)
+
+        sut.deleteAll().bind(to: success).disposed(by: bag)
+
         XCTAssertEqual(success.events, [.next(0, true), .completed(0)])
 
         let loadAllExpectation = expectation(description: "Load All")
-        sut.allObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.allItems
+            .bind(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms.count, 0)
             })
             .disposed(by: bag)
-        sut.loadAll.onNext(nil)
+
+        sut.event.loadAll.accept([])
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testLoadAll() {
+    func test_loadAll() {
         let loadAllExpectation = expectation(description: "Load All")
-        sut.allObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.allItems
+            .bind(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms.count, 10)
             })
             .disposed(by: bag)
-        sut.loadAll.onNext(nil)
+
+        sut.event.loadAll.accept([])
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testLoadAll_EpisodeDescended() {
+    func test_loadAll_episodeDescended() {
         let loadAllExpectation = expectation(description: "Load All")
-        sut.allObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.allItems
+            .bind(onNext: { episodeRealms in
                 loadAllExpectation.fulfill()
                 XCTAssertEqual(episodeRealms[0].id, "20")
                 XCTAssertEqual(episodeRealms[9].id, "11")
             })
             .disposed(by: bag)
-        sut.loadAll.onNext(["id": false])
+
+        sut.event.loadAll.accept([RealmSortField(fieldName: "id", isAscending: false)])
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testFilter() {
+    func test_filter() {
         let filterExpectation = expectation(description: "Filter")
         let predicate = NSPredicate(format: "id CONTAINS[c] '2'")
-        sut.filterObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.filterItems
+            .bind(onNext: { episodeRealms in
                 filterExpectation.fulfill()
                 XCTAssertEqual(episodeRealms[0].id, "12")
                 XCTAssertEqual(episodeRealms[1].id, "20")
             })
             .disposed(by: bag)
-        sut.filter.onNext((predicate, nil))
+
+        let filter = RealmFilter(predicate: predicate, sortFields: [])
+        sut.event.filter.accept(filter)
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
         }
     }
 
-    func testFilter_EpisodeDescended() {
+    func test_filter_episodeDescended() {
         let filterExpectation = expectation(description: "Filter")
         let predicate = NSPredicate(format: "id CONTAINS[c] '2'")
-        sut.filterObjects
-            .subscribe(onNext: { episodeRealms in
+
+        sut.state.filterItems
+            .bind(onNext: { episodeRealms in
                 filterExpectation.fulfill()
                 XCTAssertEqual(episodeRealms[0].id, "20")
                 XCTAssertEqual(episodeRealms[1].id, "12")
             })
             .disposed(by: bag)
-        sut.filter.onNext((predicate, ["id": false]))
+
+        let sortFields = [RealmSortField(fieldName: "id", isAscending: false)]
+        let filter = RealmFilter(predicate: predicate, sortFields: sortFields)
+        sut.event.filter.accept(filter)
+
         waitForExpectations(timeout: 1.0) { error in
             guard let error = error else { return }
             print(error.localizedDescription)
@@ -243,8 +279,7 @@ extension RealmServiceTests {
     }
 
     private func initStub() {
-        var models = [EpisodeRealm]()
-        for index in 11...20 {
+        let models: [EpisodeRealm] = (11...20).map { index in
             let model = EpisodeRealm()
             model.id = String(index)
             model.title = "Hello \(index)"
@@ -252,7 +287,7 @@ extension RealmServiceTests {
             model.date = "201903\(index)".date(withDateFormat: "yyyyMMdd")
             model.imagePath = "https://www.cshan.com/image\(index).jpg"
             model.path = "/episode-201903\(index).mp3"
-            models.append(model)
+            return model
         }
         _ = sut.add(objects: models)
     }

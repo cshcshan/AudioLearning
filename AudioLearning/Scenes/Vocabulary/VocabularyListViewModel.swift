@@ -33,11 +33,15 @@ final class VocabularyListViewModel: BaseViewModel {
     init(realmService: RealmService<VocabularyRealm>, episodeID: String?) {
         self.episodeID = episodeID
 
-        let vocabularies = Driver
+        let sortFields = [RealmSortField(fieldName: "updateDate", isAscending: false)]
+
+        let vocabularies = Observable
             .merge(
-                realmService.allObjects.asDriver(onErrorJustReturn: []),
-                realmService.filterObjects.asDriver(onErrorJustReturn: [])
+                realmService.state.allItems.asObservable(),
+                realmService.state.filterItems.asObservable()
             )
+            .asDriver(onErrorJustReturn: [])
+
         self.state = State(vocabularies: vocabularies)
 
         super.init()
@@ -54,19 +58,18 @@ final class VocabularyListViewModel: BaseViewModel {
         sharedFetchData
             .compactMap { [episodeID] _ in
                 guard let episodeID = episodeID else { return nil }
-                let sortedByAsc = ["updateDate": false]
-                return (NSPredicate(format: "episodeID == %@", episodeID), sortedByAsc)
+                let predicate = NSPredicate(format: "episodeID == %@", episodeID)
+                return RealmFilter(predicate: predicate, sortFields: sortFields)
             }
-            .bind(to: realmService.filter)
+            .bind(to: realmService.event.filter)
             .disposed(by: bag)
 
         sharedFetchData
             .compactMap { [episodeID] _ in
                 guard episodeID == nil else { return nil }
-                let sortedByAsc = ["updateDate": false]
-                return sortedByAsc
+                return sortFields
             }
-            .bind(to: realmService.loadAll)
+            .bind(to: realmService.event.loadAll)
             .disposed(by: bag)
 
         event.deleteVocabulary.compactMap(\.id)

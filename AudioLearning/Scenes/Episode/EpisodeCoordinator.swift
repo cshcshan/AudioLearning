@@ -95,8 +95,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
             .disposed(by: bag)
 
         viewModel.event.addVocabularyTapped
-            .map { word in (episode.id, word) }
-            .bind(to: vocabularyDetailVC.viewModel.addWithWord)
+            .map { word in VocabularyDetailViewModel.EpisodeWord(episodeID: episode.id, word: word) }
+            .bind(to: vocabularyDetailVC.viewModel.event.addEpisodeWord)
             .disposed(by: bag)
 
         // ViewController
@@ -112,8 +112,8 @@ final class EpisodeCoordinator: Coordinator<Void> {
             .subscribe()
             .disposed(by: bag)
 
-        vocabularyDetailVC.viewModel.alert
-            .subscribe(onNext: { alert in
+        vocabularyDetailVC.viewModel.event.showAlert.asSignal()
+            .emit(onNext: { alert in
                 viewController.showConfirmAlert(
                     title: alert.title,
                     message: alert.message,
@@ -145,7 +145,11 @@ final class EpisodeCoordinator: Coordinator<Void> {
         let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
-        viewModel.close.map { true }.bind(to: isVocabularyDetailViewHidden).disposed(by: bag)
+        Signal
+            .merge(viewModel.event.saveSuccessfully.asSignal(), viewModel.event.cancel.asSignal())
+            .map { _ in true }
+            .emit(to: isVocabularyDetailViewHidden)
+            .disposed(by: bag)
 
         // ViewController
         let viewController = VocabularyDetailViewController.initialize(

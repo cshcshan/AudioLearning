@@ -11,28 +11,34 @@ import RxSwift
 
 final class VocabularyDetailViewModel: BaseViewModel {
 
-    // Inputs
-    private(set) var load: AnyObserver<VocabularyRealm>!
-    private(set) var add: AnyObserver<Void>!
-    private(set) var addWithWord: AnyObserver<(String?, String)>! // episode and word
-    private(set) var save: AnyObserver<VocabularySaveModel>!
-    private(set) var cancel: AnyObserver<Void>!
+    struct EpisodeWord {
+        let episodeID: String?
+        let word: String
+    }
+
+    struct State {
+        let word: Driver<String?>
+        let note: Driver<String?>
+        let vocabulary = BehaviorRelay<VocabularyRealm?>(value: nil)
+    }
+
+    struct Event {
+        let reset = PublishRelay<Void>()
+        let addEpisodeWord = PublishRelay<EpisodeWord>()
+        let save = PublishRelay<VocabularySaveModel>()
+        let saveSuccessfully = PublishRelay<Void>()
+        let cancel = PublishRelay<Void>()
+        let showAlert = PublishRelay<AlertModel>()
+    }
+
+    // MARK: - Properties
+
+    lazy var state = State(word: word.asDriver(), note: note.asDriver())
+    let event = Event()
 
     // Outputs
-    private(set) var word = BehaviorSubject<String>(value: "")
-    private(set) var note = BehaviorSubject<String>(value: "")
-    private(set) var saved: Observable<Void>!
-    private(set) var close: Observable<Void>!
-    private(set) var alert: Observable<AlertModel>!
-
-    private let loadSubject = PublishSubject<VocabularyRealm>()
-    private let addSubject = PublishSubject<Void>()
-    private let addWithWordSubject = PublishSubject<(String?, String)>()
-    private let saveSubject = PublishSubject<VocabularySaveModel>()
-    private let savedSubject = PublishSubject<Void>()
-    private let cancelSubject = PublishSubject<Void>()
-    private let closeSubject = PublishSubject<Void>()
-    private let alertSubject = PublishSubject<AlertModel>()
+    private let word = BehaviorRelay<String?>(value: nil)
+    private let note = BehaviorRelay<String?>(value: nil)
 
     private let realmService: RealmService<VocabularyRealm>
     private var model: VocabularyRealm?
@@ -42,82 +48,72 @@ final class VocabularyDetailViewModel: BaseViewModel {
         self.realmService = realmService
         super.init()
 
-        self.load = loadSubject.asObserver()
-        self.add = addSubject.asObserver()
-        self.addWithWord = addWithWordSubject.asObserver()
-        self.save = saveSubject.asObserver()
-        self.saved = savedSubject.asObservable()
-        self.cancel = cancelSubject.asObserver()
-        self.close = closeSubject.asObservable()
-        self.alert = alertSubject.asObservable()
-
-        realmService.filterObjects
-            .subscribe(onNext: { vocabularyRealms in
-                guard let model = vocabularyRealms.first else { return }
-                self.word.onNext(model.word ?? "")
-                self.note.onNext(model.note ?? "")
-            })
+        event.reset
+            .subscribe(onNext: { [weak self] in self?.model = nil })
             .disposed(by: bag)
 
-        loadSubject
-            .subscribe(onNext: { [weak self] vocabularyRealm in
-                guard let self = self else { return }
-                self.model = vocabularyRealm
-                self.word.onNext(vocabularyRealm.word ?? "")
-                self.note.onNext(vocabularyRealm.note ?? "")
+        let addEpisodeWord = event.addEpisodeWord
+            .do(onNext: { [weak self] episodeWord in
+                self?.model = nil
+                self?.episodeID = episodeWord.episodeID
             })
+            .share()
+
+        Observable
+            .merge(
+                realmService.filterObjects.compactMap(\.first).map(\.word),
+                state.vocabulary.map { $0?.word },
+                event.reset.map { _ in nil }
+            )
+            .bind(to: word)
             .disposed(by: bag)
 
-        addSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.model = nil
-                self.word.onNext("")
-                self.note.onNext("")
-            })
+        addEpisodeWord.map(\.word).debug().bind(to: word).disposed(by: bag)
+
+        Observable
+            .merge(
+                realmService.filterObjects.compactMap(\.first).map(\.note),
+                state.vocabulary.map { $0?.note },
+                event.reset.map { _ in nil },
+                addEpisodeWord.map { _ in nil }
+            )
+            .bind(to: note)
             .disposed(by: bag)
 
-        addWithWordSubject
-            .subscribe(onNext: { [weak self] episode, word in
-                guard let self = self else { return }
-                self.model = nil
-                self.episodeID = episode
-                self.word.onNext(word)
-                self.note.onNext("")
-                var predicate = NSPredicate(format: "word == %@", word)
-                if let episode = episode {
-                    let episodePredicate = NSPredicate(format: "id == %@", episode)
+        addEpisodeWord
+            .map { episodeWord in
+                var predicate = NSPredicate(format: "word == %@", episodeWord.word)
+                if let episodeID = episodeWord.episodeID {
+                    let episodePredicate = NSPredicate(format: "id == %@", episodeID)
                     predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, episodePredicate])
                 }
-                realmService.filter.onNext((predicate, nil))
-            })
+                return (predicate, nil)
+            }
+            .bind(to: realmService.filter)
             .disposed(by: bag)
 
-        saveSubject
-            .subscribe(onNext: { [weak self] saveModel in
-                guard let self = self else { return }
-                let alert = {
-                    let alertModel = AlertModel(title: "Save word failed", message: "Word cannot be empty.")
-                    self.alertSubject.onNext(alertModel)
-                }
-                guard let word = saveModel.word, !word.isEmpty else { return alert() }
+        event.save
+            .filter { $0.word?.isEmpty ?? true }
+            .map { _ in AlertModel(title: "Save word failed", message: "Word cannot be empty.") }
+            .bind(to: event.showAlert)
+            .disposed(by: bag)
+
+        event.save
+            .filter {
+                let isWordEmpty = $0.word?.isEmpty ?? true
+                return !isWordEmpty
+            }
+            .map { [weak self] saveModel in
                 let newModel = VocabularyRealm()
-                newModel.id = self.model == nil ? UUID().uuidString : self.model!.id
-                newModel.episodeID = self.episodeID
+                newModel.id = self?.model == nil ? UUID().uuidString : self?.model?.id
+                newModel.episodeID = self?.episodeID
                 newModel.word = saveModel.word
                 newModel.note = saveModel.note
                 newModel.updateDate = Date()
                 _ = realmService.add(object: newModel)
-                self.savedSubject.onNext(())
-                self.closeSubject.onNext(())
-            })
-            .disposed(by: bag)
-
-        cancelSubject
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.closeSubject.onNext(())
-            })
+                return ()
+            }
+            .bind(to: event.saveSuccessfully)
             .disposed(by: bag)
     }
 }

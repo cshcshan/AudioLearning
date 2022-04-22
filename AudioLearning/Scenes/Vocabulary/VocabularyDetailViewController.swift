@@ -72,31 +72,23 @@ final class VocabularyDetailViewController: BaseViewController {
     }
 
     private func setupBindings() {
-        viewModel.word
-            .bind(to: wordTextField.rx.text)
-            .disposed(by: bag)
-        viewModel.note
-            .bind(to: noteTextView.rx.text)
-            .disposed(by: bag)
+        viewModel.state.word.drive(wordTextField.rx.text).disposed(by: bag)
+        viewModel.state.note.drive(noteTextView.rx.text).disposed(by: bag)
+
         saveButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                let model = VocabularySaveModel(
-                    word: self.wordTextField.text,
-                    note: self.noteTextView.text
-                )
-                self.viewModel.save.onNext(model)
-            })
-            .disposed(by: bag)
-        cancelButton.rx.tap
-            .bind(to: viewModel.cancel)
+            .map { [wordTextField, noteTextView] _ in
+                VocabularySaveModel(word: wordTextField?.text, note: noteTextView?.text)
+            }
+            .bind(to: viewModel.event.save)
             .disposed(by: bag)
 
-        Observable
-            .merge(viewModel.close, viewModel.saved)
-            .subscribe(onNext: { _ in
-                self.navigationController?.view.endEditing(true)
-                self.view.endEditing(true)
+        cancelButton.rx.tap.bind(to: viewModel.event.cancel).disposed(by: bag)
+
+        Signal
+            .merge(viewModel.event.saveSuccessfully.asSignal(), viewModel.event.cancel.asSignal())
+            .emit(onNext: { [navigationController, view] _ in
+                navigationController?.view.endEditing(true)
+                view?.endEditing(true)
             })
             .disposed(by: bag)
     }

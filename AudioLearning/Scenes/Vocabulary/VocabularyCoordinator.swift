@@ -6,6 +6,7 @@
 //  Copyright © 2019 cshan. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 import UIKit
 
@@ -32,8 +33,11 @@ final class VocabularyCoordinator: Coordinator<Void> {
         // Vocabulary Detail
         let vocabularyDetailVC = newVocabularyDetailVC(vocabularyListViewModel: viewModel)
 
-        viewModel.event.vocabularySelected.bind(to: vocabularyDetailVC.viewModel.load).disposed(by: bag)
-        viewModel.event.addVocabulary.bind(to: vocabularyDetailVC.viewModel.add).disposed(by: bag)
+        viewModel.event.vocabularySelected
+            .bind(to: vocabularyDetailVC.viewModel.state.vocabulary)
+            .disposed(by: bag)
+
+        viewModel.event.addVocabulary.bind(to: vocabularyDetailVC.viewModel.event.reset).disposed(by: bag)
 
         viewModel.event.flashCardsTapped
             .flatMapLatest { [weak self] _ in self?.showFlashCards() ?? .empty() }
@@ -49,8 +53,8 @@ final class VocabularyCoordinator: Coordinator<Void> {
         viewController.vocabularyDetailView = vocabularyDetailVC.view
         viewController.addChild(vocabularyDetailVC)
 
-        vocabularyDetailVC.viewModel.alert
-            .subscribe(onNext: { alert in
+        vocabularyDetailVC.viewModel.event.showAlert.asSignal()
+            .emit(onNext: { alert in
                 viewController.showConfirmAlert(
                     title: alert.title,
                     message: alert.message,
@@ -69,10 +73,12 @@ final class VocabularyCoordinator: Coordinator<Void> {
         let realmService = RealmService<VocabularyRealm>()
         let viewModel = VocabularyDetailViewModel(realmService: realmService)
 
-        viewModel.saved.bind(to: vocabularyListViewModel.event.fetchData).disposed(by: bag)
+        viewModel.event.saveSuccessfully.bind(to: vocabularyListViewModel.event.fetchData).disposed(by: bag)
 
-        viewModel.close.map { true }
-            .bind(to: vocabularyListViewModel.state.isVocabularyDetailViewHidden)
+        Signal
+            .merge(viewModel.event.saveSuccessfully.asSignal(), viewModel.event.cancel.asSignal())
+            .map { _ in true }
+            .emit(to: vocabularyListViewModel.state.isVocabularyDetailViewHidden)
             .disposed(by: bag)
 
         // ViewController

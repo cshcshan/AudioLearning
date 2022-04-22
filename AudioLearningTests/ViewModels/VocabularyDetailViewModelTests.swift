@@ -13,7 +13,8 @@ import RxTest
 import XCTest
 @testable import AudioLearning
 
-class VocabularyDetailViewModelTests: XCTestCase {
+final class VocabularyDetailViewModelTests: XCTestCase {
+    typealias EpisodeWord = VocabularyDetailViewModel.EpisodeWord
 
     var sut: VocabularyDetailViewModel!
     var realmService: RealmService<VocabularyRealm>!
@@ -49,521 +50,624 @@ class VocabularyDetailViewModelTests: XCTestCase {
 
 extension VocabularyDetailViewModelTests {
 
-    func testWord_FromLoad() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromVocabulary() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, realmModel190815),
+                .next(20, realmModel190822)
+            ])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, realmModel190815),
-            .next(20, realmModel190822)
-        ])
-        .bind(to: sut.load)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 3)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "Apple"),
             .next(20, "Phone")
         ])
     }
 
-    func testWord_FromAdd() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromReset() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, ()),
+                .next(20, ())
+            ])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.add)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 3)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
-            .next(10, ""),
-            .next(20, "")
+            .next(0, nil),
+            .next(10, nil),
+            .next(20, nil)
         ])
     }
 
-    func testWord_FromAddWithWord() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromAddEpisodeWord() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, EpisodeWord(episodeID: nil, word: "Hello")),
+                .next(20, EpisodeWord(episodeID: nil, word: "World"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, (nil, "Hello")),
-            .next(20, (nil, "World"))
-        ])
-        .bind(to: sut.addWithWord)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 3)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "Hello"),
             .next(20, "World")
         ])
     }
 
-    func testWord_FromLoad_ThenAdd_ThenAddWithWord() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromVocabulary_thenReset_thenAddEpisodeWord() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(20, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(30, EpisodeWord(episodeID: nil, word: "Hello"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, (nil, "Hello"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "Apple"),
-            .next(20, ""),
+            .next(20, nil),
             .next(30, "Hello")
         ])
     }
 
-    func testWord_FromAdd_ThenAddWithWord_ThenLoad() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromReset_thenAddEpisodeWord_thenVocabulary() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(20, EpisodeWord(episodeID: nil, word: "Hello"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, (nil, "Hello"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(30, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, realmModel190815)])
-            .bind(to: sut.load)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(20, "Hello"),
             .next(30, "Apple")
         ])
     }
 
-    func testWord_FromAddWithWord_ThenLoad_ThenAdd() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromAddEpisodeWord_thenLoad_thenReset() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, EpisodeWord(episodeID: nil, word: "Hello"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, (nil, "Hello"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(20, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(30, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, ())])
-            .bind(to: sut.add)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "Hello"),
             .next(20, "Apple"),
-            .next(30, "")
+            .next(30, nil)
         ])
     }
 
-    func testWord_FromAddWithWord_ThenAdd_ThenLoad() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromAddEpisodeWord_thenReset_thenVocabulary() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, EpisodeWord(episodeID: nil, word: "Hello"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, (nil, "Hello"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(20, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(30, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, realmModel190815)])
-            .bind(to: sut.load)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "Hello"),
-            .next(20, ""),
+            .next(20, nil),
             .next(30, "Apple")
         ])
     }
 
-    func testWord_FromAdd_ThenLoad_ThenAddWithWord() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromReset_thenVocabulary_thenAddEpisodeWord() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(20, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(30, EpisodeWord(episodeID: nil, word: "Hello"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, (nil, "Hello"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(20, "Apple"),
             .next(30, "Hello")
         ])
     }
 
-    func testWord_FromLoad_ThenAddWithWord_ThenAdd() {
-        let word = scheduler.createObserver(String.self)
-        sut.word
-            .bind(to: word)
+    func test_word_fromVocabulary_thenAddEpisodeWord_thenReset() {
+        let word = scheduler.createObserver(String?.self)
+        sut.state.word.drive(word).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(20, EpisodeWord(episodeID: nil, word: "Hello"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, (nil, "Hello"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(30, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, ())])
-            .bind(to: sut.add)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(word.events.count, 4)
         XCTAssertEqual(word.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "Apple"),
             .next(20, "Hello"),
-            .next(30, "")
+            .next(30, nil)
         ])
     }
 
-    func testNote_FromLoad() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromVocabulary() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, realmModel190815),
+                .next(20, realmModel190822)
+            ])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, realmModel190815),
-            .next(20, realmModel190822)
-        ])
-        .bind(to: sut.load)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 3)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "蘋果🍎"),
             .next(20, "手機📱")
         ])
     }
 
-    func testNote_FromAdd() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromReset() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, ()),
+                .next(20, ())
+            ])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, ()),
-            .next(20, ())
-        ])
-        .bind(to: sut.add)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 3)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
-            .next(20, "")
+            .next(0, nil),
+            .next(10, nil),
+            .next(20, nil)
         ])
     }
 
-    func testNote_FromAddWithWord() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAddEpisodeWord() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, EpisodeWord(episodeID: nil, word: "Hello 1")),
+                .next(20, EpisodeWord(episodeID: nil, word: "Hello 2"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, (nil, "Hello 1")),
-            .next(20, (nil, "Hello 2"))
-        ])
-        .bind(to: sut.addWithWord)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 5)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(10, "World 1"),
-            .next(20, ""),
+            .next(20, nil),
             .next(20, "World 2")
         ])
     }
 
-    func testNote_FromAddWithWordNotFound() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAddEpisodeWordNotFound() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, EpisodeWord(episodeID: nil, word: "Hello")),
+                .next(20, EpisodeWord(episodeID: nil, word: "World"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, (nil, "Hello")),
-            .next(20, (nil, "World"))
-        ])
-        .bind(to: sut.addWithWord)
-        .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 3)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
-            .next(20, "")
+            .next(0, nil),
+            .next(10, nil),
+            .next(20, nil)
         ])
     }
 
-    func testNote_FromLoad_ThenAdd_ThenAddWithWord_ThenAddWithWordNotFound() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromLoad_thenReset_thenAddEpisodeWord_thenAddEpisodeWordNotFound() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(20, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([
+                .next(30, EpisodeWord(episodeID: nil, word: "Hello 1")),
+                .next(40, EpisodeWord(episodeID: nil, word: "Not Found"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "蘋果🍎"),
-            .next(20, ""),
-            .next(30, ""),
+            .next(20, nil),
+            .next(30, nil),
             .next(30, "World 1"),
-            .next(40, "")
+            .next(40, nil)
         ])
     }
 
-    func testNote_FromAdd_ThenAddWithWord_ThenAddWithWordNotFound_ThenLoad() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAdd_thenAddEpisodeWord_thenAddEpisodeWordNotFound_thenVocabulary() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([
+                .next(20, EpisodeWord(episodeID: nil, word: "Hello 1")),
+                .next(30, EpisodeWord(episodeID: nil, word: "Not Found"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(40, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, realmModel190815)])
-            .bind(to: sut.load)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
-            .next(20, ""),
+            .next(0, nil),
+            .next(10, nil),
+            .next(20, nil),
             .next(20, "World 1"),
-            .next(30, ""),
+            .next(30, nil),
             .next(40, "蘋果🍎")
         ])
     }
 
-    func testNote_FromAddWithWord_ThenAddWithWordNotFound_ThenLoad_ThenAdd() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAddEpisodeWord_thenAddEpisodeWordNotFound_thenLoad_thenAdd() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, EpisodeWord(episodeID: nil, word: "Hello 1")),
+                .next(20, EpisodeWord(episodeID: nil, word: "Not Found"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(30, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(40, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, realmModel190815)])
-            .bind(to: sut.load)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, ())])
-            .bind(to: sut.add)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(10, "World 1"),
-            .next(20, ""),
+            .next(20, nil),
             .next(30, "蘋果🍎"),
-            .next(40, "")
+            .next(40, nil)
         ])
     }
 
-    func testNote_FromAddWithWordNotFound_ThenLoad_ThenAdd_ThenAddWithWord() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAddEpisodeWordNotFound_thenLoad_thenReset_thenAddEpisodeWord() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, EpisodeWord(episodeID: nil, word: "Not Found"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(20, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(30, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(40, EpisodeWord(episodeID: nil, word: "Hello 1"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(20, "蘋果🍎"),
-            .next(30, ""),
-            .next(40, ""),
+            .next(30, nil),
+            .next(40, nil),
             .next(40, "World 1")
         ])
     }
 
-    func testNote_FromAddWithWordNotFound_ThenAddWithWord_ThenAdd_ThenLoad() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAddEpisodeWordNotFound_thenAddEpisodeWord_thenReset_thenVocabulary() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, EpisodeWord(episodeID: nil, word: "Not Found")),
+                .next(20, EpisodeWord(episodeID: nil, word: "Hello 1"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(30, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(40, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, ())])
-            .bind(to: sut.add)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, realmModel190815)])
-            .bind(to: sut.load)
-            .disposed(by: bag)
-        scheduler.start()
+
+        scheduler
+            .start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
-            .next(20, ""),
+            .next(0, nil),
+            .next(10, nil),
+            .next(20, nil),
             .next(20, "World 1"),
-            .next(30, ""),
+            .next(30, nil),
             .next(40, "蘋果🍎")
         ])
     }
 
-    func testNote_FromAddWithWord_ThenAdd_ThenLoad_ThenAddWithWordNotFound() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromAddEpisodeWord_thenReset_thenVocabulary_thenAddEpisodeWordNotFound() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, EpisodeWord(episodeID: nil, word: "Hello 1"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(20, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(30, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([.next(40, EpisodeWord(episodeID: nil, word: "Not Found"))])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(10, "World 1"),
-            .next(20, ""),
+            .next(20, nil),
             .next(30, "蘋果🍎"),
-            .next(40, "")
+            .next(40, nil)
         ])
     }
 
-    func testNote_FromAdd_ThenLoad_ThenAddWithWordNotFound_ThenAddWithWord() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromReset_thenVocabulary_thenAddEpisodeWordNotFound_thenAddEpisodeWord() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.add)
+
+        scheduler
+            .createColdObservable([.next(20, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([
+                .next(30, EpisodeWord(episodeID: nil, word: "Not Found")),
+                .next(40, EpisodeWord(episodeID: nil, word: "Hello 1"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
-            .next(10, ""),
+            .next(0, nil),
+            .next(10, nil),
             .next(20, "蘋果🍎"),
-            .next(30, ""),
-            .next(40, ""),
+            .next(30, nil),
+            .next(40, nil),
             .next(40, "World 1")
         ])
     }
 
-    func testNote_FromLoad_ThenAddWithWordNotFound_ThenAddWithWord_ThenAdd() {
-        let note = scheduler.createObserver(String.self)
-        sut.note
-            .bind(to: note)
+    func test_note_fromVocabulary_thenAddEpisodeWordNotFound_thenAddEpisodeWord_thenReset() {
+        let note = scheduler.createObserver(String?.self)
+        sut.state.note.drive(note).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([.next(10, realmModel190815)])
+            .bind(to: sut.state.vocabulary)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, realmModel190815)])
-            .bind(to: sut.load)
+
+        scheduler
+            .createColdObservable([
+                .next(20, EpisodeWord(episodeID: nil, word: "Not Found")),
+                .next(30, EpisodeWord(episodeID: nil, word: "Hello 1"))
+            ])
+            .bind(to: sut.event.addEpisodeWord)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(20, (nil, "Not Found"))])
-            .bind(to: sut.addWithWord)
+
+        scheduler
+            .createColdObservable([.next(40, ())])
+            .bind(to: sut.event.reset)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(30, (nil, "Hello 1"))])
-            .bind(to: sut.addWithWord)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(40, ())])
-            .bind(to: sut.add)
-            .disposed(by: bag)
+
         scheduler.start()
+
         XCTAssertEqual(note.events.count, 6)
         XCTAssertEqual(note.events, [
-            .next(0, ""),
+            .next(0, nil),
             .next(10, "蘋果🍎"),
-            .next(20, ""),
-            .next(30, ""),
+            .next(20, nil),
+            .next(30, nil),
             .next(30, "World 1"),
-            .next(40, "")
+            .next(40, nil)
         ])
     }
 }
@@ -572,43 +676,23 @@ extension VocabularyDetailViewModelTests {
 
 extension VocabularyDetailViewModelTests {
 
-    func testSaved() {
-        let saved = scheduler.createObserver(Void.self)
-        sut.saved
-            .bind(to: saved)
+    func test_saveSuccessfully() {
+        let saveSuccessfully = scheduler.createObserver(Void.self)
+        sut.event.saveSuccessfully
+            .bind(to: saveSuccessfully)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, saveModel190815),
-            .next(20, saveModel190822)
-        ])
-        .bind(to: sut.save)
-        .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(saved.events.count, 2)
-    }
 
-    func testClose_FromSave() {
-        let close = scheduler.createObserver(Void.self)
-        sut.close
-            .bind(to: close)
+        scheduler
+            .createColdObservable([
+                .next(10, saveModel190815),
+                .next(20, saveModel190822)
+            ])
+            .bind(to: sut.event.save)
             .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, saveModel190815)])
-            .bind(to: sut.save)
-            .disposed(by: bag)
-        scheduler.start()
-        XCTAssertEqual(close.events.count, 1)
-    }
 
-    func testClose_FromCancel() {
-        let close = scheduler.createObserver(Void.self)
-        sut.close
-            .bind(to: close)
-            .disposed(by: bag)
-        scheduler.createColdObservable([.next(10, ())])
-            .bind(to: sut.cancel)
-            .disposed(by: bag)
         scheduler.start()
-        XCTAssertEqual(close.events.count, 1)
+
+        XCTAssertEqual(saveSuccessfully.events.count, 2)
     }
 }
 

@@ -44,11 +44,9 @@ final class FlashCardsViewController: BaseViewController {
     private func setupBindings() {
         viewModel.vocabularies
             .bind(
-                to: collectionView.rx.items(cellIdentifier: "FlashCardCell", cellType: FlashCardCell.self),
-                curriedArgument: { [weak self] row, model, item in
-                    guard let self = self else { return }
-                    item.vocabularyRealm = model
-                    item.event.flip.accept(self.viewModel.wordSideArray[row])
+                to: collectionView.rx.items(cellIdentifier: FlashCardCell.cellIdentifier, cellType: FlashCardCell.self),
+                curriedArgument: { _, item, cell in
+                    cell.vocabularyRealm = item
                 }
             )
             .disposed(by: bag)
@@ -71,7 +69,7 @@ final class FlashCardsViewController: BaseViewController {
                       let cell = self.collectionView.cellForItem(
                           at: IndexPath(item: index, section: 0)
                       ) as? FlashCardCell else { return }
-                cell.event.flip.accept(isWordSide)
+                cell.state.isWordSide.accept(isWordSide)
             })
             .disposed(by: bag)
 

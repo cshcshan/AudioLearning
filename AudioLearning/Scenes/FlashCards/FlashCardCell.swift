@@ -12,8 +12,8 @@ import UIKit
 
 final class FlashCardCell: UICollectionViewCell {
 
-    struct Event {
-        let flip = PublishRelay<Bool>()
+    struct State {
+        let isWordSide = BehaviorRelay<Bool>(value: true)
     }
 
     // MARK: - IBOutlets
@@ -22,15 +22,14 @@ final class FlashCardCell: UICollectionViewCell {
 
     // MARK: - Properties
 
-    let event = Event()
+    let state = State()
 
     var vocabularyRealm: VocabularyRealm? {
         didSet {
-            updateUI()
+            updateUI(state.isWordSide.value)
         }
     }
 
-    private var isWordSide = true
     private let bag = DisposeBag()
 
     // MARK: - View Lifecycle
@@ -47,8 +46,9 @@ final class FlashCardCell: UICollectionViewCell {
     private func setupNotification() {
         NotificationCenter.default.rx.notification(.changeAppearance)
             .take(until: rx.deallocated)
-            .subscribe(with: self, onNext: { `self`, _ in
-                self.flip(self.isWordSide)
+            .withLatestFrom(state.isWordSide)
+            .subscribe(with: self, onNext: { `self`, isWordSide in
+                self.updateUI(isWordSide)
             })
             .disposed(by: bag)
     }
@@ -75,26 +75,19 @@ final class FlashCardCell: UICollectionViewCell {
 
     // MARK: - Update
 
-    private func updateUI() {
-        label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
-    }
-
-    // MARK: - Bindings
-
-    private func bind() {
-        event.flip.asSignal()
-            .emit(with: self, onNext: { `self`, isWordSide in
-                self.flip(isWordSide)
-            })
-            .disposed(by: bag)
-    }
-
-    // MARK: - Helpers
-
-    private func flip(_ isWordSide: Bool) {
-        self.isWordSide = isWordSide
+    private func updateUI(_ isWordSide: Bool) {
         contentView.backgroundColor = (isWordSide ? Appearance.backgroundColor : Appearance.textColor)
         label.textColor = isWordSide ? Appearance.textColor : Appearance.backgroundColor
         label.text = isWordSide ? vocabularyRealm?.word : vocabularyRealm?.note
+    }
+
+    // MARK: - Bind
+
+    private func bind() {
+        state.isWordSide
+            .subscribe(with: self, onNext: { `self`, isWordSide in
+                self.updateUI(isWordSide)
+            })
+            .disposed(by: bag)
     }
 }

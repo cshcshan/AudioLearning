@@ -24,6 +24,8 @@ final class FlashCardsViewController: BaseViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+
+        viewModel.event.fetchData.accept(())
     }
 
     override func setupUIColor() {
@@ -42,18 +44,29 @@ final class FlashCardsViewController: BaseViewController {
     }
 
     private func setupBindings() {
-        viewModel.vocabularies
-            .bind(
-                to: collectionView.rx.items(cellIdentifier: FlashCardCell.cellIdentifier, cellType: FlashCardCell.self),
-                curriedArgument: { _, item, cell in
+        viewModel.state.vocabularies
+            .drive(
+                collectionView.rx.items(cellIdentifier: FlashCardCell.cellIdentifier, cellType: FlashCardCell.self),
+                curriedArgument: { [weak self] row, item, cell in
                     cell.vocabularyRealm = item
+
+                    guard let self = self else { return }
+                    self.viewModel.state.flipData
+                        .compactMap { flipData -> Bool? in
+                            guard let flipData = flipData,
+                                  row == self.currentIndex,
+                                  row == flipData.index
+                            else { return nil }
+                            return flipData.isWordSide
+                        }
+                        .drive(cell.state.isWordSide)
+                        .disposed(by: self.bag)
                 }
             )
             .disposed(by: bag)
 
-        viewModel.vocabularies
-            .subscribe(onNext: { [weak self] vocabularyRealms in
-                guard let self = self else { return }
+        viewModel.state.vocabularies
+            .drive(with: self, onNext: { `self`, vocabularyRealms in
                 self.modelCount = vocabularyRealms.count
                 if self.modelCount > 0 && self.currentIndex == nil {
                     self.currentIndex = 0
@@ -62,18 +75,6 @@ final class FlashCardsViewController: BaseViewController {
                 }
             })
             .disposed(by: bag)
-
-        viewModel.isWordSide
-            .subscribe(with: self, onNext: { `self`, isWordSide in
-                guard let index = self.currentIndex,
-                      let cell = self.collectionView.cellForItem(
-                          at: IndexPath(item: index, section: 0)
-                      ) as? FlashCardCell else { return }
-                cell.state.isWordSide.accept(isWordSide)
-            })
-            .disposed(by: bag)
-
-        viewModel.load.onNext(())
     }
 }
 
@@ -129,10 +130,10 @@ extension FlashCardsViewController {
     }
 
     private func flipItem(state: UIGestureRecognizer.State, offset: CGPoint, velocity: CGPoint) {
-        guard state == .ended else { return }
-        if offset.y > 100 || velocity.y > 500 || offset.y < -100 || velocity.y < -500 {
-            guard let index = currentIndex else { return }
-            viewModel.flip.onNext(index)
+        guard state == .ended, let index = currentIndex else { return }
+
+        if offset.y > 100 || offset.y < -100 || velocity.y > 500 || velocity.y < -500 {
+            viewModel.event.flipCard.accept(index)
         }
     }
 }

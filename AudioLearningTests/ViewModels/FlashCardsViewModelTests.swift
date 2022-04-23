@@ -13,7 +13,8 @@ import RxTest
 import XCTest
 @testable import AudioLearning
 
-class FlashCardsViewModelTests: XCTestCase {
+final class FlashCardsViewModelTests: XCTestCase {
+    typealias FlipData = FlashCardsViewModel.FlipData
 
     var sut: FlashCardsViewModel!
     var realmService: RealmService<VocabularyRealm>!
@@ -38,47 +39,49 @@ class FlashCardsViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testVocabularies() {
+    func test_vocabularies() {
         let vocabularies = scheduler.createObserver([VocabularyRealm].self)
-        sut.vocabularies
-            .bind(to: vocabularies)
-            .disposed(by: bag)
+        sut.state.vocabularies.drive(vocabularies).disposed(by: bag)
 
         scheduler
             .createColdObservable([
                 .next(10, ()),
                 .next(20, ())
             ])
-            .bind(to: sut.load)
+            .bind(to: sut.event.fetchData)
             .disposed(by: bag)
 
         scheduler.start()
 
-        XCTAssertEqual(vocabularies.events.count, 2)
-        XCTAssertEqual(vocabularies.events.first?.value.element?.count, 10)
+        XCTAssertEqual(vocabularies.events.count, 3)
+        XCTAssertEqual(vocabularies.events[1].value.element?.count, 10)
     }
 
-    func testIsWordSide() {
-        let isWordSide = scheduler.createObserver(Bool.self)
-        sut.isWordSide
-            .bind(to: isWordSide)
+    func test_flipData() {
+        let flipData = scheduler.createObserver(FlipData?.self)
+        sut.state.flipData.drive(flipData).disposed(by: bag)
+
+        scheduler
+            .createColdObservable([
+                .next(10, 0),
+                .next(20, 1),
+                .next(30, 0),
+                .next(40, 1)
+            ])
+            .bind(to: sut.event.flipCard)
             .disposed(by: bag)
-        scheduler.createColdObservable([
-            .next(10, 0),
-            .next(20, 1),
-            .next(30, 0),
-            .next(40, 1)
-        ])
-        .bind(to: sut.flip)
-        .disposed(by: bag)
-        sut.load.onNext(())
+
+        sut.event.fetchData.accept(())
+
         scheduler.start()
-        XCTAssertEqual(isWordSide.events.count, 4)
-        XCTAssertEqual(isWordSide.events, [
-            .next(10, false),
-            .next(20, false),
-            .next(30, true),
-            .next(40, true)
+
+        XCTAssertEqual(flipData.events.count, 5)
+        XCTAssertEqual(flipData.events, [
+            .next(0, nil),
+            .next(10, FlipData(index: 0, isWordSide: false)),
+            .next(20, FlipData(index: 1, isWordSide: false)),
+            .next(30, FlipData(index: 0, isWordSide: true)),
+            .next(40, FlipData(index: 1, isWordSide: true))
         ])
     }
 }
@@ -105,5 +108,13 @@ extension FlashCardsViewModelTests {
 
     private func flushData() {
         _ = realmService.deleteAll()
+    }
+}
+
+// MARK: - FlashCardsViewModel.FlipData + Equatable
+
+extension FlashCardsViewModel.FlipData: Equatable {
+    public static func == (lhs: FlashCardsViewModel.FlipData, rhs: FlashCardsViewModel.FlipData) -> Bool {
+        lhs.index == rhs.index && lhs.isWordSide == rhs.isWordSide
     }
 }
